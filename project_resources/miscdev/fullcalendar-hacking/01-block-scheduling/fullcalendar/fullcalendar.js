@@ -1943,125 +1943,6 @@ function firstDefined() {
 
 ;;
 
-fcViews.month = MonthView;
-
-function MonthView(element, calendar) {
-	var t = this;
-	
-	
-	// exports
-	t.render = render;
-	
-	
-	// imports
-	BasicView.call(t, element, calendar, 'month');
-	var opt = t.opt;
-	var renderBasic = t.renderBasic;
-	var skipHiddenDays = t.skipHiddenDays;
-	var getCellsPerWeek = t.getCellsPerWeek;
-	var formatDate = calendar.formatDate;
-	
-	
-	function render(date, delta) {
-
-		if (delta) {
-			addMonths(date, delta);
-			date.setDate(1);
-		}
-
-		var firstDay = opt('firstDay');
-
-		var start = cloneDate(date, true);
-		start.setDate(1);
-
-		var end = addMonths(cloneDate(start), 1);
-
-		var visStart = cloneDate(start);
-		addDays(visStart, -((visStart.getDay() - firstDay + 7) % 7));
-		skipHiddenDays(visStart);
-
-		var visEnd = cloneDate(end);
-		addDays(visEnd, (7 - visEnd.getDay() + firstDay) % 7);
-		skipHiddenDays(visEnd, -1, true);
-
-		var colCnt = getCellsPerWeek();
-		var rowCnt = Math.round(dayDiff(visEnd, visStart) / 7); // should be no need for Math.round
-
-		if (opt('weekMode') == 'fixed') {
-			addDays(visEnd, (6 - rowCnt) * 7); // add weeks to make up for it
-			rowCnt = 6;
-		}
-
-		t.title = formatDate(start, opt('titleFormat'));
-
-		t.start = start;
-		t.end = end;
-		t.visStart = visStart;
-		t.visEnd = visEnd;
-
-		renderBasic(rowCnt, colCnt, true);
-	}
-	
-	
-}
-
-;;
-
-fcViews.basicWeek = BasicWeekView;
-
-function BasicWeekView(element, calendar) {
-	var t = this;
-	
-	
-	// exports
-	t.render = render;
-	
-	
-	// imports
-	BasicView.call(t, element, calendar, 'basicWeek');
-	var opt = t.opt;
-	var renderBasic = t.renderBasic;
-	var skipHiddenDays = t.skipHiddenDays;
-	var getCellsPerWeek = t.getCellsPerWeek;
-	var formatDates = calendar.formatDates;
-	
-	
-	function render(date, delta) {
-
-		if (delta) {
-			addDays(date, delta * 7);
-		}
-
-		var start = addDays(cloneDate(date), -((date.getDay() - opt('firstDay') + 7) % 7));
-		var end = addDays(cloneDate(start), 7);
-
-		var visStart = cloneDate(start);
-		skipHiddenDays(visStart);
-
-		var visEnd = cloneDate(end);
-		skipHiddenDays(visEnd, -1, true);
-
-		var colCnt = getCellsPerWeek();
-
-		t.start = start;
-		t.end = end;
-		t.visStart = visStart;
-		t.visEnd = visEnd;
-
-		t.title = formatDates(
-			visStart,
-			addDays(cloneDate(visEnd), -1),
-			opt('titleFormat')
-		);
-
-		renderBasic(1, colCnt, false);
-	}
-	
-	
-}
-
-;;
-
 fcViews.basicDay = BasicDayView;
 
 
@@ -2690,6 +2571,7 @@ function AgendaWeekView(element, calendar) {
 		skipHiddenDays(visEnd, -1, true);
 
 		var colCnt = getCellsPerWeek();
+        colCnt = 10;
 
 		t.title = formatDates(
 			visStart,
@@ -2752,7 +2634,7 @@ function AgendaDayView(element, calendar) {
 ;;
 
 setDefaults({
-	allDaySlot: true,
+	allDaySlot: false,
 	allDayText: 'all-day',
 	firstHour: 6,
 	slotMinutes: 30,
@@ -3092,9 +2974,13 @@ function AgendaView(element, calendar, viewName) {
 		for (col=0; col<colCnt; col++) {
 			date = cellToDate(0, col);
 			html +=
-				"<th class='fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
-				htmlEscape(formatDate(date, colFormat)) +
-				"</th>";
+				// "<th class='fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
+				"<th data-col-id='"+col+"' class='emp-col sched-col fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>";
+				//"<th data-col-id='"+col+"' data-emp-id='00"+col+"FOO' class='emp-col sched-col fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
+				// htmlEscape(formatDate(date, colFormat)) +
+				// "<select name=\"\"><option value=\"301CY\">301CY</a><option value=\"301CD\">301CD</option></select></th>";
+                // "<a href=\"\">+ Assign</a>"
+                // "Col" + col;
 		}
 
 		html +=
@@ -3941,6 +3827,7 @@ function AgendaEventRenderer() {
 				height = Math.max(0, seg.outerHeight - seg.vsides);
 				eventElement[0].style.height = height + 'px';
 				event = seg.event;
+                /*
 				if (seg.contentTop !== undefined && height - seg.contentTop < 10) {
 					// not enough room for title, put it in the time (TODO: maybe make both display:inline instead)
 					eventElement.find('div.fc-event-time')
@@ -3948,6 +3835,7 @@ function AgendaEventRenderer() {
 					eventElement.find('div.fc-event-title')
 						.remove();
 				}
+                */
 				trigger('eventAfterRender', event, event, eventElement);
 			}
 		}
