@@ -2339,6 +2339,7 @@ function BasicView(element, calendar, viewName) {
 	
 	function dayClick(ev) {
 		if (!opt('selectable')) { // if selectable, SelectionManager will worry about dayClick
+            debugger;
 			var date = parseISO8601($(this).data('date'));
 			trigger('dayClick', this, date, true, ev);
 		}
@@ -2975,7 +2976,7 @@ function AgendaView(element, calendar, viewName) {
 			date = cellToDate(0, col);
 			html +=
 				// "<th class='fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
-				"<th data-col-id='"+col+"' class='emp-col sched-col fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>";
+				"<th data-col-id='"+col+"' class='sched-header fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>";
 				//"<th data-col-id='"+col+"' data-emp-id='00"+col+"FOO' class='emp-col sched-col fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
 				// htmlEscape(formatDate(date, colFormat)) +
 				// "<select name=\"\"><option value=\"301CY\">301CY</a><option value=\"301CD\">301CD</option></select></th>";
@@ -3015,6 +3016,8 @@ function AgendaView(element, calendar, viewName) {
 			date = cellToDate(0, col);
 
 			classNames = [
+                'sched-wholecolumn' + col,
+                'sched-col',
 				'fc-col' + col,
 				'fc-' + dayIDs[date.getDay()],
 				contentClass
@@ -3070,6 +3073,7 @@ function AgendaView(element, calendar, viewName) {
 		slotTopCache = {};
 	
 		var headHeight = dayBody.position().top;
+        console.log(headHeight);
 		var allDayHeight = slotScroller.position().top; // including divider
 		var bodyHeight = Math.min( // total body height, including borders
 			height - headHeight,   // when scrollbars
@@ -5790,6 +5794,7 @@ function SelectionManager() {
 		var hoverListener = t.getHoverListener();
 		var reportDayClick = t.reportDayClick; // this is hacky and sort of weird
 		if (ev.which == 1 && opt('selectable')) { // which==1 means left mouse button
+            debugger;
 			unselect(ev);
 			var _mousedownElement = this;
 			var dates;

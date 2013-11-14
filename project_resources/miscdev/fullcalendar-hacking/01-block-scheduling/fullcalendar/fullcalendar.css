@@ -124,6 +124,10 @@ html .fc,
 	background: #fcf8e3;
 	}
 	
+.fc-state-off {
+    background-color: #ddd;
+}
+
 .fc-cell-overlay { /* semi-transparent rectangle while dragging */
 	background: #bce8f1;
 	opacity: .3;

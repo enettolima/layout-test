@@ -1,11 +1,73 @@
 var associateInOuts = {};
-    var loadedEvents = Array();
+var loadedEvents = Array();
+var serviceURL = "http://cdev.newpassport.com/miscdev/fullcalendar-hacking/01-block-scheduling/service/index.php";
 
 $(document).ready(function() {
 
     var onEvent = 0;
 
     var empDateMap = {};
+
+    var empDatabase = Array();
+
+    // empDatabase.push({"userId" : "000BAR", "firstName" : "FBar0", "lastName" : "LBar0"});
+    // empDatabase.push({"userId" : "001BAR", "firstName" : "FBar1", "lastName" : "LBar1"});
+    // empDatabase.push({"userId" : "002BAR", "firstName" : "FBar2", "lastName" : "LBar2"});
+    // empDatabase.push({"userId" : "003BAR", "firstName" : "FBar3", "lastName" : "LBar3"});
+    // empDatabase.push({"userId" : "004BAR", "firstName" : "FBar5", "lastName" : "LBar5"});
+
+	empDatabase.push({"userId": "000FOO", "firstName": "Ann-Marie", "lastName": "Mossberg"});
+	empDatabase.push({"userId": "001FOO", "firstName": "Dustin", "lastName": "Harvey"});
+	empDatabase.push({"userId": "002FOO", "firstName": "Aristotle", "lastName": "Barlow"});
+	empDatabase.push({"userId": "003FOO", "firstName": "Nyssa", "lastName": "Brock"});
+	empDatabase.push({"userId": "004FOO", "firstName": "Marah", "lastName": "Mcmillan"});
+	empDatabase.push({"userId": "005BAR", "firstName": "Kay", "lastName": "Fisher"});
+	empDatabase.push({"userId": "006BAR", "firstName": "Cody", "lastName": "Patrick"});
+	empDatabase.push({"userId": "007BAR", "firstName": "Emerson", "lastName": "Oneil"});
+	empDatabase.push({"userId": "008BAR", "firstName": "Kylee", "lastName": "Simpson"});
+	empDatabase.push({"userId": "009BAR", "firstName": "Derek", "lastName": "House"});
+	empDatabase.push({"userId": "010BAR", "firstName": "James", "lastName": "Blevins"});
+	empDatabase.push({"userId": "011BAR", "firstName": "Lee", "lastName": "Conner"});
+	empDatabase.push({"userId": "012BAR", "firstName": "Adam", "lastName": "Mays"});
+	empDatabase.push({"userId": "013BAR", "firstName": "Maia", "lastName": "Ballard"});
+	empDatabase.push({"userId": "014BAR", "firstName": "Kadeem", "lastName": "Guerra"});
+	empDatabase.push({"userId": "015BAR", "firstName": "Kelsie", "lastName": "Marsh"});
+	empDatabase.push({"userId": "016BAR", "firstName": "Aladdin", "lastName": "Santana"});
+	empDatabase.push({"userId": "017BAR", "firstName": "Winter", "lastName": "Booth"});
+	empDatabase.push({"userId": "018BAR", "firstName": "Shelley", "lastName": "Obrien"});
+	empDatabase.push({"userId": "019BAR", "firstName": "Chava", "lastName": "Keller"});
+	empDatabase.push({"userId": "020BAR", "firstName": "Elaine", "lastName": "Pearson"});
+	empDatabase.push({"userId": "021BAR", "firstName": "Rama", "lastName": "Kidd"});
+	empDatabase.push({"userId": "022BAR", "firstName": "Ignatius", "lastName": "Blake"});
+	empDatabase.push({"userId": "023BAR", "firstName": "Charity", "lastName": "Wong"});
+	empDatabase.push({"userId": "024BAR", "firstName": "Urielle", "lastName": "House"});
+	empDatabase.push({"userId": "025BAR", "firstName": "Ina", "lastName": "Hanson"});
+	empDatabase.push({"userId": "026BAR", "firstName": "Keane", "lastName": "Anderson"});
+	empDatabase.push({"userId": "027BAR", "firstName": "Laurel", "lastName": "Levy"});
+	empDatabase.push({"userId": "028BAR", "firstName": "Leslie", "lastName": "Craig"});
+	empDatabase.push({"userId": "029BAR", "firstName": "Lacota", "lastName": "Brennan"});
+	empDatabase.push({"userId": "030BAR", "firstName": "Lars", "lastName": "Bright"});
+	empDatabase.push({"userId": "031BAR", "firstName": "Melanie", "lastName": "Mcguire"});
+	empDatabase.push({"userId": "032BAR", "firstName": "Ulric", "lastName": "Meyer"});
+	empDatabase.push({"userId": "033BAR", "firstName": "Montana", "lastName": "Riley"});
+	empDatabase.push({"userId": "034BAR", "firstName": "Emmanuel", "lastName": "Stein"});
+	empDatabase.push({"userId": "035BAR", "firstName": "Desirae", "lastName": "Mccray"});
+
+    var empAutoComplete = assignEmployees(empDatabase);
+
+    function assignEmployees(empDatabase){
+
+        var returnVal = Array();
+
+        $.each(empDatabase, function(key, value) {
+            returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
+            // $("#newUser").append($("<option></option>").attr("value", value.userId).text(value.firstName + " " + value.lastName));
+        });
+
+        return returnVal;
+    }
+
+    $("#user").autocomplete({source:empAutoComplete});
 
     var calendar = $('#calendar').fullCalendar({
         // We don't really care what time 
@@ -18,9 +80,14 @@ $(document).ready(function() {
         //
         // So to help debug, let's set the date here to 1/1/2000
         // so that we're always working with the same "days"
+        //
+        // This also conveniently circumvents highlighting today's date
+        // unless this code is transported back in time.
+
         month:1, 
         date:1,
         year:2000,
+
         defaultView: 'agendaWeek',
         header: {
             left: '',
@@ -34,10 +101,10 @@ $(document).ready(function() {
             var normalizedDate = new Date (start.getFullYear(), start.getMonth(), start.getDate()); 
             var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
             var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
-            var associateId = $(".sched-col[data-col-id="+column+"]").attr('data-emp-id');
+            var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
 
             var request = $.ajax({
-                url: "http://cdev.test/ebt/06/service/index.php/inOut/301/"+associateId+"/2013-11-05+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/2013-11-05+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00",
+                url: serviceURL + "/inOut/301/"+associateId+"/2013-11-05+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/2013-11-05+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00",
                 type: "POST"
             });
 
@@ -54,6 +121,8 @@ $(document).ready(function() {
                         },
                         true
                     );
+                } else {
+                    calendar.fullCalendar('unselect');
                 }
             });
 
@@ -63,19 +132,18 @@ $(document).ready(function() {
             var normalizedDate = new Date (event.start.getFullYear(), event.start.getMonth(), event.start.getDate()); 
             var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
             var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
-            var associateId = $(".sched-col[data-col-id="+column+"]").attr('data-emp-id');
+            var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
+
 
             var request = $.ajax({
-                url: "http://cdev.test/ebt/06/service/index.php/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta,
+                url: serviceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta,
                 type: "PUT"
             });
 
             request.done(function(msg) {
 
                 if (msg.status) {
-                    console.log('InOut Moved');
                 } else {
-                    console.log('InOut Not Moved');
                 }
 
             });
@@ -85,16 +153,14 @@ $(document).ready(function() {
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
 
             var request = $.ajax({
-                url: "http://cdev.test/ebt/06/service/index.php/inOutResize/"+event.id+"/"+minuteDelta,
+                url: serviceURL + "/inOutResize/"+event.id+"/"+minuteDelta,
                 type: "PUT"
             });
 
             request.done(function(msg) {
 
                 if (msg.status) {
-                    console.log('InOut Resized');
                 } else {
-                    console.log('InOut Not Resized');
                 }
 
             });
@@ -105,16 +171,14 @@ $(document).ready(function() {
                 $('#calendar').fullCalendar('removeEvents', event.id);
 
                 var request = $.ajax({
-                    url: "http://cdev.test/ebt/06/service/index.php/inOut/" + event.id,
+                    url: serviceURL + "/inOut/" + event.id,
                     type: "DELETE"
                 });
 
                 request.done(function(msg) {
 
                     if (msg.status) {
-                        console.log('InOut Deleted');
                     } else {
-                        console.log('InOut Not Deleted');
                     }
 
                 });
@@ -124,27 +188,108 @@ $(document).ready(function() {
         editable: true
     });
 
+    // Disable all the columns on initial load; we will then enable them
+    // As we populate them
+    $(".sched-col").addClass("fc-state-off");
+    //$(".sched-header").html("<a class=\"adder\" href=\"#\">+ Add</a>");
+    $(".sched-header").html("<button class=\"adder\">Add User</button>");
+
+    $(".adder").on("click", function(){
+        $( "#dialog" ).dialog({
+            modal:true,
+            buttons: {
+                "Add User" : function() {
+                    $(this).dialog("close");
+                    addTheUser();
+                },
+                "Cancel" : function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+    $("#dialog").keypress(function(e) {
+        if (e.keyCode == $.ui.keyCode.ENTER) {
+            $(this).dialog("close");
+            addTheUser();
+        }
+    });
+
+    function addTheUser(){
+        var nextCol  = getNextAvailableColumn();
+        var userInfo = $("#user").val().split(" - ");
+        var userCode = userInfo[0];
+        var userNameString = userInfo[1];
+        var wholeColumn   = $(".fc-col" + nextCol);
+        var colHeader = $(".sched-header[data-col-id=" + nextCol + "]");
+
+        wholeColumn.removeClass("fc-state-off");
+        colHeader.html(userCode + "<br />" + userNameString);
+        colHeader.attr("data-emp-id", userCode);
+    }
+
+    function getNextAvailableColumn(){
+        var columns = $(".sched-header");
+
+        var lastSet;
+
+        $.each(columns, function(key, value){
+            var attr = $(value).attr("data-emp-id");
+
+            if (typeof attr !== 'undefined' && attr !== false) {
+                lastSet = parseInt(attr);
+            }
+        });
+
+        if (lastSet !== 9) {
+            return lastSet + 1;
+        } else {
+            return false;
+        }
+    }
+
+    function getEmpNameFromCode(strCode){
+        // return "Harry Paratestes";
+        // return empDatabase[2].firstName;
+        var results = $.grep(empDatabase, function(e){ return e.userId === strCode; });
+
+        if (results.length === 0) {
+            return false;
+        } else if (results.length === 1) {
+            return results[0].firstName + " " + results[0].lastName;
+        } else {
+            return false;
+        }
+    }
+
     var loadFromDB = $.ajax({
-        url:  "http://cdev.test/ebt/06/service/index.php/storeDaySchedule/301/2013-11-05",
+        url:  serviceURL + "/storeDaySchedule/301/2013-11-05",
         type: "GET"
     });
  
     loadFromDB.done(function(msg) {
 
         var view = $('#calendar').fullCalendar('getView');
-        console.log(view.start);
-        console.log(view.end);
 
         if (msg.meta.sequence.length) {
             for (var i=0; i<msg.meta.sequence.length; i++) {
-                $(".emp-col").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i]);
 
                 var normalizedDate = new Date (view.start.getFullYear(), view.start.getMonth(), view.start.getDate() + i); 
                 var month = normalizedDate.getMonth() + 1;
                 var date = ('0' + normalizedDate.getDate()).slice(-2);
 
                 empDateMap[msg.meta.sequence[i]] = { "calDateIndex" : normalizedDate.getFullYear() + "-" + month + "-" + date};
+
+                // Turn on the column
+                $(".fc-col" + i).removeClass("fc-state-off");
+
+                console.log(msg.meta.sequence[i]);
+
+                // Label the column
+                $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i]) );
             }
+
         }
 
         if (msg.schedule.length) {
@@ -152,10 +297,6 @@ $(document).ready(function() {
             for (var b=0; b<msg.schedule.length; b++) {
 
                 var schedObj = msg.schedule[b];
-
-                console.log(schedObj);
-
-                console.log(schedObj.associate_id);
 
                 var column = empDateMap[schedObj.associate_id].calDateIndex;
 
@@ -165,7 +306,6 @@ $(document).ready(function() {
                      start: column + " " + schedObj.date_in.split(" ")[1], 
                      end: column + " " + schedObj.date_out.split(" ")[1]
                  }, true);
-
             }
         }
     });

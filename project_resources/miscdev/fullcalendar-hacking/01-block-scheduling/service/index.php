@@ -2,6 +2,13 @@
 
 require 'vendor/autoload.php';
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$logger = new Logger('my_logger');
+$logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
+$logger->addInfo('start');
+
 $app = new \Slim\Slim();
 
 $app->response->headers->set('Content-Type', 'application/json');
@@ -10,7 +17,7 @@ $db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '');
 
 $app->get(
     '/storeDaySchedule/:storeNumber/:date', 
-    function($storeNumber, $date) use($db)
+    function($storeNumber, $date) use($logger, $db)
     {
 
         $date = date('Y-m-d', strtotime($date));
@@ -61,41 +68,95 @@ $app->get(
 
 $app->post(
     '/inOut/:storeNumber/:userId/:inString/:outString', 
-    function($storeNumber, $userId, $inString, $outString) use ($app, $db)
+    function($storeNumber, $userId, $inString, $outString) use ($logger, $app, $db)
     {
         $in  = date('Y-m-d H:i:s', strtotime($inString));
         $out = date('Y-m-d H:i:s', strtotime($outString));
 
-        $query = "
-            INSERT INTO scheduled_inout (
-                associate_id, 
-                store_id, 
-                date_in, 
-                date_out
-            ) VALUES (
-                '$userId', 
-                $storeNumber, 
-                '$in', 
-                '$out'
-            )
-        ";
-        
-        if ($db->exec($query)) {
-            // $app->response->setStatus(201);
-            echo json_encode(array('id' => $db->lastInsertId()));
+        if ($userId != "undefined") {
+
+            $query = "
+                INSERT INTO scheduled_inout (
+                    associate_id, 
+                    store_id, 
+                    date_in, 
+                    date_out
+                ) VALUES (
+                    '$userId', 
+                    $storeNumber, 
+                    '$in', 
+                    '$out'
+                )
+            ";
+            
+            if ($db->exec($query)) {
+                // $app->response->setStatus(201);
+                echo json_encode(array('id' => $db->lastInsertId()));
+            } else {
+                // $app->response->setStatus(409);
+                echo json_encode(array('id' => null));
+            }
         } else {
-            // $app->response->setStatus(409);
+            $logger->addInfo('hey');
+            echo json_encode(array('id' => null));
+        }
+    }
+);
+
+$app->put(
+    '/inOutColumn/:storeNumber/:date/:userId',
+    function($storeNumber, $date, $userId) use ($logger, $app, $db)
+    {
+        // Get the metadata for this store/day...
+
+        $query = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$date'
+        ";
+
+        $logger->addInfo($query);
+
+        $stmt = $db->query($query);
+
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $metaArray = json_decode($res[0]['data'], true);
+
+        $currentSequence = $metaArray['sequence'];
+
+        $currentSequence[] = $userId;
+
+        $metaArray['sequence'] = $currentSequence;
+
+        $newData = json_encode($metaArray);
+
+        $update = "UPDATE schedule_day_meta set data = '$newData' where id = {$res[0]['id']}";
+
+        if ($db->exec($update)) {
+            echo json_encode(array('status' => 1));
+        } else {
+            echo json_encode(array('status' => 0));
         }
 
+        //TODO: Error checking
+
+        // $currentMeta = json_decode($res[0], true);
+
+        // $logger->addInfo($currentMeta);
     }
 );
 
 
 $app->put(
     '/inOutResize/:inOutId/:delta', 
-    function($inOutId, $delta) use ($app, $db)
+    function($inOutId, $delta) use ($app, $db, $logger)
     {
-
+        $logger->addInfo('hey', array('asdf' => 'foo'));
         $query = "
             UPDATE scheduled_inout
             SET
@@ -115,7 +176,7 @@ $app->put(
 
 $app->put(
     '/inOutMove/:userId/:inOutId/:delta', 
-    function($userId, $inOutId, $delta) use ($app, $db)
+    function($userId, $inOutId, $delta) use ($logger, $app, $db)
     {
 
         $query = "
@@ -139,7 +200,7 @@ $app->put(
 
 $app->put(
     '/inOut/:inOutId/:userId/:inString/:outString', 
-    function($inOutId, $userId, $inString, $outString) use ($app, $db)
+    function($inOutId, $userId, $inString, $outString) use ($logger, $app, $db)
     {
         $in  = date('Y-m-d H:i:s', strtotime($inString));
         $out = date('Y-m-d H:i:s', strtotime($outString));
@@ -164,7 +225,7 @@ $app->put(
 
 $app->delete(
     '/inOut/:inOutId',
-    function($inOutId) use($app, $db){
+    function($inOutId) use($logger, $app, $db){
 
         $query = "
             DELETE FROM

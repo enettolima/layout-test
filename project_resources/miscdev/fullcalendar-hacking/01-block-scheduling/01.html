@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Scheduler Dev - Day Drawing Control</title>
 <link rel="stylesheet" href="newlib/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 <link rel="stylesheet" href='fullcalendar/fullcalendar.css' />
+<link rel="stylesheet" href='local.css' />
 <link rel="stylesheet" href='fullcalendar/fullcalendar.print.css' media='print' />
 
 <script src="newlib/js/jquery-1.9.1.js"></script>
@@ -26,5 +28,10 @@
 </head>
 <body>
 <div id='calendar'></div>
+<div id="dialog" title="Select User" style="display:none;">
+    <label for="users">Users:</label>
+    <input id="user" />
+    <!-- <select id="newUser" name="newUser"></select> -->
+</div>
 </body>
 </html>
