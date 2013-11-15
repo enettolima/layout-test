@@ -58,6 +58,7 @@ $app->get(
 
         if (! isset($resultsMeta[0])) {
             $resultsMeta[0] = array();
+            $resultsMeta[0]['data'] = null;
         }
 
         // var_dump($resultsMeta[0]['data']);
@@ -103,6 +104,7 @@ $app->post(
     }
 );
 
+// Add a column
 $app->put(
     '/inOutColumn/:storeNumber/:date/:userId',
     function($storeNumber, $date, $userId) use ($logger, $app, $db)
@@ -119,35 +121,94 @@ $app->put(
                 date = '$date'
         ";
 
-        $logger->addInfo($query);
+        $sth = $db->prepare($query);
 
-        $stmt = $db->query($query);
+        $sth->execute(); //TODO: Handle errors
 
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $metaArray = json_decode($res[0]['data'], true);
-
-        $currentSequence = $metaArray['sequence'];
-
-        $currentSequence[] = $userId;
-
-        $metaArray['sequence'] = $currentSequence;
-
-        $newData = json_encode($metaArray);
-
-        $update = "UPDATE schedule_day_meta set data = '$newData' where id = {$res[0]['id']}";
-
-        if ($db->exec($update)) {
-            echo json_encode(array('status' => 1));
+        if ($res = $sth->fetch()){
+            $metaArray = json_decode($res['data'], true);
+            $currentSequence = $metaArray['sequence'];
+            print_r ($currentSequence);
+            if (! in_array($userId, $currentSequence)) {
+                $currentSequence[] = $userId;
+                $metaArray['sequence'] = $currentSequence;
+                $newData = json_encode($metaArray);
+                $addQuery = "UPDATE schedule_day_meta set data = '$newData' where id = {$res['id']}";
+            } else {
+                $addQuery = false;
+            }
         } else {
-            echo json_encode(array('status' => 0));
+            $metaArray = array();
+            $metaArray['sequence'][] = $userId;
+            $newData = json_encode($metaArray);
+            $addQuery = "INSERT INTO schedule_day_meta (store_id, date, data) VALUES ($storeNumber, '$date', '$newData')";
         }
 
-        //TODO: Error checking
+        if ($addQuery) {
+            $sth = $db->prepare($addQuery);
+             
+            if ($sth->execute()) {
+                echo json_encode(array('status' => 1));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 1));
+        }
+    }
+);
 
-        // $currentMeta = json_decode($res[0], true);
+$app->delete(
+    '/inOutColumn/:storeNumber/:date/:userId',
+    function($storeNumber, $date, $userId) use ($logger, $app, $db)
+    {
+        // Get the metadata for this store/day...
 
-        // $logger->addInfo($currentMeta);
+        $query = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$date'
+        ";
+
+        $sth = $db->prepare($query);
+
+        $sth->execute(); //TODO: Handle errors
+
+        $performUpdate = false;
+
+        if ($res = $sth->fetch()){
+            $metaArray = json_decode($res['data'], true);
+            $currentSequence = $metaArray['sequence'];
+            if (in_array($userId, $currentSequence)) {
+                foreach($currentSequence as $key=>$val) {
+                    if ($val == $userId) {
+                        unset($currentSequence[$key]);
+                        $performUpdate = true;
+                    }
+                }
+            }
+
+        }
+
+        if ($performUpdate) {
+            $metaArray['sequence'] = $currentSequence;
+            $newData = json_encode($metaArray);
+            $query = "UPDATE schedule_day_meta set data = '$newData' where id = {$res['id']}";
+            $sth = $db->prepare($query);
+             
+            if ($sth->execute()) {
+                echo json_encode(array('status' => 1));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+
+        } else {
+            echo json_encode(array('status' => 1));
+        }
     }
 );
 

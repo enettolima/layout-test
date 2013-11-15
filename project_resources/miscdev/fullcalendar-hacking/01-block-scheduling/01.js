@@ -219,9 +219,41 @@ $(document).ready(function() {
     function addTheUser(){
         var nextCol  = getNextAvailableColumn();
         var userInfo = $("#user").val().split(" - ");
+
+        //Clear the selected user field
+        $("#user").val("");
+
+
+
         var userCode = userInfo[0];
         var userNameString = userInfo[1];
+
+        //Remove the user from the list of employees
+        empDatabase = $.grep(empDatabase, function(o,i){ return o.userId === userCode; }, true);
+        // This should probably be moved out to a "refresh autocomplete" deal...
+        empAutoComplete = assignEmployees(empDatabase);
+        $("#user").autocomplete({source:empAutoComplete});
+
+        // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
+
+        var request = $.ajax({
+            url: serviceURL + "/inOutColumn/301/2013-11-05/"+userCode,
+            type: "PUT"
+        });
+
+        request.done(function(msg) {
+
+            console.log(msg);
+            console.log(msg.status);
+            console.log(parseInt(msg.status));
+
+            if (parseInt(msg.status) === 1) {
+                console.log ("Ok Good");
+            }
+        });
+
         var wholeColumn   = $(".fc-col" + nextCol);
+
         var colHeader = $(".sched-header[data-col-id=" + nextCol + "]");
 
         wholeColumn.removeClass("fc-state-off");
@@ -230,28 +262,34 @@ $(document).ready(function() {
     }
 
     function getNextAvailableColumn(){
+
         var columns = $(".sched-header");
 
         var lastSet;
 
         $.each(columns, function(key, value){
+
             var attr = $(value).attr("data-emp-id");
 
             if (typeof attr !== 'undefined' && attr !== false) {
-                lastSet = parseInt(attr);
+                lastSet = parseInt($(value).attr("data-col-id"));
             }
         });
 
-        if (lastSet !== 9) {
-            return lastSet + 1;
+        var returnval = null;
+
+        if (typeof(lastSet) === 'undefined') {
+            returnval = 0;
+        }else if (typeof(lastSet) === 'number' && lastSet !== 9) {
+            returnval = lastSet + 1;
         } else {
-            return false;
+            returnval = false;
         }
+
+        return returnval;
     }
 
     function getEmpNameFromCode(strCode){
-        // return "Harry Paratestes";
-        // return empDatabase[2].firstName;
         var results = $.grep(empDatabase, function(e){ return e.userId === strCode; });
 
         if (results.length === 0) {
@@ -272,7 +310,7 @@ $(document).ready(function() {
 
         var view = $('#calendar').fullCalendar('getView');
 
-        if (msg.meta.sequence.length) {
+        if (msg.meta && msg.meta.sequence.length) {
             for (var i=0; i<msg.meta.sequence.length; i++) {
 
                 var normalizedDate = new Date (view.start.getFullYear(), view.start.getMonth(), view.start.getDate() + i); 
@@ -283,8 +321,6 @@ $(document).ready(function() {
 
                 // Turn on the column
                 $(".fc-col" + i).removeClass("fc-state-off");
-
-                console.log(msg.meta.sequence[i]);
 
                 // Label the column
                 $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i]) );
