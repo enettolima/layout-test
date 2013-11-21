@@ -10,48 +10,42 @@ $(document).ready(function() {
 
     var empDatabase = Array();
 
-    // empDatabase.push({"userId" : "000BAR", "firstName" : "FBar0", "lastName" : "LBar0"});
-    // empDatabase.push({"userId" : "001BAR", "firstName" : "FBar1", "lastName" : "LBar1"});
-    // empDatabase.push({"userId" : "002BAR", "firstName" : "FBar2", "lastName" : "LBar2"});
-    // empDatabase.push({"userId" : "003BAR", "firstName" : "FBar3", "lastName" : "LBar3"});
-    // empDatabase.push({"userId" : "004BAR", "firstName" : "FBar5", "lastName" : "LBar5"});
-
-	empDatabase.push({"userId": "000FOO", "firstName": "Ann-Marie", "lastName": "Mossberg"});
-	empDatabase.push({"userId": "001FOO", "firstName": "Dustin", "lastName": "Harvey"});
-	empDatabase.push({"userId": "002FOO", "firstName": "Aristotle", "lastName": "Barlow"});
-	empDatabase.push({"userId": "003FOO", "firstName": "Nyssa", "lastName": "Brock"});
-	empDatabase.push({"userId": "004FOO", "firstName": "Marah", "lastName": "Mcmillan"});
-	empDatabase.push({"userId": "005BAR", "firstName": "Kay", "lastName": "Fisher"});
-	empDatabase.push({"userId": "006BAR", "firstName": "Cody", "lastName": "Patrick"});
-	empDatabase.push({"userId": "007BAR", "firstName": "Emerson", "lastName": "Oneil"});
-	empDatabase.push({"userId": "008BAR", "firstName": "Kylee", "lastName": "Simpson"});
-	empDatabase.push({"userId": "009BAR", "firstName": "Derek", "lastName": "House"});
-	empDatabase.push({"userId": "010BAR", "firstName": "James", "lastName": "Blevins"});
-	empDatabase.push({"userId": "011BAR", "firstName": "Lee", "lastName": "Conner"});
-	empDatabase.push({"userId": "012BAR", "firstName": "Adam", "lastName": "Mays"});
-	empDatabase.push({"userId": "013BAR", "firstName": "Maia", "lastName": "Ballard"});
-	empDatabase.push({"userId": "014BAR", "firstName": "Kadeem", "lastName": "Guerra"});
-	empDatabase.push({"userId": "015BAR", "firstName": "Kelsie", "lastName": "Marsh"});
-	empDatabase.push({"userId": "016BAR", "firstName": "Aladdin", "lastName": "Santana"});
-	empDatabase.push({"userId": "017BAR", "firstName": "Winter", "lastName": "Booth"});
-	empDatabase.push({"userId": "018BAR", "firstName": "Shelley", "lastName": "Obrien"});
-	empDatabase.push({"userId": "019BAR", "firstName": "Chava", "lastName": "Keller"});
-	empDatabase.push({"userId": "020BAR", "firstName": "Elaine", "lastName": "Pearson"});
-	empDatabase.push({"userId": "021BAR", "firstName": "Rama", "lastName": "Kidd"});
-	empDatabase.push({"userId": "022BAR", "firstName": "Ignatius", "lastName": "Blake"});
-	empDatabase.push({"userId": "023BAR", "firstName": "Charity", "lastName": "Wong"});
-	empDatabase.push({"userId": "024BAR", "firstName": "Urielle", "lastName": "House"});
-	empDatabase.push({"userId": "025BAR", "firstName": "Ina", "lastName": "Hanson"});
-	empDatabase.push({"userId": "026BAR", "firstName": "Keane", "lastName": "Anderson"});
-	empDatabase.push({"userId": "027BAR", "firstName": "Laurel", "lastName": "Levy"});
-	empDatabase.push({"userId": "028BAR", "firstName": "Leslie", "lastName": "Craig"});
-	empDatabase.push({"userId": "029BAR", "firstName": "Lacota", "lastName": "Brennan"});
-	empDatabase.push({"userId": "030BAR", "firstName": "Lars", "lastName": "Bright"});
-	empDatabase.push({"userId": "031BAR", "firstName": "Melanie", "lastName": "Mcguire"});
-	empDatabase.push({"userId": "032BAR", "firstName": "Ulric", "lastName": "Meyer"});
-	empDatabase.push({"userId": "033BAR", "firstName": "Montana", "lastName": "Riley"});
-	empDatabase.push({"userId": "034BAR", "firstName": "Emmanuel", "lastName": "Stein"});
-	empDatabase.push({"userId": "035BAR", "firstName": "Desirae", "lastName": "Mccray"});
+	empDatabase.push({"userId": "000FOO" , "firstName": "Ann-Marie" , "lastName": "Mossberg"});
+	empDatabase.push({"userId": "001FOO" , "firstName": "Dustin"    , "lastName": "Harvey"});
+	empDatabase.push({"userId": "002FOO" , "firstName": "Aristotle" , "lastName": "Barlow"});
+	empDatabase.push({"userId": "003FOO" , "firstName": "Nyssa"     , "lastName": "Brock"});
+	empDatabase.push({"userId": "004FOO" , "firstName": "Marah"     , "lastName": "Mcmillan"});
+	empDatabase.push({"userId": "005BAR" , "firstName": "Kay"       , "lastName": "Fisher"});
+	empDatabase.push({"userId": "006BAR" , "firstName": "Cody"      , "lastName": "Patrick"});
+	empDatabase.push({"userId": "007BAR" , "firstName": "Emerson"   , "lastName": "Oneil"});
+	empDatabase.push({"userId": "008BAR" , "firstName": "Kylee"     , "lastName": "Simpson"});
+	empDatabase.push({"userId": "009BAR" , "firstName": "Derek"     , "lastName": "House"});
+	empDatabase.push({"userId": "010BAR" , "firstName": "James"     , "lastName": "Blevins"});
+	empDatabase.push({"userId": "011BAR" , "firstName": "Lee"       , "lastName": "Conner"});
+	empDatabase.push({"userId": "012BAR" , "firstName": "Adam"      , "lastName": "Mays"});
+	empDatabase.push({"userId": "013BAR" , "firstName": "Maia"      , "lastName": "Ballard"});
+	empDatabase.push({"userId": "014BAR" , "firstName": "Kadeem"    , "lastName": "Guerra"});
+	empDatabase.push({"userId": "015BAR" , "firstName": "Kelsie"    , "lastName": "Marsh"});
+	empDatabase.push({"userId": "016BAR" , "firstName": "Aladdin"   , "lastName": "Santana"});
+	empDatabase.push({"userId": "017BAR" , "firstName": "Winter"    , "lastName": "Booth"});
+	empDatabase.push({"userId": "018BAR" , "firstName": "Shelley"   , "lastName": "Obrien"});
+	empDatabase.push({"userId": "019BAR" , "firstName": "Chava"     , "lastName": "Keller"});
+	empDatabase.push({"userId": "020BAR" , "firstName": "Elaine"    , "lastName": "Pearson"});
+	empDatabase.push({"userId": "021BAR" , "firstName": "Rama"      , "lastName": "Kidd"});
+	empDatabase.push({"userId": "022BAR" , "firstName": "Ignatius"  , "lastName": "Blake"});
+	empDatabase.push({"userId": "023BAR" , "firstName": "Charity"   , "lastName": "Wong"});
+	empDatabase.push({"userId": "024BAR" , "firstName": "Urielle"   , "lastName": "House"});
+	empDatabase.push({"userId": "025BAR" , "firstName": "Ina"       , "lastName": "Hanson"});
+	empDatabase.push({"userId": "026BAR" , "firstName": "Keane"     , "lastName": "Anderson"});
+	empDatabase.push({"userId": "027BAR" , "firstName": "Laurel"    , "lastName": "Levy"});
+	empDatabase.push({"userId": "028BAR" , "firstName": "Leslie"    , "lastName": "Craig"});
+	empDatabase.push({"userId": "029BAR" , "firstName": "Lacota"    , "lastName": "Brennan"});
+	empDatabase.push({"userId": "030BAR" , "firstName": "Lars"      , "lastName": "Bright"});
+	empDatabase.push({"userId": "031BAR" , "firstName": "Melanie"   , "lastName": "Mcguire"});
+	empDatabase.push({"userId": "032BAR" , "firstName": "Ulric"     , "lastName": "Meyer"});
+	empDatabase.push({"userId": "033BAR" , "firstName": "Montana"   , "lastName": "Riley"});
+	empDatabase.push({"userId": "034BAR" , "firstName": "Emmanuel"  , "lastName": "Stein"});
+	empDatabase.push({"userId": "035BAR" , "firstName": "Desirae"   , "lastName": "Mccray"});
 
     var empAutoComplete = assignEmployees(empDatabase);
 
@@ -61,13 +55,14 @@ $(document).ready(function() {
 
         $.each(empDatabase, function(key, value) {
             returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
-            // $("#newUser").append($("<option></option>").attr("value", value.userId).text(value.firstName + " " + value.lastName));
         });
 
         return returnVal;
     }
 
-    $("#user").autocomplete({source:empAutoComplete});
+    $("#user").autocomplete({source:empAutoComplete, autoFocus:true});
+
+    // $("#users").combobox();
 
     var calendar = $('#calendar').fullCalendar({
         // We don't really care what time 

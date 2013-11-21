@@ -1,5 +1,8 @@
-ul.ui-autocomplete {
-    z-index:1100;
+.ui-autocomplete
+{
+    position:absolute;
+    cursor:default;
+    z-index:4000 !important;
 }
 
 .sched-header {
