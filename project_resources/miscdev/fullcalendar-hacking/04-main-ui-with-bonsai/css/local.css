@@ -100,3 +100,18 @@ a.schedule-graphic-header:hover{
     text-decoration:none;
 }
 
+
+.ui-autocomplete
+{
+    position:absolute;
+    cursor:default;
+    z-index:4000 !important;
+}
+
+.sched-header {
+    height:50px;
+}
+#calendar {
+    width: 900px;
+    margin: 0 auto;
+}

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <script src="http://cdnjs.cloudflare.com/ajax/libs/bonsai/0.4/bonsai.min.js" type="text/javascript" charset="utf-8"></script>
 
-        <title>Fixed Top Navbar</title>
+        <title>Scheduler - Overview</title>
 
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.css" rel="stylesheet">
@@ -47,6 +46,7 @@
 
 
         <div class="container">
+            <h3>Week 50: Sun Dec 9th - Sat Dec 15th</h3>
         <!-- width = blockwidth * 11 * 7 -->
         <!-- height = blockheight * 4 * 24 -->
         <div id="schedule-graphic-scale">
@@ -143,24 +143,24 @@
                 <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Friday</button></li> -->
                 <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Saturday</button></li> -->
                 <!-- </ul> -->
-                    <button type="button" class="btn btn-primary btn-sm">Sunday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Monday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Tuesday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Wednesday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Thursday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Friday</button>
-                    <button type="button" class="btn btn-primary btn-sm">Saturday</button>
+                    <button type="button" data-day-number="0" class="day-button btn btn-primary btn-sm">Sunday</button>
+                    <button type="button" data-day-number="1" class="day-button btn btn-primary btn-sm">Monday</button>
+                    <button type="button" data-day-number="2" class="day-button btn btn-primary btn-sm">Tuesday</button>
+                    <button type="button" data-day-number="3" class="day-button btn btn-primary btn-sm">Wednesday</button>
+                    <button type="button" data-day-number="4" class="day-button btn btn-primary btn-sm">Thursday</button>
+                    <button type="button" data-day-number="5" class="day-button btn btn-primary btn-sm">Friday</button>
+                    <button type="button" data-day-number="6" class="day-button btn btn-primary btn-sm">Saturday</button>
             </div>
             <div id="schedule-graphic-graph" style=""></div>
         </div>
 
-            <script src="days.js" type="text/javascript" charset="utf-8"></script>
+            <script src="day-data.js" type="text/javascript" charset="utf-8"></script>
 
             <script type="text/javascript" charset="utf-8">
                 var movie = document.getElementById('schedule-graphic-graph');
 
                 var stage = bonsai.run(movie, {
-                    url: '01.js',
+                    url: 'overview-bonsai-movie.js',
                     width: 912,
                     height: 768,
                     daysData: days 
@@ -168,30 +168,10 @@
 
             </script>
 
-
-            <h1>Etc etc blah blah</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <h1>Etc etc blah blah</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            <!-- Main component for a primary marketing message or call to action -->
-            <div class="jumbotron">
-                <h1>Ting</h1>
-                <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-                <p>To see the difference between static and fixed top navbars, just scroll.</p>
-                <p>
-                <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-                </p>
-            </div>
-
         </div> <!-- /container -->
 
-
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="js/jquery-git.js"></script>
+        <script src="overview.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/bootstrap.js"></script>
     </body>
 </html>
