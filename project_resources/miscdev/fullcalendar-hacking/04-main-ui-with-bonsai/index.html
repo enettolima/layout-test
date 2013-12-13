@@ -6,16 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="http://cdnjs.cloudflare.com/ajax/libs/bonsai/0.4/bonsai.min.js" type="text/javascript" charset="utf-8"></script>
 
-    <style type="text/css" media="all">
-        .scale-time {
-            font-size:11px;
-            text-align:right;
-            padding-right:2px;
-            line-height:16px;
-            font-family:monospace;
-        }
-    </style>
-
         <title>Fixed Top Navbar</title>
 
         <!-- Bootstrap core CSS -->
@@ -31,7 +21,7 @@
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand passport-brand" href="#"><img src="logo.png"></a>
+                    <a class="navbar-brand passport-brand" href="#"><img alt="Passport Logo" src="logo.png"></a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -59,7 +49,7 @@
         <div class="container">
         <!-- width = blockwidth * 11 * 7 -->
         <!-- height = blockheight * 4 * 24 -->
-        <div id="scale" style="float:left; height:768px; width:54px;">
+        <div id="schedule-graphic-scale">
             <div class="scale-time">12:00am</div>
             <div class="scale-time">12:30am</div>
 
@@ -133,144 +123,50 @@
             <div class="scale-time">11:30pm</div>
         </div>
 
-        <div id="movie" style="background:#efefef; margin-left:54px; width:924px; height:768px"></div>
-        <script type="text/javascript" charset="utf-8">
+        <div id="schedule-graphic-container">
+            <div id="schedule-graphic-headers">
+                <!-- <ul> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Sunday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Monday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Tuesday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Wednesday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Thursday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Friday</a></li> -->
+                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Saturday</a></li> -->
+                <!-- </ul> -->
+                <!-- <ul> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Sunday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Monday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Tuesday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Wednesday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Thursday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Friday</button></li> -->
+                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Saturday</button></li> -->
+                <!-- </ul> -->
+                    <button type="button" class="btn btn-primary btn-sm">Sunday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Monday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Tuesday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Wednesday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Thursday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Friday</button>
+                    <button type="button" class="btn btn-primary btn-sm">Saturday</button>
+            </div>
+            <div id="schedule-graphic-graph" style=""></div>
+        </div>
 
-            bonsai.run(document.getElementById('movie'), {
-                code: function() {
+            <script src="days.js" type="text/javascript" charset="utf-8"></script>
 
-                    var sunday = [];
-                    sunday.push( { 'eid': '301SM', 'inouts': [ 
-                        {'in':'00:00', 'out':'00:30'}, 
-                        {'in':'01:00', 'out':'01:30'}, 
-                        {'in':'02:00', 'out':'02:30'}, 
-                        {'in':'03:00', 'out':'03:30'}, 
-                        {'in':'04:00', 'out':'04:30'}, 
-                        {'in':'05:00', 'out':'05:30'}, 
-                        {'in':'06:00', 'out':'06:30'}, 
-                        {'in':'07:00', 'out':'07:30'}, 
-                        {'in':'08:00', 'out':'08:30'}, 
-                        {'in':'09:00', 'out':'09:30'}, 
-                        {'in':'10:00', 'out':'10:30'}, 
-                        {'in':'11:00', 'out':'11:30'}, 
-                        {'in':'12:00', 'out':'12:30'}, 
-                        {'in':'13:00', 'out':'13:30'}, 
-                        {'in':'14:00', 'out':'14:30'}, 
-                        {'in':'15:00', 'out':'15:30'}, 
-                        {'in':'16:00', 'out':'16:30'}, 
-                        {'in':'17:00', 'out':'17:30'}, 
-                        {'in':'18:00', 'out':'18:30'}, 
-                        {'in':'19:00', 'out':'19:30'}, 
-                        {'in':'20:00', 'out':'20:30'}, 
-                        {'in':'21:00', 'out':'21:30'}, 
-                        {'in':'22:00', 'out':'22:30'}, 
-                        {'in':'23:00', 'out':'23:30'}, 
-                    ] });
-                    sunday.push( { 'eid': '301LB', 'inouts': [ {'in':'09:00', 'out':'10:00'}, {'in':'13:00', 'out':'22:00'} ] });
-                    sunday.push( { 'eid': '301SR', 'inouts': [ {'in':'09:00', 'out':'10:30'}, {'in':'13:00', 'out':'20:15'} ] }); 
+            <script type="text/javascript" charset="utf-8">
+                var movie = document.getElementById('schedule-graphic-graph');
 
-                    var monday = [];
-                    monday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    monday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    monday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
+                var stage = bonsai.run(movie, {
+                    url: '01.js',
+                    width: 912,
+                    height: 768,
+                    daysData: days 
+                });
 
-                    var tuesday = [];
-                    tuesday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    tuesday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    tuesday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
-
-                    var wednesday = [];
-                    wednesday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    wednesday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    wednesday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
-
-                    var thursday = [];
-                    thursday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    thursday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    thursday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
-
-                    var friday = [];
-                    friday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    friday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    friday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
-
-                    var saturday = [];
-                    saturday.push( { 'eid': '301SM', 'inouts': [ {'in':'11:00', 'out':'14:00'}, {'in':'15:00', 'out':'19:00'} ] });
-                    saturday.push( { 'eid': '301LB', 'inouts': [ {'in':'08:00', 'out':'12:30'}, {'in':'13:00', 'out':'22:00'} ] });
-                    saturday.push( { 'eid': '301SR', 'inouts': [ {'in':'07:30', 'out':'11:00'}, {'in':'12:00', 'out':'18:00'} ] });
-
-                    var days = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]; 
-
-                    // console.log(days);
-
-                    var startX = 0;
-                    var startY = 0;
-                    var blockWidth = 12;
-                    var blockHeight = 8;
-                    var alpha = 1;
-                    var dayWidth = blockWidth * 10;
-
-                    var colors = [
-                        new color.RGBAColor(42,75,215,alpha),
-                        new color.RGBAColor(129,197,122,alpha),
-                        new color.RGBAColor(173,35,35,alpha),
-                    ]; 
-
-                    var myColor = new color.RGBAColor(42,75,215,alpha);
-
-                    for(var dayIterator=0; dayIterator < days.length; dayIterator++){
-
-                        var dayStartX = dayWidth * dayIterator;
-
-                        var day = days[dayIterator];
-
-                        for (var empIterator=0; empIterator < days[dayIterator].length; empIterator++) {
-
-                            var empStartX = dayStartX + (blockWidth * empIterator);
-
-                            var emp = days[dayIterator][empIterator];
-
-                            var inoutStartY = 0;
-
-                            var dayStart = new Date(2000, 0, 1, 0, 0, 0);
-                            var accumulatedPaddingBlocks = 0;
-
-                            for(var inoutIterator=0; inoutIterator < emp['inouts'].length; inoutIterator++) {
-                                var inoutStartX = dayStartX + empStartX;
-                                inout = emp['inouts'][inoutIterator];
-                                var clockInParts  = inout['in'].match(/^(\d+):(\d+)$/);
-                                var clockIn = new Date(2000, 0, 1, parseInt(clockInParts[1]), parseInt(clockInParts[2]), 0);
-
-                                var clockOutParts = inout['out'].match(/^(\d+):(\d+)$/);
-                                var clockOut = new Date(2000, 0, 1, parseInt(clockOutParts[1]), parseInt(clockOutParts[2]), 0);
-
-                                inOutBlockCount = ((clockOut - clockIn) / 1000 / 60 / 60) * 4;
-
-                                var padBlockCount = ((clockIn - dayStart) / 1000 / 60 / 60) * 4;
-
-                                inoutStartY = padBlockCount * blockHeight;
-
-                                inoutStartY = inoutStartY + (accumulatedPaddingBlocks * blockHeight);
-
-                                new Rect(
-                                        empStartX,
-                                        inoutStartY,
-                                        blockWidth,
-                                        inOutBlockCount*blockHeight
-                                    )
-                                    .addTo(stage)
-                                    .attr('fillColor', colors[empIterator]);
-
-                            }
-                        }
-                    }
-                },
-
-                width: 924,
-
-                height: 768 
-            });
-        </script>
+            </script>
 
 
             <h1>Etc etc blah blah</h1>
@@ -280,7 +176,6 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
             <!-- Main component for a primary marketing message or call to action -->
-            <!--
             <div class="jumbotron">
                 <h1>Ting</h1>
                 <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
@@ -289,7 +184,6 @@
                 <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
                 </p>
             </div>
-            -->
 
         </div> <!-- /container -->
 

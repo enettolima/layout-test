@@ -14,28 +14,6 @@ body {
 .c09 { /* Brown */     background-color: rgba(129, 74, 25, 1); }
 .c10 { /* Cyan */      background-color: rgba(41, 208, 208, 1); }
 
-.emp-slot {
-    width:11px;
-    height:7px;
-    margin-right:2px;
-    float:left;
-}
-
-.off {
-    background-color: #efefef;
-}
-
-#one { height:672px; }
-#two { height:100px; }
-#three { height:100px; }
-#four { height:100px; }
-#five { height:100px; }
-#six { height:100px; }
-#seven { height:100px; }
-#eight { height:100px; }
-#nine { height:100px; }
-#ten { height:100px; }
-
 .schedule-overview-container {
     width:952px;
     background-color: #efefef;
@@ -52,3 +30,73 @@ body {
 .passport-brand {
     padding:12px 15px;
 }
+
+.scale-time {
+    font-size:11px;
+    text-align:right;
+    padding-right:5px;
+    line-height:1.5em;
+    font-family:monospace;
+}
+
+#schedule-graphic-scale {
+    /* border:1px solid lime; */
+    /* clear:both; */
+    width:54px;
+    float:left;
+    padding-top:30px;
+}
+
+#schedule-graphic-container {
+    /* border:1px solid red; */
+    margin-left:54px;
+    width:912px;
+}
+
+#schedule-graphic-headers {
+    /* border:1px solid blue; */
+}
+
+#schedule-graphic-graph {
+    background:#efefef; 
+    width:912px; 
+    height:768px
+}
+
+#schedule-graphic-headers ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+#schedule-graphic-headers {
+    margin-left:2px;
+    padding-bottom:4px;
+}
+
+
+#schedule-graphic-headers li {
+    /* float:left; */
+    display:inline;
+    /* padding:0; */
+    /* margin:0; */
+}
+
+#schedule-graphic-headers button {
+    width:126px;
+}
+
+a.schedule-graphic-header{
+    display:inline-block;
+    font-size:17px;
+    padding:0;
+    margin:0;
+    width:125px;
+    text-align:center;
+    color:#777777;
+}
+
+a.schedule-graphic-header:hover{
+    text-decoration:none;
+}
+
