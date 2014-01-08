@@ -13,7 +13,7 @@ $app = new \Slim\Slim();
 
 $app->response->headers->set('Content-Type', 'application/json');
 
-$db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '');
+$db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '123');
 
 $app->get(
     '/storeDaySchedule/:storeNumber/:date', 
