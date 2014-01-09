@@ -1,3 +1,12 @@
+<?php
+require 'vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$logger = new Logger('my_logger');
+$logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,13 +33,13 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Scheduler</a></li>
+                        <li class="active"><a href="overview.php">Scheduler</a></li>
                         <li><a href="#about">Thing</a></li>
                         <li><a href="#contact">Foo</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret" /></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Choose store:</li>
                                 <li><a href="#">301</a></li>
@@ -44,9 +53,53 @@
             </div>
         </div>
 
-
         <div class="container">
-            <h3>Week 50: Sun Dec 9th - Sat Dec 15th</h3>
+            <div role="form" class="form-horizontal">
+                <form action="" class="form-horizontal">
+                    <div class="col-sm-5">
+                        <select id="rangeSelector" class="form-control input-lg">
+                            <?php
+
+                                if ($_GET['weekOf']) {
+                                    $currentWeekOf = $_GET['weekOf'];
+                                    $logger->addInfo($currentWeekOf);
+                                }
+                                $futureWeekCount = 10;
+                                // Get the Sunday for this week
+                                $lastSunday = strtotime('last sunday');
+                                $futureWeekCount = 10;
+                                $selectorDateFormat = 'D, M jS, Y';
+                                $ranges = array();
+
+                                // Get the Sunday for this week
+                                $lastSunday = strtotime('last sunday');
+
+                                for ($i=0; $i<$futureWeekCount; $i++) {
+                                    $ranges[] = array('start' => $lastSunday, 'end' => $lastSunday + (86400 * 6));
+                                    $lastSunday = $lastSunday + (86400 * 7);
+                                }
+
+                                foreach ($ranges as $range) {
+                                    $weekOf = date('Y-m-d', $range['start']);
+                                    $logger->addInfo("currentWeekOf:$currentWeekOf");
+                                    $logger->addInfo("weekOf:$weekOf");
+                                    if ($currentWeekOf == $weekOf) {
+                                        $selected = 'selected';
+                                    } else {
+                                        $selected = '';
+                                    }
+                                    echo "<option $selected value=\"".date('Y-m-d', $range['start'])."\">".date($selectorDateFormat, $range['start'])." &mdash; ".date($selectorDateFormat, $range['end'])."</option>\n";
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <br clear="both" />
+            <br clear="both" />
+
+            
         <!-- width = blockwidth * 11 * 7 -->
         <!-- height = blockheight * 4 * 24 -->
         <div id="schedule-graphic-scale">
@@ -125,31 +178,13 @@
 
         <div id="schedule-graphic-container">
             <div id="schedule-graphic-headers">
-                <!-- <ul> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Sunday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Monday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Tuesday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Wednesday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Thursday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Friday</a></li> -->
-                <!--     <li><a class="schedule&#45;graphic&#45;header" href="#">Saturday</a></li> -->
-                <!-- </ul> -->
-                <!-- <ul> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Sunday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Monday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Tuesday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Wednesday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Thursday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Friday</button></li> -->
-                <!--     <li><button type="button" class="btn btn&#45;primary btn&#45;sm">Saturday</button></li> -->
-                <!-- </ul> -->
-                    <button type="button" data-day-number="0" class="day-button btn btn-primary btn-sm">Sunday</button>
-                    <button type="button" data-day-number="1" class="day-button btn btn-primary btn-sm">Monday</button>
-                    <button type="button" data-day-number="2" class="day-button btn btn-primary btn-sm">Tuesday</button>
-                    <button type="button" data-day-number="3" class="day-button btn btn-primary btn-sm">Wednesday</button>
-                    <button type="button" data-day-number="4" class="day-button btn btn-primary btn-sm">Thursday</button>
-                    <button type="button" data-day-number="5" class="day-button btn btn-primary btn-sm">Friday</button>
-                    <button type="button" data-day-number="6" class="day-button btn btn-primary btn-sm">Saturday</button>
+                <button type="button" data-day-number="0" class="day-button btn btn-primary btn-sm">Sunday</button>
+                <button type="button" data-day-number="1" class="day-button btn btn-primary btn-sm">Monday</button>
+                <button type="button" data-day-number="2" class="day-button btn btn-primary btn-sm">Tuesday</button>
+                <button type="button" data-day-number="3" class="day-button btn btn-primary btn-sm">Wednesday</button>
+                <button type="button" data-day-number="4" class="day-button btn btn-primary btn-sm">Thursday</button>
+                <button type="button" data-day-number="5" class="day-button btn btn-primary btn-sm">Friday</button>
+                <button type="button" data-day-number="6" class="day-button btn btn-primary btn-sm">Saturday</button>
             </div>
             <div id="schedule-graphic-graph" style=""></div>
         </div>

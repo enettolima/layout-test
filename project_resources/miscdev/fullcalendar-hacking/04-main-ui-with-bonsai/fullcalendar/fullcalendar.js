@@ -3073,7 +3073,6 @@ function AgendaView(element, calendar, viewName) {
 		slotTopCache = {};
 	
 		var headHeight = dayBody.position().top;
-        console.log(headHeight);
 		var allDayHeight = slotScroller.position().top; // including divider
 		var bodyHeight = Math.min( // total body height, including borders
 			height - headHeight,   // when scrollbars

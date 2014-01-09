@@ -1,3 +1,7 @@
+<?php
+    $targetDay = date('Y-m-d', strtotime($_GET['weekOf']) + ($_GET['dayOffset'] * 86400));
+    $selectorDateFormat = 'D, M jS, Y';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,6 +21,7 @@
         <link rel="stylesheet" href='fullcalendar/fullcalendar.print.css' media='print' />
 
     </head>
+
     <body>
 
         <!-- Fixed navbar -->
@@ -27,7 +32,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Scheduler</a></li>
+                        <li class="active"><a href="overview.php">Scheduler</a></li>
                         <li><a href="#about">Thing</a></li>
                         <li><a href="#contact">Foo</a></li>
                     </ul>
@@ -47,12 +52,11 @@
             </div>
         </div>
 
-
         <div class="container">
 
-            <h3>Week 50: Sun Dec 9th - Sat Dec 15th</h3>
+            <h3>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?></h3>
 
-            <a class="btn btn-primary btn-sm" href="overview.html">Back to Overview</a>
+            <a class="btn btn-primary btn-sm" href="overview.php?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>
 
         <div id='calendar'></div>
 
@@ -63,6 +67,7 @@
         </div>
         </div>
 
+
         <script src="js/jquery-git.js"></script>
 
         <script src="js/jquery-ui-1.10.3.custom.js"></script>
@@ -72,5 +77,7 @@
         <script src="http://bseth99.github.io/jquery-ui-extensions/ui/jquery.ui.combobox.js"></script>
 
         <script src="day.js"></script>
+
+        <input type="hidden" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />
     </body>
 </html>
