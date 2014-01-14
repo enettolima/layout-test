@@ -189,20 +189,6 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
             <div id="schedule-graphic-graph" style=""></div>
         </div>
 
-            <script src="day-data.js" type="text/javascript" charset="utf-8"></script>
-
-            <script type="text/javascript" charset="utf-8">
-                var movie = document.getElementById('schedule-graphic-graph');
-
-                var stage = bonsai.run(movie, {
-                    url: 'overview-bonsai-movie.js',
-                    width: 912,
-                    height: 768,
-                    daysData: days 
-                });
-
-            </script>
-
         </div> <!-- /container -->
 
         <script src="js/jquery-git.js"></script>

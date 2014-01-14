@@ -24,7 +24,7 @@ var myColor = new color.RGBAColor(42,75,215,alpha);
 for(var dayIterator=0; dayIterator < days.length; dayIterator++){
 
     var dayStartX = (dayWidth * dayIterator) + (dayIterator * blockWidth);
-    console.log("Day " + dayIterator + " starts at " + dayStartX);
+    //console.log("Day " + dayIterator + " starts at " + dayStartX);
 
     var day = days[dayIterator];
 

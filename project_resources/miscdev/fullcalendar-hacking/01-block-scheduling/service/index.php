@@ -16,6 +16,167 @@ $app->response->headers->set('Content-Type', 'application/json');
 $db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '123');
 
 $app->get(
+    '/storeWeekSchedule/:storeNumber/:sundayDate',
+    function($storeNumber, $sundayDate) use ($logger, $db)
+    {
+        // Normalize supplied 'sundayDate' to YYYY-MM-DD
+        $sundayDate = date('Y-m-d', strtotime($sundayDate));
+
+        $returnval = array();
+
+        // So we get 7 total days starting from sunday...
+        for ($i=0; $i <=6; $i++) {
+
+            $onDate = date('Y-m-d', strtotime($sundayDate) + ($i * 86400));
+
+            /*
+             * Following is a copy from /storeDaySchedule below, which
+             * is not the proper way to do this, but Slim's scope is messing with 
+             * me. TODO: Refactor this to avoid obvious DRY breakage
+             */ 
+
+            $querySchedule = "
+                SELECT
+                    s.`id`,
+                    s.`associate_id`,
+                    s.`store_id`, 
+                    s.`date_in`, 
+                    s.`date_out` 
+                FROM 
+                    scheduled_inout s 
+                WHERE
+                    s.`store_id` = $storeNumber AND
+                    DATE(date_in) = '$onDate'
+            ";
+
+            $stmtSchedule = $db->query($querySchedule);
+
+            $resultsSchedule = $stmtSchedule->fetchAll(PDO::FETCH_ASSOC);
+
+            $queryMeta = "
+                SELECT
+                    data
+                FROM
+                    schedule_day_meta
+                WHERE
+                    store_id = $storeNumber AND
+                    date = '$onDate'
+            ";
+
+            $stmtMeta = $db->query($queryMeta);
+
+            $resultsMeta = $stmtMeta->fetchAll(PDO::FETCH_ASSOC);
+
+            if (! isset($resultsMeta[0])) {
+                $resultsMeta[0] = array();
+                $resultsMeta[0]['data'] = null;
+            }
+
+            $returnval[$onDate] = array('meta' => json_decode($resultsMeta[0]['data']), 'schedule' => $resultsSchedule);
+        }
+
+        $nr = array();
+
+        // Here I need to reconstruct the data in a way that makes sense
+        foreach ($returnval as $day => $val) {
+            $dayArray = array();
+            $empArray = array();
+            $logger->addInfo($day);
+            foreach ($val['schedule'] as $inoutKey => $inoutVal) {
+                $empArray[$inoutVal['associate_id']][] = array (
+                    'in' => date("H:i", strtotime($inoutVal['date_in'])), 
+                    'out' =>date("H:i", strtotime($inoutVal['date_out']))
+                );
+            }
+            foreach ($empArray as $empKey=>$empVal) {
+                $dayArray[] = array('eid' => $empKey, 'inouts' => $empVal);
+            }
+
+            $nr[] = $dayArray;
+        }
+
+        $logger->addInfo('', $nr);
+
+        echo json_encode($nr);
+    }
+);
+
+
+// This isn't being used; created as part of sketching out of range
+// but decided to just get -week-
+$app->get(
+    '/storeRangeSchedule/:storeNumber/:dateFrom/:dateTo',
+    function($storeNumber, $dateFrom, $dateTo) use ($logger, $db)
+    {
+        // Normalize supplied 'dateFrom' to YYYY-MM-DD
+        $dateFrom = date('Y-m-d', strtotime($dateFrom));
+
+        // Normalize supplied 'dateTo' to YYYY-MM-DD
+        $dateTo = date('Y-m-d', strtotime($dateTo));
+
+        // Calculate number of days different between these two
+        $daysDiff = (strtotime($dateTo) - strtotime($dateFrom)) / 86400;
+
+        $returnval = array();
+
+        for ($i=0; $i <=$daysDiff; $i++) {
+
+            $onDate = date('Y-m-d', strtotime($dateFrom) + ($i * 86400));
+
+            /*
+             * Following is a copy from /storeDaySchedule below, which
+             * is not the proper way to do this, but Slim's scope is messing with 
+             * me. TODO: Refactor this to avoid obvious DRY breakage
+             */ 
+
+            $querySchedule = "
+                SELECT
+                    s.`id`,
+                    s.`associate_id`,
+                    s.`store_id`, 
+                    s.`date_in`, 
+                    s.`date_out` 
+                FROM 
+                    scheduled_inout s 
+                WHERE
+                    s.`store_id` = $storeNumber AND
+                    DATE(date_in) = '$onDate'
+            ";
+
+            $stmtSchedule = $db->query($querySchedule);
+
+            $resultsSchedule = $stmtSchedule->fetchAll(PDO::FETCH_ASSOC);
+
+            $queryMeta = "
+                SELECT
+                    data
+                FROM
+                    schedule_day_meta
+                WHERE
+                    store_id = $storeNumber AND
+                    date = '$onDate'
+            ";
+
+            $stmtMeta = $db->query($queryMeta);
+
+            $resultsMeta = $stmtMeta->fetchAll(PDO::FETCH_ASSOC);
+
+            if (! isset($resultsMeta[0])) {
+                $resultsMeta[0] = array();
+                $resultsMeta[0]['data'] = null;
+            }
+
+            $returnval[$onDate] = array('meta' => json_decode($resultsMeta[0]['data']), 'schedule' => $resultsSchedule);
+        }
+
+        echo json_encode($returnval);
+        
+    }
+);
+
+
+// Get store schedule for a day
+$app->get(
     '/storeDaySchedule/:storeNumber/:date', 
     function($storeNumber, $date) use($logger, $db)
     {
