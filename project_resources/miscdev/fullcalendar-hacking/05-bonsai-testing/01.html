@@ -1,0 +1,33 @@
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/bonsai.min.js" type="text/javascript" charset="utf-8"></script>
+<button class="launcher" data-size="2" data-count="100">2</button>
+<button class="launcher" data-size="3" data-count="100">3</button>
+<button class="launcher" data-size="4" data-count="100">4</button>
+<button class="launcher" data-size="5" data-count="100">5</button>
+<button class="launcher" data-size="6" data-count="100">6</button>
+<button class="launcher" data-size="7" data-count="100">7</button>
+<button class="launcher" data-size="8" data-count="100">8</button>
+<br />
+<br />
+<div id="movie"></div>
+<script type="text/javascript" charset="utf-8">
+    var movieo = bonsai.run(
+        document.getElementById('movie'),
+        {
+            url: 'movie.js'
+        }
+    );
+
+    $(document).ready(function(){
+            $(".launcher").click(function(){
+                console.log($(this));
+                movieo.sendMessage('externalData', {
+                    nodeData: { 
+                        "command" : "bar",
+                        "size" : $(this).attr('data-size') ,
+                        "count" : $(this).attr('data-count')
+                    } 
+                });
+            });
+    });
+</script>
