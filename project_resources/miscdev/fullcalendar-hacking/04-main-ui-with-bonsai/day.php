@@ -58,13 +58,13 @@
 
             <a class="btn btn-primary btn-sm" href="overview.php?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>
 
-        <div id='calendar'></div>
+            <div id='calendar'></div>
 
-        <div id="dialog" title="Select User" style="display:none;">
-            <label for="users">Users:</label>
-            <input id="user" />
-            <select id="newUser" name="newUser"></select>
-        </div>
+            <div id="dialog" title="Select User" style="display:none;">
+                <label for="users">Users:</label>
+                <input id="user" />
+                <select id="newUser" name="newUser"></select>
+            </div>
         </div>
 
 

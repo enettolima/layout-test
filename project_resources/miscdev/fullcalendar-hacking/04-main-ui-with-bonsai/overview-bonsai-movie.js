@@ -1,73 +1,105 @@
-var startX = 0;
-var startY = 0;
-var blockWidth = 12;
-var blockHeight = 8;
-var alpha = 1;
-var dayWidth = blockWidth * 10;
-var days = stage.options.daysData;
+stage.on('message:externalData', function(data) {
 
-var colors = [
-    new color.RGBAColor(42  , 75  , 215 , alpha) , /* Blue */
-    new color.RGBAColor(129 , 197 , 122 , alpha) , /* Lt. Green */
-    new color.RGBAColor(173 , 35  , 35  , alpha) , /* Red */
-    new color.RGBAColor(157 , 175 , 255 , alpha) , /* Lt. Blue */
-    new color.RGBAColor(129 , 38  , 192 , alpha) , /* Purple */
-    new color.RGBAColor(255 , 146 , 51  , alpha) , /* Orange */
-    new color.RGBAColor(29  , 105 , 20  , alpha) , /* Green */
-    new color.RGBAColor(255 , 238 , 51  , alpha) , /* Yellow */
-    new color.RGBAColor(129 , 74  , 25  , alpha) , /* Brown */
-    new color.RGBAColor(41  , 208 , 208 , alpha) , /* Cyan */
-];
+    if (data.nodeData.command === 'drawSchedule') {
 
-var myColor = new color.RGBAColor(42,75,215,alpha);
+        var currentChildren = this.children();
 
-for(var dayIterator=0; dayIterator < days.length; dayIterator++){
+        for (var i=0; i < currentChildren.length; i++) {
+            currentChildren[i].remove();
+        }
 
-    var dayStartX = (dayWidth * dayIterator) + (dayIterator * blockWidth);
-    //console.log("Day " + dayIterator + " starts at " + dayStartX);
+        var days = data.nodeData.data;
 
-    var day = days[dayIterator];
+        var dataToShow = false;
 
-    for (var empIterator=0; empIterator < days[dayIterator].length; empIterator++) {
+        for (var iDays=0; iDays < days.length; iDays++) {
+            if (days[iDays].length > 0) {
+                dataToShow = true;
+            }
+        }
 
-        var empStartX = dayStartX + (blockWidth * empIterator);
+        if (dataToShow) {
+            var colors = [
+                new color.RGBAColor(42  , 75  , 215 , alpha) , /* Blue */
+                new color.RGBAColor(129 , 197 , 122 , alpha) , /* Lt. Green */
+                new color.RGBAColor(173 , 35  , 35  , alpha) , /* Red */
+                new color.RGBAColor(157 , 175 , 255 , alpha) , /* Lt. Blue */
+                new color.RGBAColor(129 , 38  , 192 , alpha) , /* Purple */
+                new color.RGBAColor(255 , 146 , 51  , alpha) , /* Orange */
+                new color.RGBAColor(29  , 105 , 20  , alpha) , /* Green */
+                new color.RGBAColor(255 , 238 , 51  , alpha) , /* Yellow */
+                new color.RGBAColor(129 , 74  , 25  , alpha) , /* Brown */
+                new color.RGBAColor(41  , 208 , 208 , alpha) , /* Cyan */
+            ];
 
-        var emp = days[dayIterator][empIterator];
+            var startX = 0;
+            var startY = 0;
+            var blockWidth = 12;
+            var blockHeight = 8;
+            var alpha = 1;
+            var dayWidth = blockWidth * 10;
 
-        var inoutStartY = 0;
+            var myColor = new color.RGBAColor(42,75,215,alpha);
 
-        var dayStart = new Date(2000, 0, 1, 0, 0, 0);
-        var accumulatedPaddingBlocks = 0;
+            for(var dayIterator=0; dayIterator < days.length; dayIterator++){
 
-        for(var inoutIterator=0; inoutIterator < emp.inouts.length; inoutIterator++) {
-            var inoutStartX = dayStartX + empStartX;
-            inout = emp.inouts[inoutIterator];
-            var clockInParts  = inout.in.match(/^(\d+):(\d+)$/);
-            var clockIn = new Date(2000, 0, 1, parseInt(clockInParts[1]), parseInt(clockInParts[2]), 0);
+                var dayStartX = (dayWidth * dayIterator) + (dayIterator * blockWidth);
 
-            var clockOutParts = inout.out.match(/^(\d+):(\d+)$/);
-            var clockOut = new Date(2000, 0, 1, parseInt(clockOutParts[1]), parseInt(clockOutParts[2]), 0);
+                var day = days[dayIterator];
 
-            inOutBlockCount = ((clockOut - clockIn) / 1000 / 60 / 60) * 4;
+                for (var empIterator=0; empIterator < days[dayIterator].length; empIterator++) {
 
-            var padBlockCount = ((clockIn - dayStart) / 1000 / 60 / 60) * 4;
+                    var empStartX = dayStartX + (blockWidth * empIterator);
 
-            inoutStartY = padBlockCount * blockHeight;
+                    var emp = days[dayIterator][empIterator];
 
-            inoutStartY = inoutStartY + (accumulatedPaddingBlocks * blockHeight);
+                    var inoutStartY = 0;
 
-            new Rect(
-                empStartX,
-                inoutStartY,
-                blockWidth,
-                inOutBlockCount*blockHeight
-            )
-            .addTo(stage)
-            .attr('fillColor', colors[empIterator])
-            // .attr('filters', new filter.Grayscale())
-            // .animate('1s', { filters: new filter.Grayscale()})
-            // .attr('filters', new filter.Sepia())
-            ;
+                    var dayStart = new Date(2000, 0, 1, 0, 0, 0);
+                    var accumulatedPaddingBlocks = 0;
+
+                    for(var inoutIterator=0; inoutIterator < emp.inouts.length; inoutIterator++) {
+                        var inoutStartX = dayStartX + empStartX;
+                        inout = emp.inouts[inoutIterator];
+                        var clockInParts  = inout.in.match(/^(\d+):(\d+)$/);
+                        var clockIn = new Date(2000, 0, 1, parseInt(clockInParts[1]), parseInt(clockInParts[2]), 0);
+
+                        var clockOutParts = inout.out.match(/^(\d+):(\d+)$/);
+                        var clockOut = new Date(2000, 0, 1, parseInt(clockOutParts[1]), parseInt(clockOutParts[2]), 0);
+
+                        inOutBlockCount = ((clockOut - clockIn) / 1000 / 60 / 60) * 4;
+
+                        var padBlockCount = ((clockIn - dayStart) / 1000 / 60 / 60) * 4;
+
+                        inoutStartY = padBlockCount * blockHeight;
+
+                        inoutStartY = inoutStartY + (accumulatedPaddingBlocks * blockHeight);
+
+                        new Rect(
+                            empStartX,
+                            inoutStartY,
+                            blockWidth,
+                            inOutBlockCount*blockHeight
+                        )
+                        .addTo(stage)
+                        .attr('fillColor', colors[empIterator])
+                        // .attr('filters', new filter.Grayscale())
+                        // .animate('1s', { filters: new filter.Grayscale()})
+                        // .attr('filters', new filter.Sepia())
+                        ;
+                    }
+                }
+            }
+        } else {
+            new Text('No scheduling data available for this week.').addTo(stage).attr({
+                fontFamily: 'Helvetica',
+                fontSize: '16',
+                textAlign: 'center',
+                x: 10,
+                y: 10
+            });
         }
     }
-}
+});
+
+stage.sendMessage('ready', {});
