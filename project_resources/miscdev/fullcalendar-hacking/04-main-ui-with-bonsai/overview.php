@@ -12,9 +12,13 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bonsai/0.4/bonsai.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+        <script>document.write('<script src="http://192.168.1.52:35729/livereload.js?snipver=1"></' + 'script>')</script>
 
         <title>Scheduler - Overview</title>
+
+        <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.css" rel="stylesheet">
@@ -54,52 +58,56 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
         </div>
 
         <div class="container">
-            <div role="form" class="form-horizontal">
-                <form action="" class="form-horizontal">
-                    <div class="col-sm-5">
-                        <select id="rangeSelector" class="form-control input-lg">
-                            <?php
+            <div class="row">
+                <div class="col-md-5">
+                    <div role="form" class="form-horizontal">
+                        <form action="" class="form-horizontal"> 
+                                <select id="rangeSelector" class="form-control input">
+                                    <?php
 
-                                if ($_GET['weekOf']) {
-                                    $currentWeekOf = $_GET['weekOf'];
-                                    $logger->addInfo($currentWeekOf);
-                                }
-                                $futureWeekCount = 10;
-                                // Get the Sunday for this week
-                                $lastSunday = strtotime('last sunday');
-                                $futureWeekCount = 10;
-                                $selectorDateFormat = 'D, M jS, Y';
-                                $ranges = array();
+                                        if ($_GET['weekOf']) {
+                                            $currentWeekOf = $_GET['weekOf'];
+                                            $logger->addInfo($currentWeekOf);
+                                        }
+                                        $futureWeekCount = 10;
+                                        // Get the Sunday for this week
+                                        $lastSunday = strtotime('last sunday');
+                                        $futureWeekCount = 10;
+                                        $selectorDateFormat = 'D, M jS, Y';
+                                        $ranges = array();
 
-                                // Get the Sunday for this week
-                                $lastSunday = strtotime('last sunday');
+                                        // Get the Sunday for this week
+                                        $lastSunday = strtotime('last sunday');
 
-                                for ($i=0; $i<$futureWeekCount; $i++) {
-                                    $ranges[] = array('start' => $lastSunday, 'end' => $lastSunday + (86400 * 6));
-                                    $lastSunday = $lastSunday + (86400 * 7);
-                                }
+                                        for ($i=0; $i<$futureWeekCount; $i++) {
+                                            $ranges[] = array('start' => $lastSunday, 'end' => $lastSunday + (86400 * 6));
+                                            $lastSunday = $lastSunday + (86400 * 7);
+                                        }
 
-                                foreach ($ranges as $range) {
-                                    $weekOf = date('Y-m-d', $range['start']);
-                                    $logger->addInfo("currentWeekOf:$currentWeekOf");
-                                    $logger->addInfo("weekOf:$weekOf");
-                                    if ($currentWeekOf == $weekOf) {
-                                        $selected = 'selected';
-                                    } else {
-                                        $selected = '';
-                                    }
-                                    echo "<option $selected value=\"".date('Y-m-d', $range['start'])."\">".date($selectorDateFormat, $range['start'])." &mdash; ".date($selectorDateFormat, $range['end'])."</option>\n";
-                                }
-                            ?>
-                        </select>
+                                        foreach ($ranges as $range) {
+                                            $weekOf = date('Y-m-d', $range['start']);
+                                            $logger->addInfo("currentWeekOf:$currentWeekOf");
+                                            $logger->addInfo("weekOf:$weekOf");
+                                            if ($currentWeekOf == $weekOf) {
+                                                $selected = 'selected';
+                                            } else {
+                                                $selected = '';
+                                            }
+                                            echo "<option $selected value=\"".date('Y-m-d', $range['start'])."\">".date($selectorDateFormat, $range['start'])." &mdash; ".date($selectorDateFormat, $range['end'])."</option>\n";
+                                        }
+                                    ?>
+                                </select>
+                        </form>
                     </div>
-                </form>
+                </div>
+                <div class="col-md-7">
+                    <strong>Employees: <a href="#" class="adder" role="button">(click here to add)</a></strong>
+                    <ul id="empList">
+                    </ul>
+                </div>
             </div>
-
-            <br clear="both" />
-            <br clear="both" />
-
-            
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-12">
         <!-- width = blockwidth * 11 * 7 -->
         <!-- height = blockheight * 4 * 24 -->
         <div id="schedule-graphic-scale">
@@ -189,9 +197,26 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
             <div id="schedule-graphic-graph" style=""></div>
         </div>
 
+                </div>
+            </div>
+
+        </div>
+            
+
         </div> <!-- /container -->
 
+        <div id="dialog" title="Select User" style="display:none;">
+            <label for="users">Users:</label>
+            <input id="user" />
+            <select id="newUser" name="newUser"></select>
+        </div>
+
         <script src="js/jquery-git.js"></script>
+        <script src="js/jquery-ui-1.10.3.custom.js"></script>
+        <script src="http://bseth99.github.io/jquery-ui-extensions/ui/jquery.ui.combobox.js"></script>
+        <!-- employees needs to be first! -->
+        <script src="employee-database.js" type="text/javascript" charset="utf-8"></script>
+        <script src="employees.js" type="text/javascript" charset="utf-8"></script>
         <script src="overview.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/bootstrap.js"></script>
     </body>

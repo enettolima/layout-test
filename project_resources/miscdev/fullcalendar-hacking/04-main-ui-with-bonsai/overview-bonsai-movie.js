@@ -8,7 +8,7 @@ stage.on('message:externalData', function(data) {
             currentChildren[i].remove();
         }
 
-        var days = data.nodeData.data;
+        var days = data.nodeData.schedule;
 
         var dataToShow = false;
 
@@ -19,6 +19,7 @@ stage.on('message:externalData', function(data) {
         }
 
         if (dataToShow) {
+
             var colors = [
                 new color.RGBAColor(42  , 75  , 215 , alpha) , /* Blue */
                 new color.RGBAColor(129 , 197 , 122 , alpha) , /* Lt. Green */
@@ -91,7 +92,7 @@ stage.on('message:externalData', function(data) {
                 }
             }
         } else {
-            new Text('No scheduling data available for this week.').addTo(stage).attr({
+            new Text('No scheduling data available for the week starting ' + data.nodeData.strDate).addTo(stage).attr({
                 fontFamily: 'Helvetica',
                 fontSize: '16',
                 textAlign: 'center',

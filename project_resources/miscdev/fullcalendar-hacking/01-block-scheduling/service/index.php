@@ -24,6 +24,27 @@ $app->get(
 
         $returnval = array();
 
+        $queryMeta = "
+            SELECT
+                data
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$sundayDate'
+        ";
+
+        $stmtMeta = $db->query($queryMeta);
+
+        $resultsMeta = $stmtMeta->fetchAll(PDO::FETCH_ASSOC);
+
+        if (! isset($resultsMeta[0])) {
+            $resultsMeta[0] = array();
+            $resultsMeta[0]['data'] = null;
+        }
+
+        $metaArray = json_decode($resultsMeta[0]['data'], true);
+
         // So we get 7 total days starting from sunday...
         for ($i=0; $i <=6; $i++) {
 
@@ -53,26 +74,7 @@ $app->get(
 
             $resultsSchedule = $stmtSchedule->fetchAll(PDO::FETCH_ASSOC);
 
-            $queryMeta = "
-                SELECT
-                    data
-                FROM
-                    schedule_day_meta
-                WHERE
-                    store_id = $storeNumber AND
-                    date = '$onDate'
-            ";
-
-            $stmtMeta = $db->query($queryMeta);
-
-            $resultsMeta = $stmtMeta->fetchAll(PDO::FETCH_ASSOC);
-
-            if (! isset($resultsMeta[0])) {
-                $resultsMeta[0] = array();
-                $resultsMeta[0]['data'] = null;
-            }
-
-            $returnval[$onDate] = array('meta' => json_decode($resultsMeta[0]['data']), 'schedule' => $resultsSchedule);
+            $returnval[$onDate] = array('schedule' => $resultsSchedule);
         }
 
         $nr = array();
@@ -81,7 +83,6 @@ $app->get(
         foreach ($returnval as $day => $val) {
             $dayArray = array();
             $empArray = array();
-            $logger->addInfo($day);
             foreach ($val['schedule'] as $inoutKey => $inoutVal) {
                 $empArray[$inoutVal['associate_id']][] = array (
                     'in' => date("H:i", strtotime($inoutVal['date_in'])), 
@@ -95,9 +96,9 @@ $app->get(
             $nr[] = $dayArray;
         }
 
-        $logger->addInfo('', $nr);
+        $returnval =  json_encode(array('meta' => $metaArray, 'schedule' => $nr));
 
-        echo json_encode($nr);
+        echo $returnval;
     }
 );
 
@@ -259,7 +260,6 @@ $app->post(
                 echo json_encode(array('id' => null));
             }
         } else {
-            $logger->addInfo('hey');
             echo json_encode(array('id' => null));
         }
     }
@@ -289,7 +289,6 @@ $app->put(
         if ($res = $sth->fetch()){
             $metaArray = json_decode($res['data'], true);
             $currentSequence = $metaArray['sequence'];
-            print_r ($currentSequence);
             if (! in_array($userId, $currentSequence)) {
                 $currentSequence[] = $userId;
                 $metaArray['sequence'] = $currentSequence;
@@ -378,7 +377,6 @@ $app->put(
     '/inOutResize/:inOutId/:delta', 
     function($inOutId, $delta) use ($app, $db, $logger)
     {
-        $logger->addInfo('hey', array('asdf' => 'foo'));
         $query = "
             UPDATE scheduled_inout
             SET

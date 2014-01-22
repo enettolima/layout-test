@@ -10,52 +10,52 @@ $(document).ready(function() {
 
     var empDateMap = {};
 
-    var empDatabase = Array();
+    var empMasterDatabase = Array();
 
-	empDatabase.push({"userId": "000FOO" , "firstName": "Ann-Marie" , "lastName": "Mossberg"});
-	empDatabase.push({"userId": "001FOO" , "firstName": "Dustin"    , "lastName": "Harvey"});
-	empDatabase.push({"userId": "002FOO" , "firstName": "Aristotle" , "lastName": "Barlow"});
-	empDatabase.push({"userId": "003FOO" , "firstName": "Nyssa"     , "lastName": "Brock"});
-	empDatabase.push({"userId": "004FOO" , "firstName": "Marah"     , "lastName": "Mcmillan"});
-	empDatabase.push({"userId": "005BAR" , "firstName": "Kay"       , "lastName": "Fisher"});
-	empDatabase.push({"userId": "006BAR" , "firstName": "Cody"      , "lastName": "Patrick"});
-	empDatabase.push({"userId": "007BAR" , "firstName": "Emerson"   , "lastName": "Oneil"});
-	empDatabase.push({"userId": "008BAR" , "firstName": "Kylee"     , "lastName": "Simpson"});
-	empDatabase.push({"userId": "009BAR" , "firstName": "Derek"     , "lastName": "House"});
-	empDatabase.push({"userId": "010BAR" , "firstName": "James"     , "lastName": "Blevins"});
-	empDatabase.push({"userId": "011BAR" , "firstName": "Lee"       , "lastName": "Conner"});
-	empDatabase.push({"userId": "012BAR" , "firstName": "Adam"      , "lastName": "Mays"});
-	empDatabase.push({"userId": "013BAR" , "firstName": "Maia"      , "lastName": "Ballard"});
-	empDatabase.push({"userId": "014BAR" , "firstName": "Kadeem"    , "lastName": "Guerra"});
-	empDatabase.push({"userId": "015BAR" , "firstName": "Kelsie"    , "lastName": "Marsh"});
-	empDatabase.push({"userId": "016BAR" , "firstName": "Aladdin"   , "lastName": "Santana"});
-	empDatabase.push({"userId": "017BAR" , "firstName": "Winter"    , "lastName": "Booth"});
-	empDatabase.push({"userId": "018BAR" , "firstName": "Shelley"   , "lastName": "Obrien"});
-	empDatabase.push({"userId": "019BAR" , "firstName": "Chava"     , "lastName": "Keller"});
-	empDatabase.push({"userId": "020BAR" , "firstName": "Elaine"    , "lastName": "Pearson"});
-	empDatabase.push({"userId": "021BAR" , "firstName": "Rama"      , "lastName": "Kidd"});
-	empDatabase.push({"userId": "022BAR" , "firstName": "Ignatius"  , "lastName": "Blake"});
-	empDatabase.push({"userId": "023BAR" , "firstName": "Charity"   , "lastName": "Wong"});
-	empDatabase.push({"userId": "024BAR" , "firstName": "Urielle"   , "lastName": "House"});
-	empDatabase.push({"userId": "025BAR" , "firstName": "Ina"       , "lastName": "Hanson"});
-	empDatabase.push({"userId": "026BAR" , "firstName": "Keane"     , "lastName": "Anderson"});
-	empDatabase.push({"userId": "027BAR" , "firstName": "Laurel"    , "lastName": "Levy"});
-	empDatabase.push({"userId": "028BAR" , "firstName": "Leslie"    , "lastName": "Craig"});
-	empDatabase.push({"userId": "029BAR" , "firstName": "Lacota"    , "lastName": "Brennan"});
-	empDatabase.push({"userId": "030BAR" , "firstName": "Lars"      , "lastName": "Bright"});
-	empDatabase.push({"userId": "031BAR" , "firstName": "Melanie"   , "lastName": "Mcguire"});
-	empDatabase.push({"userId": "032BAR" , "firstName": "Ulric"     , "lastName": "Meyer"});
-	empDatabase.push({"userId": "033BAR" , "firstName": "Montana"   , "lastName": "Riley"});
-	empDatabase.push({"userId": "034BAR" , "firstName": "Emmanuel"  , "lastName": "Stein"});
-	empDatabase.push({"userId": "035BAR" , "firstName": "Desirae"   , "lastName": "Mccray"});
+	empMasterDatabase.push({"userId": "000FOO" , "firstName": "Ann-Marie" , "lastName": "Mossberg"});
+	empMasterDatabase.push({"userId": "001FOO" , "firstName": "Dustin"    , "lastName": "Harvey"});
+	empMasterDatabase.push({"userId": "002FOO" , "firstName": "Aristotle" , "lastName": "Barlow"});
+	empMasterDatabase.push({"userId": "003FOO" , "firstName": "Nyssa"     , "lastName": "Brock"});
+	empMasterDatabase.push({"userId": "004FOO" , "firstName": "Marah"     , "lastName": "Mcmillan"});
+	empMasterDatabase.push({"userId": "005BAR" , "firstName": "Kay"       , "lastName": "Fisher"});
+	empMasterDatabase.push({"userId": "006BAR" , "firstName": "Cody"      , "lastName": "Patrick"});
+	empMasterDatabase.push({"userId": "007BAR" , "firstName": "Emerson"   , "lastName": "Oneil"});
+	empMasterDatabase.push({"userId": "008BAR" , "firstName": "Kylee"     , "lastName": "Simpson"});
+	empMasterDatabase.push({"userId": "009BAR" , "firstName": "Derek"     , "lastName": "House"});
+	empMasterDatabase.push({"userId": "010BAR" , "firstName": "James"     , "lastName": "Blevins"});
+	empMasterDatabase.push({"userId": "011BAR" , "firstName": "Lee"       , "lastName": "Conner"});
+	empMasterDatabase.push({"userId": "012BAR" , "firstName": "Adam"      , "lastName": "Mays"});
+	empMasterDatabase.push({"userId": "013BAR" , "firstName": "Maia"      , "lastName": "Ballard"});
+	empMasterDatabase.push({"userId": "014BAR" , "firstName": "Kadeem"    , "lastName": "Guerra"});
+	empMasterDatabase.push({"userId": "015BAR" , "firstName": "Kelsie"    , "lastName": "Marsh"});
+	empMasterDatabase.push({"userId": "016BAR" , "firstName": "Aladdin"   , "lastName": "Santana"});
+	empMasterDatabase.push({"userId": "017BAR" , "firstName": "Winter"    , "lastName": "Booth"});
+	empMasterDatabase.push({"userId": "018BAR" , "firstName": "Shelley"   , "lastName": "Obrien"});
+	empMasterDatabase.push({"userId": "019BAR" , "firstName": "Chava"     , "lastName": "Keller"});
+	empMasterDatabase.push({"userId": "020BAR" , "firstName": "Elaine"    , "lastName": "Pearson"});
+	empMasterDatabase.push({"userId": "021BAR" , "firstName": "Rama"      , "lastName": "Kidd"});
+	empMasterDatabase.push({"userId": "022BAR" , "firstName": "Ignatius"  , "lastName": "Blake"});
+	empMasterDatabase.push({"userId": "023BAR" , "firstName": "Charity"   , "lastName": "Wong"});
+	empMasterDatabase.push({"userId": "024BAR" , "firstName": "Urielle"   , "lastName": "House"});
+	empMasterDatabase.push({"userId": "025BAR" , "firstName": "Ina"       , "lastName": "Hanson"});
+	empMasterDatabase.push({"userId": "026BAR" , "firstName": "Keane"     , "lastName": "Anderson"});
+	empMasterDatabase.push({"userId": "027BAR" , "firstName": "Laurel"    , "lastName": "Levy"});
+	empMasterDatabase.push({"userId": "028BAR" , "firstName": "Leslie"    , "lastName": "Craig"});
+	empMasterDatabase.push({"userId": "029BAR" , "firstName": "Lacota"    , "lastName": "Brennan"});
+	empMasterDatabase.push({"userId": "030BAR" , "firstName": "Lars"      , "lastName": "Bright"});
+	empMasterDatabase.push({"userId": "031BAR" , "firstName": "Melanie"   , "lastName": "Mcguire"});
+	empMasterDatabase.push({"userId": "032BAR" , "firstName": "Ulric"     , "lastName": "Meyer"});
+	empMasterDatabase.push({"userId": "033BAR" , "firstName": "Montana"   , "lastName": "Riley"});
+	empMasterDatabase.push({"userId": "034BAR" , "firstName": "Emmanuel"  , "lastName": "Stein"});
+	empMasterDatabase.push({"userId": "035BAR" , "firstName": "Desirae"   , "lastName": "Mccray"});
 
-    var empAutoComplete = assignEmployees(empDatabase);
+    var empAutoComplete = assignEmployees(empMasterDatabase);
 
-    function assignEmployees(empDatabase){
+    function assignEmployees(empMasterDatabase){
 
         var returnVal = Array();
 
-        $.each(empDatabase, function(key, value) {
+        $.each(empMasterDatabase, function(key, value) {
             returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
         });
 
@@ -226,9 +226,9 @@ $(document).ready(function() {
         var userNameString = userInfo[1];
 
         //Remove the user from the list of employees
-        empDatabase = $.grep(empDatabase, function(o,i){ return o.userId === userCode; }, true);
+        empMasterDatabase = $.grep(empMasterDatabase, function(o,i){ return o.userId === userCode; }, true);
         // This should probably be moved out to a "refresh autocomplete" deal...
-        empAutoComplete = assignEmployees(empDatabase);
+        empAutoComplete = assignEmployees(empMasterDatabase);
         $("#user").autocomplete({source:empAutoComplete});
 
         // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
@@ -287,7 +287,7 @@ $(document).ready(function() {
     }
 
     function getEmpNameFromCode(strCode){
-        var results = $.grep(empDatabase, function(e){ return e.userId === strCode; });
+        var results = $.grep(empMasterDatabase, function(e){ return e.userId === strCode; });
 
         if (results.length === 0) {
             return false;
