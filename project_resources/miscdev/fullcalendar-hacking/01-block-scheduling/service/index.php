@@ -204,6 +204,12 @@ $app->get(
 
         $resultsSchedule = $stmtSchedule->fetchAll(PDO::FETCH_ASSOC);
 
+        // Metadata currently resides at the week point...
+
+        $ts = strtotime($date);
+        $sundayTimestamp = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
+        $sundayDate = date('Y-m-d', $sundayTimestamp);
+
         $queryMeta = "
             SELECT
                 data
@@ -211,7 +217,7 @@ $app->get(
                 schedule_day_meta
             WHERE
                 store_id = $storeNumber AND
-                date = '$date'
+                date = '$sundayDate'
         ";
 
         $stmtMeta = $db->query($queryMeta);
@@ -312,6 +318,78 @@ $app->put(
             } else {
                 echo json_encode(array('status' => 0));
             }
+        } else {
+            echo json_encode(array('status' => 1));
+        }
+    }
+);
+
+$app->delete(
+    '/removeUserFromSchedule/:storeNumber/:userId/:weekOf',
+    function($storeNumber, $userId, $weekOf) use ($logger, $app, $db)
+    {
+        $query = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$weekOf'
+        ";
+
+        $sth = $db->prepare($query);
+
+        $sth->execute(); //TODO: Handle errors
+
+        $performUpdate = false;
+
+        if ($res = $sth->fetch()){
+
+            $metaArray = json_decode($res['data'], true);
+
+            $currentSequence = $metaArray['sequence'];
+            if (in_array($userId, $currentSequence)) {
+                foreach($currentSequence as $key=>$val) {
+                    if ($val == $userId) {
+                        unset($currentSequence[$key]);
+                        $performUpdate = true;
+                    }
+                }
+            }
+        }
+
+        if ($performUpdate) {
+            $metaArray['sequence'] = array_values($currentSequence);
+            $newData = json_encode($metaArray);
+            $query = "UPDATE schedule_day_meta set data = '$newData' where id = {$res['id']}";
+            $sth = $db->prepare($query);
+             
+            if ($sth->execute()) {
+
+                $nextSunday = date("Y-m-d", strtotime('next sunday', strtotime($weekOf)));
+
+                $deleteScheduleQuery = "
+                    DELETE FROM
+                        scheduled_inout
+                    WHERE
+                        date_in >= '$weekOf' AND
+                        date_in < '$nextSunday' AND
+                        associate_id = '$userId' AND
+                        store_id = $storeNumber
+                ";
+
+                $logger->addInfo($deleteScheduleQuery);
+
+                $deleteScheduleHandle = $db->prepare($deleteScheduleQuery);
+
+                $deleteScheduleHandle->execute();
+
+                echo json_encode(array('status' => 1));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+
         } else {
             echo json_encode(array('status' => 1));
         }

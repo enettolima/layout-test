@@ -40,10 +40,10 @@ function loadSchedule(strDate) {
         // Reinitialize the employees database
         if (msg.meta && msg.meta.sequence) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
-                // Remove employee from current 
-                var result = $.grep(empMasterDatabase, function(e){ return e.userId == msg.meta.sequence[iEmp]; });
-                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a href=\"#\" class=\"user-del\">x</a>"));
-                currentEmployees.push(msg.meta.sequence[iEmp]);
+                var userId = msg.meta.sequence[iEmp];
+                var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
+                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-id=\""+userId+"\" href=\"#\" class=\"user-del\">x</a>"));
+                currentEmployees.push(userId);
             }
         }
 
@@ -75,5 +75,21 @@ $(document).ready(function(){
     $('#rangeSelector').change(function(){
         loadSchedule($(this).val());
     });
+});
 
+$(document).on("click", ".user-del", function(){
+    if (confirm("Are you sure?")) {
+
+        var userId = $(this).attr("data-user-id");
+        var weekOf = $("#rangeSelector").val();
+
+        var request = $.ajax({
+            url: serviceURL + "/removeUserFromSchedule/301/" + userId + "/" + weekOf,
+            type: "DELETE"
+        });
+
+        request.done(function(msg) {
+            loadSchedule(weekOf);
+        });
+    }
 });

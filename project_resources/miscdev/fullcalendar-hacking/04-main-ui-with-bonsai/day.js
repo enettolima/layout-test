@@ -4,67 +4,14 @@ var serviceURL = "http://cdev.newpassport.com/miscdev/fullcalendar-hacking/01-bl
 
 $(document).ready(function() {
 
+    var weekOf = $('#weekOf').val();
+    console.log(weekOf);
     var targetDate = $('#targetDate').val();
+    console.log(targetDate);
 
     var onEvent = 0;
 
     var empDateMap = {};
-
-    var empMasterDatabase = Array();
-
-	empMasterDatabase.push({"userId": "000FOO" , "firstName": "Ann-Marie" , "lastName": "Mossberg"});
-	empMasterDatabase.push({"userId": "001FOO" , "firstName": "Dustin"    , "lastName": "Harvey"});
-	empMasterDatabase.push({"userId": "002FOO" , "firstName": "Aristotle" , "lastName": "Barlow"});
-	empMasterDatabase.push({"userId": "003FOO" , "firstName": "Nyssa"     , "lastName": "Brock"});
-	empMasterDatabase.push({"userId": "004FOO" , "firstName": "Marah"     , "lastName": "Mcmillan"});
-	empMasterDatabase.push({"userId": "005BAR" , "firstName": "Kay"       , "lastName": "Fisher"});
-	empMasterDatabase.push({"userId": "006BAR" , "firstName": "Cody"      , "lastName": "Patrick"});
-	empMasterDatabase.push({"userId": "007BAR" , "firstName": "Emerson"   , "lastName": "Oneil"});
-	empMasterDatabase.push({"userId": "008BAR" , "firstName": "Kylee"     , "lastName": "Simpson"});
-	empMasterDatabase.push({"userId": "009BAR" , "firstName": "Derek"     , "lastName": "House"});
-	empMasterDatabase.push({"userId": "010BAR" , "firstName": "James"     , "lastName": "Blevins"});
-	empMasterDatabase.push({"userId": "011BAR" , "firstName": "Lee"       , "lastName": "Conner"});
-	empMasterDatabase.push({"userId": "012BAR" , "firstName": "Adam"      , "lastName": "Mays"});
-	empMasterDatabase.push({"userId": "013BAR" , "firstName": "Maia"      , "lastName": "Ballard"});
-	empMasterDatabase.push({"userId": "014BAR" , "firstName": "Kadeem"    , "lastName": "Guerra"});
-	empMasterDatabase.push({"userId": "015BAR" , "firstName": "Kelsie"    , "lastName": "Marsh"});
-	empMasterDatabase.push({"userId": "016BAR" , "firstName": "Aladdin"   , "lastName": "Santana"});
-	empMasterDatabase.push({"userId": "017BAR" , "firstName": "Winter"    , "lastName": "Booth"});
-	empMasterDatabase.push({"userId": "018BAR" , "firstName": "Shelley"   , "lastName": "Obrien"});
-	empMasterDatabase.push({"userId": "019BAR" , "firstName": "Chava"     , "lastName": "Keller"});
-	empMasterDatabase.push({"userId": "020BAR" , "firstName": "Elaine"    , "lastName": "Pearson"});
-	empMasterDatabase.push({"userId": "021BAR" , "firstName": "Rama"      , "lastName": "Kidd"});
-	empMasterDatabase.push({"userId": "022BAR" , "firstName": "Ignatius"  , "lastName": "Blake"});
-	empMasterDatabase.push({"userId": "023BAR" , "firstName": "Charity"   , "lastName": "Wong"});
-	empMasterDatabase.push({"userId": "024BAR" , "firstName": "Urielle"   , "lastName": "House"});
-	empMasterDatabase.push({"userId": "025BAR" , "firstName": "Ina"       , "lastName": "Hanson"});
-	empMasterDatabase.push({"userId": "026BAR" , "firstName": "Keane"     , "lastName": "Anderson"});
-	empMasterDatabase.push({"userId": "027BAR" , "firstName": "Laurel"    , "lastName": "Levy"});
-	empMasterDatabase.push({"userId": "028BAR" , "firstName": "Leslie"    , "lastName": "Craig"});
-	empMasterDatabase.push({"userId": "029BAR" , "firstName": "Lacota"    , "lastName": "Brennan"});
-	empMasterDatabase.push({"userId": "030BAR" , "firstName": "Lars"      , "lastName": "Bright"});
-	empMasterDatabase.push({"userId": "031BAR" , "firstName": "Melanie"   , "lastName": "Mcguire"});
-	empMasterDatabase.push({"userId": "032BAR" , "firstName": "Ulric"     , "lastName": "Meyer"});
-	empMasterDatabase.push({"userId": "033BAR" , "firstName": "Montana"   , "lastName": "Riley"});
-	empMasterDatabase.push({"userId": "034BAR" , "firstName": "Emmanuel"  , "lastName": "Stein"});
-	empMasterDatabase.push({"userId": "035BAR" , "firstName": "Desirae"   , "lastName": "Mccray"});
-
-    var empAutoComplete = assignEmployees(empMasterDatabase);
-
-    function assignEmployees(empMasterDatabase){
-
-        var returnVal = Array();
-
-        $.each(empMasterDatabase, function(key, value) {
-            returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
-        });
-
-        return returnVal;
-    }
-
-    $("#user").autocomplete({source:empAutoComplete, autoFocus:true});
-
-    // $("#users").combobox();
 
     var calendar = $('#calendar').fullCalendar({
         // We don't really care what time 
@@ -304,6 +251,8 @@ $(document).ready(function() {
     });
  
     loadFromDB.done(function(msg) {
+
+        console.log(msg);
 
         var view = $('#calendar').fullCalendar('getView');
 

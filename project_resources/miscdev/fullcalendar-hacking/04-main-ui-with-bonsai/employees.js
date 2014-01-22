@@ -1,17 +1,11 @@
 function assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees){
 
-    console.log('assignEmployeesToAutoComplete');
-    console.log(currentEmployees);
-
     var returnVal = Array();
 
     $.each(empMasterDatabase, function(key, value) {
         if (currentEmployees.indexOf(value.userId) < 1) {
             returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
-        } else {
-            console.log("Not assigning " + value.userId +"|"+ value.firstName +"|");
         }
-
     });
 
     return returnVal;
@@ -49,27 +43,19 @@ function addTheUser(){
     //var nextCol  = getNextAvailableColumn();
     var userInfo = $("#user").val().split(" - ");
 
-    console.log("addTheUser fired for " + userInfo);
-
     var targetDate = $("#rangeSelector").val();
-    console.log(1);
 
     var userCode = userInfo[0];
-    console.log(2);
 
     var userNameString = userInfo[1];
-    console.log(3);
 
     // Add the user to current list of employees
     currentEmployees.push(userCode);
-    console.log(4);
 
     // This should probably be moved out to a "refresh autocomplete" deal...
     empAutoComplete = assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees);
-    console.log(5);
 
     $("#user").autocomplete({source:empAutoComplete});
-    console.log(6);
 
     // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
 
@@ -79,23 +65,14 @@ function addTheUser(){
     })
 
     .done(function(msg) {
-    console.log(8);
-        console.log(msg);
-        // console.log(msg.status);
-        // console.log(parseInt(msg.status));
 
         if (parseInt(msg.status) === 1) {
-            console.log ("Ok Good");
             $("#empList").append($("<li></li>").html(userNameString + " <a href=\"#\" class=\"user-del\">x</a>"));
         }
     })
 
     .fail(function(jaXHR, textStatus){
         console.log(textStatus);
-    });
-
-    request.always(function(){
-        console.log('always do this');
     });
 
     /*

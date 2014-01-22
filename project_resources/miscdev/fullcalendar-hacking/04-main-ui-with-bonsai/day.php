@@ -1,4 +1,5 @@
 <?php
+    $weekOf = $_GET['weekOf'];
     $targetDay = date('Y-m-d', strtotime($_GET['weekOf']) + ($_GET['dayOffset'] * 86400));
     $selectorDateFormat = 'D, M jS, Y';
 ?>
@@ -19,6 +20,8 @@
         <link rel="stylesheet" href='fullcalendar/fullcalendar.css' />
 
         <link rel="stylesheet" href='fullcalendar/fullcalendar.print.css' media='print' />
+
+        <script>document.write('<script src="http://192.168.1.52:35729/livereload.js?snipver=1"></' + 'script>')</script>
 
     </head>
 
@@ -76,8 +79,10 @@
 
         <script src="http://bseth99.github.io/jquery-ui-extensions/ui/jquery.ui.combobox.js"></script>
 
+        <script src="employee-database.js" type="text/javascript" charset="utf-8"></script>
         <script src="day.js"></script>
 
-        <input type="hidden" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />
+        <input type="text" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />
+        <input type="text" name="weekOf" id="weekOf" value="<?php echo $weekOf ?>" />
     </body>
 </html>
