@@ -42,7 +42,7 @@ function loadSchedule(strDate) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
                 var userId = msg.meta.sequence[iEmp];
                 var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-id=\""+userId+"\" href=\"#\" class=\"user-del\">x</a>"));
+                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-id=\""+userId+"\" href=\"#\" class=\"user-del small\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
                 currentEmployees.push(userId);
             }
         }

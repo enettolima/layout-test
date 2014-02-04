@@ -136,7 +136,7 @@ $(document).ready(function() {
     // As we populate them
     $(".sched-col").addClass("fc-state-off");
     //$(".sched-header").html("<a class=\"adder\" href=\"#\">+ Add</a>");
-    $(".sched-header").html("<button class=\"adder\">Add User</button>");
+    // $(".sched-header").html("<button class=\"adder\">Add User</button>");
 
     $(".adder").on("click", function(){
         $( "#dialog" ).dialog({

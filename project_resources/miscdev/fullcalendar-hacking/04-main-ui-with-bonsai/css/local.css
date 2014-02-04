@@ -128,5 +128,6 @@ a.schedule-graphic-header:hover{
 }
 
 #empList li:after {
-    content:" - ";
+    content:"";
+    padding-right:15px;
 }
