@@ -111,7 +111,22 @@ a.schedule-graphic-header:hover{
 .sched-header {
     height:50px;
 }
+
 #calendar {
     width: 900px;
-    margin: 0 auto;
+    margin:0 0 0 10px;
+}
+
+#empList {
+    display:inline;
+    padding-left:2px;;
+}
+
+#empList li {
+    display:inline;
+    padding-right:3px;
+}
+
+#empList li:after {
+    content:" - ";
 }

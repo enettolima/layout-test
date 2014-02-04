@@ -29,33 +29,7 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
 
     <body>
 
-        <!-- Fixed navbar -->
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand passport-brand" href="#"><img alt="Passport Logo" src="logo.png"></a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="overview.php">Scheduler</a></li>
-                        <li><a href="#about">Thing</a></li>
-                        <li><a href="#contact">Foo</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret" /></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-header">Choose store:</li>
-                                <li><a href="#">301</a></li>
-                                <li><a href="#">302</a></li>
-                                <li><a href="#">303</a></li>
-                                <li><a href="#">304</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
-        </div>
+        <?php include('inc-header.php'); ?>
 
         <div class="container">
             <div class="row">
@@ -100,11 +74,12 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
                         </form>
                     </div>
                 </div>
-                <div class="col-md-7">
-                    <strong>Employees: <a href="#" class="adder" role="button">(click here to add)</a></strong>
+            </div>
+            <div class="row" style="padding-top:10px; margin-left: 4px;">
+                    <strong>Staff:</strong>
                     <ul id="empList">
                     </ul>
-                </div>
+                    <a href="#" class="adder btn btn-primary btn-xs" role="button">+</a> 
             </div>
             <div class="row" style="margin-top:20px;">
                 <div class="col-md-12">

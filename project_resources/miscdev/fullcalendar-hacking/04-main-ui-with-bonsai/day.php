@@ -27,47 +27,37 @@
 
     <body>
 
-        <!-- Fixed navbar -->
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand passport-brand" href="#"><img alt="Passport Logo" src="logo.png"></a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="overview.php">Scheduler</a></li>
-                        <li><a href="#about">Thing</a></li>
-                        <li><a href="#contact">Foo</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-header">Choose store:</li>
-                                <li><a href="#">301</a></li>
-                                <li><a href="#">302</a></li>
-                                <li><a href="#">303</a></li>
-                                <li><a href="#">304</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
-        </div>
+        <?php include('inc-header.php'); ?>
 
         <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div role="form" class="form-horizontal">
+                        <form action="" class="form-horizontal"> 
+                                <select disabled id="rangeSelector" class="form-control input">
+                                    <?php
+                                        $range['start'] = strtotime($_GET['weekOf']);
+                                        $range['end'] = strtotime($_GET['weekOf']) + (86400 * 6) ;
+                                        echo "<option $selected value=\"".date('Y-m-d', $range['start'])."\">".date($selectorDateFormat, $range['start'])." &mdash; ".date($selectorDateFormat, $range['end'])."</option>\n";
+                                    ?>
+                                </select>
+                        </form>
+                    </div>
+                </div>
 
-            <h3>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?></h3>
 
-            <a class="btn btn-primary btn-sm" href="overview.php?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>
 
-            <div id='calendar'></div>
 
-            <div id="dialog" title="Select User" style="display:none;">
-                <label for="users">Users:</label>
-                <input id="user" />
-                <select id="newUser" name="newUser"></select>
+
             </div>
+
+                <h4>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?> [<a class="" href="overview.php?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>] </h4>
+
+
+            <div class="row" style="padding-top:10px;">
+                <div id='calendar'></div>
+            </div>
+
         </div>
 
 
@@ -82,7 +72,7 @@
         <script src="employee-database.js" type="text/javascript" charset="utf-8"></script>
         <script src="day.js"></script>
 
-        <input type="text" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />
-        <input type="text" name="weekOf" id="weekOf" value="<?php echo $weekOf ?>" />
+        <input type="hidden" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />
+        <input type="hidden" name="weekOf" id="weekOf" value="<?php echo $weekOf ?>" />
     </body>
 </html>
