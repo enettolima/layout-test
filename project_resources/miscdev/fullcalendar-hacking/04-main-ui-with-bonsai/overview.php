@@ -178,11 +178,11 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
         <div class="row">
             <div class="col-md-5">
             <h4>Schedule Summary by Day</h4>
-            <table id="day-summary" class="table"></table>
+            <table id="day-summary" class="summary-table table table-striped table-condensed"></table>
         </div>
         <div class="col-md-5">
             <h4>Week Summary by Staff</h4>
-            <table id="week-summary" class="table"></table>
+            <table id="week-summary" class="summary-table table table-striped table-condensed"></table>
         </div>
 
         </div>

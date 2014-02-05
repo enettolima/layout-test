@@ -63,37 +63,37 @@ function loadSchedule(strDate) {
 
         $("#day-summary").empty();
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Sunday ["+msg.summary.hoursByDayNum[0]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Sunday ["+msg.summary.hoursByDayNum[0]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[0]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[0][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Monday ["+msg.summary.hoursByDayNum[1]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Monday ["+msg.summary.hoursByDayNum[1]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[1]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[1][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Tuesday ["+msg.summary.hoursByDayNum[2]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Tuesday ["+msg.summary.hoursByDayNum[2]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[2]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[2][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Wednesday ["+msg.summary.hoursByDayNum[3]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Wednesday ["+msg.summary.hoursByDayNum[3]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[3]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[3][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Thursday ["+msg.summary.hoursByDayNum[4]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Thursday ["+msg.summary.hoursByDayNum[4]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[4]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[4][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Friday ["+msg.summary.hoursByDayNum[5]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Friday ["+msg.summary.hoursByDayNum[5]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[5]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[5][emp]+"</td></tr>");
         }
 
-        $("#day-summary").append("<tr><td colspan=\"2\">Saturday ["+msg.summary.hoursByDayNum[6]+" Hours]</td></tr>");
+        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Saturday ["+msg.summary.hoursByDayNum[6]+" Hours]</td></tr>");
         for (var emp in msg.summary.empHoursByDayNum[6]) {
             $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[6][emp]+"</td></tr>");
         }
@@ -106,7 +106,7 @@ function loadSchedule(strDate) {
             var totalHours = msg.summary.empHoursByEmp[emp].total;
             var days = msg.summary.empHoursByEmp[emp].days;
 
-            $("#week-summary").append("<tr><td colspan=\"2\">"+emp+" ["+totalHours+" Hours]</td></tr>");
+            $("#week-summary").append("<tr><td class=\"heady\" colspan=\"2\">"+emp+" ["+totalHours+" Hours]</td></tr>");
 
             if (typeof(days[0].string) === "undefined") {
                 days[0].string = '<em>No hours</em>';

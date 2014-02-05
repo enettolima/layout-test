@@ -131,3 +131,11 @@ a.schedule-graphic-header:hover{
     content:"";
     padding-right:15px;
 }
+
+.heady {
+    font-weight:bold;
+}
+
+.summary-table td:not(.heady) {
+    padding-left:20px;
+}
