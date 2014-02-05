@@ -77,7 +77,7 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
             </div>
             <div class="row" style="padding-top:10px; margin-left: 4px;">
                     <strong>Staff:</strong>
-                    <ul id="empList">
+                    <ul id="empList" style="">
                     </ul>
                     <a href="#" class="adder btn btn-primary btn-xs" role="button">+</a> 
             </div>
@@ -175,8 +175,17 @@ $logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
                 </div>
             </div>
 
+        <div class="row">
+            <div class="col-md-5">
+            <h4>Schedule Summary by Day</h4>
+            <table id="day-summary" class="table"></table>
         </div>
-            
+        <div class="col-md-5">
+            <h4>Week Summary by Staff</h4>
+            <table id="week-summary" class="table"></table>
+        </div>
+
+        </div>
 
         </div> <!-- /container -->
 

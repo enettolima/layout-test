@@ -59,6 +59,91 @@ function loadSchedule(strDate) {
             } 
         });
 
+        // Populate the Day Summary
+
+        $("#day-summary").empty();
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Sunday ["+msg.summary.hoursByDayNum[0]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[0]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[0][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Monday ["+msg.summary.hoursByDayNum[1]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[1]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[1][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Tuesday ["+msg.summary.hoursByDayNum[2]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[2]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[2][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Wednesday ["+msg.summary.hoursByDayNum[3]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[3]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[3][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Thursday ["+msg.summary.hoursByDayNum[4]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[4]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[4][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Friday ["+msg.summary.hoursByDayNum[5]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[5]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[5][emp]+"</td></tr>");
+        }
+
+        $("#day-summary").append("<tr><td colspan=\"2\">Saturday ["+msg.summary.hoursByDayNum[6]+" Hours]</td></tr>");
+        for (var emp in msg.summary.empHoursByDayNum[6]) {
+            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[6][emp]+"</td></tr>");
+        }
+
+        // Populate the Week Summary
+        $("#week-summary").empty();
+
+        for (var emp in msg.summary.empHoursByEmp) {
+
+            var totalHours = msg.summary.empHoursByEmp[emp].total;
+            var days = msg.summary.empHoursByEmp[emp].days;
+
+            $("#week-summary").append("<tr><td colspan=\"2\">"+emp+" ["+totalHours+" Hours]</td></tr>");
+
+            if (typeof(days[0].string) === "undefined") {
+                days[0].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Sunday:</td><td>"+days[0].string+"</td></tr>");
+
+            if (typeof(days[1].string) === "undefined") {
+                days[1].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Monday:</td><td>"+days[1].string+"</td></tr>");
+
+            if (typeof(days[2].string) === "undefined") {
+                days[2].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Tuesday:</td><td>"+days[2].string+"</td></tr>");
+
+            if (typeof(days[3].string) === "undefined") {
+                days[3].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Wednesday:</td><td>"+days[3].string+"</td></tr>");
+
+            if (typeof(days[4].string) === "undefined") {
+                days[4].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Thursday:</td><td>"+days[4].string+"</td></tr>");
+            
+            if (typeof(days[5].string) === "undefined") {
+                days[5].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Friday:</td><td>"+days[5].string+"</td></tr>");
+
+            if (typeof(days[6].string) === "undefined") {
+                days[6].string = '<em>No hours</em>';
+            }
+            $("#week-summary").append("<tr><td>Saturday:</td><td>"+days[6].string+"</td></tr>");
+
+        }
     });
 }
 

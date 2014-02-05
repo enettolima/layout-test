@@ -1,13 +1,29 @@
 <?php
 
+function elog ($thing)
+{
+    if (is_array($thing) || is_object($thing))
+    {
+        ob_start();
+        echo var_export($thing);
+        $logLine = ob_get_contents();
+        ob_end_clean();
+    }
+    else
+    {
+        $logLine = $thing;
+    }
+
+    $fp = fopen('log.txt', 'aw');
+    fwrite($fp, "[" . date("c") . "]: " . $logLine . "\n");
+    fclose($fp);
+}
+
+require ('empInfoHelper.class.php');
+
+$e = new empInfoHelper();
+
 require 'vendor/autoload.php';
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
-$logger = new Logger('my_logger');
-$logger->pushHandler(new StreamHandler(__DIR__.'/log.txt', Logger::DEBUG));
-$logger->addInfo('start');
 
 $app = new \Slim\Slim();
 
@@ -15,9 +31,11 @@ $app->response->headers->set('Content-Type', 'application/json');
 
 $db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '123');
 
+$logger = true;
+
 $app->get(
     '/storeWeekSchedule/:storeNumber/:sundayDate',
-    function($storeNumber, $sundayDate) use ($logger, $db)
+    function($storeNumber, $sundayDate) use ($e, $logger, $db)
     {
         // Normalize supplied 'sundayDate' to YYYY-MM-DD
         $sundayDate = date('Y-m-d', strtotime($sundayDate));
@@ -78,25 +96,54 @@ $app->get(
         }
 
         $nr = array();
+        $summary = array();
 
-        // Here I need to reconstruct the data in a way that makes sense
+        // This: is getting super messy
         foreach ($returnval as $day => $val) {
+            if (! isset($dayNum)) {
+                $dayNum = 0;
+            }
             $dayArray = array();
             $empArray = array();
-            foreach ($val['schedule'] as $inoutKey => $inoutVal) {
+
+            $summary['hoursByDate'][$day] = 0;
+            $summary['hoursByDayNum'][$dayNum] = 0; 
+
+            foreach ($val['schedule'] as $inoutVal) {
                 $empArray[$inoutVal['associate_id']][] = array (
-                    'in' => date("H:i", strtotime($inoutVal['date_in'])), 
-                    'out' =>date("H:i", strtotime($inoutVal['date_out']))
+                    'in' => date("H:i", strtotime($inoutVal['date_in'])),
+                    'out' => date("H:i", strtotime($inoutVal['date_out']))
                 );
+
+                $e->setInOut($dayNum, $inoutVal['associate_id'], $inoutVal['date_in'], $inoutVal['date_out']);
+
+                $totFoo = strtotime($inoutVal['date_out']) - strtotime($inoutVal['date_in']);
+
+                $summary['hoursByDate'][$day] = $summary['hoursByDate'][$day] + ($totFoo / 3600);
+                $summary['hoursByDayNum'][$dayNum] = $summary['hoursByDayNum'][$dayNum] + ($totFoo / 3600);
             }
+
+            // $summary['empHoursByDayNum'][$dayNum] = $empSchedArray;
+
             foreach ($empArray as $empKey=>$empVal) {
                 $dayArray[] = array('eid' => $empKey, 'inouts' => $empVal);
             }
 
             $nr[] = $dayArray;
+            $dayNum++;
         }
 
-        $returnval =  json_encode(array('meta' => $metaArray, 'schedule' => $nr));
+        $summary['empHoursByDayNum'] = $e->getInOutStringsArray();
+        $summary['empHoursByEmp'] = $e->getEmpHoursWeekSummaryArray();
+
+        $returnArray = array('meta' => $metaArray, 'schedule' => $nr, 'summary' => $summary);
+
+        $returnval =  json_encode($returnArray);
+
+        //elog("here comes the FOO");
+        //elog($e->inOut);
+
+        $e->getInOutStringsArray();
 
         echo $returnval;
     }
@@ -378,8 +425,6 @@ $app->delete(
                         associate_id = '$userId' AND
                         store_id = $storeNumber
                 ";
-
-                $logger->addInfo($deleteScheduleQuery);
 
                 $deleteScheduleHandle = $db->prepare($deleteScheduleQuery);
 
