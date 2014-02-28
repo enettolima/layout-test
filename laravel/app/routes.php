@@ -13,10 +13,46 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
-    $results = DB::connection('sqlsrv')->select("select * from SCHED_BUDGET_PER_HOURS_FINAL_TABLE WHERE Store = '311'");
-    var_dump($results);
+    return Redirect::to('/home');
 });
+
+Route::get('/home', function()
+{
+    return View::make('pages.home.home');
+});
+
+Route::get('/scheduler', function()
+{
+    return View::make('pages.scheduler.overview');
+});
+
+Route::get('/weborder', function()
+{
+    return View::make('pages.weborder.comingsoon');
+});
+
+Route::get('/settings', function()
+{
+    return View::make('pages.settings.home');
+});
+
+
+Route::get('about', function()
+{
+    return View::make('pages.about');
+});
+
+Route::get('projects', function()
+{
+    return View::make('pages.projects');
+});
+
+Route::get('contact', function()
+{
+    return View::make('pages.contact');
+});
+
+
 
 Route::get('/dbtest', function()
 {
