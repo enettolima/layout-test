@@ -4,5 +4,9 @@
 
 <div class="jumbotron"><h1>...</h1></div>
 
-@stop
+<div class="row">
 
+
+</div>
+
+@stop

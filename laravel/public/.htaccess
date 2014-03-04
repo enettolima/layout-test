@@ -6,6 +6,7 @@
     RewriteEngine On
 
     RewriteRule ^miscdev - [L,NC]
+    RewriteRule ^svc - [L,NC]
 
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]

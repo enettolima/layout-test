@@ -21,7 +21,7 @@
 
         <link rel="stylesheet" href='fullcalendar/fullcalendar.print.css' media='print' />
 
-        <script>document.write('<script src="http://192.168.1.52:35729/livereload.js?snipver=1"></' + 'script>')</script>
+        <!-- <script>document.write('<script src="http://192.168.1.52:35729/livereload.js?snipver=1"></' + 'script>')</script> -->
 
     </head>
 
@@ -45,10 +45,6 @@
                     </div>
                 </div>
 
-
-
-
-
             </div>
 
                 <h4>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?> [<a class="" href="overview.php?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>] </h4>
@@ -66,8 +62,6 @@
         <script src="js/jquery-ui-1.10.3.custom.js"></script>
 
         <script src="fullcalendar/fullcalendar.js"></script>
-
-        <script src="http://bseth99.github.io/jquery-ui-extensions/ui/jquery.ui.combobox.js"></script>
 
         <script src="employee-database.js" type="text/javascript" charset="utf-8"></script>
         <script src="day.js"></script>

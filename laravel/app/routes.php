@@ -22,10 +22,14 @@ Route::get('/home', function()
 });
 
 Route::get('/scheduler', function()
-{
-    return View::make('pages.scheduler.overview');
+{ 
+    return Redirect::to('/scheduler/weekOverview');
 });
 
+Route::get('/scheduler/weekOverview', 'SchedulerController@showWeekOverview');
+
+Route::get('/scheduler/planDay', 'SchedulerController@showPlanDay');
+    
 Route::get('/weborder', function()
 {
     return View::make('pages.weborder.comingsoon');

@@ -1,0 +1,48 @@
+<?php
+
+class SchedulerController extends BaseController
+{
+    public function showWeekOverview()
+    {
+        if (! $currentWeekOf = Input::get('weekOf')) {
+            $currentWeekOf = '2014-02-23';
+        }
+
+        $extraJS['head'] = array('/js/bonsai-0.4.1.min.js');
+
+        $extraHead = '
+            <script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+        ';
+
+        return View::make(
+            'pages.scheduler.weekOverview', array(
+                'extraHead' => $extraHead,
+                'extraJS' => $extraJS,
+                'currentWeekOf' => $currentWeekOf,
+            )
+        );
+    }
+
+    public function showPlanDay()
+    {
+        $extraHead = '
+            <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
+            <link rel="stylesheet" href="/css/schdeduler/fullcalendar.print.css" media="print" />
+        ';
+
+        $weekOf = Request::input('weekOf');
+        $dayOffset = Request::input('dayOffset');
+        $targetDay = date('Y-m-d', strtotime($weekOf) + ($dayOffset * 86400));
+        $selectorDateFormat = 'D, M jS, Y';
+
+        return View::make(
+            'pages.scheduler.planDay', array(
+                'extraHead' => $extraHead,
+                'weekOf' => $weekOf,
+                'dayOffset' => $dayOffset,
+                'targetDay' => $targetDay,
+                'selectorDateFormat' => $selectorDateFormat
+            )
+        );
+    }
+}
