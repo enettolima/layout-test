@@ -16,9 +16,9 @@ Route::get('/', function()
     return Redirect::to('/home');
 });
 
-Route::controller('users', 'UsersController');
+Route::controller('/users', 'UsersController');
 
-Route::controller('scheduler', 'SchedulerController');
+Route::controller('/scheduler', 'SchedulerController');
 
 Route::get('/home', function()
 {
@@ -35,17 +35,17 @@ Route::get('/settings', function()
     return View::make('pages.settings.home');
 });
 
-Route::get('about', function()
+Route::get('/about', function()
 {
     return View::make('pages.about');
 });
 
-Route::get('projects', function()
+Route::get('/projects', function()
 {
     return View::make('pages.projects');
 });
 
-Route::get('contact', function()
+Route::get('/contact', function()
 {
     return View::make('pages.contact');
 });
