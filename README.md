@@ -1,4 +1,4 @@
-passport_main_2013
+EBT Passport
 ==================
 
-Passport Main Site Codebase
+Laravel-based Earthbound Trading Company Intranet
