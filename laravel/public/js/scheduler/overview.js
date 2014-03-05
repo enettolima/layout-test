@@ -154,7 +154,7 @@ $(document).ready(function(){
     $('.day-button').click(function(){
         var dayOffset = $(this).attr('data-day-number');
         var weekOf = $("#rangeSelector").val();
-        window.location.href = '/scheduler/planDay?weekOf='+weekOf+'&dayOffset='+dayOffset;
+        window.location.href = '/scheduler/day-planner?weekOf='+weekOf+'&dayOffset='+dayOffset;
     });
 
     $('#rangeSelector').change(function(){

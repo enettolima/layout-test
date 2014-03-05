@@ -19,7 +19,7 @@
 
     </div>
 
-    <h4>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?> [<a class="" href="weekOverview?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>] </h4>
+    <h4>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?> [<a class="" href="week-overview?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>] </h4>
 
     <div class="row" style="padding-top:10px;">
         <div id='calendar'></div>

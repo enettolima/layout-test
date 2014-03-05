@@ -18,19 +18,13 @@ Route::get('/', function()
 
 Route::controller('users', 'UsersController');
 
+Route::controller('scheduler', 'SchedulerController');
+
 Route::get('/home', function()
 {
     return View::make('pages.home.home');
 });
 
-Route::get('/scheduler', function()
-{ 
-    return Redirect::to('/scheduler/weekOverview');
-});
-
-Route::get('/scheduler/weekOverview', 'SchedulerController@showWeekOverview');
-
-Route::get('/scheduler/planDay', 'SchedulerController@showPlanDay');
     
 Route::get('/weborder', function()
 {

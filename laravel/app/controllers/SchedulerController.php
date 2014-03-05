@@ -2,7 +2,14 @@
 
 class SchedulerController extends BaseController
 {
-    public function showWeekOverview()
+
+    public function getIndex()
+    {
+        return Redirect::to('/scheduler/week-overview');
+    }
+
+
+    public function getWeekOverview()
     {
         if (! $currentWeekOf = Input::get('weekOf')) {
             $currentWeekOf = '2014-02-23';
@@ -23,7 +30,7 @@ class SchedulerController extends BaseController
         );
     }
 
-    public function showPlanDay()
+    public function getDayPlanner()
     {
         $extraHead = '
             <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
@@ -36,7 +43,7 @@ class SchedulerController extends BaseController
         $selectorDateFormat = 'D, M jS, Y';
 
         return View::make(
-            'pages.scheduler.planDay', array(
+            'pages.scheduler.dayPlanner', array(
                 'extraHead' => $extraHead,
                 'weekOf' => $weekOf,
                 'dayOffset' => $dayOffset,
