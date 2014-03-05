@@ -24,7 +24,6 @@ Route::get('/home', function()
 {
     return View::make('pages.home.home');
 });
-
     
 Route::get('/weborder', function()
 {
@@ -35,7 +34,6 @@ Route::get('/settings', function()
 {
     return View::make('pages.settings.home');
 });
-
 
 Route::get('about', function()
 {
@@ -51,8 +49,6 @@ Route::get('contact', function()
 {
     return View::make('pages.contact');
 });
-
-
 
 Route::get('/dbtest', function()
 {
