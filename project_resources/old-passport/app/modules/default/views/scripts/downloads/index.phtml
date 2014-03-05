@@ -1,0 +1,60 @@
+<?php 
+	$cwdPath = '/'. ltrim(join('/', $this->cwd), '/');
+	if (substr($cwdPath, -1) != '/')
+		$cwdPath .= '/';
+
+	$this->headTitle('Downloads ' . $cwdPath); 
+	$this->headLink()->appendStylesheet('/scripts/css/icons.css');
+	$this->layout()->help = array(
+		'title' => 'Downloads',
+		'body' => 'Here you will find various files that we regularly update.  These files include reports, product information, and store forms.');
+?>
+<div class="content-box">
+	<div class="header">
+		<div class="tools" style="margin: 5px 5px 0 0">
+			<?php if ($this->layout == 'large') : ?>
+			<a href="/downloads/?cwd=<?php echo urlencode($cwdPath) ?>&layout=small">List</a> | Grid
+			<?php else : ?>
+			 List | <a href="/downloads/?cwd=<?php echo urlencode($cwdPath) ?>&layout=large">Grid</a>
+			<?php endif; ?>
+			<?php if ($this->can_upload) : ?>
+			<a href="/downloads/upload/?cwd=<?php echo urlencode($cwdPath) ?>">Upload</a>
+			<?php endif; ?>
+		</div>
+		<h1>
+			<a href="/downloads?cwd=/">Downloads:</a> 
+			<?php 
+			$folderPath = "";
+			foreach ($this->cwd as $i => $folder) : 
+				$folderPath = '/'. ltrim($folderPath .= "/$folder", '/');
+			?>
+			<?php if ($i == count($this->cwd) - 1) : ?>
+			<?php echo htmlentities($folder) ?>
+			<?php else : ?>
+			<a href="/downloads?cwd=<?php echo urlencode($folderPath) ?>&layout=<?php echo $this->size ?>">
+				<?php echo htmlentities($folder) ?>
+			</a>
+			&gt;
+			<?php endif; ?>
+			<?php endforeach; ?>
+		</h1>
+	</div>
+	<div class="body">
+		<?php if (count($this->files->folders) || $this->files->files) : ?>
+		<?php 
+		if ($this->layout == 'large') {
+			echo $this->partial('downloads/partials/grid_view.phtml', array(
+				'files' => $this->files,
+				'cwd' => $cwdPath,
+				'sort' => $this->sort));
+		} else {
+			echo $this->partial('downloads/partials/list_view.phtml', array(
+				'files' => $this->files,
+				'cwd' => $cwdPath,
+				'sort' => $this->sort));
+		} ?>
+		<?php else : ?>
+		There are no available files in this folder.
+		<?php endif; ?>
+	</div>
+</div>

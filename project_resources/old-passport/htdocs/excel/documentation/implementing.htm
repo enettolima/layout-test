@@ -1,0 +1,252 @@
+<html>
+<head>
+<title>Advanced Data Grid Control Software</title>
+<META NAME="DESCRIPTION" CONTENT="JPowered is a leading provider of Web Component Software. The Advanced Data Grid Control is an extremely powerful component enabling the display of data in rows and columns. Features include Data Sorting, URL Linking, Scrolling, Dynamic methods and much more.">
+<META NAME="KEYWORDS" CONTENT="grid control,data grid,grid component,data grid control,grid,control,data,component,table,data table">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../images/jpowered_style.css">
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<BR>
+
+  <!-- One big table contain only one cell -->
+<table width="730" border="0" cellspacing="0" cellpadding="1" bgcolor="#FFAA00" align="center">
+  <tr>
+    <td>
+<table width="730" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+  <tr>
+    <td> <!-- Heading section that includes Logo, Title and Links -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="heading_cell" rowspan="2" bgcolor="#FFCC00"><img src="../images/jpowered.gif" width="270" height="60" align="left" alt="data grid control"></td>
+          <td class="heading_cell" bgcolor="#FFCC00">
+                  <h1 class="heading">Advanced Data Grid Control</h1>
+          </td>
+        </tr>
+        <tr>
+          <td class="menu_cell" bgcolor="#F0F0B0" valign="top"> <img src="../images/curve.gif" width="22" height="18" alt="grid component" vspace="0" hspace="0" align="left">
+                  [<a href="http://www.jpowered.com"> Home </a>]
+                  [<a href="http://www.jpowered.com/products.htm"> Products </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+                  [<a href="http://www.jpowered.com/support.htm"> Support </a>]
+                  [<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+          </td>
+        </tr>
+      </table>
+      <!-- Content section that includes Main left hand column 430 pixels wide with right hand column taking remaining 200 pixels. -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="2">
+              <tr>
+                <td width="560" valign="top"> <!-- begin content -->
+                  <table width="100%" border="0" cellpadding="5">
+                    <tr valign="top" align="left">
+                      <td bgcolor="#99CCFF" colspan="2"> [<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+                        Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+                        Buy Now </a> ] </td>
+                    </tr>
+                    <tr align="left" valign="top">
+                      <td width="70%" >
+                        <h2><font color="#009900"><b><font face="Arial, Helvetica, sans-serif" color="#FF9933">Advanced Data Grid Control</font></b></font></h2>
+                        <p><font color="#009900"><b><font color="#666666">Setup and Implementing the Data Grid Control</font></b></font></p>
+                      </td>
+                      <td align="right" width="39%" ><img src="../images/data-grid-control-220.gif" width="220" height="64" alt="advanced data grid control"></td>
+                    </tr>
+                    <tr align="left" valign="top">
+                      <td colspan="2">
+                        <p>Incorporating the Data Grid Control into your web page involves the following four simple steps,</p>
+                        <p><a href="#step1">Step 1 - Add the Applet html code to your web page</a></p>
+                        <p><a href="#step2">Step 2 - Set up the Configuration (Property) data</a></p>
+                        <p><a href="#step3">Step 3 - Set up the Cell Data</a></p>
+                        <p><a href="#step4">Step 4 - Upload the files to your Web Server</a></p>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#CC6600">
+                          <tr>
+                            <td>
+                              <table width="100%" border="0" cellspacing="0" cellpadding="5" bgcolor="#EEEEEE">
+                                <tr> 
+                                  <td> 
+                                    <p><b><a name="step1"></a>Step 1 - Add the Applet html code to your web page</b></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">In your web page place the following code, where you wish the 
+                                      Data Grid to appear,</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;applet code=&quot;AdvDataGridApplet&quot; archive=&quot;AdvDataGrid.jar&quot; 
+                                      width=&quot;400&quot; height=&quot;300&quot; mayscript&gt;<br>
+                                      &lt;/applet&gt;</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">Adjusting the &quot;width&quot; and &quot;height&quot; element 
+                                      of this applet tag to specify the size (in pixels) of the desired grid display.</font></p>
+                                  </td>
+                                </tr>
+                                <tr bgcolor="#DDDDDD"> 
+                                  <td> 
+                                    <p><b><a name="step2"></a>Step 2 - Set up the Configuration (Property) data</b></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">The Data Grid applet provides the following options for inputting 
+                                      the configuration data.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2"><b>a) Configuration File.</b><br>
+                                      The applet will read all the configuration parameters from a specified file. To use this option add the following 
+                                      PARAM tag to your html code between the &lt;applet&gt; and &lt;/applet&gt; tags,</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;gridproperties&quot; value=&quot;gridprops.txt&quot;&gt;</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">where &quot;gridprops.txt&quot; is the name of the file containing 
+                                      the configuration data ( <a href="gridprops.txt" target="areaprops">click here for an example file</a> ). As you will 
+                                      see from the example file each property is specified on a name, value basis. Note that comments may be added to this 
+                                      file by placing &quot;&lt;!--&quot; at the beginning of a line.<br>
+                                      Adjust the property values to specify the characteristics of the data grid and then place this file in the same directory 
+                                      as your web page.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">For a full description of each property please see the &quot;<a href="parameters.htm">Data 
+                                      Grid Parameters</a>&quot;.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This method is used in Example 2 - <a href="../Examples/Example2.htm">click 
+                                      here to view</a>.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2"><b>b) HTML PARAM tags.<br>
+                                      </b>Using this option the applet will read all the configuration information from the standard applet &lt;PARAM&gt; 
+                                      tags. Simply add the &lt;PARAM&gt; tags, contained in the paramtags.txt file (<a href="paramtags.txt" target="paramtags">click 
+                                      here</a>), to your html between the &lt;APPLET&gt; and &lt;/APPLET&gt; tag, adjusting the values to specify the characteristics 
+                                      of the Data Grid.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">For a full description of each property please see the &quot;<a href="parameters.htm">Data 
+                                      Grid Parameters</a>&quot;.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This method is used in Example 1- <a href="../Examples/Example1.htm">click 
+                                      here to view</a>.</font></p>
+                                  </td>
+                                </tr>
+                                <tr> 
+                                  <td> 
+                                    <p><b><a name="step3"></a>Step 3 - Set up the Cell Data</b></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">As with the configuration data there are several options for supplying 
+                                      the cell data to the applet,</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2"><b>a) Data File.</b><br>
+                                      The applet will read all the cell data from a specified file. To use this option add the following PARAM tag to your 
+                                      html code between the &lt;applet&gt; and &lt;/applet&gt; tags,</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;griddata&quot; value=&quot;griddata.txt&quot;&gt;</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">where &quot;</font><font face="Courier New, Courier, mono" size="2">griddata</font>.txt<font face="Arial, Helvetica, sans-serif" size="2">&quot; 
+                                      is the name of the file containing the data ( <a href="griddata.txt" target="lineprops">click here for an example 
+                                      file</a> ). As you will see from the example file each row of data is supplied on each line of the file. Each column 
+                                      is separated by a comma (ie. this is a comma separated file). </font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This method is used in Example 2 - <a href="../Examples/Example2.htm">click 
+                                      here to view</a>.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">Comma separated is the default setting however it is possible 
+                                      to override this so that the data can be separated by any character of choice or even be of fixed width format.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">To set the character separator to something other than comma, 
+                                      simply insert the following parameter,</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;dataseperator&quot; value=&quot;#&quot;&gt;</font></p>
+                                    <p>This will indicate to the applet that the data will be separated by a # character.</p>
+                                    <p>To specify a 'Fixed Width' format the following two parameters should be added,</p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;datafiletype&quot; value=&quot;1&quot;&gt;</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;fixedwidths&quot; value=&quot;20|10|20|10&quot;&gt;</font></p>
+                                    <p>where setting <font face="Courier New, Courier, mono" size="2">&quot;datafiletype&quot;</font> tells the applet to 
+                                      expect a fixed width data file and <font face="Courier New, Courier, mono" size="2">&quot;fixedwidths&quot;</font> 
+                                      defines the widths (in characters) of each column of data.</p>
+                                    <p>For further information on this see the section <a href="griddata.htm">Grid Data</a></p>
+                                    <p>&nbsp;</p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2"><b>b) Server Side process<br>
+                                      </b>This option is the most powerful and gives the applet the ability to retrieve data from databases without compromising 
+                                      database security. This method involves specifying a server side script in the html page which in turn returns the 
+                                      data to the Grid applet, giving enormous flexibility for data acquisition. </font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">The server side script can be constructed in the language of your 
+                                      choice and as such can be written to acquire data from the widest variety of sources, multiple databases etc.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">To instruct the applet to retrieve data from a server side script 
+                                      simply insert the following &lt;PARAM&gt; tag between the &lt;APPLET&gt; and &lt;/APPLET&gt; tags in your html page.</font></p>
+                                    <p><font face="Courier New, Courier, mono" size="2">&lt;PARAM name=&quot;griddata&quot; value=&quot;[URL of Server Process]&quot;</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">inserting the URL of your server side application in the value 
+                                      element of this tag. </font><font face="Arial, Helvetica, sans-serif" size="2">The server side script should be designed 
+                                      to output the data in the same format as the file in option a) above </font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">For an example script see <a href="ServerTemplateScript/GridDataServlet.java" target="configservlet">GridDataServlet.java</a> 
+                                      in the ServerTemplateScripts directory.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">For a full description of constructing a server side script which 
+                                      retrieves data from a database see the section &quot;Connecting the Data Grid to a database&quot; under the &quot;<a href="griddata.htm">Grid 
+                                      Data</a> &quot; section ( or <a href="griddata.htm">click here</a>).</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This method is used in Example 3 - <a href="http://www.jpowered.com/data_grid_control/Examples/Example3.htm">click 
+                                      here to view</a>.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2"><b>c) HTML PARAM tags.<br>
+                                      </b>Using this option the applet will read all the grid data from the standard applet &lt;PARAM&gt; tags. Simply add 
+                                      the &lt;PARAM&gt; tags, contained in the dataparamtags.txt file (<a href="dataparamtags.txt" target="paramtags">click 
+                                      here</a>), to your html between the &lt;APPLET&gt; and &lt;/APPLET&gt; tag, adjusting the values to specify the data 
+                                      for the grid.</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This option is the simplest method of supplying data to the grid 
+                                      applet and is probably most useful where the grid data is either static or the html page is constructed dynamically, 
+                                      (e.g.. Via ASP or JSP.)</font></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">This method is used in Example 1 - <a href="../Examples/Example1.htm">click 
+                                      here to view</a>.</font></p>
+                                  </td>
+                                </tr>
+                                <tr bgcolor="#DDDDDD"> 
+                                  <td> 
+                                    <p><b><a name="step4"></a>Step 4 - Upload the files to your Web Server</b></p>
+                                    <p><font face="Arial, Helvetica, sans-serif" size="2">The final step is to simply to place the AdvDataGrid.jar file 
+                                      in the same directory as your web page. At only 14kb this jar file contains all the applet code for producing the 
+                                      Data Grid in your page and as such is very fast to load and run.</font></p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                      </td>
+                    </tr>
+                    <tr align="left" valign="top" bgcolor="#FFFFFF">
+                      <td colspan="2"><a href="../GettingStarted.htm">&laquo; back to Getting Started</a></td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td bgcolor="#99CCFF" colspan="2">[<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+                        Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+                        Buy Now </a> ] </td>
+                    </tr>
+                  </table>
+                  
+                </td>
+                <td valign="top"> <!-- Begin right hand column -->
+                  <table width="200" border="0" cellspacing="0" cellpadding="1" bgcolor="#CC6600">
+                    <tr>
+                      <td>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#FFFFFF">
+                          <tr>
+                            <td>
+                              <p><a href="../GettingStarted.htm">Getting Started</a></p>
+                              <p><a href="index.htm">Documentation</a></p>
+                              <ul>
+                                <li><a href="implementing.htm">Implementing</a></li>
+                                <li><a href="gridproperties.htm">Grid Properties</a></li>
+                                <li><a href="griddata.htm">Grid Data</a></li>
+                                <li><a href="javascript.htm">JavaScript</a></li>
+                                <li><a href="parameters.htm">Parameters</a></li>
+                                <li><a href="dynamicmethods.htm">Dynamic Methods</a></li>
+                                <li><a href="charsets.htm">Multi Language</a></li>
+                                <li><a href="support.htm">Further Help &amp; Support</a></li>
+                              </ul>
+                              <p><a href="../Examples/index.htm">Examples</a></p>
+                              <p><a href="http://www.jpowered.com/data_grid_control/order.htm"><img src="../images/buydownload.gif" width="140" height="57" border="0"></a></p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  <font face="Arial, Helvetica, sans-serif" size="2">                    </font><p>&nbsp;</p>
+                </td>
+        </tr>
+      </table>
+      <!-- Footer section that includes Links, Horizontal Rule and Copyright image -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="2">
+        <tr>
+          <td class="menu_cell" bgcolor="#FFCC00">
+                <p class="bottom_menu">
+                  [<a href="http://www.jpowered.com"> Home </a>]
+                  [<a href="http://www.jpowered.com/products.htm"> Products </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+                  [<a href="http://www.jpowered.com/support.htm"> Support </a>]
+                  [<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+                </p>
+          </td>
+        </tr>
+        <tr bgcolor="#FFCC00">
+          <td class="heading_cell">
+            <div align="center"><img src="../images/copyright.gif" width="450" height="25"></div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

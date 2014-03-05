@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>
+            Passport Catalogue
+        </title>
+        <link href="/scripts/css/addon/slimbox.css" media="screen" rel="stylesheet" type=
+        "text/css" />
+        <link href="/scripts/css/icons.css" media="screen" rel="stylesheet" type=
+        "text/css" />
+        <link href="/scripts/css/search.css" media="screen" rel="stylesheet" type=
+        "text/css" />
+        <link href="/images/favicon.ico" rel="icon" type="icon/ico" />
+        <link href="/scripts/css/master.css" media="screen" rel="stylesheet" type=
+        "text/css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+        <meta http-equiv="Content-Language" content="en-US" />
+        <script type="text/javascript" src="/scripts/js/addon/mootools-debug.js">
+</script>
+        <script type="text/javascript" src="/scripts/js/loading.js">
+</script>
+        <script type="text/javascript" src="/scripts/js/cart.js">
+</script>
+        <script type="text/javascript" src="/scripts/js/addon/slimbox.js">
+</script>
+        <script type="text/javascript" src="/scripts/js/search.js">
+</script>
+    </head>
+    <body>
+        <div id="help-box">
+            <h1>
+                Product Catalogue
+            </h1>
+            <p>
+                This page provides the tools you need to search or browse our catalogue
+                and find the products you need.
+            </p>
+        </div>
+        <div id="top-panel">
+            <div style="text-align: left">
+                <img src="/images/Tag_02.jpg" alt="EBT Logo" style=
+                "text-align: center" />
+            </div>
+        </div>
+        <div id="breadcrumb-panel">
+            Welcome Jason | Passport &gt; Home
+        </div>
+        <div id="right_panel">
+            <script type="text/javascript" language="javascript" src=
+            "/scripts/js/menu.js">
+</script>
+            <ul class="menu" id="nav">
+                <li class="menu-closed">
+                    <h1 onclick="showMenu(this.parentNode)">
+                        Product
+                    </h1>
+                    <ul>
+                        <li>
+                            <a href="/items/">Catalogue</a>
+                        </li>
+                        <li>
+                            <a href="/orders/">Review Orders</a>
+                        </li>
+                        <li>
+                            <a href="/items/highlights/">Product Highlights</a>
+                        </li>
+                        <li>
+                            <a target="new" href=
+                            "http://www.earthboundtrading.com/images/graphicorderform/graphic_order_form.htm">
+                            Graphics Order</a>
+                        </li>
+                        <li>
+                            <a target="new" href=
+                            "http://www.earthboundtrading.com/images/signorderform/sign-checklist-master.htm">
+                            Sign Order</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-closed">
+                    <h1 onclick="showMenu(this.parentNode)">
+                        Management
+                    </h1>
+                    <ul>
+                        <li>My Account
+                        </li>
+                        <li>Site Admin
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-open">
+                    <h1 onclick="showMenu(this.parentNode)">
+                        Passport
+                    </h1>
+                    <ul>
+                        <li>
+                            <a href="/news">News</a>
+                        </li>
+                        <li>
+                            <a href="/downloads">Downloads</a>
+                        </li>
+                        <li>About
+                        </li>
+                        <li>Help
+                        </li>
+                        <li>
+                            <a href="/auth/logout/">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-bottom">
+                    <h1>
+                        Passport Menu
+                    </h1>
+                </li>
+            </ul>
+            <div id="cart">
+                <div class="content-box" style="display: none">
+                    <div class="header">
+                        <a class="cart_clear_button" style=
+                        "float: right; margin-right: 5px" href="/cart/clear" title=
+                        "Remove item from cart"><img class="icon" alt="trash icon" src=
+                        "/images/icons/trash_16.png" /></a>
+                        <h1>
+                            Cart - 0 items
+                        </h1>
+                    </div>
+                    <div class="body">
+                        <table id="cart_items">
+							<tbody>
+							</tbody>
+						</table>
+                    </div>
+                </div>
+            </div>
+            <div class="content-box" id="messages" style="display: none">
+                <div class="header">
+                    <h1>
+                        Errors
+                    </h1>
+                </div>
+                <div class="body"></div>
+            </div><br />
+        </div>
+        <div id="content-area">
+            <script type="text/javascript">
+			// <![CDATA[
+            var dcsTree = {"ACCESSORY":{"BELLYDANCE":{"PANTS":[],"SCARVES":[],"TOPS":[]},"HAIR ACCES":[],"HATS":{"MISC":[],"URB\/COWB\/H":[]},"PURSE\/BAG":{"COIN PURSE":[],"MISC BAGS":[]},"PURSES":[],"SCARVES":{"PONCHOS":[]},"SEASONAL":[]},"CAND\/HOLD":{"CANDLEHOL":{"LANTERNS":[],"ROCK&MINER":[],"TEA LIGHT":[]},"CANDLES":{"MISC":[],"PILLARS":[]}},"CLOTHING":{"CLOTHING":{"DRESSES\/SK":[],"PANTS":[],"ROBES":[],"T-SHIRTS":[]},"SHIRT\/SHIR":{"TS":[]}},"GIFTS":{"MISC":[],"PEWTER DRA":{"GONS ETC.":[]},"RESIN":{"MISC":[]},"SPA PRODUC":{"MASSAGERS":[]},"STATIONARY":{"B.LEAF JOU":[],"JOURNALS":[]},"ZEN PRODUC":{"HEALTH BAL":[],"MISC RESIN":[],"RED RESIN":[]}},"HIST\/CULT":{"WEAPONS":{"SWORDS":[]}},"HOMEDECOR":{"BOXES":[],"FOUNTAINS":{"MIST":[]},"MISC":[],"WALLDECOR":{"B.CURTAIN":[],"MASKS":[],"MIRROR":[],"POSTERS":[],"SIGNS":[],"STRECH CAN":[],"VENETIAN M":[]}},"HOOKAH":{"ACCESSORY":[],"HOOKAHS":[]},"INCENSE":{"AROMA ROCK":{"WARMERS":[]},"BODY OILS":{"PERFUME":[]},"FRAGRANCE":{"FUEL":[],"LAMP":[]},"GIFT SETS":[],"HEM CHAMPA":[],"INC.BURNER":{"CER.BURNER":[],"SOAPSTN BU":[]},"NAG CHAMPA":[],"OIL BURNER":{"CERAMIC BU":[],"SOAPSTN BU":[]},"OILS":{"FRAGRANCE":[]},"STICK\/CONE":[]},"JEWELRY":{"2.95F.RING":{"MOOD RINGS":[],"STONE RING":[]},"BODY JEWEL":{"BASICS":[]},"BRACELETS":[],"COCONUTS J":[],"EARRINGS":[],"FASHION RI":{"NG":[]},"HEMATITE":[],"HEMP":[],"NECKLACES":{"FASHION NK":[],"GENERAL NK":[]},"PAUA SHELL":[],"SHELL":{"MISC":[]},"ZODIAC NCK":[]},"LIGHTING":{"LANTERNS":{"BULBS&CORD":[],"ROUNDPAPER":[]},"MISC":[]},"NATURAL":{"BAMBOO":{"IND.STALKS":[],"MISC":[],"POTS\/ARRAN":[]},"HERMITCRAB":{"ACCESSORIE":[],"STARTER KT":[]}},"STONE PROD":{"NAT.STONS":{"FOSSILS":[],"HIMALAY.SA":[],"MAG STONES":[],"MISC.RK&MN":[],"TUMB\/MARBL":[]},"STONE CARV":{"INDIAN SPS":[]}},"TOYS IMPU":{"IMPULSE":{"MISC":[],"MUSIC":[],"PEN\/PENCIL":[],"PIN\/MAG\/ST":[],"PWTER PCK":[]},"TOY\/GAMES":{"GAMES":[],"MISC":[]}},"WC\/MOBILE":{"MOBILES":{"MISC MOBIL":[]}},"WOOD PROD":{"CARVINGS":{"ASMAT MEN":[],"LG WD CARV":[]},"PRIMITIVE":{"P.TOTEMS":[]}}};
+			// ]]>
+            </script>
+            <div id="left-panel">
+                <div class="content-box">
+                    <div class="header">
+                        <h1>
+                            Browse
+                        </h1>
+                    </div>
+                    <div class="body" id="browse-box"></div>
+                </div>
+            </div>
+            <div id="mid-panel">
+                <div class="content-box">
+                    <div class="header">
+                        <h1>
+                            Search Catalogue
+                        </h1>
+                    </div>
+                    <div class="body">
+                        <form method="post" id="search_form" action="/items">
+                            <div>
+                                <label>Keyword</label><input type="text" name="keyword"
+                                style="width: 26em" />
+                            </div>
+                            <div>
+                                <label><input type="checkbox" name="image" /> Show items
+                                with images only.</label>
+                            </div><input type="reset" value="Reset" /> <input type=
+                            "submit" value="Search" />
+                        </form>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <div class="header">
+                        <h1>
+                            Results
+                        </h1>
+                    </div>
+                    <div class="body">
+                        <div id="results">
+                            <div class="result alt">
+                                <h2>
+                                    #1
+                                </h2>
+                                <div class="item-image">
+                                    <a href="/images/items/large/1411.jpg" title=
+                                    "SM.RIVER ROCKS NATUR. 8-10MM" rel=
+                                    "lightbox"><img src="/images/items/thumb/1411.jpg"
+                                    alt="Thumbnail for 1411" rel="lightbox" /></a>
+                                </div>
+								<a class="order_button" href="/cart/add/item/1411" title="Order Item #1411">
+									<img class="icon" src="/images/icons/down_32.png" alt="Down icon" />
+								</a>
+                                <h1>
+                                    1411: SM.RIVER ROCKS NATUR. 8-10MM (RROCK10)
+                                </h1>
+                                <table class="pricing">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                                company
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>
+                                                Retail
+                                            </th>
+                                            <td>
+                                                $1.00
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="clear: left"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<br />
+        </div>
+        <div id="loading-status">
+            Loading... <img src="/images/ajax-loader.gif" title="Loading..." alt=
+            "Loading..." />
+        </div>
+    </body>
+</html>

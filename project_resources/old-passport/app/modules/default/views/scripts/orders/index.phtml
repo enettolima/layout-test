@@ -1,0 +1,108 @@
+<?php 
+$this->headTitle('Passport Orders'); 
+$this->headLink()->appendStylesheet('/scripts/css/order.css');
+$this->headLink()->appendStylesheet('/scripts/css/icons.css');
+?>
+<div class="content-box"> 
+	<div class="header">
+		<?php if (isset($this->week) && isset($this->year)) : ?>
+		<?php if ($this->week != $this->this_week || $this->year != $this->this_year) : ?>
+		<h1 style="background: none; float: right"><a href="/orders?week=<?php echo $this->this_week ?>&year=<?php echo $this->this_year ?>">This Week</a></h1>
+		<?php endif ?>
+		<?php 
+		$w = $this->week;
+		$y = $this->year;
+		for($i = 0; $i < 4; $i++) {
+		?>
+		<h1 style="background: none; display: inline-block">
+			<?php if ($i == 0) : ?>
+			Week <?php echo "$w : $y" ?>
+			<?php else : ?>
+			<a style="color: grey" href="/orders?week=<?php echo $w ?>&year=<?php echo $y ?>">
+				Week <?php echo "$w : $y" ?>
+			</a>
+			<?php endif ?>
+		</h1>
+		<?php
+			if ($w-- == 1) {
+				$w = 52;
+				$y--;
+			}
+		} 
+		?>
+		<?php else : ?>
+		<h1>Orders listed by week</h1>
+		<?php endif ?>
+	</div>
+ 	<div class="body">
+		<table>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Order</th>
+					<th>Store</th>
+					<th>Stage</th>
+					<th>Type</th>
+					<th>Items</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php if (isset($this->week) && isset($this->year)) : ?>
+				<?php $alt = 0; foreach($this->orders as $order): ?>
+				<tr <?php if ($alt ^= 1) : ?>class="alt"<?php endif; ?>>
+					<td>
+						<?php if ($order->locked == 1) : ?>
+						<img class="icon" src="/images/icons/lock_16.png" alt="lock icon" />
+						<?php endif ?>
+					</td>
+					<td><?php echo $order->id ?></td>
+					<td><?php echo $order->Store->id . ' ' . $order->Store->name ?></td>
+					<td><?php echo $order->Stage->name ?></td>
+					<td><?php echo ucwords($order->OrderType->name) ?></td>
+					<td><?php echo $order->item_count ?></td>
+					<td style="text-align: right">
+						<a href="/orders/history/order/<?php echo $order->id ?>" title="Order History">
+							<img src="/images/icons/search_16.png" class="icon" alt="search icon" />
+						</a>
+						<a href="/orders/show/order/<?php echo $order->id ?>" title="View Order">
+							<img src="/images/icons/right_16.png" class="icon" alt="right arrow" />
+						</a>
+					</td>
+				</tr>
+				<?php endforeach ?>
+				<?php else : ?>
+				<?php $alt = 0; foreach($this->orders as $week => $orders): ?>
+				<tr><th colspan="7"><?php echo $week ?></th></tr>
+				<?php if (empty($orders)) : ?>
+				<tr><td colspan="7" style="text-align: center">There are no orders in this week.</td></tr>
+				<?php else : ?>
+				<?php foreach($orders as $order): ?>
+				<tr <?php if ($alt ^= 1) : ?>class="alt"<?php endif; ?>>
+					<td>
+						<?php if ($order->locked == 1) : ?>
+						<img class="icon" src="/images/icons/lock_16.png" alt="lock icon" />
+						<?php endif ?>
+					</td>
+					<td><?php echo $order->id ?></td>
+					<td><?php echo $order->Store->id . ' ' . $order->Store->name ?></td>
+					<td><?php echo $order->Stage->name ?></td>
+					<td><?php echo ucwords($order->OrderType->name) ?></td>
+					<td><?php echo $order->item_count ?></td>
+					<td style="text-align: right">
+						<a href="/orders/history/order/<?php echo $order->id ?>" title="Order History">
+							<img src="/images/icons/search_16.png" class="icon" alt="search icon" />
+						</a>
+						<a href="/orders/show/order/<?php echo $order->id ?>" title="View Order">
+							<img src="/images/icons/right_16.png" class="icon" alt="right arrow" />
+						</a>
+					</td>
+				</tr>
+				<?php endforeach ?>
+				<?php endif ?>
+				<?php endforeach ?>
+				<?php endif ?>
+			</tbody>
+		</table>
+	</div>
+</div>

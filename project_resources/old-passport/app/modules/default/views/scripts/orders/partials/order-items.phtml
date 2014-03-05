@@ -1,0 +1,147 @@
+<?php 
+if (!empty($this->order->items)) : 
+	$columns  = array();
+	if ($this->order->access->write)
+		$columns[] = (object)array('head' => '');
+
+	$columns[] = (object)array('head' => 'Item');
+	$columns[] = (object)array('head' => 'Description', 'expand' => true);
+	$columns[] = (object)array('head' => 'Qty');
+	$columns[] = (object)array('head' => 'Retail');
+	$columns[] = (object)array('head' => 'Total');
+	
+	if ($this->order->STORE_TYPE != 0) {
+		$columns[] = (object)array('head' => 'Discount');
+		$columns[] = (object)array('head' => 'Cost');
+		$columns[] = (object)array('head' => 'Total');
+	}
+
+	if ($this->order->access->write)
+		$columns[] = (object)array('head' => '');
+?>
+<div class="content-box"> 
+	    <div class="header">
+			<h1>Line Items</h1>
+	    </div>
+		<div class="body">
+			<form action="/orders/update/order/<?php echo $this->order->ORDER_ID ?>" method="post" id="items_form">
+		        <table style="">
+					<?php foreach ($columns as $col) : ?>
+                	<col style="<?php if (!isset($col->expand) || !$col->expand) echo " width: 1px;" ?>"/>
+                	<?php endforeach ?>
+		            <thead>
+		                <tr>
+		                	<?php foreach ($columns as $col) : ?>
+		                	<th><?php echo $col->head ?></th>
+		                	<?php endforeach ?>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <?php 
+						$alt = 0;						
+						foreach ($this->order->items as $dname => $items) : ?>
+		                <tr>
+		                    <th colspan="<?php echo count($columns) ?>"><?php echo $dname; ?></th>
+		                </tr>
+		                <?php $alt = 0; foreach ($items as $item) : ?>
+		                <tr <?php if ($alt ^= 1) : ?>class="alt"<?php endif; ?>>
+		                	<?php if ($this->order->access->write) : ?>
+		                	<td>
+		                		<a 
+		                			class="delete_button"
+		                			href="/orders/delete-item/order/<?php echo $this->order->ORDER_ID ?>/item/<?php echo $item->ITEM_NO ?>"
+		                			title="Remove item from order">
+		                			<img class="icon" alt="trash icon" src="/images/icons/trash_16.png" />
+		                		</a>
+		                	</td>
+		                	<?php endif; ?>
+		                    <td>
+		                    	<?php if(isset($item->ALU)) : ?>
+		                    	<abbr title="<?php echo $item->ALU; ?>"><?php echo $item->ITEM_NO; ?></abbr>
+		                    	<?php else : ?>
+		                    	<?php echo $item->ITEM_NO; ?>
+		                    	<?php endif; ?>
+		                	</td>
+		                    <td><?php echo $item->DESCRIPTION; ?></td>
+		                    <td>
+		                        <div style="white-space: nowrap">
+		                        	<?php if ($this->order->access->write) : ?>
+			                        	<input style="width: 20px" type="text" name="<?php echo $item->ITEM_NO ?>_qty" value="<?php echo $item->ITEM_QTY ?>" />
+			                    	<?php else : ?>
+			                    		<?php echo $item->ITEM_QTY ?>
+			                    	<?php endif ?>
+			                    	x<?php echo $item->CASE_QTY ?>
+		                    	</div>
+		                    </td>
+		                    <td class="money">
+		                        <?php if (isset($item->RETAIL_PRICE)) : ?>
+		                        <?php echo '$'. number_format($item->RETAIL_PRICE, 2); ?>
+		                        <?php endif; ?>
+		                    </td>
+		                    <td class="money">
+		                    	<?php if (isset($item->RETAIL_PRICE)) : ?>
+		              			<?php echo '$' . number_format($item->RETAIL_TOTAL, 2); ?>
+		              			<?php endif; ?>
+		                    </td>
+		                    <?php if ($this->order->STORE_TYPE != 0) : ?>
+		                    <td class="money">
+		                        <?php echo (isset($item->MARKDOWN) ? number_format($item->MARKDOWN, 2) . '%' : '') ?>
+		                    </td>
+		                    <td class="money">
+		                        <?php if (isset($item->COST)) : ?>
+		                        <?php echo '$' . number_format($item->COST, 2); ?>
+		                        <?php endif; ?>
+		                    </td>
+		                    <td class="money">
+		                    	<?php if (isset($item->COST)) : ?>
+		              			<?php echo '$' . number_format($item->COST_TOTAL, 2); ?>
+		              			<?php endif; ?>
+		                    </td>
+		                    <?php endif; ?>   
+		                    <?php if ($this->order->access->write) : ?>
+	                    	<td>
+		                    	<a 
+		                    		class="comment_button"
+		                    		href="/orders/comment/order/<?php echo $this->order->ORDER_ID ?>/item/<?php echo $item->ITEM_NO ?>"
+		                    		title="Comment on this item">
+		                    		<img 
+		                    			src="/images/icons/<?php echo (isset($item->ITEM_COMMENT) ? 'notes_16.png' : 'notes_inactive_16.gif') ?>"
+		                    			class="icon"
+		                    			alt="comment icon" />
+		                    	</a>
+	                    	</td>
+	                    	<?php endif; ?>
+		                </tr>
+		                <?php if (isset($item->ITEM_COMMENT)) : ?>
+		                <tr class="comment_entry">
+		                	<td colspan="<?php echo count($columns) ?>">
+		                		<div>
+		                			<label>Comment:</label> 
+	                				<input type="text" name="<?php echo $item->ITEM_NO; ?>_comment" value="<?php echo $item->ITEM_COMMENT ?>" />
+		                		</div>
+		                	</td>
+		                </tr>
+		                <?php endif; ?>
+		                <?php endforeach; ?>
+		                <?php endforeach; ?>
+		            </tbody>
+		        </table>
+		         <?php if ($this->order->access->write) : ?>
+		        <input style="float: left; margin-top: 8px" type="submit" value="Save Changes" name="update" />
+		        <h1 style="text-align: right">
+		    		Finalized: 
+		    		<input 
+		    			type="checkbox" 
+		    			name="locked" 
+		    			<?php if ($this->order->LOCKED == 1) : ?>
+		    			checked="checked"
+		    			<?php endif; ?>
+		    			<?php if (!$this->order->access->write) : ?>
+		    			disabled="disabled"
+		    			<?php endif; ?>/>
+		    	</h1>
+		        <?php endif; ?>
+	        </form>
+    	</div>
+</div>
+<?php endif; ?>

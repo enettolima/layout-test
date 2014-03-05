@@ -1,0 +1,24 @@
+<?php 
+$this->headTitle('Passport Edit Employee'); 
+$this->headLink()
+	->appendStylesheet('/scripts/css/new-hire.css')
+	->appendStylesheet('/scripts/css/addon/nogray_calendar_vs1.css');
+
+$this->headScript()
+	->appendFile('/scripts/js/addon/nogray_date_calendar_vs1_min.js')
+	->appendFile('/scripts/js/new-hire.js');
+?>
+<div class="content-box">
+	<div class="header">
+		<h1>
+			<?php echo $this->employeeData->FIRST_NAME ?> 
+			<?php echo $this->employeeData->LAST_NAME ?>
+			- <?php echo $this->employeeData->EMPL_ID ?>
+			@ <?php echo $this->employeeData->STORE_NAME ?>
+			[<?php echo $this->employeeData->STORE_CODE ?>]
+		</h1>
+	</div>
+	<div class="body">
+		<?php echo $this->editEmployeeForm ?>
+	</div>
+</div>

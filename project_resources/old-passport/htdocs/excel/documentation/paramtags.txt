@@ -1,0 +1,55 @@
+<!-- General parameters -->
+<param name="bgcolor"  value="214,214,236">
+<param name="bgimage"  value=" ">
+<param name="dateformat"  value="dd MMMM yyyy">
+<param name="scrollbarbgcolor"  value="214,214,236">
+
+<!-- Data File Fixed Width Format -->
+<param name="fixedwidths"  value="20|10|20|10">
+<param name="dataseperator"  value=",">
+<param name="datafiletype"  value="0">
+
+<!-- Row Properties -->
+<param name="rownumbgcolor"  value="164,164,186">
+<param name="rownumtxtcolor"  value="40,40,70">
+
+<!-- Boolean Switches -->
+<param name="titlearea"  value="false">
+<param name="rownumbers"  value="true">
+<param name="cellgrid"  value="true">
+<param name="transcells"  value="false">
+<param name="displaytotals"  value="true">
+<param name="columnheadings"  value="true">
+
+<!-- Border Properties -->
+<param name="borderwidth"  value="1">
+<param name="bordercolor"  value="150,150,150">
+<param name="borderstyle"  value="1">
+
+<!-- Title Properties -->
+<!-- Although title properties are defined here, in this example   -->
+<!-- we have set the "titlearea" display flag to false (see above) -->
+<!-- hence in this example the title are will not be displayed.    -->
+<param name="titletext"  value="Products by Jpowered">
+<param name="titlefont"  value="Arial,B,14">
+<param name="titlecolor"  value="114,114,186">
+<param name="titlealign"  value="right">
+<param name="titlebgcolor"  value="214,214,236">
+<param name="titleimage"  value="jpowered2.gif">
+
+<!-- Cell Properties -->
+<param name="cellgridline"  value="2">
+<param name="cellgridcolor"  value="125,175,175">
+<param name="cellfont"  value="Arial,N,12">
+<param name="celltextcolor"  value="black">
+<param name="cellbgcolor"  value="white">
+<param name="cell_mo_textcolor"  value="blue">
+<param name="cell_mo_bgcolor"  value="214,214,236">
+
+<!-- Define the Columns -->
+<!-- text,data type,bg color,text color,width,alignment,URL,Target,currency symbol,decimal places,image,tool tip -->
+<param name="column1"  value="Product|0|164,164,186|40,40,70|150|left| | | |0| |Product Titles">
+<param name="column2"  value="Standard|3|164,164,186|40,40,70|75|right| | |$ |2| |Standard License Price">
+<param name="column3"  value="Professional|3|164,164,186|40,40,70|100|right| | |$ |2| |Professional License Price">
+<param name="column4"  value="Launch Date|2|164,164,186|40,40,70|125|center| | | |0| |Latest Release Launch Date">
+<param name="column5"  value="Category|0|164,164,186|40,40,70|150|left| | | |0| | ">

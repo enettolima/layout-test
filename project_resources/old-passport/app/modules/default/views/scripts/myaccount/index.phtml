@@ -1,0 +1,34 @@
+<?php
+$this->headTitle('Passport MyAccount');
+$this->headLink()->appendStylesheet('/scripts/css/addon/magicform.css');
+?>
+<div class="content-box">
+	<div class="header">
+		<h1>Change Password for <?php echo $this->user['username'] ?></h1>
+	</div>
+	<div class="body">
+		<?php if (!empty($this->message)) : ?>
+		<div id="message" class="<?php echo $this->success ? 'success' : 'error' ?>">
+			<?php echo $this->message ?>
+		</div>
+		<?php endif ?>
+		
+		<form action="" method="post" id="password_form">
+			<fieldset id="password">
+				<dl>
+					<dt><label for="password">Password</label></dt>
+					<dd>
+						<input type="password" name="password" validate="strlen 32 4; alnum" required="true" />
+						<error for="password">Password must be alpha numeric and between 4 and 32 characters.</error>
+					</dd>
+					<dt><label for="confirm_password">Confirm</label></dt>
+					<dd>
+						<input type="password" name="confirm_password" validate="match password"  required="true" />
+						<error for="confirm_password">Must match password</error>
+					</dd>
+				</dl>
+			</fieldset>
+			<input type="submit" value="Change Password" name="change_password" />
+		</form>
+	</div>
+</div>

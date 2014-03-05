@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Passport Login</title>
+		<link rel="icon" type="icon/ico" href="/images/favicon.ico" /> 
+		<link href="/scripts/css/master.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/scripts/js/addon/mootools.js"></script>
+		<script type="text/javascript" src="/scripts/js/sha1.js"></script>
+		<script type="text/javascript">
+			var login = {
+				init: function() {
+					var form = $('user_login_form');
+					form.onsubmit = login.onSubmit;
+				},
+				onSubmit: function() {
+					var user_form = $('user_login_form');
+					var secure_form = $('secure_login_form');
+					
+					var username = user_form.getElement('input[name=username]').value;
+					var password = user_form.getElement('input[name=password]').value;
+					
+					secure_form.getElement('input[name=username]').value = username;
+					secure_form.getElement('input[name=passhash]').value = hex_sha1(password);
+					secure_form.submit();
+					
+					return false;
+				}
+			}
+			function loginOnSubmit()
+			{	
+				var passIn = document.getElementById('password-input');
+				passOut.value = hex_sha1(passIn.value);
+				
+				return true;
+			}
+			
+			window.onDomReady(login.init.bind(login));
+		</script>
+		<style type="text/css">
+			.login {
+				position: absolute; 
+				left: 50%; 
+				margin-left: -150px; 
+				margin-top: -63px;
+			}
+			
+			.deadcenter {
+				position: absolute; 
+				top: 50%;
+				width: 100%;
+			}
+			
+			.login input {
+				width: 100%;
+			}
+			
+			.login table {
+				width: 300px;
+				height: 74px;
+				padding: 0;
+				border-collapse: collapse;
+				margin-top: 5px;
+			}
+			
+			.login table td {
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="deadcenter">
+			<div class="login content-box">
+				<div class="header">
+					<h1>Login</h1>
+				</div>
+				<div class="body">
+					<?php if (isset($this->errors)) : ?>
+					<?php foreach($this->errors as $error) : ?>
+					<div style="error">
+					<?php echo $error ?>
+					</div>
+					<?php endforeach ?>
+					<?php endif ?>
+					<form style="margin:0; padding:0" id="user_login_form" method="post">
+						<table>
+				 			<tr>
+				 				<td style="width: 1px">Username </td>
+				 				<td><input type="text" name="username" /></td>
+				 			</tr>
+				 			<tr>
+				 				<td style="width: 1px">Password </td>
+				 				<td><input type="password" name="password" /></td>
+				 			</tr>
+				 			<tr>
+				 				<td colspan="2">
+				 					<input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+				 					<input type="submit" value="Login" />
+				 				<td>
+				 			</tr>
+				 		</table>
+			 		</form>
+			 	</div>
+			 	<form style="visibility: hidden" action="" method="post" id="secure_login_form">
+			 		<fieldset>
+			 			<input type="hidden" name="username" />
+				 		<input type="hidden" name="passhash" />
+				 		<input type="hidden" name="redirect" value="<?php echo $this->redirect ?>" />
+			 		</fieldset>
+			 	</form>
+			</div>
+		</div>
+	</body>
+</html>

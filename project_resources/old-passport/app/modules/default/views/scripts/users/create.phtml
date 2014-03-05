@@ -1,0 +1,50 @@
+<?php 
+$this->headTitle('Create User');
+$this->headLink()->appendStylesheet('/scripts/css/addon/magicform.css');
+?>
+<div class="content-box">
+	<div class="header">
+		<h1>Create User</h1>
+	</div>
+	<div class="body">
+		<form action="" method="post" id="create_user">
+			<fieldset id="account">
+				<dl> 
+					<dt><label for="username">Username</label></dt> 
+					<dd>
+						<input type="text" name="username" required="true" validate="strlen 32 3; username" value="<?php echo $this->user['username'] ?>" />
+						<error for="username" class="error_icon" validator="username">Username must be characters A-Z, a-z, 0-9, '.', '-', '_', '@'</error>
+						<error for="username" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="first_name">First Name</label></dt> 
+					<dd>
+						<input type="text" name="first_name" required="true" validate="strlen 32 3; words" value="<?php echo $this->user['first_name'] ?>" />
+						<error for="first_name" class="error_icon"></error>
+						<error for="first_name" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="last_name">Last Name</label></dt> 
+					<dd>
+						<input type="text" name="last_name" required="false" validate="strlen 32 3; words" value="<?php echo $this->user['last_name'] ?>" />
+						<error for="last_name" class="error_icon"></error>
+						<error for="last_name" validator="required">This is a required field</error>
+					</dd>
+				</fieldset>
+				<fieldset id="password">
+					<dt><label for="password">Password</label></dt> 
+					<dd>
+						<input type="password" name="password" required="true" validate="strlen 32 4; alnum" />
+						<error for="password" class="error_icon"></error>
+						<error for="password" validator="required">This is a required field</error>
+					</dd>
+					<dt><label for="confirm_password">Confirm</label></dt> 
+					<dd>
+						<input type="password" name="confirm_password" required="true" validate="match password" />
+						<error for="confirm_password" class="error_icon"></error>
+						<error for="confirm_password" validator="required">This is a required field</error>
+					</dd>
+				</dl>
+			</fieldset>
+			<input type="submit" value="Create User" />
+		</form>
+	</div>
+</div>

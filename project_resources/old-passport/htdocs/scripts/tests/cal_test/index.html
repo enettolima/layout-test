@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Calendar Test</title>
+		<link rel="stylesheet" href="nogray_calendar_vs1.css" />
+		<script type="text/javascript" src="mootools.v1.11.js"></script>
+		<script type="text/javascript" src="nogray_date_calendar_vs1_min.js"></script>
+		<script type="text/javascript">
+			window.addEvent("domready", function() {
+				var calendar1 = new Calendar(
+					'birth_date_cal',
+					'birth_date_toggle', {
+						'inputField': 'birth_date',
+						'idPrefix': 'birth_date',
+						'startDate': null, 
+						'allowSelection': true,
+						'allowWeekendSelection': true
+					}
+				)
+				
+				var calendar2 = new Calendar(
+					'hire_date_cal',
+					'hire_date_toggle', {
+						'inputField': 'hire_date',
+						'idPrefix': 'hire_date',
+						'startDate': null, 
+						'allowSelection': true,
+						'allowWeekendSelection': true
+					}
+				);
+			});
+		</script>
+		<style type="text/css">
+			dt { 
+				float: left; 
+				clear: left;
+				font-weight: bold; 
+				width: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Calendar Bug</h1>
+		<p>This page shows a problem I am having with the Calenar class.  
+		As you can see the first calendar "Birth Date" works just fine, 
+		however the second does not work, and the first calendar is 
+		updating both inputs.</p>
+		<dl>
+			<dt>Birth Date</dt>
+			<dd>
+				<input type="text" name="birth_date" id="birth_date" />
+				<a id="birth_date_toggle">show cal</a>
+				<div id="birth_date_cal"></div>
+			</dd>
+			<dt>Hire Date</dt>
+			<dd>
+				<input type="text" name="hire_date" id="hire_date" />
+				<a id="hire_date_toggle">show cal</a>
+				<div id="hire_date_cal"></div>
+			</dd>
+		</dl>
+	</body>
+</html>

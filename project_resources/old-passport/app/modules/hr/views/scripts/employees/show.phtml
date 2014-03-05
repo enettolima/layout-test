@@ -1,0 +1,78 @@
+<?php 
+$this->headTitle('Passport Employee #' . $this->employeeData->EMPL_ID); 
+?>
+<style type="text/css">
+	dd { 
+		margin-left: 120px;
+	}
+</style>
+<div class="content-box">
+	<div class="header">
+		<h1>
+			<?php echo $this->employeeData->FIRST_NAME ?> 
+			<?php echo $this->employeeData->LAST_NAME ?>
+			- <?php echo $this->employeeData->EMPL_ID ?>
+			@ <?php echo $this->employeeData->STORE_NAME ?>
+			[<?php echo $this->employeeData->STORE_CODE ?>]
+		</h1>
+	</div>
+	<div class="body">
+		<h1>Personal</h1>
+		<dl>
+			<dt>Name</dt>
+			<dd>
+				<?php echo $this->employeeData->FIRST_NAME ?>
+				<?php echo $this->employeeData->MI ?>
+				<?php echo $this->employeeData->LAST_NAME ?>
+			</dd>
+			<dt>Address</dt>
+			<dd>
+				<div>
+					<?php echo $this->employeeData->ADDRESS ?>
+					<?php if (isset($this->employeeData->ADDRESS2)) : ?>
+					<?php echo $this->employeeData->ADDRESS2 ?>
+					<?php endif; ?>
+				</div>
+				<div>
+					<?php echo $this->employeeData->CITY ?>
+					<?php echo $this->employeeData->STATE ?>,
+					<?php echo $this->employeeData->ZIP ?>
+				</div>
+			</dd>
+			<dt>Married</dt>
+			<dd><?php echo $this->employeeData->MARITAL_STATUS == 1 ? 'Yes' : 'No' ?></dd>
+			<dt>SSN</dt>
+			<dd>XX-XXX-<?php echo $this->employeeData->SSN_LAST4 ?></dd>
+			<dt>Birth Date</dt>
+			<dd><?php echo $this->employeeData->BIRTH_DATE ?></dd>
+		</dl>
+		<h1>Contact</h1>
+		<dl>
+			<?php foreach ($this->employeeData->contact as $contact) : ?>
+			<dt>
+				<?php echo ucwords($contact->CONTACT_TYPE) ?> 
+				<?php echo ucwords($contact->CONTACT_METHOD) ?>
+			</dt>
+			<dd>
+				<?php echo $contact->CONTACT_METHOD == 'phone' ? $this->phoneNumber($contact->VALUE) : $contact->VALUE ?>
+				<?php if (isset($contact->NOTE)) : ?>
+				<span style="font-style: italic">
+					<?php echo $contact->NOTE ?>
+				</span>
+				<?php endif; ?>
+			</dd>
+			<?php endforeach; ?>
+		</dl>
+		<h1>Employment</h1>
+		<dl>
+			<dt>Status</dt>
+			<dd><?php echo $this->employeeData->ACTIVE == 1 ? 'Active' : 'Inactive' ?></dd>
+			<dt>Position</dt>
+			<dd><?php echo $this->employeeData->JOB_DESCRIPTION ?></dd>
+			<dt>Pay Type</dt>
+			<dd><?php echo $this->employeeData->PAY_TYPE ?></dd>
+			<dt>Hired</dt>
+			<dd><?php echo $this->employeeData->HIRE_DATE ?></dd>
+		</dl>
+	</div>
+</div>

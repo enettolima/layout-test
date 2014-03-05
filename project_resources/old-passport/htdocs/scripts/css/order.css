@@ -1,0 +1,43 @@
+#order_items table td {
+	font-size: 8pt;
+	padding-left: 5px;
+}
+
+td.change-up 
+{
+    font-weight: bold;
+    font-size: 14px;
+    
+    line-height: 22px;
+    text-align: center;
+    vertical-align: middle;
+    
+    background: url(/images/icons/up.gif) no-repeat;
+    background-position: center
+}
+
+td.change-down 
+{
+    font-weight: bold;
+    font-size: 14px;
+    
+    line-height: 22px;
+    text-align: center;
+    vertical-align: middle;
+    
+    background: url(/images/icons/down.gif) no-repeat;
+    background-position: center
+}
+
+tr.comment_entry td {
+	padding-left: 10px;
+}
+
+tr.comment_entry label {
+	float: left;
+	font-weight: bold;
+}
+
+tr.comment_entry input {
+	width: 40em;
+}

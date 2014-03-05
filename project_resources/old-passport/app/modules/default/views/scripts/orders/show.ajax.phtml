@@ -1,0 +1,5 @@
+<?php 
+if (!empty($this->order)) {
+	echo $this->partial('orders/partials/order-summary.phtml', array('order' => $this->order));
+	echo $this->partial('orders/partials/order-items.phtml', array('order' => $this->order));
+}	

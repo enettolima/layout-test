@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title>Edit User</title>
+		<script type="text/javascript" src="jquery-1.2.6.min.js"></script> 
+		<!-- <script type="text/javascript" src="magicform.js"></script> -->
+		<link rel="stylesheet" href="magicform.css" />
+	</head>
+	<body>
+		<h2>Demo Form</h2>
+		<form action="" method="post" id="add_user">
+			<fieldset id="account">
+				<dl> 
+					<dt><label for="username">Username</label></dt> 
+					<dd>
+						<input type="text" name="username" required="true" validate="strlen 32 3; username" value="<?php echo $formData['username'] ?>" />
+						<error for="username" class="error_icon"></error>
+						<error for="username" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="username">First Name</label></dt> 
+					<dd>
+						<input type="text" name="first_name" required="true" validate="strlen 32 3; words" value="<?php echo $formData['first_name'] ?>" />
+						<error for="username" class="error_icon"></error>
+						<error for="username" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="username">Last Name</label></dt> 
+					<dd>
+						<input type="text" name="last_name" required="false" validate="strlen 32 3; words" value="<?php echo $formData['last_name'] ?>" />
+						<error for="username" class="error_icon"></error>
+						<error for="username" validator="required">This is a required field</error>
+					</dd>
+				</dl>
+			</fieldset>
+			<fieldset id="access">
+				<dl> 
+					<dt><label for="role">Role</label></dt> 
+					<dd>
+						<select name="role" required="true" validate="strict">
+							<?php foreach ($roles as $role_id => $role_name) : ?>
+							<option value="<?php echo $role_id ?>"><?php echo $role_name ?></option>
+							<?php endforeach ?>
+						</select>
+						<error for="role" class="error_icon"></error>
+						<error for="role" validator="required">This is a required field</error>
+					</dd>
+					<dt><label for="all_stages">All Stages</label></dt>
+					<dd><input type="checkbox" name="all_stages" />
+					<dt><label>Order Stages</label></dt> 
+					<dd>
+						<table>
+							<thead>
+								<tr>
+									<th>Stage</th>
+									<th>R</th>
+									<th>W</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($stages as $order_stage => $stage_name) : ?>
+								<tr>
+									<td><?php echo $stage_name ?></td>
+									<td><input type="checkbox" name="order_stages[<?php echo $order_stage ?>][]" value="read" validate="strict" /></td>
+									<td><input type="checkbox" name="order_stages[<?php echo $order_stage ?>][]" value="write" validate="strict" /></td>
+								</tr>
+								<?php endforeach ?>
+							<tbody>
+						</table>
+					</dd>
+					<dt><label for="all_stores">All Stores</label></dt>
+					<dd><input type="checkbox" name="all_stores" />
+					<dt><label>Store Access</label></dt> 
+					<dd>
+						<table id="store_access_table">
+							<thead>
+								<tr>
+									<th>Store</th>
+									<th>R</th>
+									<th>W</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($stores as $store_code => $store_name) : ?>
+								<tr>
+									<td><?php echo $store_name ?></td>
+									<td><input type="checkbox" name="store_access[<?php echo $store_code ?>][]" value="read" validate="strict" /></td>
+									<td><input type="checkbox" name="store_access[<?php echo $store_code ?>][]" value="write" validate="strict" /></td>
+								</tr>
+								<?php endforeach ?>
+							<tbody>
+						</table>
+						<error for="store_access" class="error_icon"></error>
+						<error for="store_access" validator="strict">Unknown elements found</error>
+					</dd> 
+				</dl>
+			</fieldset>
+			<input type="submit" value="Purchase" />
+		</form>
+	</body>
+</html>

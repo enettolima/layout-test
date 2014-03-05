@@ -1,0 +1,123 @@
+<?php
+$this->headTitle('History of order #' . $this->order->ORDER_ID);
+$this->headLink()->appendStylesheet('/scripts/css/icons.css');
+$this->headLink()->appendStylesheet('/scripts/css/order.css');
+
+$this->layout()->help = array(
+	'title' => 'Order History',
+	'body' => 'This page contains 
+		information about how the items have changed throughout the order process.');
+?>
+<?php echo $this->partial('orders/partials/order-summary.phtml', array('order' => $this->order)); ?>
+<div class="content-box"> 
+    <div class="header">
+		<h1>Legend</h1>
+    </div>
+    <div class="body">
+    	<table class="legend">
+    		<tbody>
+    			<tr class="alt">
+    				<td>1</td>
+    				<td style="font-weight: bold">Propose</td>
+    				<td>
+	    				This stage is where store inventories as well as warehouse inventories 
+	    				and sales trends are used to propose a basic order for the stores to edit.
+	    				These proposals are just a general template for the store to expand upon.
+	    			</td>
+    			</tr>
+    			<tr>
+    				<td>2</td>
+    				<td style="font-weight: bold">Store Review</td>
+    				<td>
+	    				This stage is where the store inspects the proposed order and makes any 
+	    				modifications they see fit, adjusting for changing sales requirements or
+	    				inventory inaccuracies. 
+	    			</td>
+    			</tr>
+    			<tr class="alt">
+    				<td>3</td>
+    				<td style="font-weight: bold">Item Approval</td>
+    				<td>
+	    				This stage is where the staff at the headquarters inspect store orders for
+	    				the whole company and reallocate items if needed based on availability.
+	    				Also checks are made to ensure that our budget is kept and on hand inventories
+	    				are sufficient.
+	    			</td>
+    			</tr>
+    			<tr>
+    				<td>4</td>
+    				<td style="font-weight: bold">Shipping and Handling</td>
+    				<td>
+	    				This stage is where the warehouse physically collects the items for an order
+	    				and places them into shipping containers. Order tracking is often added to 
+	    				this stage if the shipping carrier supports it.
+	    			</td>
+    			</tr>
+    		</tbody>
+    	</table>
+    </div>
+</div>
+<?php if (!empty($this->orderStages)) : ?>
+<div class="content-box"> 
+    <div class="header">
+		<h1>History</h1>
+    </div>
+    <div class="body">
+        <table>
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>ALU</th>
+					<th>Description</th>
+					<th>Case Qty</th>
+					<?php 
+					$stageKey = array(
+						0 => 'Proposed',
+						1 => 'Store Review',
+						2 => 'Item Approval',
+						3 => 'Shipping and Handling');					
+					for($i = 0; $i <= $this->order->ORDER_STAGE; $i++) : ?>
+					<th style="width: 30px; text-align: center">
+						<abbr title="<?php echo $stageKey[$i]; ?>"><?php echo $i + 1; ?></abbr>
+					</th>
+					<?php endfor; ?>
+					<th style="width: 0; text-align: right">Final</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php 
+				$alt = 0; 
+				foreach ($this->orderStages as $dname => $items) : 
+				?>
+				<tr>
+					<th colspan="<?php echo 6 + $this->order->ORDER_STAGE; ?>">
+						<?php echo $dname; ?>
+					</th>
+				</tr>
+				<?php foreach ($items as $item) : ?>
+				<tr <?php if ($alt ^= 1) : ?>class="alt"<?php endif; ?>>
+					<td><?php echo $item->ITEM_NO; ?></td>
+					<td><?php echo $item->ALU; ?></td>
+					<td><?php echo $item->DESCRIPTION; ?></td>
+					<td><?php echo $item->CASE_QTY; ?></td>
+					<td style="text-align: right"><?php echo (isset($item->stages[0]->qty) ? $item->stages[0]->qty : 0); ?></td>
+					<?php for ($i = 1 ; $i <= $this->order->ORDER_STAGE; $i++) : ?>
+					<?php if ($item->stages[$i]->change != '=') : ?>
+					<td class="change-<?php echo ($item->stages[$i]->change == '+' ? 'up' : 'down'); ?>">
+						<?php echo $item->stages[$i]->change; ?><?php echo $item->stages[$i]->diff; ?>
+					</td>
+					<?php else : ?>
+					<td style="text-align: center; font-weight: bold"><abbr title="No Change">/</abbr></td>
+					<?php endif; ?>
+					<?php endfor; ?>
+					<td style="text-align: right">
+						=<?php echo (isset($item->stages[$this->order->ORDER_STAGE]->qty) ? $item->stages[$this->order->ORDER_STAGE]->qty : 0); ?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+				<?php endforeach; ?>
+			</tbody>
+        </table>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,28 @@
+#order_items table td {
+	font-size: 8pt;
+}
+
+td {
+	padding-left: 5px;
+}
+
+tr.comment_entry td {
+	padding-left: 10px;
+}
+
+div.print_page {
+	display: inline-block;
+}
+
+table {
+	width: 100%;	
+}
+
+table td.money {
+	text-align: right;
+}
+
+div.content-box h1 {
+	text-align: center;
+	font-size: 12;
+}

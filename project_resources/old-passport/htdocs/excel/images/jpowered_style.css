@@ -1,0 +1,53 @@
+body {
+background-color: #FFCC00;
+}
+a {
+font-weight:bold;
+font-family:Arial,Helvetica;
+color:#0000B0;
+text-decoration:none;
+font-size:12px;
+}
+a:hover {
+font-weight:bold;
+font-family:Arial,Helvetica;
+color:#AA0000;
+text-decoration:underline;
+font-size:12px;
+}
+H1 { color: #000000; font-size: 18px; font-family: Arial,Helvetica;font-weight:bold; margin:5px;}
+H2 { color: #000000; font-size: 16px; font-family: Arial,Helvetica;font-style:italic; margin:5px;}
+H3 { color: #000000; font-size: 13px; font-family: Arial,Helvetica; font-weight:bold; margin:5px;}
+H4 { color: #000000; font-size: 12px; font-family: Arial,Helvetica; font-weight:bold; text-decoration:underline; margin:5px;}
+p {
+font-family:Arial,Helvetica;
+color:#000000;
+font-size:12px;
+margin:10px;
+}
+li, ul, ol, td {
+font-family:Arial,Helvetica;
+color:#000000;
+font-size:12px;
+}
+
+/* Everything below this point does not affect the content, only the header and footer */
+/* This sets the backgound color for the top (heading) and bottom (footer) Menus */
+td.menu_cell {
+background-color: #F0F0B0;
+}
+/* This sets the background color for the header and the footer */
+td.heading_cell {
+background-color: #FFCC00;
+}
+/* This overides the H1 style and sets the style for the Heading only */
+H1.heading {
+color: #BB3500;
+text-align: right;
+margin:5px;
+}
+/* This sets the style for the menu at the bottom (footer) menu */
+p.bottom_menu {
+margin-left: 5em;
+margin-right: 5em;
+}

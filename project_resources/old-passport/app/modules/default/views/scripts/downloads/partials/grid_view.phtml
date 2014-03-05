@@ -1,0 +1,54 @@
+<?php $this->headStyle()->captureStart() ?>
+	a.file {
+		float: left;
+		height: 64px;
+		width: 200px;
+
+		padding-left: 67px;
+		text-align: left;
+		font-size: 8pt;
+		
+		background-position: top left;
+		background-repeat: no-repeat;
+		
+		margin: 3px;
+	}
+	
+	a.file:hover {
+		background-color: #fbfae9
+	}
+<?php $this->headStyle()->captureEnd() ?>
+<?php foreach ($this->files->folders as $folder) : ?>
+<a 
+	class="file" 
+	style="background-image: url(/images/icons/downloads/folder.png)" 
+	href="/downloads?cwd=<?php echo urlencode($this->cwd . $folder->filename) ?>&layout=large">
+	<?php echo $folder->filename ?>
+</a>
+<?php endforeach; ?>
+<?php 
+foreach ($this->files->files as $file) : 
+	$iconPath = '/images/icons/downloads/default-icon.png';
+	$ext = substr($file->filename, strrpos($file->filename, '.') + 1);
+	$relPath = '/images/icons/downloads/' . $ext . '-icon.png';
+	
+	if (file_exists(APP_ROOT . '/htdocs' . $relPath))
+		$iconPath = $relPath;
+?>
+<a 
+	class="file" 
+	title="<?php echo $file->filename ?>"
+	style="background-image: url(<?php echo $iconPath ?>)" 
+	href="/downloads/download?file=<?php echo urlencode($file->filename) ?>&cwd=<?php echo urlencode($this->cwd) ?>">
+	<div style="overflow: hidden; text-overflow: ellipsis">
+		<?php if (strlen($file->filename) > 20) : ?>
+		<?php echo substr($file->filename, 0, 20) . '...' ?>
+		<?php else : ?>
+		<?php echo $file->filename ?>
+		<?php endif; ?>
+	</div>
+	<div style="font-style: italic; font-size: 8pt; font-weight: normal"><?php echo date('F d Y', $file->mtime) ?></div>
+	<div style="font-style: italic; font-size: 8pt; font-weight: normal"><?php echo $this->fileSize($file->size) ?></div>
+</a>
+<?php endforeach; ?>
+<div style="clear: both"></div>

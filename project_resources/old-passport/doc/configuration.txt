@@ -1,0 +1,26 @@
+= Configuration =
+To configure the database connection of the passport system you must use the config.ini configuration file.  This file is located in
+
+<pre>
+passport/app/etc/config.ini
+</pre>
+
+The configuration file contains several sections, each section contains several configuration variables.  To configure the passport system
+simply change the configuration variables to represent the values you need.  Below is a listing of sections and what possible values are 
+contained within.
+
+== Sections ==
+
+=== General ===
+The general section of this file dictates several basic settings outlined below.
+
+* app.mode - The application mode, defined here, allows for conditional configuration.  Basically any setting defined here can also be overridden in the section corresponding to the application mode.  This makes it simple to have different configuration in your development environment and production.
+* database.user - The username of the database connection, for example 'reportuser'
+* database.password - The password of the database connection, for example 'report'
+* database.tnsname - The "TNS name" of the database connection, for example '//flash/rproods'
+
+=== Live ===
+This section overrides the general section if mode = live, typically you would use this to put database settings specific to the live environment in.
+
+== Development ==
+This section overrides the general section if mode = development, typically you would use this to put database settings specific to the dev environment in.

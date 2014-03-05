@@ -1,0 +1,92 @@
+<?php $this->headScript()->captureStart() ?>
+var editRoleInterface = {
+	init: function() {
+		$('a.delete_role').each(function(i, e) {
+			e.onclick = editRoleInterface.deleteRule;
+		});
+		
+		$('add_rule').onclick = editRoleInterface.createRule;
+	},
+	deleteRule: function() {
+		$(this).getParent().getParent().remove(); // delete the row with this rule.
+	},
+	createRule: function() {
+		var tbody = $('rule_list').find('tbody');
+		var rule = { 
+			module: $('module_select').getProperty('value'), 
+			controller: $('controller_select').getProperty('value'),
+			action:  $('action_select').getProperty('value') };
+			
+		var newRow = new Element('tr');
+		for (key in rule) {
+			newRow.adopt(
+				new Element('td').adopt(
+					new Element('input', { 
+						name: 'role_rules[][' + key + ']',
+						value: rule[key] 
+					});
+				)
+			);
+		}
+		
+		newRow.insertAfter(tbody.getLast());
+	}
+}
+
+window.onDomReady(editRoleInterface.init.bind(editRoleInterface));
+<?php $this->headScript()->captureEnd() ?>
+<div class="content-box">
+	<div class="header">
+		<h1>Create Role</h1>
+	</div>
+	<div class="body">
+		<?php if (isset($this->errors)) : ?>
+		<?php foreach ($this->errors as $error) : ?>
+		<div><?php echo $error ?></div>
+		<?php endforeach ?>
+		<?php endif ?>
+		<form action="" method="post" id="edit_role">
+			<fieldset>
+				<dl>
+					<dt><label for="name">Role Name</label></dt>
+					<dd>
+						<input name="name" validate="strlen 1 32; words" />
+						<error for="name">A role name must consist of letters and numbers and be 1-32 characters.</error>
+					</dd>
+					<dt>Rules</dt>
+					<dd>
+						<table id="rule_list">
+							<tbody>
+								<?php foreach ($this->rules as $rule) : ?>
+								<tr>
+									<td>
+										<a class="delete_role" title="Delete Role">
+											<img class="icon" src="/images/icons/trash_16.png" alt="trash icon" />
+										</a>
+									</td>
+									<?php foreach (array('module', 'controller', 'action') as $key) : ?>
+									<td>
+										<input type="text" name="role_rule[][<?php echo $key ?>]" value="<?php echo $rule[$key] ?>" />
+									</td>
+									<?php endforeach ?>
+								</tr>
+								<?php endforeach ?>
+							</tbody>
+						</table>
+						<div>
+							<?php foreach (array('module', 'controller', 'action') as $key) : ?>
+							<select id="<?php echo $key ?>_select">
+								<?php foreach ($this->$key as $value) : ?>
+								<option value="<?php echo $value ?>"><?php echo $value ?></option>
+								<?php endforeach ?>
+							</select>
+							<?php endforeach ?>
+						</div>
+						<input type="button" value="Add Rule" id="add_rule" />
+					</dd>
+				</dl>
+			</fieldset>
+			<input type="submit" value="Create Role" />
+		</form>
+	</div>
+</div>

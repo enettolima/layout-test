@@ -1,0 +1,46 @@
+<?php 
+	$this->headTitle('Passport News');
+	$this->headLink()->appendStylesheet('/scripts/css/icons.css');
+	
+	$this->layout()->help = array(
+		'title' => "News Articles",
+		'body' => "This page displays news articles ordered from new to old. If you have access you can create, edit, or delete articles using the icons below.");
+ ?>
+<div class="content-box">
+	<div class="header">
+		<div class="tools">
+			<a href="/news/create" title="New">
+				<div class="new-icon-medium"></div>
+			</a>
+		</div>
+		<h1>News Articles</h1>
+	</div>
+ 	<div class="body">
+ 		<?php 
+			$isEven = 1;
+			foreach ($this->articles as $article) : 
+		?>
+		<div <?php if ($isEven ^= 1): ?>class="alt"<?php endif; ?>>
+			<div class="tools">
+				<a href="/news/delete/article/<?= $article->ARTICLE_ID ?>" title="Delete">
+					<div class="trash-icon-small"></div>
+				</a>
+				<a href="/news/edit/article/<?= $article->ARTICLE_ID ?>" title="Edit">
+					<div class="write-icon-small"></div>
+				</a> 
+			</div>
+			<h3><?= $article->RNO ?>: <?= $article->SUBJECT ?></h3>
+			<?= $article->FIRST_NAME ?> <?= $article->LAST_NAME ?>
+			&nbsp;&nbsp;&nbsp;&nbsp;<?= $article->BODY ?>
+		</div>
+		<?php endforeach; ?>
+		
+		<?php if ($this->page > 0) : ?>
+		<a href="/news/index/page/<?= $this->page - 1 ?>/page_size/<?= $this->pageSize ?>">&lt;&lt; Previous Page</a> 
+		<?php endif; ?>
+
+		<?php if ($this->page < $this->pageCount) : ?>
+		<a href="/news/index/page/<?= $this->page + 1 ?>/page_size/<?= $this->pageSize ?>">Next Page &gt;&gt;</a>
+		<?php endif; ?>
+ 	</div>
+</div>

@@ -1,0 +1,20 @@
+<?php 
+$this->headTitle('Passport New Hire Confirm'); 
+?>
+<div class="content-box">
+	<div class="header">
+		<h1>Confirm New Hire</h1>
+	</div>
+	<div class="body">
+		<dl>
+		<?php foreach ($this->employeeData as $key => $val) : ?>
+			<dt><?php echo $key ?></dt>
+			<dd><?php echo $val ?></dd>
+		<?php endforeach; ?>
+		</dl>
+		<form action="" method="post">
+			<input type="submit" name="confirm_newhire" value="Confirm" />
+			<a href="/hr/employees/new-hire">Correct Mistakes</a>
+		</form>
+	</div>
+</div>

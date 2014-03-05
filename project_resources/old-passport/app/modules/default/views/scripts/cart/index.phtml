@@ -1,0 +1,55 @@
+<?php if ($this->cart && count($this->cart->CartItem) > 0) : ?>
+<div class="content-box">
+	<div class="header">
+		<a  class = "cart_clear_button"
+			style = "float: right; margin-right: 5px"
+        	href = "/cart/clear"
+        	title="Clear Cart">
+        	<img class="icon" alt="trash icon" src="/images/icons/trash_16.png" />
+        </a>
+		<h1>Cart - <?php echo count($this->cart->CartItem) ?> items</h1>
+	</div>
+	<div class="body">
+		<ul>
+			<?php if (isset($this->messages)) : ?>
+			<?php foreach ($this->messages as $message) : ?>
+			<li><?php echo $message; ?>
+			<?php endforeach ?>
+			<?php endif ?>
+		</ul>
+		<form method="post" action="/orders/add">
+			<table id="cart_items">
+				<tbody>
+					<?php $alt = 0; foreach ($this->cart->CartItem as $item) : ?>
+					<tr<?php if (($alt ^= 1) == 0) echo ' class="alt"'?>>
+						<td>
+	                		<a class = "cart_delete_button" href = "/cart/delete/item/<?php echo $item->item_no ?>" title="Remove item from cart">
+	                			<img class="icon" alt="trash icon" src="/images/icons/trash_16.png" />
+	                		</a>
+	                	</td>
+	                	<td><input type="text" name="item_qty[<?php echo $item->item_no ?>]" value="<?php echo $item->qty ?>" /></td>
+						<td><?php echo $item->item_no ?></td>
+						<td>
+							<?php if (empty($item->Item->description)) : ?>
+								Unknown Item
+							<?php elseif (strlen($item->Item->description) > 16) : ?>
+							<abbr title="<?php echo $item->Item->description ?>">
+								<?php echo substr($item->Item->description, 0, 16) . '...' ?>
+							</abbr>	
+							<?php else : ?>
+								<?php echo $item->Item->description ?>
+							<?php endif ?>
+						</td>
+					</tr>
+					<?php endforeach ?>
+				</tbody>
+			</table>
+			<input id="cart_save_button" type="button" value="Save" />
+			<?php if (isset($this->order)) : ?>
+			<input type="hidden" name="order" value="<?php echo $this->order->id ?>" />
+			<input id="cart_order_button" type="submit" value="Add to Order" />
+			<?php endif ?>
+		</form>
+	</div>
+</div>
+<?php endif ?>

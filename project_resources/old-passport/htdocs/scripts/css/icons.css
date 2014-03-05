@@ -1,0 +1,42 @@
+/* Passport Icon Theme */
+img.icon
+{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.trash-icon-small {
+	background-image: url(/images/icons/recycle-bin-empty-16x16.png);
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+}
+
+.write-icon-small {
+	background-image: url(/images/icons/write-document-16x16.png);
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+}
+
+.new-icon-medium {
+	background-image: url(/images/icons/default-document-24x24.png);
+	height: 24px;
+	width: 24px;
+	display: inline-block;
+}
+
+.refresh-icon-medium {
+	background-image: url(/images/icons/subscriptions-24x24.png);
+	height: 24px;
+	width: 24px;
+	display: inline-block;
+}
+
+.delete-icon-medium {
+	background-image: url(/images/icons/subscriptions-24x24.png);
+	height: 24px;
+	width: 24px;
+	display: inline-block;
+}

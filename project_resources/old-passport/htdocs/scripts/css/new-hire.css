@@ -1,0 +1,29 @@
+@CHARSET "ISO-8859-1";
+#new_hire fieldset dt {
+	width: 125px;
+	clear: left
+}
+
+#first_name {
+	width: 15em	
+}
+
+#last_name {
+	width: 15em	
+}
+
+#mi {
+	width: 2em
+}
+
+#address {
+	width: 30em
+}
+
+#address2 {
+	width: 30em
+}
+
+#zip {
+	width: 5em;
+}

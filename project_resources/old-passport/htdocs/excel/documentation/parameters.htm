@@ -1,0 +1,919 @@
+<html>
+<head>
+<title>Advanced Data Grid Control Software</title>
+<META NAME="DESCRIPTION" CONTENT="JPowered is a leading provider of Web Component Software. The Advanced Data Grid Control is an extremely powerful component enabling the display of data in rows and columns. Features include Data Sorting, URL Linking, Scrolling, Dynamic methods and much more.">
+<META NAME="KEYWORDS" CONTENT="grid control,data grid,grid component,data grid control,grid,control,data,component,table,data table">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../images/jpowered_style.css">
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<BR>
+
+<!-- One big table contain only one cell -->
+<table width="730" border="0" cellspacing="0" cellpadding="1" bgcolor="#FFAA00" align="center">
+<tr>
+<td>
+<table width="730" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+<tr>
+<td> <!-- Heading section that includes Logo, Title and Links -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td class="heading_cell" rowspan="2" bgcolor="#FFCC00"><img src="../images/jpowered.gif" width="270" height="60" align="left" alt="data grid control"></td>
+<td class="heading_cell" bgcolor="#FFCC00">
+<h1 class="heading">Advanced Data Grid Control</h1>
+</td>
+</tr>
+<tr>
+<td class="menu_cell" bgcolor="#F0F0B0" valign="top"> <img src="../images/curve.gif" width="22" height="18" alt="grid component" vspace="0" hspace="0" align="left">
+[<a href="http://www.jpowered.com"> Home </a>]
+[<a href="http://www.jpowered.com/products.htm"> Products </a>]
+[<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+[<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+[<a href="http://www.jpowered.com/support.htm"> Support </a>]
+[<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+</td>
+</tr>
+</table>
+<!-- Content section that includes Main left hand column 430 pixels wide with right hand column taking remaining 200 pixels. -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+<tr>
+<td width="560" valign="top"> <!-- begin content -->
+<table width="100%" border="0" cellpadding="5">
+<tr valign="top" align="left">
+<td bgcolor="#99CCFF" colspan="2"> [<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+Buy Now </a> ] </td>
+</tr>
+<tr align="left" valign="top">
+<td width="70%" >
+<h2><font color="#009900"><b><font face="Arial, Helvetica, sans-serif" color="#FF9933">Advanced Data Grid Control</font></b></font></h2>
+<p><font color="#009900"><b><font color="#666666">Full Parameter Reference</font></b></font></p>
+</td>
+<td align="right" width="39%" ><img src="../images/data-grid-control-220.gif" width="220" height="64" alt="advanced data grid control"></td>
+</tr>
+<tr align="left" valign="top">
+<td colspan="2">
+<p><font face="Arial, Helvetica, sans-serif" size="2">Whichever method ( file, html code, server process etc.) you choose to supply
+the data grid with the configuration options, the various parameters all follow the same format of <b>[Parameter Name] , [Parameter
+Value].</b> Below you will find each option detailed with examples for supplying by file and html code.</font></p>
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Please Note :</b> Parameters Names are case sensitive. ( i.e.. axis is
+not the same as Axis ).</font></p>
+<ol>
+<ol>
+<li><a href="#gridswitches">Grid Switches</a></li>
+<li><a href="#general">General Characteristics</a></li>
+<li><a href="#dataformat">Data Format</a></li>
+<li><a href="#rownumber">Row Number Properties</a></li>
+<li><a href="#border">Border Properties</a></li>
+<li><a href="#title">Title Properties</a></li>
+<li><a href="#cells">Cell Properties</a></li>
+<li><a href="#column">Column Definitions</a></li>
+<li><a href="#charsets">Multi Language Character Set</a></li>
+</ol>
+</ol>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="gridswitches"></a>GridSwitches (
+Boolean flags )</font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183" bgcolor="#CCFFFF"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>titlearea</b></td>
+<td width="232"> Specifies whether a Title area is to be drawn<br>
+<br>
+<b>Range of Values :</b> true or false </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+titlearea: true</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;titlearea&quot; value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>rownumbers </b></font></td>
+<td width="232"> Specifies whether rows should be numbered <br>
+<br>
+<b>Range of Values</b> : true or false </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">rownumbers: true</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">rownumbers</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>cellgrid</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> Specifies whether cells should be outlined</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> true or false</font> </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellgrid</font></font><font face="Courier New, Courier, mono">:
+true</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellgrid</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>transcells</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">If
+a background image is used then you may wish to make the cells transparent.</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> true or false</font> </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">transcells</font></font><font face="Courier New, Courier, mono">:
+true</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">transcells</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>displaytotals</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+whether numeric &amp; currency columns should have a total displayed</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> true or false</font> </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2">displaytotals </font><font face="Courier New, Courier, mono">:
+true</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2">displaytotals</font><font face="Courier New, Courier, mono">&quot;
+value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>columnheadings</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+whether column headings should be drawn</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> true or false</font> </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">columnheadings</font></font><font face="Courier New, Courier, mono">:
+outline</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">columnheadings</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;true&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="general"></a>General Characteristics</font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>bgcolor</b></td>
+<td width="232"> Specifies the Background Color<br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+bgcolor: white</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;bgcolor&quot; value=&quot;#FFFFFF&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>bgimage </b></font></td>
+<td width="232"> Specifies a background image for the cell area<br>
+<br>
+<b>Range of Values</b> : URL to image file</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">bgimage: cellbg.gif
+</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">bgimage</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;cellbg.gif&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>scrollbarbgcolor</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> Specifies the background color for the scroll bars</font><br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">scrollbarbgcolor</font></font><font face="Courier New, Courier, mono">:
+blue</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">scrollbarbgcolor</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;#0000FF&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>dateformat</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+the Date Format for interpreting any dates within the data</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> Date Format<br>
+<a href="dateformat.htm">click here</a> for Date Definitions</font> </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">dateformat</font></font><font face="Courier New, Courier, mono">:
+dd MMMM yyyy</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;dateformat</font><font face="Courier New, Courier, mono">&quot; value=&quot;MM/dd/yyyy&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>thousandseparator</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+the character to be used as a thousand separator when displaying numerical values</font><br>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> String<br>
+or "none" to specifiy no character<br>
+or "space" to specify a space character</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">thousandseparator</font></font><font face="Courier New, Courier, mono">:
+,</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;thousandseparator</font><font face="Courier New, Courier, mono">&quot; value=&quot;none&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+
+</table>
+<p>&nbsp;</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="dataformat"></a>Data Format</font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>datafiletype</b></td>
+<td width="232"> Specifies the format of the data, ie. <b>Fixed Width</b> or <b>Character separated.</b><br>
+<br>
+<b>Range of Values :</b> 0 - Character Separated or 1 - Fixed Width </td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+datafiletype: 0</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;datafiletype&quot; value=&quot;0&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>dataseperator </b></font></td>
+<td width="232"> If character separated then specifies the character separator<br>
+<br>
+<b>Range of Values</b> : Any Alpha Numeric Character</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">dataseperator: # </font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">dataseperator</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;,&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>fixedwidths</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> If fixed width then specifies the width(in characters)
+of each column. </font><br>
+<br>
+<b>Range of Values :</b> Integers separated by a | character.<br>
+</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">fixedwidths</font></font><font face="Courier New, Courier, mono">:
+20|10|25|15 </font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">fixedwidths</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;15|30|30&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="rownumber"></a>Row Properties </font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>rownumbgcolor</b></td>
+<td width="232"> Background color of row numbers<br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+rownumbgcolor: light grey</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;rownumbgcolor&quot; value=&quot;#BBBBBB&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>rownumtxtcolor </b></font></td>
+<td width="232"> Text color of row numbers<br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">rownumtxtcolor: black
+</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">rownumtxtcolor</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;#000000&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="border"></a>Border Properties </font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>borderwidth</b></td>
+<td width="232"> Specifies the width of the border<br>
+<br>
+<b>Range of Values :</b> Integer Value. If no border is required set this value to 0.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+borderwidth: 1</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;borderwidth&quot; value=&quot;3&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>bordercolor </b></font></td>
+<td width="232"> Specifies the base color of the border. <br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">bordercolor: #999999
+</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">bordercolor</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;grey&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>borderstyle</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> Specifies whether the border should be Plain, Raised
+or Sunken.</font><br>
+<br>
+<b>Range of Values :</b> 0 - Plain, 1 - Raised, 2 - Sunken<br>
+</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2">borderstyle</font><font face="Courier New, Courier, mono">:
+1 </font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2">borderstyle</font><font face="Courier New, Courier, mono">&quot;
+value=&quot;0&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="title"></a>Title Properties </font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>titletext</b></td>
+<td width="232"> Specifies the Title Text<br>
+<br>
+<b>Range of Values :</b> Text</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+titletext: Data Grid Title</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;titletext&quot; value=&quot;Data Grid Title&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>titlefont </b></font></td>
+<td width="232"> Specifies the Title Font<br>
+<br>
+<b>Range of Values</b> : Font Definition<br>
+<a href="fonts.htm">click here</a> for defining fonts</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titlefont: Arial,B,16
+</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titlefont</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">Arial,BI,14</font></font><font face="Courier New, Courier, mono">&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>titlecolor</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> Specifies the text color</font><br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titlecolor</font></font><font face="Courier New, Courier, mono">:
+blue</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">title</font></font><font face="Courier New, Courier, mono">color</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;#0000FF&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>titlealign</b></font></td>
+<td width="232">
+<p><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+the text alignment</font></p>
+<p><br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> Left, Right or Center </font></p>
+</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">textalign</font></font><font face="Courier New, Courier, mono">:
+right</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;textalign</font><font face="Courier New, Courier, mono">&quot; value=&quot;center&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>titlebgcolor</b></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2">Specifies the title area background color</font><br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"><b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titlebgcolor</font></font><font face="Courier New, Courier, mono">:
+white</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titlebg</font></font><font face="Courier New, Courier, mono">color</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;#FFFFFF&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>titleimage</b></td>
+<td width="232">
+<p><font face="Arial, Helvetica, sans-serif" size="2">Specifies the URL of an Image file</font></p>
+<p><br>
+<font face="Arial, Helvetica, sans-serif" size="2"><b>Range of Values :</b> Image file URL</font></p>
+</td>
+<td width="183"><b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titleimage</font></font><font face="Courier New, Courier, mono">:
+title.gif</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">titleimage</font></font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;title.gif&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><br>
+</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="cells"></a>Cell Properties </font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left" bgcolor="#CCFFFF">
+<td width="73"><b>Parameter</b></td>
+<td width="232"><b>Description</b></td>
+<td width="183"><b>Example</b></td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>cellgridline</b></td>
+<td width="232"> Specifies the grid line style<br>
+<br>
+<b>Range of Values :</b> 1- Solid, 2- dotted, 3- dashed(short), 3- dashed(long)</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+cellgridline: 1</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;cellgridline&quot; value=&quot;2&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"><b>cellgridcolor </b></font></td>
+<td width="232"> Specifies the grid line color<br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellgridcolor: 175,175,175
+</font></font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;cellgridcolor</font><font face="Courier New, Courier, mono">&quot; value=&quot;light grey</font><font face="Courier New, Courier, mono">&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>cellfont</b></font></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2"> Specifies the cell text font</font><br>
+<br>
+<b>Range of Values :</b> Font Definition<br>
+<a href="fonts.htm">click here</a> for defining fonts.</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2">cellfont</font><font face="Courier New, Courier, mono">: Arial,N,12
+</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellfont</font></font><font face="Courier New, Courier, mono"></font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;Arial,N,10&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><font face="Arial, Helvetica, sans-serif" size="2"> <b>celltextcolor</b></font></td>
+<td width="232">
+<p><font face="Arial, Helvetica, sans-serif" size="2"> </font><font face="Arial, Helvetica, sans-serif" size="2">Specifies
+the cell text color</font></p>
+<p><br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</p>
+</td>
+<td width="183"> <b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">celltextcolor</font></font><font face="Courier New, Courier, mono">:
+black </font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;celltextcolor</font><font face="Courier New, Courier, mono">&quot; value=&quot;#000000&quot;&gt;</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>cellbgcolor</b></td>
+<td width="232"><font face="Arial, Helvetica, sans-serif" size="2">Specifies the cell area background color</font><br>
+<br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</td>
+<td width="183"><b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellbgcolor</font></font><font face="Courier New, Courier, mono">:
+white</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cellbg</font></font><font face="Courier New, Courier, mono">color</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;#FFFFFF&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>cell_mo_textcolor</b></td>
+<td width="232">
+<p><font face="Arial, Helvetica, sans-serif" size="2">Specifies the text color upon Mouseover for cells which have a
+URL Link attached</font></p>
+<p><br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</p>
+</td>
+<td width="183"><b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cell_mo_textcolor</font></font><font face="Courier New, Courier, mono">:
+white </font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2">cell_mo_textcolor</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;white&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td colspan="3">
+<table width="500" border="0" cellpadding="2" align="center" cellspacing="0" vspace="0" hspace="0">
+<tr valign="top" align="left">
+<td width="73"><b>cell_mo_bgcolor</b></td>
+<td width="232">
+<p><font face="Arial, Helvetica, sans-serif" size="2">Specifies the cell background color upon Mouseover for cells which
+have a URL Link attached</font></p>
+<p><br>
+<b>Range of Values :</b> Color Definition<br>
+<a href="colors.htm">click here</a> for defining colors.</p>
+</td>
+<td width="183"><b>File Example : </b><font face="Courier New, Courier, mono"><br>
+</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Courier New, Courier, mono">cell_mo_bgcolor</font></font><font face="Courier New, Courier, mono">:
+black</font><br>
+<br>
+<b>Html Code Example : </b><font face="Courier New, Courier, mono"><br>
+&lt;PARAM name=&quot;</font><font face="Arial, Helvetica, sans-serif" size="2"><font face="Arial, Helvetica, sans-serif" size="2">cell_mo_bgcolor</font></font><font face="Courier New, Courier, mono">&quot;
+value=&quot;black&quot;&gt;</font> </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><br>
+</p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="column"></a>Column Definitions </font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left">
+<td colspan="3">
+<p><font face="Arial, Helvetica, sans-serif" size="2">For each column in the data grid, 12 characteristics can be defined,
+</font></p>
+<p>Column Heading Text<br>
+Data Type<br>
+Background Color<br>
+Text Color<br>
+Width (in pixels)<br>
+Alignment<br>
+Default URL<br>
+Default Target Frame<br>
+Currency Symbol<br>
+Number of decimal places to display<br>
+Image<br>
+Tool Tip text </p>
+<p><font face="Arial, Helvetica, sans-serif" size="2">These are supplied via the &quot;columnN&quot; parameter (where N is
+an integer ranging from 1 to the total number of columns). Each item above is separated by a | character.</font></p>
+<p> For the <b>Data Type</b> Item the following are supported,</p>
+<ul>
+<li>0 - Text ( default )</li>
+<li>1 - Numeric</li>
+<li>2 - Date</li>
+<li>3 - Currency</li>
+</ul>
+<p><b>Alignment </b>- can be one of &quot;left&quot;, &quot;right&quot; or &quot;center&quot;</p>
+<p><b>Currency Symbol</b> - If the Data Type is set to currency then all cells in this column will have this character placed
+in front. (eg. &quot;$&quot;).</p>
+<p><b>Number of decimal places to display</b> - For Numeric or Currency types the data is held in the format and precision
+is which it is supplied, but using this element you can specify only to display a certain number of decimal places. e.g.
+for currency types you may wish to only display to 2 decimal places.</p>
+<p>F<font face="Arial, Helvetica, sans-serif" size="2">or example if we have 4 columns of data,</font></p>
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>File Example : </b></font><font face="Courier New, Courier, mono" size="2"><br>
+column1: Product|0|white|black|150|left| | | |0| |Product Titles<br>
+column2: Standard|3|164,164,186|40,40,70|75|right| | |$ |2| |Standard License Price<br>
+column3: Professional|3|164,164,186|40,40,70|100|right| | |$ |2| |Professional License Price<br>
+column4: Launch Date|2|164,164,186|40,40,70|125|center| | | |0| |Latest Release Launch Date<br>
+</font></p>
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Html Code Example : </b><br>
+</font> <font face="Courier New, Courier, mono">&lt;param name=&quot;column1&quot; value=&quot;Product|0|164,164,186|40,40,70|150|left|
+| | |0| |Product Titles&quot;&gt;<br>
+&lt;param name=&quot;column2&quot; value=&quot;Standard|3|164,164,186|40,40,70|75|right| | |$ |2| |Standard License Price&quot;&gt;<br>
+&lt;param name=&quot;column3&quot; value=&quot;Professional|3|164,164,186|40,40,70|100|right| | |$ |2| |Professional License
+Price&quot;&gt;<br>
+&lt;param name=&quot;column4&quot; value=&quot;Launch Date|2|164,164,186|40,40,70|125|center| | | |0| |Latest Release Launch
+Date&quot;&gt;</font></p>
+<br>
+</td>
+</tr>
+</table>
+<p>&nbsp; </p>
+<p align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><font size="3"><a name="charsets"></a>Multi Language Character
+Sets</font></b></font></p>
+<table width="500" border="1" cellpadding="2" align="center" vspace="0" hspace="0" cellspacing="0" bgcolor="#EEEEEE">
+<tr valign="top" align="left">
+<td colspan="3">
+<p>If your data incorporates characters which are not included in the Western Alphabet (eg. Japanese or Eastern European characters)
+then the data grid provides the ability for displaying such character sets.</p>
+<p>To change the character set you will need to add the following parameter between the &lt;applet&gt; and &lt;/applet&gt;
+tags,</p>
+<p><font face="Courier New, Courier, mono">&lt;param name=&quot;charset&quot; value=&quot;SJIS&quot;&gt; </font> </p>
+<p><b>Please Note:</b> The &quot;charset&quot; parameter will only work where Data is read from a plain text file or server
+side process (ie. not HTML Parameters).</p>
+<p>&nbsp;</p>
+<p>For further information on specifying character sets please <a href="charsets.htm">click here.</a></p>
+<p><br>
+</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr align="left" valign="top" bgcolor="#FFFFFF">
+<td colspan="2"><a href="../GettingStarted.htm">&laquo; back to Getting Started</a></td>
+</tr>
+<tr valign="top" align="left">
+<td bgcolor="#99CCFF" colspan="2">[<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+Buy Now </a> ] </td>
+</tr>
+</table>
+
+</td>
+<td valign="top"> <!-- Begin right hand column -->
+<table width="200" border="0" cellspacing="0" cellpadding="1" bgcolor="#CC6600">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#FFFFFF">
+<tr>
+<td>
+<p><a href="../GettingStarted.htm">Getting Started</a></p>
+<p><a href="index.htm">Documentation</a></p>
+<ul>
+<li><a href="implementing.htm">Implementing</a></li>
+<li><a href="gridproperties.htm">Grid Properties</a></li>
+<li><a href="griddata.htm">Grid Data</a></li>
+<li><a href="javascript.htm">JavaScript</a></li>
+<li><a href="parameters.htm">Parameters</a></li>
+<li><a href="dynamicmethods.htm">Dynamic Methods</a></li>
+<li><a href="charsets.htm">Multi Language</a></li>
+<li><a href="support.htm">Further Help &amp; Support</a></li>
+</ul>
+<p><a href="../Examples/index.htm">Examples</a></p>
+<p><a href="http://www.jpowered.com/data_grid_control/order.htm"><img src="../images/buydownload.gif" width="140" height="57" border="0"></a></p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!-- Footer section that includes Links, Horizontal Rule and Copyright image -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+<tr>
+<td class="menu_cell" bgcolor="#FFCC00">
+<p class="bottom_menu">
+[<a href="http://www.jpowered.com"> Home </a>]
+[<a href="http://www.jpowered.com/products.htm"> Products </a>]
+[<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+[<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+[<a href="http://www.jpowered.com/support.htm"> Support </a>]
+[<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+</p>
+</td>
+</tr>
+<tr bgcolor="#FFCC00">
+<td class="heading_cell">
+<div align="center"><img src="../images/copyright.gif" width="450" height="25"></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

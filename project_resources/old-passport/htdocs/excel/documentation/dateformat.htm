@@ -1,0 +1,303 @@
+<html>
+<head>
+<title>Advanced Data Grid Control Software</title>
+<META NAME="DESCRIPTION" CONTENT="JPowered is a leading provider of Web Component Software. The Advanced Data Grid Control is an extremely powerful component enabling the display of data in rows and columns. Features include Data Sorting, URL Linking, Scrolling, Dynamic methods and much more.">
+<META NAME="KEYWORDS" CONTENT="grid control,data grid,grid component,data grid control,grid,control,data,component,table,data table">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../images/jpowered_style.css">
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<BR>
+
+  <!-- One big table contain only one cell -->
+<table width="730" border="0" cellspacing="0" cellpadding="1" bgcolor="#FFAA00" align="center">
+  <tr>
+    <td>
+<table width="730" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+  <tr>
+    <td> <!-- Heading section that includes Logo, Title and Links -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="heading_cell" rowspan="2" bgcolor="#FFCC00"><img src="../images/jpowered.gif" width="270" height="60" align="left" alt="data grid control"></td>
+          <td class="heading_cell" bgcolor="#FFCC00">
+                  <h1 class="heading">Advanced Data Grid Control</h1>
+          </td>
+        </tr>
+        <tr>
+          <td class="menu_cell" bgcolor="#F0F0B0" valign="top"> <img src="../images/curve.gif" width="22" height="18" alt="grid component" vspace="0" hspace="0" align="left">
+                  [<a href="http://www.jpowered.com"> Home </a>]
+                  [<a href="http://www.jpowered.com/products.htm"> Products </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+                  [<a href="http://www.jpowered.com/support.htm"> Support </a>]
+                  [<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+          </td>
+        </tr>
+      </table>
+      <!-- Content section that includes Main left hand column 430 pixels wide with right hand column taking remaining 200 pixels. -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="2">
+              <tr>
+                <td width="560" valign="top"> <!-- begin content -->
+                  <table width="100%" border="0" cellpadding="5">
+                    <tr valign="top" align="left">
+                      <td bgcolor="#99CCFF" colspan="2"> [<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+                        Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+                        Buy Now </a> ] </td>
+                    </tr>
+                    <tr align="left" valign="top">
+                      <td width="70%" >
+                        <h2><font color="#009900"><b><font face="Arial, Helvetica, sans-serif" color="#FF9933">Advanced Data Grid Control</font></b></font></h2>
+                        <p><font color="#009900"><b><font color="#666666">Date Format</font></b></font></p>
+                      </td>
+                      <td align="right" width="39%" ><img src="../images/data-grid-control-220.gif" width="220" height="64" alt="advanced data grid control"></td>
+                    </tr>
+                    <tr align="left" valign="top">
+                      <td colspan="2">
+                         When a Column data type is set to Date it is necessary to specify the date format to be used. This is done by the parameter
+                          <b>dateformat <br>
+                          </b>(<b>Note</b>: if no data format is specified then a default format of <b>MM/dd/yyyy</b> is assumed.)
+                        <p>The Date format parameter specifies the pattern that dates will follow in the data. For example if your dates are in the default 
+                          format you would have,</p>
+
+                            <p><font face="Courier New, Courier, mono" size="2">&lt;param name=&quot;dateformat&quot; value=&quot;MM/dd/yyyy&quot;&gt;</font></p>
+
+                          <p>or if the elements of the date were seperated by a &quot;.&quot; (rather than a &quot;/&quot;),</p>
+
+                            <p><font face="Courier New, Courier, mono" size="2">&lt;param name=&quot;dateformat&quot; value=&quot;MM.dd.yyyy&quot;&gt;</font></p>
+
+                          <p>(<b>Please note</b>: Month is represented by an Upper Case M whilst day and year are lower case d and y.)</p>
+                          <p>&nbsp;</p>
+                          <p>Here are some common Date Format Examples</p>
+
+                        <div align="center">
+                          <table width="400" border="0" cellpadding="5" bgcolor="#DDFFFF">
+                            <tr>
+                              <td>MM/dd/yyyy</td>
+                              <td>04/14/2003</td>
+                            </tr>
+                            <tr>
+                              <td>MM/dd/yy</td>
+                              <td>04/14/03</td>
+                            </tr>
+                            <tr>
+                              <td>dd MMMM yyyy</td>
+                              <td>24 January 2003</td>
+                            </tr>
+                            <tr>
+                              <td>dd/MM/yyyy</td>
+                              <td>28/02/2003</td>
+                            </tr>
+                            <tr>
+                              <td>dd.MM.yyyy</td>
+                              <td>28.02.2003</td>
+                            </tr>
+                            <tr>
+                              <td>EEE, MMM d, ''yy</td>
+                              <td>Wed, April 16 '03</td>
+                            </tr>
+                          </table>
+                        </div>
+
+
+                            <p>&nbsp;</p>
+
+                          <p>In addition, Time may also be incorporated into the date format. Here are some Examples incorporating Time,</p>
+                          <div align="center">
+                            
+                          <table width="400" border="0" cellpadding="5" bgcolor="#DDFFFF">
+                            <tr bgcolor="#CCFFFF">
+                                <td><b>Format Pattern</b></td>
+                                <td><b>Date Example</b></td>
+                              </tr>
+                              <tr>
+                                <td>yyyy.MM.dd G 'at' hh:mm:ss z</td>
+                                <td>1996.07.10 AD at 15:08:56 PDT</td>
+                              </tr>
+                              <tr>
+                                <td>h:mm a</td>
+                                <td>12:08 PM</td>
+                              </tr>
+                              <tr>
+                                <td>hh 'o''clock' a, zzzz</td>
+                                <td>12 o'clock PM, Pacific Daylight Time</td>
+                              </tr>
+                              <tr>
+                                <td>K:mm a, z</td>
+                                <td>0:00 PM, PST</td>
+                              </tr>
+                              <tr>
+                                <td>yyyyy.MMMMM.dd GGG hh:mm aaa</td>
+                                <td>1996.July.10 AD 12:08 PM</td>
+                              </tr>
+                            </table>
+                          </div>
+                          <p>&nbsp;</p>
+                          <p>As you can see it is possible to define virtually any pattern to match the format of your data. Here are the full range of
+                            characters and thier meanings when used within the Date Format parameter,</p>
+                          
+                        <div align="center"></div>
+                        <table width="500" border="0" cellpadding="5" bgcolor="#DDFFFF" align="center">
+                          <tr bgcolor="#CCFFFF">
+                              <td><b>Symbol</b></td>
+                              <td><b>Meaning</b></td>
+                              <td><b>Example</b></td>
+                            </tr>
+                            <tr>
+                              <td>G</td>
+                              <td>era designator</td>
+                              <td>AD</td>
+                            </tr>
+                            <tr>
+                              <td>y</td>
+                              <td>year</td>
+                              <td>2003</td>
+                            </tr>
+                            <tr>
+                              <td>M</td>
+                              <td>Month</td>
+                              <td>July or 07</td>
+                            </tr>
+                            <tr>
+                              <td>d</td>
+                              <td>day in the month</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>h</td>
+                              <td>hour in am/pm (1-12)</td>
+                              <td>11</td>
+                            </tr>
+                            <tr>
+                              <td>H</td>
+                              <td>hour in the day (0-23)</td>
+                              <td>21</td>
+                            </tr>
+                            <tr>
+                              <td>m</td>
+                              <td>minute in the hour</td>
+                              <td>55</td>
+                            </tr>
+                            <tr>
+                              <td>s</td>
+                              <td>second in the minute</td>
+                              <td>30</td>
+                            </tr>
+                            <tr>
+                              <td>S</td>
+                              <td>miilisecond</td>
+                              <td>978</td>
+                            </tr>
+                            <tr>
+                              <td>E</td>
+                              <td>day in the week</td>
+                              <td>Tuesday</td>
+                            </tr>
+                            <tr>
+                              <td>D</td>
+                              <td>day in the year</td>
+                              <td>234</td>
+                            </tr>
+                            <tr>
+                              <td>w</td>
+                              <td>week in the year</td>
+                              <td>27</td>
+                            </tr>
+                            <tr>
+                              <td>W</td>
+                              <td>week in the month</td>
+                              <td>2</td>
+                            </tr>
+                            <tr>
+                              <td>a</td>
+                              <td>am / pm marker</td>
+                              <td>PM</td>
+                            </tr>
+                            <tr>
+                              <td>k</td>
+                              <td>hour in the day (1-24)</td>
+                              <td>24</td>
+                            </tr>
+                            <tr>
+                              <td>K</td>
+                              <td>hour in am/pm (0-11)</td>
+                              <td>0</td>
+                            </tr>
+                            <tr>
+                              <td>z</td>
+                              <td>time zone</td>
+                              <td>Eastern Standard Time</td>
+                            </tr>
+                          </table>
+
+                      </td>
+                    </tr>
+                    <tr align="left" valign="top"> 
+                      <td colspan="2" bgcolor="#FFFFFF"><a href="../GettingStarted.htm">&laquo; back to Getting Started</a></td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td bgcolor="#99CCFF" colspan="2">[<a href="http://www.jpowered.com/data_grid_control/index.htm"> Data Grid Home</a> ] [ <a href="index.htm">
+                        Documentation</a> ] [ <a href="../Examples/index.htm"> Examples &amp; Demos</a> ] [ <a href="http://www.jpowered.com/data_grid_control/order.htm">
+                        Buy Now </a> ] </td>
+                    </tr>
+                  </table>
+                  &nbsp;
+                </td>
+                <td valign="top"> <!-- Begin right hand column -->
+                  <table width="200" border="0" cellspacing="0" cellpadding="1" bgcolor="#CC6600">
+                    <tr>
+                      <td>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#FFFFFF">
+                          <tr>
+                            <td>
+                              <p><a href="../GettingStarted.htm">Getting Started</a></p>
+                              <p><a href="index.htm">Documentation</a></p>
+                              <ul>
+                                <li><a href="implementing.htm">Implementing</a></li>
+                                <li><a href="gridproperties.htm">Grid Properties</a></li>
+                                <li><a href="griddata.htm">Grid Data</a></li>
+                                <li><a href="javascript.htm">JavaScript</a></li>
+                                <li><a href="parameters.htm">Parameters</a></li>
+                                <li><a href="dynamicmethods.htm">Dynamic Methods</a></li>
+                                <li><a href="charsets.htm">Multi Language</a></li>
+                                <li><a href="support.htm">Further Help &amp; Support</a></li>
+                              </ul>
+                              <p><a href="../Examples/index.htm">Examples</a></p>
+                              <p><a href="http://www.jpowered.com/data_grid_control/order.htm"><img src="../images/buydownload.gif" width="140" height="57" border="0"></a></p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+        </tr>
+      </table>
+      <!-- Footer section that includes Links, Horizontal Rule and Copyright image -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="2">
+        <tr>
+          <td class="menu_cell" bgcolor="#FFCC00">
+                <p class="bottom_menu">
+                  [<a href="http://www.jpowered.com"> Home </a>]
+                  [<a href="http://www.jpowered.com/products.htm"> Products </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/download.htm"> Downloads </a>]
+                  [<a href="http://www.jpowered.com/data_grid_control/order.htm"> Purchase </a>]
+                  [<a href="http://www.jpowered.com/support.htm"> Support </a>]
+                  [<a href="http://www.jpowered.com/aboutus.htm"> About Us </a>]
+                </p>
+           </td>
+        </tr>
+        <tr bgcolor="#FFCC00">
+          <td class="heading_cell">
+            <div align="center"><img src="../images/copyright.gif" width="450" height="25"></div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

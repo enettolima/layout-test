@@ -1,0 +1,187 @@
+<?php 
+$this->headTitle('Edit User ' . $this->user['username']);
+$this->headLink()->appendStylesheet('/scripts/css/addon/magicform.css');
+
+// Need to create a hashtable here to increase performance
+// of looking up which stores and stages should be checked
+$stage_access_checked = array();
+foreach($this->user['StageAccessRule'] as $sa) {
+	$stage_access_checked[$sa['order_stage']] = array(
+		'read' => $sa['can_read'] == 'Y',
+		'write' => $sa['can_write'] == 'Y');
+}
+
+$store_access_checked = array();
+foreach($this->user['StoreAccessRule'] as $sa) {
+	$store_access_checked[trim($sa['store_code'])] = array(
+		'read' => $sa['can_read'] == 'Y',
+		'write' => $sa['can_write'] == 'Y');
+}
+?>
+<div class="content-box">
+	<div class="header">
+		<h1>Change Password for <?php echo $this->user['username'] ?></h1>
+	</div>
+	<div class="body">
+		<form action="" method="post" id="password_form">
+			<fieldset id="password">
+				<dl>
+					<dt><label for="password">Password</label></dt>
+					<dd>
+						<input type="password" name="password" validate="strlen 32 4; alnum" required="true" />
+						<error for="password">Password must be alpha numeric and between 4 and 32 characters.</error>
+					</dd>
+					<dt><label for="confirm_password">Confirm</label></dt>
+					<dd>
+						<input type="password" name="confirm_password" validate="match password"  required="true" />
+						<error for="confirm_password">Must match password</error>
+					</dd>
+				</dl>
+			</fieldset>
+			<input type="submit" value="Change Password" name="change_password" />
+		</form>
+	</div>
+</div>
+<div class="content-box">
+	<div class="header">
+		<a style="float: right" href="/users/delete/user/<?php echo $this->user['id'] ?>">delete user</a>
+		<h1>Edit User <?php echo $this->user['username'] ?></h1>
+	</div>
+	<div class="body">
+		<form action="" method="post" id="user_form">
+			<fieldset id="account">
+				<dl> 
+					<dt><label for="username">Username</label></dt> 
+					<dd>
+						<input type="text" name="username" required="true" validate="strlen 32 3; username" value="<?php echo $this->user['username'] ?>" />
+						<error for="username" class="error_icon"></error>
+						<error for="username" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="first_name">First Name</label></dt> 
+					<dd>
+						<input type="text" name="first_name" required="true" validate="strlen 32 3; words" value="<?php echo $this->user['first_name'] ?>" />
+						<error for="first_name" class="error_icon"></error>
+						<error for="first_name" validator="required">This is a required field</error>
+					</dd> 
+					<dt><label for="last_name">Last Name</label></dt> 
+					<dd>
+						<input type="text" name="last_name" required="false" validate="strlen 32 3; words" value="<?php echo $this->user['last_name'] ?>" />
+						<error for="last_name" class="error_icon"></error>
+						<error for="last_name" validator="required">This is a required field</error>
+					</dd>
+				</dl>
+			</fieldset>
+			<fieldset id="access">
+				<dl> 
+					<dt><label>Role</label></dt> 
+					<dd>
+						<select name="role_id" validate="strict">
+							<?php foreach ($this->roles as $role) : ?>
+							<option value="<?php echo $role->id ?>" <?php if ($this->user['role_id'] == $role->id) : ?>selected="selected"<?php endif ?>>
+								<?php echo ucwords($role->name) ?>
+							</option>
+							<?php endforeach ?>
+						</select>
+					</dd>
+					<dt><label>Access</label></dt> 
+					<dd>
+						<div style="width: 300px; display: inline-block; overflow: auto">
+							<table>
+								<col></col>
+								<col style="width: 20px; text-align: right"></col>
+								<col style="width: 20px; text-align: right"></col>
+								<thead>
+									<tr>
+										<th>Stage</th>
+										<th>R</th>
+										<th>W</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>All Stages</td>
+										<?php foreach (array('read', 'write') as $operation) : ?>
+										<td>
+											<input type="checkbox"
+												<?php if (isset($stage_access_checked[''][$operation]) && $stage_access_checked[''][$operation]) : ?>
+												checked="checked"
+												<?php endif ?> 
+												name="StageAccessRule[all_items][]" 
+												value="<?php echo $operation ?>" />
+										</td>
+										<?php endforeach ?>
+									</tr>
+									<?php foreach ($this->stages as $stage) : ?>
+									<tr>
+										<td><?php echo $stage->name ?></td>
+										<?php foreach (array('read', 'write') as $operation) : ?>
+										<td>
+											<input type="checkbox"
+												<?php if (isset($stage_access_checked[$stage->id][$operation]) && $stage_access_checked[$stage->id][$operation]) : ?>
+												checked="checked"
+												<?php endif ?> 
+												name="StageAccessRule[<?php echo $stage->id ?>][]" 
+												value="<?php echo $operation ?>" 
+												validate="strict" />
+										</td>
+										<?php endforeach ?>
+									</tr>
+									<?php endforeach ?>
+								<tbody>
+							</table>
+						</div>
+						<br />
+						<div style="width: 300px; height: 300px; display: inline-block; overflow: auto">
+							<table id="store_access_table">
+								<col></col>
+								<col style="width: 20px; text-align: right"></col>
+								<col style="width: 20px; text-align: right"></col>
+								<thead>
+									<tr>
+										<th>Store</th>
+										<th>R</th>
+										<th>W</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>All Stores</td>
+										<?php foreach (array('read', 'write') as $operation) : ?>
+										<td>
+											<input type="checkbox"
+												<?php if (isset($store_access_checked[''][$operation]) && $store_access_checked[''][$operation]) : ?>
+												checked="checked"
+												<?php endif ?> 
+												name="StoreAccessRule[all_items][]" 
+												value="<?php echo $operation ?>" />
+										</td>
+										<?php endforeach ?>
+									</tr>
+									<?php foreach ($this->stores as $store) : ?>
+									<tr>
+										<td><?php echo $store->id ?> - <?php echo $store->name ?></td>
+										<?php foreach (array('read', 'write') as $operation) : ?>
+										<td>
+											<input type="checkbox"
+												<?php if (isset($store_access_checked[$store->id][$operation]) && $store_access_checked[$store->id][$operation]) : ?>
+												checked="checked"
+												<?php endif ?> 
+												name="StoreAccessRule[<?php echo $store->id ?>][]" 
+												value="<?php echo $operation ?>" 
+												validate="strict" />
+										</td>
+										<?php endforeach ?>
+									</tr>
+									<?php endforeach ?>
+								<tbody>
+							</table>
+						</div>
+						<error for="store_access" class="error_icon"></error>
+						<error for="store_access" validator="strict">Unknown elements found</error>
+					</dd> 
+				</dl>
+			</fieldset>
+			<input type="submit" value="Save" name="edit_user" />
+		</form>
+	</div>
+</div>

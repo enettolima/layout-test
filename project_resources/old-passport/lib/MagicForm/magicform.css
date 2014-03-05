@@ -1,0 +1,44 @@
+label.error {
+	margin: 0 5px 0 5px;
+}
+
+label.validatestate_valid, label.validatestate_none {
+	display: none;
+}
+
+label.error_icon.validatestate_valid {
+	display: inline-block;
+	margin: 0 5px 0 5px;
+	background: url(check.gif);
+	height: 18px;
+	width: 0;
+	padding-left:18px;
+	overflow: hidden;
+}
+
+label.validatestate_invalid {
+
+}
+
+fieldset {
+	border: 2px dashed black;
+	border-left: 0;
+	border-right: 0;
+	padding-left: 15px;
+}
+
+dt {
+	float: left;
+	clear: left;
+	font-weight: bold;
+	text-align: right;
+	width: 90px;
+}
+
+dd { 
+	margin-left: 100px;
+}
+
+body {
+	background
+}

@@ -1,0 +1,40 @@
+<?php 
+$this->headTitle('Passport Store Employees'); 
+?>
+<div class="content-box">
+	<div class="header">
+		<div style="float: right; text-align: right">
+			<a href="/hr/employees/new-hire">New Hire</a>
+		</div>
+		<h1>Employees</h1>
+	</div>
+	<div class="body">
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Hired</th>
+					<th>Verified</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->employees as $storeName => $employees) : ?>
+				<tr>
+					<th colspan="5"><?php echo $storeName ?></th>
+				</tr>
+				<?php foreach ($employees as $employee) : ?>
+				<tr>
+					<td><?php echo $employee->EMPL_ID ?></td>
+					<td><?php echo $employee->FIRST_NAME ?> <?php echo $employee->LAST_NAME ?></td>
+					<td><?php echo $employee->HIRE_DATE ?></td>
+					<td>----</td>
+					<td></td>
+				</tr>
+				<?php endforeach; ?>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,159 @@
+<?php 
+	$this->headTitle('Passport Catalogue'); 
+	$this->headScript()
+		->appendFile("/scripts/js/addon/slimbox.js")
+		->appendFile("/scripts/js/search.js");
+		
+	$this->headLink()
+		->appendStylesheet("/scripts/css/addon/slimbox.css")
+		->appendStylesheet("/scripts/css/icons.css")
+		->appendStylesheet("/scripts/css/search.css");
+		
+	$this->layout()->help = array(
+		'title' => 'Product Catalogue',
+		'body' => 'This page provides the tools you need to search or browse our catalogue and find the products you need.');
+?>
+<div id="left-panel">
+	<div class="content-box"> 
+		<div class="header">
+			<h1>Browse</h1>
+		</div>
+	 	<div class="body">
+	 		<ul id="browse_box">
+	 			<?php foreach ($this->dcsTree as $d_name => $categories) : ?>
+	 			<li>
+	 				<?php if(is_array($categories)) : ?>
+	 				<h1><?php echo $d_name ?></h1>
+		 			<ul class="category">
+		 				<?php foreach ($categories as $c_name => $subcategories) : ?>
+			 			<li>
+			 				<?php if(is_array($subcategories)) : ?>
+			 				<h1><?php echo $c_name ?></h1>
+			 				<ul class="subcategory">
+			 					<?php foreach ($subcategories as $s_name => $dcs_code) : ?>
+			 					<li>
+			 						<a href="/items?dcs=<?php echo urlencode($dcs_code) ?>"><?php echo $s_name ?></a>
+			 					</li>
+			 					<?php endforeach ?>
+			 				</ul>
+			 				<?php else : ?>
+	 						<a href="/items?dcs=<?php echo urlencode($subcategories) ?>"><?php echo $c_name ?></a>
+			 				<?php endif ?>
+			 			</li>
+			 			<?php endforeach ?>
+	 				</ul>
+	 				<?php else : ?>
+ 					<a href="/items?dcs=<?php echo urlencode($categories) ?>"><?php echo $d_name ?></a>
+	 				<?php endif ?>
+	 			</li>
+	 			<?php endforeach ?>
+	 		</ul>
+		</div>
+	</div>
+</div>
+<div id="mid-panel">
+	<div class="content-box"> 
+		<div class="header">
+			<h1>Search Catalogue</h1>
+		</div>
+	 	<div class="body">
+	 		<form method="get" id="search_form" action="/items">
+				<div>
+					<label>Keyword</label><input type="text" name="q" style="width: 26em" />
+				</div>
+				<div>
+					<label>
+						<input type="checkbox"<?php if ($this->formData['image']) echo ' checked="checked"' ?> name="image" />
+						Show items with images only.
+					</label>
+				</div>
+				<input type="reset" value="Reset" />
+				<input type="submit" value="Search" />
+	 		</form>
+		</div>
+	</div>
+    <?php if (!empty($this->items)) : ?>
+	<div class="content-box"> 
+		<div class="header">
+			<h1>Results</h1>
+		</div>
+	 	<div class="body">
+			<table class="results">
+				<col style="width: 1px" />
+				<col style="width: 1px" />
+				<col style="text-align: left" />
+				<tbody>
+					<?php $alt = 0; foreach($this->items as $i => $item) : ?>
+						<tr class="result<?php if($alt ^= 1) echo ' alt' ?>" id="result_<?php echo $item->id ?>">
+							<td>#<?php echo $i + 1 ?></td>
+							<td>
+								<?php if ($item->has_image) : ?>
+		        				<a href="/images/items/large/<?php echo $item->id ?>.jpg" title="<?php echo $item->description ?>" rel="lightbox">
+		        					<img 
+		        						src="/images/items/thumb/<?php echo $item->id ?>.jpg"
+		         						alt="Thumbnail for <?php echo $item->id ?>" rel="lightbox" />
+		        				</a>
+		        				<?php else : ?>
+		        					<img 
+		        						src="/images/unknown-thumb.jpg"
+		        						alt="No image for <?php echo $item->id ?>" />
+		        				<?php endif ?>
+	        				</td>
+	        				<td>
+	        					<div class="order_menu">
+				        			<form action="/cart/add/item/<?php echo $item->id ?>" method="post">
+										Add 
+										<input type="text" name="qty" value="1" style="width: 20px" />
+										case to Shopping Cart
+										<input type="submit" value="Order" />
+									</form>
+								</div>
+	        	 				<h1>
+			        				<?php echo $item->id ?>: 
+			        				<?php echo $item->description ?>
+			        				<?php if (!empty($item->alu)) : ?>
+			        				(<?php echo $item->alu ?>)
+			        				<?php endif ?>
+		        				</h1>
+	            				<?php if (isset($item->pricing)) : ?>
+		        					<?php foreach ($result->pricing as $pricing) : ?>
+					        			<?php if (isset($pricing->RETAIL_PRICE) || isset($pricing->COST)) : ?>
+					        			<table class="pricing">
+					                		<thead>
+					        					<tr>
+					        						<th colspan="2"><?php echo $pricing->TYPE_NAME ?></th>
+					        					</tr>
+					        				</thead>
+					        				<tbody>
+						        				<?php if ($pricing->RETAIL_PRICE) : ?>
+						        				<tr>
+						        					<th>Retail</th>
+						        					<td>$<?php echo number_format(floatval($pricing->RETAIL_PRICE), 2) ?></td>
+						        				</tr>
+						        				<?php endif ?>
+						        				<?php if (isset($pricing->RETAIL_PRICE) && isset($pricing->COST)) : ?>
+						        				<tr>
+						        					<th>Discount</th>
+						        					<td><?php echo number_format((1 - floatval($pricing->COST) / floatval($pricing->RETAIL_PRICE)) * 100, 2) ?>%</td>
+						        				</tr>
+						        				<?php endif ?>
+						        				<?php if (isset($pricing->COST)) : ?>
+						        				<tr>
+						        					<th>Cost</th>
+						        					<td>$<?php echo number_format(floatval($pricing->COST), 2) ?></td>
+						        				</tr>
+						        				<?php endif ?>
+					        				</tbody>
+					        			</table>
+					        			<?php endif ?>
+				        			<?php endforeach ?>
+			        			<?php endif ?>
+	        				</td>
+						</tr>
+					<?php endforeach ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <?php endif ?>
+</div>

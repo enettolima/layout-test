@@ -1,0 +1,379 @@
+* { padding: 0; margin: 0 }
+/*
+TABLE OF CONTENTS
+
+HTML Elements
+Page Structure
+Help Box
+Navigation
+Headings
+Content Area
+Forms
+Clear
+Footer
+
+/* -------------- @HTML Elements -------------*/
+
+* { 
+	padding: 0;
+	margin: 0;
+}
+
+html, body {
+	background-color: #E3DBBB;
+	color: #372415;
+	font-family: Georgia,Serif;
+	font-size: 90%;
+	margin: 0pt;
+	padding: 0pt 0pt 10px;
+	text-align: left;
+}
+
+a {
+	color: #372415;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover, a:active {
+	text-decoration: underline;
+}
+
+/* ------------- @Page Structure -------------*/
+#top-panel {
+	background-image: url(/images/Bamboo-Tile_03.jpg);
+	height: 204px;
+	padding: 0px;
+	width: 100%;
+}
+
+#breadcrumb-panel {
+	background: #372415 none repeat scroll 0% 0%;
+	color: #F4F3D8;
+	height: 18px;
+	margin: 0px;
+	padding: 7px;
+}
+
+/* ------------- @Help Box -------------*/ 
+#help-box {
+	background:transparent url(/images/corners/help-cheat.gif) no-repeat scroll left bottom;
+	display: inline;
+	height: 120px;
+	position: absolute;
+	right: 15px;
+	top: 75px;
+	width: 400px;
+}
+
+#help-box h1 {
+	background: transparent url(/images/corners/help-cheat2.gif) no-repeat scroll left top;
+	font-size: 17px;
+	margin: 0pt;
+	padding: 5px 5px 0px;
+	text-decoration: underline;
+}
+
+#help-box p {
+	background-color: #F4F3D8;
+	margin: 0pt;
+	padding: 5px;
+}
+
+#right_panel {
+	float: right;
+	width: 200px;
+	margin: 0 15px 0 15px;
+	padding: 0;
+	
+}
+
+/* -------------@Navigation -------------*/ 
+#nav {
+	margin: 0;
+	margin-bottom: 15px;
+	padding: 0;
+	background: #372415 none repeat scroll 0% 0%;
+	color: #F4F3D8;
+	line-height: 21px;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+}
+
+#nav a {
+	color: #F4F3D8;
+}
+
+#nav ul {
+	padding-left: 20px
+}
+
+#nav li h1 {
+	margin: 0;
+	padding: 2px 5px 3px 24px;
+	
+	background-color: #54422E;
+	background-position: left center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 26px;
+}
+
+#nav li.menu-open h1 {
+	background-image: url(/images/nav/nav_open.gif);
+}
+
+#nav li.menu-open h1:hover {
+	background-image: url(/images/nav/nav_close.gif);
+}
+
+#nav li.menu-closed h1 {
+	background-image: url(/images/nav/nav_close.gif);
+}
+
+#nav li.menu-closed h1:hover {
+	background-image: url(/images/nav/nav_open.gif);
+}
+
+#nav li.menu-closed ul {
+	display: none;
+}
+
+#nav li.menu-bottom {
+	background: transparent url(/images/corners/dark-se.gif) no-repeat scroll right bottom;
+}
+
+#nav li.menu-bottom h1 {
+	background: transparent url(/images/corners/dark-sw.gif) no-repeat scroll left bottom;
+	padding: 0pt;
+	text-align: center;
+}
+
+/* ------------- @ Headings -------------*/
+h2 {
+	font-size: 1.6em;
+}
+
+h3 {
+	line-height: 26px;
+	text-decoration: underline;
+}
+
+h4 {
+	font-size: 80%;
+}
+
+/* ------------- @ Content Area -------------*/
+#content-area {
+	padding:5px 220px 15px 5px;
+}
+
+.content-box {
+	margin: 10px;
+	background: #F4F2D8 url(/images/corners/light-sw.gif) no-repeat scroll left bottom;
+}
+
+.content-box div.header {
+	background: transparent url(/images/corners/light-ne.gif) no-repeat scroll right top;
+	border-bottom: 2px dashed #CC5100;
+}
+
+.content-box h1 {
+	background: transparent url(/images/corners/light-nw.gif) no-repeat scroll left top;
+	color: #CC5100;
+	line-height: 16px;
+	font-size: 14pt;
+	margin: 0pt;
+	padding: 8px 8px 6px 15px;
+}
+
+.content-box h2 {
+	color: #382516;
+	font-size: 11px;
+	font-variant: small-caps;
+	font-weight: normal;
+	line-height: 22px;
+	margin: 0pt;
+	padding: 0pt 8px 0px 15px;
+}
+
+.content-box h3 {
+	font-size: 14px;
+	margin: 0pt;
+	padding: 0pt;
+}
+
+.content-box .body {
+	background: transparent url(/images/corners/light-se.gif) no-repeat scroll right bottom;
+	padding: 5px;
+}
+
+.content-box .tools {
+	float:right;
+	font-size:10px;
+}
+
+.content-box .tools a {
+	border-bottom: none;
+}
+
+#footer {
+	bottom:8px;
+	color:#372415;
+	font-size:8px;
+	position:absolute;
+	text-align:center;
+	width:100%;
+}
+
+#cart .content-box {
+	background-color: #f4f3d8;
+	margin: 0;
+}
+
+#cart .delete {
+	width: 10px;
+}
+
+#cart table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#cart td {
+	font-size: 10px;
+	white-space: nowrap;
+}
+
+#cart td input, #order_items td input {
+	font-size: 10px;
+	width: 2em;
+}
+
+#cart tr.alt {
+	background-color: #fbfae9;
+}
+
+#cart h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 12pt;
+	padding-left: 5px;
+}
+
+#cart h2 {
+	margin: 0;
+	padding: 0;
+	font-size: 8pt;
+	white-space: nowrap;
+	padding-left: 5px;
+}
+
+#loading-status {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: #f4f3d8
+}
+
+.total {
+	font-weight: bold;
+}
+
+.money {
+	text-align: right;
+	padding-right: 1ex;
+}
+
+#messages li {
+	list-style: none;
+}
+
+#messages {
+	margin: 0;
+	margin-top: 10px;
+}
+
+#messages h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 12pt;
+	padding-left: 5px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	white-space: nowrap;
+}
+
+table.legend {
+	white-space: normal;	
+}
+
+table.legend td {
+	padding-bottom: 5px;
+}
+
+table td.fill {
+	width: 100%;
+}
+
+table thead th {
+	text-align: left
+}
+
+table tr.alt td {
+	background-color: #fbfae9
+}
+
+table tbody th 
+{
+    text-align: center;
+	background-color: #54422e;
+	color: #fbfae9;
+}
+
+dl dt {
+	float: left;
+	font-weight: bold;
+	margin-right: .3em;
+}
+
+/* Error and Info styles */
+.info, .success, .warning, .error {
+	font-size: 13px;
+	border: 1px solid;
+	margin: 10px 0px;
+	padding: 15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+}
+
+.info {
+	color: #00529B;
+	background-color: #BDE5F8;
+	background-image: url('../../images/layout/info.jpg');
+}
+
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image:url('../../images/layout/success.jpg');
+}
+
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+	background-image: url('../../images/layout/warning.jpg');
+}
+
+.error {
+	color: #D8000C;
+	background-color: #FFBABA;
+	background-image: url('../../images/layout/error.jpg');
+}

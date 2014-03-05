@@ -1,0 +1,17 @@
+<?php 
+$this->headLink()->appendStylesheet('/scripts/css/order-print.css');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title>Order #<?php echo $this->order->ORDER_ID ?></title>
+		<link rel="stylesheet" href="/scripts/css/order-print.css" />
+	</head>
+	<body>
+		<div class="print_page">
+			<?php echo $this->partial('orders/partials/order-summary.phtml', array('order' => $this->order)) ?>
+			<?php echo $this->partial('orders/partials/order-items-print.phtml', array('order' => $this->order)) ?>
+		</div>
+	</body>
+</html>

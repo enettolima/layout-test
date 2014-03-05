@@ -1,0 +1,25 @@
+.tabbed-box div.tab {
+    display: none;
+}
+
+.tabbed-box div.selected {
+    display: block;
+}
+
+ul.tab-label 
+{
+    height: 1em;
+}
+
+ul.tab-label li 
+{
+    list-style: none;
+    padding: 0 5px 0 5px;
+    float: left;
+    color: grey;
+    line-height: 1em;
+}
+
+ul.tab-label li.selected {
+    color: #cc5100;
+}

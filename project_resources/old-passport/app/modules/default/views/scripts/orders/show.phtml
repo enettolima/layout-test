@@ -1,0 +1,20 @@
+<?php 
+$this->headTitle('Order #' . $this->order->ORDER_ID);
+$this->headLink()->appendStylesheet('/scripts/css/icons.css');
+$this->headLink()->appendStylesheet('/scripts/css/order.css');
+
+$this->headScript()->appendFile('/scripts/js/orders.js');
+
+$this->layout()->help = array(
+    'title' => 'Modify Order',
+    'body' => 'This page allows you to modify your order to your specific needs.  
+	Be sure to place your order after changing it.  Check out the Product Catalogue 
+	for items to add to your order.');
+?>
+<script type="text/javascript">
+	var orderId = <?php echo $this->order->ORDER_ID ?>;
+	var can_write = <?php echo $this->order->access->write ? 'true' : 'false' ?>;
+</script>
+<div id="order-data">
+	<?php echo $this->partial('orders/show.ajax.phtml', array('order' => $this->order)); ?>
+</div>
