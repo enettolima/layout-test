@@ -16,6 +16,8 @@ Route::get('/', function()
     return Redirect::to('/home');
 });
 
+Route::controller('users', 'UsersController');
+
 Route::get('/home', function()
 {
     return View::make('pages.home.home');
