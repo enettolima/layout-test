@@ -6,11 +6,14 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                    @if(Auth::check())
                         <li class="<?php echo Request::is('home*') ? 'active' : '' ?>"><a href="/">Passport Home</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
                         <li class="<?php echo Request::is('weborder*') ? 'active' : '' ?>"><a href="/weborder">Web Order</a></li>
+                    @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                    @if(Auth::check())
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret" /></b></a>
                             <ul class="dropdown-menu">
@@ -22,6 +25,7 @@
                             </ul>
                         </li>
                         <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+                    @endif
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
