@@ -3,6 +3,11 @@
 class UsersController extends BaseController
 {
 
+    public function getIndex()
+    {
+        return Redirect::to('/');
+    }
+
     public function getLogin()
     {
         return View::make('pages.users.login');

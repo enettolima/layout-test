@@ -3,6 +3,12 @@
 class SchedulerController extends BaseController
 {
 
+    /* Require Auth on Everything Here */
+    public function __construct()
+    {
+        $this->beforeFilter('auth', array());
+    }
+
     public function getIndex()
     {
         return Redirect::to('/scheduler/week-overview');

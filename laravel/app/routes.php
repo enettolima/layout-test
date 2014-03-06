@@ -11,44 +11,29 @@
 |
 */
 
-Route::get('/', function()
+Route::get('/', array('before'=>'auth', function()
 {
     return Redirect::to('/home');
-});
+}));
 
 Route::controller('/users', 'UsersController');
 
 Route::controller('/scheduler', 'SchedulerController');
 
-Route::get('/home', function()
+Route::get('/home', array('before'=>'auth', function()
 {
     return View::make('pages.home.home');
-});
+}));
     
-Route::get('/weborder', function()
+Route::get('/weborder', array('before'=>'auth', function()
 {
     return View::make('pages.weborder.comingsoon');
-});
+}));
 
-Route::get('/settings', function()
+Route::get('/settings', array('before'=>'auth', function()
 {
     return View::make('pages.settings.home');
-});
-
-Route::get('/about', function()
-{
-    return View::make('pages.about');
-});
-
-Route::get('/projects', function()
-{
-    return View::make('pages.projects');
-});
-
-Route::get('/contact', function()
-{
-    return View::make('pages.contact');
-});
+}));
 
 Route::get('/dbtest', function()
 {
