@@ -78,7 +78,6 @@ Route::get('roles', function()
 
 Route::controller('/lsvc', 'LSvcController');
 
-
 Route::get('/', array('before'=>'auth', function()
 {
     return Redirect::to('/home');
@@ -88,6 +87,8 @@ Route::controller('/users', 'UsersController');
 
 Route::controller('/scheduler', 'SchedulerController');
 
+Route::controller('/settings', 'SettingsController');
+
 Route::get('/home', array('before'=>'auth', function()
 {
     return View::make('pages.home.home');
@@ -96,11 +97,6 @@ Route::get('/home', array('before'=>'auth', function()
 Route::get('/weborder', array('before'=>'auth', function()
 {
     return View::make('pages.weborder.comingsoon');
-}));
-
-Route::get('/settings', array('before'=>'auth', function()
-{
-    return View::make('pages.settings.home');
 }));
 
 Route::get('/dbtest', function()

@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
     $("a.change-store-context").on("click", function(){
-        myApp.showPleaseWait();
+
+        $("#current-store").html('<em>Loading...</em><img src="/images/ajax-loader-arrows.gif">');
 
         console.log($(this).attr('data-store-number'));
 

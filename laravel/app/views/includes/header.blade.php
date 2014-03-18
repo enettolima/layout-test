@@ -15,16 +15,18 @@
                     <ul class="nav navbar-nav navbar-right">
                     @if(Auth::check())
                         <li class="dropdown">
-                        <a href="#" id="store-context-label" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
                             <?php
                                 if (Session::has('storeContext')) {
-                                    echo "Current Store: <strong>" . Session::get('storeContext') . "</strong>";
+                                    echo 'Current Store: <span id="current-store">' . Session::get('storeContext') . "</span>";
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
                             ?>
+
                             <b class="caret" /></b></a>
+
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Switch Store To:</li>
                                 <?php

@@ -12,6 +12,16 @@
 
 </div>
 
+<p>
+    <?php 
+        if (Session::has('storeContext')) {
+            echo "Store context set to: " . Session::get('storeContext');
+        } else {
+            echo "Store context not set.";
+        }
+    ?>
+</p>
+
 
 <p><?php echo Auth::user()->getAuthIdentifier(); ?> </p>
 
