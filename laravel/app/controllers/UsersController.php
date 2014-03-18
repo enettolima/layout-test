@@ -15,7 +15,7 @@ class UsersController extends BaseController
 
     public function postSignin()
     {
-        if (Auth::attempt(array('email'=>Input::get('email'), 'password'=>Input::get('password')))) {
+        if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')))) {
             return Redirect::to('/')
                 ->with('message', 'You are now logged in');
         } else {
@@ -29,5 +29,4 @@ class UsersController extends BaseController
         Auth::logout();
         return Redirect::to('users/login')->with('message', 'You have been logged out.');
     }
-
 }

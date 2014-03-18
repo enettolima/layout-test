@@ -15,13 +15,23 @@
                     <ul class="nav navbar-nav navbar-right">
                     @if(Auth::check())
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">STORE 301 <b class="caret" /></b></a>
+                        <a href="#" id="store-context-label" class="dropdown-toggle" data-toggle="dropdown">
+
+                            <?php
+                                if (Session::has('storeContext')) {
+                                    echo "Current Store: <strong>" . Session::get('storeContext') . "</strong>";
+                                } else {
+                                    echo "<em>Please Choose Store</em>";
+                                }
+                            ?>
+                            <b class="caret" /></b></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header">Choose store:</li>
-                                <li><a href="#">301</a></li>
-                                <li><a href="#">302</a></li>
-                                <li><a href="#">303</a></li>
-                                <li><a href="#">304</a></li>
+                                <li class="dropdown-header">Switch Store To:</li>
+                                <?php
+                                    foreach (Auth::user()->getStores() as $store) {
+                                        echo "<li><a data-store-number=\"$store\" class=\"change-store-context\" href=\"#\">$store</a></li>";
+                                    }
+                                ?>
                             </ul>
                         </li>
                         <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>

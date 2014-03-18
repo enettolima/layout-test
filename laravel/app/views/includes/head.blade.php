@@ -9,11 +9,6 @@
 
 <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 
-<?php
+<script src="/js/jquery-git.js"></script>
 
-if (isset($extraHead)) {
-    echo $extraHead;
-}
-
-?>
-
+<script src="/js/main.js" type="text/javascript" charset="utf-8"></script>

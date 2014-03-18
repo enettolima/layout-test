@@ -13,7 +13,7 @@
         {{ Form::open(array('url'=>'users/signin', 'role' => 'form', 'class'=>'form-signin')) }}
 
         <div class="form-group">
-            {{ Form::text('email', null, array('class'=>'form-control', 'placeholder'=>'Email Address')) }}
+            {{ Form::text('username', null, array('class'=>'form-control', 'placeholder'=>'Username')) }}
         </div>
 
         <div class="form-group">
