@@ -21,8 +21,6 @@ class SchedulerController extends BaseController
             $currentWeekOf = '2014-02-23';
         }
 
-        $extraJS['head'] = array('/js/bonsai-0.4.1.min.js');
-
         $extraHead = '
             <script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
         ';
@@ -30,7 +28,6 @@ class SchedulerController extends BaseController
         return View::make(
             'pages.scheduler.weekOverview', array(
                 'extraHead' => $extraHead,
-                'extraJS' => $extraJS,
                 'currentWeekOf' => $currentWeekOf,
             )
         );

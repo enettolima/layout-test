@@ -12,3 +12,9 @@
 <script src="/js/jquery-git.js"></script>
 
 <script src="/js/main.js" type="text/javascript" charset="utf-8"></script>
+
+<?php 
+    if (isset($extraHead)) {
+        echo $extraHead;
+    }
+?>
