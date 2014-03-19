@@ -9,14 +9,53 @@ class SchedulerController extends BaseController
         $this->beforeFilter('auth', array());
     }
 
+    protected function ensurePermission($stringPermission, $moreInfo = null)
+    {
+        $hasPermission = true;
+
+        $user = Auth::user();
+
+        if (! $user->hasRole('Store' . Session::get('storeContext'))) {
+            $hasPermission = false;
+        }
+
+        if (! $user->can($stringPermission)) {
+            $hasPermission = false;
+        }
+
+        return $hasPermission;
+
+        if (! $hasPermission) {
+            Log::info('need to redirect');
+            return View::make(
+                'pages.permissionDenied', array(
+                    'moreInfo' => $moreInfo
+                )
+            );
+        }
+
+    }
+
     public function getIndex()
     {
         return Redirect::to('/scheduler/week-overview');
     }
 
-
     public function getWeekOverview()
     {
+
+        if (! $this->ensurePermission('scheduler_manage')) {
+
+            $moreInfo = "Click here to request access to this...";
+
+            return View::make(
+                'pages.permissionDenied', array(
+                    'moreInfo' => $moreInfo
+                )
+            );
+        }
+
+
         if (! $currentWeekOf = Input::get('weekOf')) {
             $currentWeekOf = '2014-02-23';
         }
@@ -35,6 +74,18 @@ class SchedulerController extends BaseController
 
     public function getDayPlanner()
     {
+
+        if (! $this->ensurePermission('scheduler_manage')) {
+
+            $moreInfo = "Click here to request access to this...";
+
+            return View::make(
+                'pages.permissionDenied', array(
+                    'moreInfo' => $moreInfo
+                )
+            );
+        }
+
         $extraHead = '
             <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
             <link rel="stylesheet" href="/css/schdeduler/fullcalendar.print.css" media="print" />
