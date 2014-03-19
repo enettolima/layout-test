@@ -9,6 +9,8 @@ var bonsaiMovie = bonsai.run(
 
 var serviceURL = "http://cdev.newpassport.com/svc/index.php";
 
+var currentStore = parseInt($("#current-store").html());
+
 function loadSchedule(strDate) {
 
     var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -27,7 +29,7 @@ function loadSchedule(strDate) {
     }
 
     var request = $.ajax({
-        url: serviceURL + "/storeWeekSchedule/301/" + strDate,
+        url: serviceURL + "/storeWeekSchedule/"+currentStore+"/" + strDate,
         type: "GET"
     });
 
@@ -169,7 +171,7 @@ $(document).on("click", ".user-del", function(){
         var weekOf = $("#rangeSelector").val();
 
         var request = $.ajax({
-            url: serviceURL + "/removeUserFromSchedule/301/" + userId + "/" + weekOf,
+            url: serviceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
             type: "DELETE"
         });
 

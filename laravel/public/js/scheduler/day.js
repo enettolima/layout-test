@@ -1,6 +1,7 @@
 var associateInOuts = {};
 var loadedEvents = Array();
 var serviceURL = "http://cdev.newpassport.com/svc/index.php";
+var currentStore = parseInt($("#current-store").html());
 
 $(document).ready(function() {
 
@@ -48,7 +49,7 @@ $(document).ready(function() {
             var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
 
             var request = $.ajax({
-                url: serviceURL + "/inOut/301/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00",
+                url: serviceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00",
                 type: "POST"
             });
 
@@ -181,7 +182,7 @@ $(document).ready(function() {
         // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
 
         var request = $.ajax({
-            url: serviceURL + "/inOutColumn/301/"+targetDate+"/"+userCode,
+            url: serviceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+userCode,
             type: "PUT"
         });
 
@@ -246,7 +247,7 @@ $(document).ready(function() {
     }
 
     var loadFromDB = $.ajax({
-        url:  serviceURL + "/storeDaySchedule/301/"+targetDate,
+        url:  serviceURL + "/storeDaySchedule/"+currentStore+"/"+targetDate,
         type: "GET"
     });
  

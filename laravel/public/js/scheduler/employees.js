@@ -14,6 +14,8 @@ function assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees){
 var currentEmployees = [];
 var empAutoComplete = assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees);
 
+var currentStore = parseInt($("#current-store").html());
+
 $(".adder").on("click", function(){
     $( "#dialog" ).dialog({
         modal:true,
@@ -60,7 +62,7 @@ function addTheUser(){
     // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
 
     var request = $.ajax({
-        url: serviceURL + "/inOutColumn/301/"+targetDate+"/"+userCode,
+        url: serviceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+userCode,
         type: "PUT"
     })
 

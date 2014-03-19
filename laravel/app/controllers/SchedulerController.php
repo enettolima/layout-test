@@ -88,7 +88,7 @@ class SchedulerController extends BaseController
 
         $extraHead = '
             <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
-            <link rel="stylesheet" href="/css/schdeduler/fullcalendar.print.css" media="print" />
+            <link rel="stylesheet" href="/css/scheduler/fullcalendar.print.css" media="print" />
         ';
 
         $weekOf = Request::input('weekOf');
