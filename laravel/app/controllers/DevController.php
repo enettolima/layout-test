@@ -31,6 +31,7 @@ class DevController extends BaseController
         }
         echo "</ul>";
 
+
         $content = ob_get_contents();
         ob_end_clean();
 
@@ -41,7 +42,7 @@ class DevController extends BaseController
     {
         ob_start();
 
-        echo "<ul style=\"line-height:20px\">";
+        echo "<h3>Roles to Permissions</h3>";
         $rolesCollection = Role::all();
         foreach ($rolesCollection as $role) {
             echo "<li><strong>Role:</strong> {$role->name}</li>";
@@ -59,8 +60,27 @@ class DevController extends BaseController
         }
         echo '</ul>';
 
+
+        echo "<h3>Users to Roles</h3>";
+        echo "<ul>";
+
+        foreach (User::all() as $user) {
+            echo "<li><strong>User: </strong> {$user->username}</li>";
+            echo "<ul>";
+            foreach ($user->roles as $role) {
+                echo "<li>{$role->name}</li>";
+            }
+            echo "</ul>";
+        }
+        echo "</ul>";
+
         $content = ob_get_contents();
         ob_end_clean();
         return View::make('pages.plain')->withContent($content);
+    }
+
+    public function getStyles()
+    {
+        return View::make('pages.dev.styles');
     }
 }
