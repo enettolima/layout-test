@@ -19,7 +19,7 @@
 
                             <?php
                                 if (Session::has('storeContext')) {
-                                    echo '<strong>Current Store: <span id="current-store">' . Session::get('storeContext') . " - Shady Brook, AL</span></strong>";
+                                    echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . " - Shady Brook, AL</span></strong>";
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
