@@ -9,7 +9,9 @@
                     @if(Auth::check())
                         <!--<li class="<?php echo Request::is('home*') ? 'active' : '' ?>"><a href="/">Home</a></li>-->
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
-                        <li class="<?php echo Request::is('weborder*') ? 'active' : '' ?>"><a href="/weborder">Web Order</a></li>
+                        @if(Auth::user()->hasRole('Developer'))
+                            <li class="<?php echo Request::is('dev*') ? 'active' : '' ?>"><a href="/dev">Dev</a></li>
+                        @endif
                     @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

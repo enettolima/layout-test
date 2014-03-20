@@ -10,12 +10,21 @@
                     <select id="rangeSelector" class="form-control input">
                         <?php
 
-                            if (isset($_GET['weekOf'])) {
+                            /*
+                            if (isset($_GET['weekOf']) ) {
                                 $currentWeekOf = $_GET['weekOf'];
                                 // $logger->addInfo($currentWeekOf);
                             } else {
                                 $currentWeekOf = '2014-02-23';
                             }
+                            */
+
+                            if (Session::has('schedulerCurrentWeekOf')) {
+                                $currentWeekOf = Session::get('schedulerCurrentWeekOf');
+                            } else { 
+                                $currentWeekOf = date('Y-m-d', strtotime('last sunday'));
+                            }
+
 
                             $futureWeekCount = 10;
                             // Get the Sunday for this week
@@ -180,6 +189,8 @@
         <select id="newUser" name="newUser"></select>
     </div>
     <!-- /Markup for Employee Selector -->
+
+    <input type="hidden" id="currentWeekOf" name="currentWeekOf" value="<?php echo Session::has('schedulerCurrentWeekOf') ? Session::get('schedulerCurrentWeekOf') : ''; ?>">
 
     <script src="/js/jquery-git.js"></script>
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>

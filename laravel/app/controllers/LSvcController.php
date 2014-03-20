@@ -14,6 +14,21 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getSetSchedulerCurrentWeekOf($string)
+    {
+
+        if (preg_match('/^\d\d\d\d-\d\d-\d\d$/', Request::segment(3))) {
+
+            Session::set('schedulerCurrentWeekOf', Request::segment(3));
+
+            /*
+            if (Session::has('schedulerCurrentWeekOf')) {
+                echo "I has currentWeekOf and it is " . Session::get('schedulerCurrentWeekOf');
+            }
+            */
+        }
+    }
+
     public function postCheckStoreAuth()
     {
         $storeNumber = Input::get('storeNumber');

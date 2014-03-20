@@ -83,4 +83,9 @@ class DevController extends BaseController
     {
         return View::make('pages.dev.styles');
     }
+
+    public function getFoo()
+    {
+        var_dump(Input::all());
+    }
 }

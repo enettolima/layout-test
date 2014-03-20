@@ -13,6 +13,15 @@ var currentStore = parseInt($("#current-store").html());
 
 function loadSchedule(strDate) {
 
+    // Look to see if we've changed date; if so need to change it in
+    // the PHP session
+    if (strDate != $("#currentWeekOf").val()) {
+        $.ajax({
+            url: '/lsvc/set-scheduler-current-week-of/' + strDate,
+            type: "GET"
+        });
+    }
+
     var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     var selectedRangeParts = strDate.split('-'); 
@@ -151,7 +160,13 @@ function loadSchedule(strDate) {
 
 $(document).ready(function(){
 
-    loadSchedule($('#rangeSelector').val());
+    if ($("#currentWeekOf").val()) {
+        // console.log("currentWeekOf = " + $('#currentWeekOf').val());
+        loadSchedule($('#currentWeekOf').val());
+    } else {
+        // console.log("currentWeekOf is not set");
+        loadSchedule($('#rangeSelector').val());
+    }
 
     $('.day-button').click(function(){
         var dayOffset = $(this).attr('data-day-number');
