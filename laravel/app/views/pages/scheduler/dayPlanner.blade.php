@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-xs-5">
             <div role="form" class="form-horizontal">
                 <form action="" class="form-horizontal"> 
                         <select disabled id="rangeSelector" class="form-control input">

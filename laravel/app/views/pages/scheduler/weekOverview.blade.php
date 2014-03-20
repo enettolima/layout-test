@@ -4,7 +4,7 @@
 
     <!-- Week Selector -->
     <div class="row" style="">
-        <div class="col-md-5">
+        <div class="col-xs-5">
             <div role="form" class="form-horizontal">
                 <form action="" class="form-horizontal"> 
                     <select id="rangeSelector" class="form-control input">
@@ -61,7 +61,7 @@
 
     <!-- Main Scheduling Grid Section -->
     <div class="row" style="margin-top:20px;">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <!-- width = blockwidth * 11 * 7 -->
             <!-- height = blockheight * 4 * 24 -->
             <div id="schedule-graphic-scale">
@@ -160,12 +160,12 @@
     <!-- Summary Section -->
     <div class="row">
 
-        <div class="col-md-5">
+        <div class="col-xs-5">
             <h4>Schedule Summary by Day</h4>
             <table id="day-summary" class="summary-table table table-striped table-condensed"></table>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-xs-5">
             <h4>Week Summary by Staff</h4>
             <table id="week-summary" class="summary-table table table-striped table-condensed"></table>
         </div>

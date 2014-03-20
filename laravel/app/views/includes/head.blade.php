@@ -1,6 +1,6 @@
 <title>EBT Passport</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
 
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="/css/bootstrap.css">

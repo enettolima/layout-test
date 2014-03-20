@@ -7,7 +7,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                     @if(Auth::check())
-                        <li class="<?php echo Request::is('home*') ? 'active' : '' ?>"><a href="/">Passport Home</a></li>
+                        <!--<li class="<?php echo Request::is('home*') ? 'active' : '' ?>"><a href="/">Home</a></li>-->
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
                         <li class="<?php echo Request::is('weborder*') ? 'active' : '' ?>"><a href="/weborder">Web Order</a></li>
                     @endif
@@ -15,11 +15,11 @@
                     <ul class="nav navbar-nav navbar-right">
                     @if(Auth::check())
                         <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle text-danger" data-toggle="dropdown">
 
                             <?php
                                 if (Session::has('storeContext')) {
-                                    echo 'Current Store: <span id="current-store">' . Session::get('storeContext') . "</span>";
+                                    echo '<strong>Current Store: <span id="current-store">' . Session::get('storeContext') . " - Shady Brook, AL</span></strong>";
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
@@ -36,9 +36,18 @@
                                 ?>
                             </ul>
                         </li>
-                        <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+
+                        <li class="dropdown <?php echo Request::is('settings*') ? 'active' : '' ?>">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo Auth::user()->username ?> <b class="caret" /></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header"><?php echo Auth::user()->fname . ' ' . Auth::user()->lname ?></li>
+                                <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings">Settings</a></li>
+                                <li><a href="/users/logout">Logout</a></li>
+                            </ul>
+                        </li>
                     @endif
                     </ul>
-                </div><!--/.nav-collapse -->
+                </div>
+                <!--/.nav-collapse -->
             </div>
         </div>

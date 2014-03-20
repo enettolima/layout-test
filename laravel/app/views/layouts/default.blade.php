@@ -10,7 +10,7 @@
         <div class="container">
 
             @if(Session::has('message'))
-                <p class="bg-primary">{{ Session::get('message') }}</p>
+                <p class="">{{ Session::get('message') }}</p>
             @endif
 
             @yield('content')

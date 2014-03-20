@@ -145,3 +145,9 @@ a.schedule-graphic-header:hover{
     width:200px;
 }
 
+.container {
+    max-width:none !important;
+    min-width:none !important;
+    width:1000px;
+}
+
