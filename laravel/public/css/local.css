@@ -151,3 +151,6 @@ a.schedule-graphic-header:hover{
     width:1000px;
 }
 
+.users-table tr {
+    cursor: pointer;
+}

@@ -10,6 +10,8 @@ Route::get('/home', array('before'=>'auth', function()
     return View::make('pages.home.home');
 }));
 
+Route::controller('/admin', 'AdminController'); 
+
 Route::controller('/dev', 'DevController');
 
 Route::controller('/lsvc', 'LSvcController');
