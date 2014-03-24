@@ -2,6 +2,11 @@
 
 class AdminController extends BaseController
 {
+    public function getIndex()
+    {
+        return View::make('pages.admin.index');
+    }
+
     public function getUserList()
     {
         $users = User::all();
@@ -73,7 +78,23 @@ class AdminController extends BaseController
             $user->password = Input::get('password');
         }
 
-        $user->save();
+        if (! $storeRoles = Input::get('stores')) {
+            $storeRoles = array();
+        }
+
+        if (! $mainRoles = Input::get('roles')) {
+            $mainRoles = array();
+        }
+
+        $arrayRoleIds = array();
+
+        foreach (array_merge($storeRoles, $mainRoles) as $role) {
+            $arrayRoleIds[] = Role::where('name', '=', $role)->first()->id;
+        }
+
+        if ($user->save()) {
+            $user->roles()->sync($arrayRoleIds);
+        }
 
         return Redirect::to('admin/user-list')
             ->with('message', 'User updated');

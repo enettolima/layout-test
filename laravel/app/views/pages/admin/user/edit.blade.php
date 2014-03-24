@@ -6,11 +6,12 @@
 
 <div class="row">
 
+    {{ Form::open(array('url' => 'admin/user-save')) }}
+
     <div class="col-xs-4">
 
         <h4>General Info</h4>
 
-        {{ Form::open(array('url' => 'admin/user-save')) }}
 
             <div class="form-group">
                 {{ Form::label('fname', 'First Name') }}
@@ -47,7 +48,6 @@
                 <button type="submit" class="btn btn-primary">Save User</button>
             </div>
 
-        {{ Form::close() }}
 
     </div>
 
@@ -55,7 +55,7 @@
         <h4>Assigned Roles</h4>
         <ul class="list-unstyled">
         @foreach ($mainRoles as $role)
-            <li>{{ Form::checkbox($role['name'], $role['name'], $role['has']) }} {{ $role['name'] }}</li>
+            <li>{{ Form::checkbox("roles[" . $role['name'] . "]", $role['name'], $role['has']) }} {{ $role['name'] }}</li>
         @endforeach
         </ul>
     </div>
@@ -64,10 +64,12 @@
         <h4>Assigned Stores</h4>
         <ul class="list-unstyled">
         @foreach ($storeRoles as $role)
-            <li>{{ Form::checkbox($role['name'], $role['name'], $role['has']) }} {{ $role['name'] }}</li>
+            <li>{{ Form::checkbox("stores[" . $role['name'] . "]", $role['name'], $role['has']) }} {{ $role['name'] }}</li>
         @endforeach
         </ul>
     </div>
+
+    {{ Form::close() }}
 
 </div>
 

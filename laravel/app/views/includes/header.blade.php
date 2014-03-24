@@ -12,6 +12,9 @@
                         @if(Auth::user()->hasRole('Developer'))
                             <li class="<?php echo Request::is('dev*') ? 'active' : '' ?>"><a href="/dev">Dev</a></li>
                         @endif
+                        @if(Auth::user()->hasRole('Administrator'))
+                            <li class="<?php echo Request::is('admin*') ? 'active' : '' ?>"><a href="/admin">Admin</a></li>
+                        @endif
                     @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
