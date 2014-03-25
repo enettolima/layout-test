@@ -14,6 +14,27 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    /*
+     * Currently a "stub" function which will probably be hooked into Oracle
+     */
+    public function getEmployees()
+    {
+        // To Protect
+        $returnval = array();
+        $returnval[] = array("userId" => "000FOO" , "firstName" => "Zero"  , "lastName" => "Mossberg");
+        $returnval[] = array("userId" => "001FOO" , "firstName" => "One"   , "lastName" => "Harvey");
+        $returnval[] = array("userId" => "002FOO" , "firstName" => "Two"   , "lastName" => "Barlow");
+        $returnval[] = array("userId" => "003FOO" , "firstName" => "Three" , "lastName" => "Brock");
+        $returnval[] = array("userId" => "004FOO" , "firstName" => "Four"  , "lastName" => "Mcmillan");
+        $returnval[] = array("userId" => "005BAR" , "firstName" => "Five"  , "lastName" => "Fisher");
+        $returnval[] = array("userId" => "006BAR" , "firstName" => "Six"   , "lastName" => "Patrick");
+        $returnval[] = array("userId" => "007BAR" , "firstName" => "Seven" , "lastName" => "Oneil");
+        $returnval[] = array("userId" => "008BAR" , "firstName" => "Eight" , "lastName" => "Simpson");
+        $returnval[] = array("userId" => "009BAR" , "firstName" => "Nine"  , "lastName" => "House");
+        $returnval[] = array("userId" => "010BAR" , "firstName" => "Ten"   , "lastName" => "Blevins");
+        return Response::json($returnval);
+    }
+
     public function getSetSchedulerCurrentWeekOf($string)
     {
 

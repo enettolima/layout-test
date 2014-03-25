@@ -1,3 +1,60 @@
+var empMasterDatabase = employeesFromService; // from employees.js
+var currentEmployees  = Array;
+var currentStore      = parseInt($("#current-store").html());
+var serviceURL = "http://cdev.newpassport.com/svc/index.php";
+
+function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
+
+    console.log(currentEmployees);
+
+    for (var i=0; i<empMasterDatabase.length; i++) {
+        var emp = empMasterDatabase[i];
+        var addClass = null;
+        if (currentEmployees.indexOf(emp.userId) > -1) {
+            addClass = 'text-muted';
+        }
+
+        $("#staff-picker").append('<tr class="staffmember-row '+addClass+'" data-emp-id="'+emp.userId+'" data-emp-name="'+emp.firstName+' '+emp.lastName+'"><td>'+emp.userId+'</td><td>'+emp.firstName+' '+emp.lastName+'</td></tr>');
+    }
+
+    $("#staff-picker tr.staffmember-row").on("click", function(){
+        if (currentEmployees.indexOf($(this).attr("data-emp-id")) > -1){
+            // Already added; just do nothing TODO: give some sort of feedback?
+        }else{
+            $(this).addClass('text-muted');
+            $("#staffPickerModal").modal('hide');
+            addEmployeeToSchedule({
+                "id" : $(this).attr("data-emp-id"),
+                "name" : $(this).attr("data-emp-name")
+            });
+        }
+    });
+}
+
+function addEmployeeToSchedule(employeeObj)
+{
+    var targetDate = $("#rangeSelector").val();
+
+    // Add the user to current list of employees
+    currentEmployees.push(employeeObj.id);
+
+    var request = $.ajax({
+        url: serviceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+employeeObj.id,
+        type: "PUT"
+    })
+
+    .done(function(msg) {
+
+        if (parseInt(msg.status) === 1) {
+            $("#empList").append($("<li></li>").html(employeeObj.name + " <a href=\"#\" class=\"user-del\">x</a>"));
+        }
+    })
+
+    .fail(function(jaXHR, textStatus){
+        console.log(textStatus);
+    });
+}
+
 var bonsaiMovie = bonsai.run(
     document.getElementById('schedule-graphic-graph'),
     {
@@ -6,10 +63,6 @@ var bonsaiMovie = bonsai.run(
         height: 768
     }
 );
-
-var serviceURL = "http://cdev.newpassport.com/svc/index.php";
-
-var currentStore = parseInt($("#current-store").html());
 
 function loadSchedule(strDate) {
 
@@ -46,9 +99,10 @@ function loadSchedule(strDate) {
 
         // Refresh the employees list
         $("#empList").empty();
+
         currentEmployees = [];
 
-        // Reinitialize the employees database
+        // Populate Staff listing on the page and currentEmployees
         if (msg.meta && msg.meta.sequence) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
                 var userId = msg.meta.sequence[iEmp];
@@ -58,7 +112,7 @@ function loadSchedule(strDate) {
             }
         }
 
-        assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees);
+        populateEmployeeSelector(empMasterDatabase, currentEmployees);
 
         // Trigger the Schedule Overview
         bonsaiMovie.sendMessage('externalData', {
@@ -161,10 +215,8 @@ function loadSchedule(strDate) {
 $(document).ready(function(){
 
     if ($("#currentWeekOf").val()) {
-        // console.log("currentWeekOf = " + $('#currentWeekOf').val());
         loadSchedule($('#currentWeekOf').val());
     } else {
-        // console.log("currentWeekOf is not set");
         loadSchedule($('#rangeSelector').val());
     }
 
@@ -177,6 +229,7 @@ $(document).ready(function(){
     $('#rangeSelector').change(function(){
         loadSchedule($(this).val());
     });
+
 });
 
 $(document).on("click", ".user-del", function(){
@@ -191,6 +244,8 @@ $(document).on("click", ".user-del", function(){
         });
 
         request.done(function(msg) {
+            // We don't have to reactivate the employee in the selector because 
+            // We reload
             loadSchedule(weekOf);
         });
     }

@@ -154,3 +154,18 @@ a.schedule-graphic-header:hover{
 .users-table tr {
     cursor: pointer;
 }
+
+/* Scheduler Week Overview */
+#staff-picker tr.staffmember-row:not(.text-muted):hover{
+    cursor:pointer;
+	background-color:#428bca;
+	color:#fff;
+}
+
+#staff-picker tr.picked {
+	color:#efefef;
+}
+
+#staff-picker tr.picked:hover {
+	cursor:default;
+}

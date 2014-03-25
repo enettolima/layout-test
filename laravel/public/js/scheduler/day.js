@@ -1,3 +1,4 @@
+var empMasterDatabase = employeesFromService; // from employees.js
 var associateInOuts = {};
 var loadedEvents = Array();
 var serviceURL = "http://cdev.newpassport.com/svc/index.php";
@@ -6,9 +7,8 @@ var currentStore = parseInt($("#current-store").html());
 $(document).ready(function() {
 
     var weekOf = $('#weekOf').val();
-    console.log(weekOf);
+
     var targetDate = $('#targetDate').val();
-    console.log(targetDate);
 
     var onEvent = 0;
 
@@ -252,8 +252,6 @@ $(document).ready(function() {
     });
  
     loadFromDB.done(function(msg) {
-
-        console.log(msg);
 
         var view = $('#calendar').fullCalendar('getView');
 

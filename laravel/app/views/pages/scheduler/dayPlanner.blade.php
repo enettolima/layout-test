@@ -28,9 +28,9 @@
     <script src="/js/jquery-git.js"></script>
 
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
+    <script src="/js/scheduler/employees.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="/js/scheduler/fullcalendar.js"></script>
-    <script src="/js/scheduler/employee-database.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/scheduler/day.js"></script>
 
     <input type="hidden" name="targetDate" id="targetDate" value="<?php echo $targetDay ?>" />

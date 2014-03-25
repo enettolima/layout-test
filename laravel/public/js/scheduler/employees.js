@@ -1,89 +1,17 @@
-function assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees){
+/* Load up employees from source */
+/* TODO: Cache this? We Don't want to perform a Get every time, but I'm not sure how to cache JS stuff */
+/* How about: http://stackoverflow.com/questions/17104265/caching-a-jquery-ajax-response-in-javascript-browser */
+/* Or: http://stackoverflow.com/questions/20667527/jquery-ajax-cache-response */
+/* TODO: How do we know if this fails? What do we do when it fails? */
 
-    var returnVal = Array();
+var employeesFromService;
 
-    $.each(empMasterDatabase, function(key, value) {
-        if (currentEmployees.indexOf(value.userId) < 1) {
-            returnVal.push(value.userId + " - " + value.firstName + " " + value.lastName);
-        }
-    });
-
-    return returnVal;
-}
-
-var currentEmployees = [];
-var empAutoComplete = assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees);
-
-var currentStore = parseInt($("#current-store").html());
-
-$(".adder").on("click", function(){
-    $( "#dialog" ).dialog({
-        modal:true,
-        buttons: {
-            "Add User" : function() {
-                $(this).dialog("close");
-                addTheUser();
-            },
-            "Cancel" : function(){
-                $(this).dialog("close");
-            }
-        }
-    });
+var employeeRequest = $.ajax({
+    url: "/lsvc/employees",
+    type: "GET",
+    async: false,
+    cache: true,
+}).done(function(msg){
+    employeesFromService = msg;
 });
 
-$("#dialog").keypress(function(e) {
-    if (e.keyCode == $.ui.keyCode.ENTER) {
-        $(this).dialog("close");
-        addTheUser();
-    }
-});
-
-$("#user").autocomplete({source:empAutoComplete, autoFocus:true});
-
-function addTheUser(){
-
-    //var nextCol  = getNextAvailableColumn();
-    var userInfo = $("#user").val().split(" - ");
-
-    var targetDate = $("#rangeSelector").val();
-
-    var userCode = userInfo[0];
-
-    var userNameString = userInfo[1];
-
-    // Add the user to current list of employees
-    currentEmployees.push(userCode);
-
-    // This should probably be moved out to a "refresh autocomplete" deal...
-    empAutoComplete = assignEmployeesToAutoComplete(empMasterDatabase, currentEmployees);
-
-    $("#user").autocomplete({source:empAutoComplete});
-
-    // Implement: http://stackoverflow.com/questions/10405932/jquery-ui-autocomplete-when-user-does-not-select-an-option-from-the-dropdown
-
-    var request = $.ajax({
-        url: serviceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+userCode,
-        type: "PUT"
-    })
-
-    .done(function(msg) {
-
-        if (parseInt(msg.status) === 1) {
-            $("#empList").append($("<li></li>").html(userNameString + " <a href=\"#\" class=\"user-del\">x</a>"));
-        }
-    })
-
-    .fail(function(jaXHR, textStatus){
-        console.log(textStatus);
-    });
-
-    /*
-    var wholeColumn   = $(".fc-col" + nextCol);
-
-    var colHeader = $(".sched-header[data-col-id=" + nextCol + "]");
-
-    wholeColumn.removeClass("fc-state-off");
-    colHeader.html(userCode + "<br />" + userNameString);
-    colHeader.attr("data-emp-id", userCode);
-    */
-}
