@@ -88,4 +88,17 @@ class DevController extends BaseController
     {
         var_dump(Input::all());
     }
+
+    public function getDatabase()
+    {
+        $mysqlResults  = DB::connection('mysql')->select("select * from scheduled_inout limit 2");
+        $sqlsrvResults = DB::connection('sqlsrv')->select("select top 2 * from SCHED_BUDGET_PER_HOURS_FINAL_TABLE WHERE Store = '311'");
+        return View::make(
+            'dbtest', 
+            array(
+                'mysqlResults' => $mysqlResults,
+                'sqlsrvResults' => $sqlsrvResults,
+            )
+        );
+    }
 }
