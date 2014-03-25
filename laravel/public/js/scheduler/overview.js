@@ -99,13 +99,12 @@ function loadSchedule(strDate) {
         $("#empList").empty();
         currentEmployees = [];
         $("#staff-picker tbody").empty();
-
         // Populate Staff listing on the page and currentEmployees
         if (msg.meta && msg.meta.sequence) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
                 var userId = msg.meta.sequence[iEmp];
                 var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-id=\""+userId+"\" href=\"#\" class=\"user-del small\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-name=\""+result[0].firstName + " " + result[0].lastName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
                 currentEmployees.push(userId);
             }
         }
@@ -230,21 +229,33 @@ $(document).ready(function(){
 
 });
 
-$(document).on("click", ".user-del", function(){
-    if (confirm("Are you sure?")) {
+$(document).on("click", ".staff-remove", function(){
 
-        var userId = $(this).attr("data-user-id");
-        var weekOf = $("#rangeSelector").val();
+    var empId = $(this).attr('data-user-id');
 
-        var request = $.ajax({
-            url: serviceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
-            type: "DELETE"
-        });
+    var empFullName = $(this).attr('data-user-name');
 
-        request.done(function(msg) {
-            // We don't have to reactivate the employee in the selector because 
-            // We reload
-            loadSchedule(weekOf);
-        });
-    }
+    $("#staff-remove-modal-content").html("<p>Are you sure you want to remove <strong>"+empId+" "+empFullName+"</strong> from this week's schedule?");
+    $("#staff-remove-modal-confirm").attr("data-emp-id", empId);
+    $("#staff-remove-modal").modal('show');
+});
+
+$(document).on("click", "#staff-remove-modal-confirm", function(){
+
+    $("#staff-remove-modal").modal('hide');
+
+    var userId = $(this).attr("data-emp-id");
+
+    var weekOf = $("#rangeSelector").val();
+
+    var request = $.ajax({
+        url: serviceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
+        type: "DELETE"
+    });
+
+    request.done(function(msg) {
+        // We don't have to reactivate the employee in the selector because 
+        // We reload
+        loadSchedule(weekOf);
+    });
 });

@@ -10,15 +10,6 @@
                     <select id="rangeSelector" class="form-control input">
                         <?php
 
-                            /*
-                            if (isset($_GET['weekOf']) ) {
-                                $currentWeekOf = $_GET['weekOf'];
-                                // $logger->addInfo($currentWeekOf);
-                            } else {
-                                $currentWeekOf = '2014-02-23';
-                            }
-                            */
-
                             if (Session::has('schedulerCurrentWeekOf')) {
                                 $currentWeekOf = Session::get('schedulerCurrentWeekOf');
                             } else { 
@@ -61,7 +52,7 @@
     <!-- /Week Selector -->
 
 
-    <!-- Staff Selector Modal -->
+    <!-- Staff Row -->
     <div class="row" style="padding-top:10px; margin-left:4px;">
         <div id="emplist-container">
             <strong>Staff:</strong>
@@ -70,10 +61,10 @@
             <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staffPickerModal">+</button>
         </div>
     </div>
-    <!-- /Staff Selector -->
+    <!-- /Staff Row -->
 
-    <!-- New Employee Selector -->
-    <div class="modal fade" id="staffPickerModal" tabindex="-1" role="dialog" aria-labelledby="staffPickerModalLabel" aria-hidden="true">
+    <!-- Staff Selector Modal -->
+    <div class="modal " id="staffPickerModal" tabindex="-1" role="dialog" aria-labelledby="staffPickerModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width:420px;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -113,6 +104,24 @@
             </div>
         </div>
     </div>
+    <!-- /Staff Selector Modal -->
+
+    <div id="staff-remove-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Staff Deletion</h4>
+                </div>
+                <div id="staff-remove-modal-content" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="staff-remove-modal-confirm" type="button" class="btn btn-danger">Confirm Deletion</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Main Scheduling Grid Section -->
     <div class="row" style="margin-top:20px;">
@@ -232,9 +241,6 @@
 
     <script src="/js/jquery-git.js"></script>
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
-    <!-- <script src="http://bseth99.github.io/jquery&#45;ui&#45;extensions/ui/jquery.ui.combobox.js"></script> -->
-    <!-- employees needs to be first! -->
-    <!-- <script src="/js/scheduler/employee&#45;database.js" type="text/javascript"></script> -->
     <script src="/js/scheduler/employees.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/scheduler/overview.js" type="text/javascript" charset="utf-8"></script>
 
