@@ -56,9 +56,11 @@ class SchedulerController extends BaseController
         }
 
 
+        /*
         if (! $currentWeekOf = Input::get('weekOf')) {
             $currentWeekOf = '2014-02-23';
         }
+        */
 
         $extraHead = '
             <script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
@@ -67,7 +69,7 @@ class SchedulerController extends BaseController
         return View::make(
             'pages.scheduler.weekOverview', array(
                 'extraHead' => $extraHead,
-                'currentWeekOf' => $currentWeekOf,
+                // 'currentWeekOf' => $currentWeekOf,
             )
         );
     }
