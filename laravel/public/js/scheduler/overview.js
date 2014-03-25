@@ -5,8 +5,6 @@ var serviceURL = "http://cdev.newpassport.com/svc/index.php";
 
 function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
 
-    console.log(currentEmployees);
-
     for (var i=0; i<empMasterDatabase.length; i++) {
         var emp = empMasterDatabase[i];
         var addClass = null;
@@ -99,8 +97,8 @@ function loadSchedule(strDate) {
 
         // Refresh the employees list
         $("#empList").empty();
-
         currentEmployees = [];
+        $("#staff-picker tbody").empty();
 
         // Populate Staff listing on the page and currentEmployees
         if (msg.meta && msg.meta.sequence) {
