@@ -10,7 +10,9 @@ class DevController extends BaseController
 {
     /**
      * Spit out a link for every getMethod in this class (except this 
-     * one)
+     * one).
+     *
+     * Yes, this is silly.
      **/
     public function getIndex()
     {
@@ -25,14 +27,24 @@ class DevController extends BaseController
                 ($method->name !== explode('::', __METHOD__)[1] ) 
                 && preg_match('/^get(.*)$/', $method->name, $matches)
             ) {
-                $url = URL::current() . '/' . strtolower($matches[1]);
+                // need to turn stuff like SchedulerTargets into scheduler-targets 
+                preg_match_all('/[A-Z][^A-Z]*/', $matches[1], $camelMatches);
+                $strang = '';
+                foreach ($camelMatches[0] as $match) { 
+                    $strang .= strtolower($match) . '-';
+                }
+
+                $strang = preg_replace('/-$/', '', $strang);
+
+                $url = URL::current() . '/' . $strang;
+
                 echo "<li><a href=\"$url\">$url</a></li>";
             }
         }
         echo "</ul>";
 
-
         $content = ob_get_contents();
+
         ob_end_clean();
 
         return View::make('pages.plain')->withContent($content);
@@ -100,5 +112,9 @@ class DevController extends BaseController
                 'sqlsrvResults' => $sqlsrvResults,
             )
         );
+    }
+
+    public function getSchedulerTargets()
+    {
     }
 }
