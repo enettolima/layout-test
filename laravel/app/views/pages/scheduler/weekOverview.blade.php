@@ -129,26 +129,26 @@
             <!-- width = blockwidth * 11 * 7 -->
             <!-- height = blockheight * 4 * 24 -->
             <div id="schedule-graphic-scale">
-                <div class="scale-time">12:00am</div>
-                <div class="scale-time">12:30am</div>
-
-                <div class="scale-time">1:00am</div>
-                <div class="scale-time">1:30am</div>
-
-                <div class="scale-time">2:00am</div>
-                <div class="scale-time">2:30am</div>
-
-                <div class="scale-time">3:00am</div>
-                <div class="scale-time">3:30am</div>
-
-                <div class="scale-time">4:00am</div>
-                <div class="scale-time">4:30am</div>
-
-                <div class="scale-time">5:00am</div>
-                <div class="scale-time">5:30am</div>
-
-                <div class="scale-time">6:00am</div>
-                <div class="scale-time">6:30am</div>
+                <!-- <div class="scale&#45;time">12:00am</div> -->
+                <!-- <div class="scale&#45;time">12:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">1:00am</div> -->
+                <!-- <div class="scale&#45;time">1:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">2:00am</div> -->
+                <!-- <div class="scale&#45;time">2:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">3:00am</div> -->
+                <!-- <div class="scale&#45;time">3:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">4:00am</div> -->
+                <!-- <div class="scale&#45;time">4:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">5:00am</div> -->
+                <!-- <div class="scale&#45;time">5:30am</div> -->
+                <!--  -->
+                <!-- <div class="scale&#45;time">6:00am</div> -->
+                <!-- <div class="scale&#45;time">6:30am</div> -->
 
                 <div class="scale-time">7:00am</div>
                 <div class="scale-time">7:30am</div>

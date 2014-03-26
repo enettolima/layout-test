@@ -75,7 +75,7 @@ stage.on('message:externalData', function(data) {
 
                     var inoutStartY = 0;
 
-                    var dayStart = new Date(2000, 0, 1, 0, 0, 0);
+                    var dayStart = new Date(2000, 0, 1, 7, 0, 0);
                     var accumulatedPaddingBlocks = 0;
 
                     for(var inoutIterator=0; inoutIterator < emp.inouts.length; inoutIterator++) {

@@ -56,9 +56,9 @@ function addEmployeeToSchedule(employeeObj)
 var bonsaiMovie = bonsai.run(
     document.getElementById('schedule-graphic-graph'),
     {
-        url: '/js/scheduler/overview-bonsai-movie.js',
+        url: '/js/scheduler/overview-bonsai-movie.js?ts=' + Date.now(),
         width: 912,
-        height: 768
+        height: 544
     }
 );
 
