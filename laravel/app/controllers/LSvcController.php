@@ -14,6 +14,59 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
+    public function getSchedulerTargets()
+    {
+        // /scheduler-targets/301/2014-01-01
+
+        $store = Request::segment(3);
+
+        $weekOf = Request::segment(4);
+
+        $from = date("m/d/Y", strtotime($weekOf)); // Sunday, or "Week Of"
+
+        $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6)); // Sunday, or "Week Of"
+
+        $targetsSQL = "
+            SELECT
+                Store,
+                DailyBudget,
+                BDWeekday,
+                HR_PROFILE,
+                PROF_HOUR_NEW, 
+                PROF_PER, 
+                HR_BUDGET,
+                Date,
+                HR_OPEN_MIL,
+                HR_CLOSE_MIL
+              FROM
+                SCHED_BUDGET_PER_HOURS_FINAL_TABLE
+              WHERE
+                Store = '301' and
+                Date >= convert(datetime, '$from', 101) and
+                Date <= convert(datetime, '$to', 101)
+              ORDER BY
+                Store,
+                Date,
+                PROF_HOUR_NEW
+        ";
+
+        $targetsRES = DB::connection('sqlsrv')->select($targetsSQL);
+
+        $returnval = array();
+
+        foreach ($targetsRES as $result) {
+            $returnval[$result->BDWeekday]['target'] = $result->DailyBudget;
+            $returnval[$result->BDWeekday]['profile'] = $result->HR_PROFILE;
+            $returnval[$result->BDWeekday]['open'] = $result->HR_OPEN_MIL;
+            $returnval[$result->BDWeekday]['close'] = $result->HR_CLOSE_MIL;
+            $returnval[$result->BDWeekday][$result->PROF_HOUR_NEW]['budget'] = $result->HR_BUDGET;
+            $returnval[$result->BDWeekday][$result->PROF_HOUR_NEW]['percent'] = $result->PROF_PER;
+        }
+
+        return Response::json($returnval);
+    }
+
     /*
      * Currently a "stub" function which will probably be hooked into Oracle
      */
