@@ -129,6 +129,21 @@ $app->get(
                 $dayArray[] = array('eid' => $empKey, 'inouts' => $empVal);
             }
 
+            // Ill-advised sorting method START
+            // TODO: This probably has the potential to break a lot of things
+            // The point of this is to re-sort the employees in the schedule based on their 
+            // sequence in the meta array
+            $sorted = array();
+            foreach ($metaArray['sequence'] as $sortKey) {
+                foreach ($dayArray as $empOuts) {
+                    if ($sortKey == $empOuts['eid']) {
+                        $sorted[] = $empOuts;
+                    }
+                }
+            }
+            $dayArray = $sorted;
+            // Ill-advised sorting method STOP
+
             $nr[] = $dayArray;
             $dayNum++;
         }
