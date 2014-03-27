@@ -21,8 +21,12 @@ $(document).ready(function() {
     });
 
     getTargets.done(function(data){
+        console.log('getTargets');
+        console.log(data);
         dayTargetData = data[dayOffset+1];
+        console.log(dayTargetData);
         updateSummaries(scheduleHourLookup);
+        console.log('/getTargets');
     });
 
     var loadFromDB = $.ajax({
@@ -206,6 +210,7 @@ $(document).ready(function() {
 function updateSummaries(scheduleRef)
 {
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
+
     $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
 
     $("#day-hours-detail tbody").empty();
@@ -216,6 +221,10 @@ function updateSummaries(scheduleRef)
     for(var h=openHour; h<closeHour; h++) {
         for (var i=1; i<3; i++) {
 
+            if (!dayTargetData.hours[h]) {
+                dayTargetData.hours[h] = {"budget" : "0.00"};
+            }
+
             var halfHourBudget = parseFloat(dayTargetData.hours[h].budget / 2).toFixed(2);
 
             var timeKey = (h < 10 ? '0' : '') + h + ':' + (i == 1 ? '00' : '30'); 
@@ -225,12 +234,18 @@ function updateSummaries(scheduleRef)
             var distributedGoal; 
             var extraClasses = '';
 
-            if (staffCount === 0) {
-                distributedGoal = "NEED STAFF!";
-                extraClasses += "danger ";
+            if (halfHourBudget > 0) {
+                if (staffCount === 0) {
+                    distributedGoal = "NEED STAFF!";
+                    extraClasses += "danger ";
+                } else {
+                    distributedGoal = "$" + (halfHourBudget / staffCount).toFixed(2);
+                }
             } else {
-                distributedGoal = "$" + (halfHourBudget / staffCount).toFixed(2);
+                extraClasses += "info ";
+                distributedGoal = "<em>No Goals Specified</em>";
             }
+
 
             var row = "";
             row += '<tr class="'+extraClasses+'">';
