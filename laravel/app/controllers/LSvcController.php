@@ -42,7 +42,7 @@ class LSvcController extends BaseController
               FROM
                 SCHED_BUDGET_PER_HOURS_FINAL_TABLE
               WHERE
-                Store = '301' and
+                Store = '$store' and
                 Date >= convert(datetime, '$from', 101) and
                 Date <= convert(datetime, '$to', 101)
               ORDER BY
@@ -60,8 +60,8 @@ class LSvcController extends BaseController
             $returnval[$result->BDWeekday]['profile'] = $result->HR_PROFILE;
             $returnval[$result->BDWeekday]['open'] = $result->HR_OPEN_MIL;
             $returnval[$result->BDWeekday]['close'] = $result->HR_CLOSE_MIL;
-            $returnval[$result->BDWeekday][$result->PROF_HOUR_NEW]['budget'] = $result->HR_BUDGET;
-            $returnval[$result->BDWeekday][$result->PROF_HOUR_NEW]['percent'] = $result->PROF_PER;
+            $returnval[$result->BDWeekday]['hours'][$result->PROF_HOUR_NEW]['budget'] = $result->HR_BUDGET;
+            $returnval[$result->BDWeekday]['hours'][$result->PROF_HOUR_NEW]['percent'] = $result->PROF_PER;
         }
 
         return Response::json($returnval);
