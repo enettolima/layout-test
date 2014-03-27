@@ -133,15 +133,17 @@ $app->get(
             // TODO: This probably has the potential to break a lot of things
             // The point of this is to re-sort the employees in the schedule based on their 
             // sequence in the meta array
-            $sorted = array();
-            foreach ($metaArray['sequence'] as $sortKey) {
-                foreach ($dayArray as $empOuts) {
-                    if ($sortKey == $empOuts['eid']) {
-                        $sorted[] = $empOuts;
+            if (isset($metaArray) && array_key_exists('sequence', $metaArray)) {
+                $sorted = array();
+                foreach ($metaArray['sequence'] as $sortKey) {
+                    foreach ($dayArray as $empOuts) {
+                        if ($sortKey == $empOuts['eid']) {
+                            $sorted[] = $empOuts;
+                        }
                     }
                 }
+                $dayArray = $sorted;
             }
-            $dayArray = $sorted;
             // Ill-advised sorting method STOP
 
             $nr[] = $dayArray;
@@ -291,15 +293,43 @@ $app->get(
             $resultsMeta[0]['data'] = null;
         }
 
+        $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+        $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+        $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+        $scheduleHourLookup = array();
+
+        /*
+        for ($i=0;$i<48;$i++) {
+
+            $stamp = mktime(0, (30 * $i));
+
+            $halfKey = date("H:i", $stamp);
+            $fullKey = date("H", $stamp);
+
+            // Init the index the avoid warnings
+            if (! array_key_exists($fullKey, $scheduleHourLookup)) {
+                $scheduleHourLookup[$fullKey]['staffCount'] = 0;
+            }
+
+            $scheduleHourLookup[$fullKey]['staffCount'] = $scheduleHourLookup[$fullKey]['staffCount'] + $scheduleHalfHourLookupRES[0][$halfKey];
+
+        }
+        */
+
         // var_dump($resultsMeta[0]['data']);
 
-        echo json_encode(array('meta' => json_decode($resultsMeta[0]['data']), 'schedule' => $resultsSchedule));
+        echo json_encode(array(
+            'meta' => json_decode($resultsMeta[0]['data']), 
+            'schedule' => $resultsSchedule,
+            'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+        ));
     }
 );
 
 $app->post(
-    '/inOut/:storeNumber/:userId/:inString/:outString', 
-    function($storeNumber, $userId, $inString, $outString) use ($logger, $app, $db)
+    '/inOut/:storeNumber/:userId/:inString/:outString/:date', 
+    function($storeNumber, $userId, $inString, $outString, $date) use ($logger, $app, $db)
     {
         $in  = date('Y-m-d H:i:s', strtotime($inString));
         $out = date('Y-m-d H:i:s', strtotime($outString));
@@ -321,10 +351,19 @@ $app->post(
             ";
             
             if ($db->exec($query)) {
-                // $app->response->setStatus(201);
-                echo json_encode(array('id' => $db->lastInsertId()));
+                $id = $db->lastInsertId();
+
+                $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+                $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+                $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+                echo json_encode(array(
+                    'status' => 1,
+                    'id' => $id, 
+                    'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                ));
+
             } else {
-                // $app->response->setStatus(409);
                 echo json_encode(array('id' => null));
             }
         } else {
@@ -512,8 +551,8 @@ $app->delete(
 
 
 $app->put(
-    '/inOutResize/:inOutId/:delta', 
-    function($inOutId, $delta) use ($app, $db, $logger)
+    '/inOutResize/:inOutId/:delta/:storeNumber/:date', 
+    function($inOutId, $delta, $storeNumber, $date) use ($app, $db, $logger)
     {
         $query = "
             UPDATE scheduled_inout
@@ -524,7 +563,16 @@ $app->put(
         ";
 
         if ($db->exec($query)) {
-            echo json_encode(array('status' => 1));
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+            $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
+
         } else {
             echo json_encode(array('status' => 0));
         }
@@ -533,8 +581,8 @@ $app->put(
 );
 
 $app->put(
-    '/inOutMove/:userId/:inOutId/:delta', 
-    function($userId, $inOutId, $delta) use ($logger, $app, $db)
+    '/inOutMove/:userId/:inOutId/:delta/:date/:storeNumber', 
+    function($userId, $inOutId, $delta, $date, $storeNumber) use ($logger, $app, $db)
     {
 
         $query = "
@@ -548,9 +596,22 @@ $app->put(
         ";
 
         if ($db->exec($query)) {
-            echo json_encode(array('status' => 1));
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+            $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
         } else {
-            echo json_encode(array('status' => 0));
+            echo json_encode(
+                array(
+                    'status' => 0,
+                    'error' => $db->errorInfo()
+                )
+            );
         }
 
     }
@@ -574,16 +635,29 @@ $app->put(
         ";
 
         if ($db->exec($query)) {
-            // $app->response->setStatus(204);
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+            $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
         } else {
-            // $app->response->setStatus(409);
+            echo json_encode(
+                array(
+                    'status' => 0,
+                    'error' => $db->errorInfo()
+                )
+            );
         }
     }
 );
 
 $app->delete(
-    '/inOut/:inOutId',
-    function($inOutId) use($logger, $app, $db){
+    '/inOut/:inOutId/:storeNumber/:date',
+    function($inOutId, $storeNumber, $date) use($logger, $app, $db){
 
         $query = "
             DELETE FROM
@@ -593,7 +667,15 @@ $app->delete(
         ";
 
         if ($db->exec($query)) {
-            echo json_encode(array('status' => 1));
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
+            $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
+
         } else {
             echo json_encode(array('status' => 0));
         }

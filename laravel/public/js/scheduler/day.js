@@ -2,11 +2,26 @@ var empMasterDatabase = employeesFromService; // from employees.js
 var associateInOuts = {};
 var loadedEvents = Array();
 var serviceURL = "http://cdev.newpassport.com/svc/index.php";
-var currentStore = parseInt($("#current-store").html());
+var dayTargetData;
+var scheduleHourLookup = null;
 
 $(document).ready(function() {
 
+    var currentStore = parseInt($("#current-store").html());
+
     var weekOf = $('#weekOf').val();
+
+    var dayOffset = parseInt($('#dayOffset').val());
+
+    var getTargets = $.ajax({
+        url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
+        type: 'GET'
+    });
+
+    getTargets.done(function(data){
+        dayTargetData = data[dayOffset+1];
+        updateSummaries(scheduleHourLookup);
+    });
 
     var targetDate = $('#targetDate').val();
 
@@ -49,7 +64,7 @@ $(document).ready(function() {
             var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
 
             var request = $.ajax({
-                url: serviceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00",
+                url: serviceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
                 type: "POST"
             });
 
@@ -66,6 +81,8 @@ $(document).ready(function() {
                         },
                         true
                     );
+                    updateSummaries(msg.scheduleHourLookup);
+
                 } else {
                     calendar.fullCalendar('unselect');
                 }
@@ -81,16 +98,12 @@ $(document).ready(function() {
 
 
             var request = $.ajax({
-                url: serviceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta,
+                url: serviceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
                 type: "PUT"
             });
 
             request.done(function(msg) {
-
-                if (msg.status) {
-                } else {
-                }
-
+                updateSummaries(msg.scheduleHourLookup);
             });
 
         },
@@ -98,16 +111,12 @@ $(document).ready(function() {
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
 
             var request = $.ajax({
-                url: serviceURL + "/inOutResize/"+event.id+"/"+minuteDelta,
+                url: serviceURL + "/inOutResize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
                 type: "PUT"
             });
 
             request.done(function(msg) {
-
-                if (msg.status) {
-                } else {
-                }
-
+                updateSummaries(msg.scheduleHourLookup);
             });
         },
 
@@ -116,16 +125,12 @@ $(document).ready(function() {
                 $('#calendar').fullCalendar('removeEvents', event.id);
 
                 var request = $.ajax({
-                    url: serviceURL + "/inOut/" + event.id,
+                    url: serviceURL + "/inOut/" + event.id+"/"+currentStore+"/"+targetDate,
                     type: "DELETE"
                 });
 
                 request.done(function(msg) {
-
-                    if (msg.status) {
-                    } else {
-                    }
-
+                    updateSummaries(msg.scheduleHourLookup);
                 });
             }
         },
@@ -160,6 +165,48 @@ $(document).ready(function() {
             addTheUser();
         }
     });
+
+    function updateSummaries(scheduleRef)
+    {
+        $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
+        $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
+
+        $("#day-hours-detail tbody").empty();
+
+        var openHour = parseInt(dayTargetData.open);
+        var closeHour= parseInt(dayTargetData.close);
+        
+        for(var h=openHour; h<closeHour; h++) {
+            for (var i=1; i<3; i++) {
+
+                var halfHourBudget = parseFloat(dayTargetData.hours[h].budget / 2).toFixed(2);
+
+                var timeKey = (h < 10 ? '0' : '') + h + ':' + (i == 1 ? '00' : '30'); 
+
+                var staffCount = parseInt(scheduleRef[timeKey]);
+
+                var distributedGoal; 
+                var extraClasses = '';
+
+                if (staffCount === 0) {
+                    distributedGoal = "NEED STAFF!";
+                    extraClasses += "danger ";
+                } else {
+                    distributedGoal = "$" + (halfHourBudget / staffCount).toFixed(2);
+                }
+
+                var row = "";
+                row += '<tr class="'+extraClasses+'">';
+                row += '    <td class="text-center">'+timeKey+'</td>';
+                row += '    <td class="text-right">$'+halfHourBudget+'</td>';
+                row += '    <td class="text-center">'+staffCount+'</td>';
+                row += '    <td class="text-right">'+distributedGoal+'</td>';
+
+                row += '</tr>';
+                $("#day-hours-detail").append(row);
+            }
+        }
+    }
 
     function addTheUser(){
         var nextCol  = getNextAvailableColumn();
@@ -253,6 +300,7 @@ $(document).ready(function() {
  
     loadFromDB.done(function(msg) {
 
+
         var view = $('#calendar').fullCalendar('getView');
 
         if (msg.meta && msg.meta.sequence.length) {
@@ -275,6 +323,8 @@ $(document).ready(function() {
 
         if (msg.schedule.length) {
 
+            // Here we populate scheduleRef, right?
+
             for (var b=0; b<msg.schedule.length; b++) {
 
                 var schedObj = msg.schedule[b];
@@ -288,6 +338,12 @@ $(document).ready(function() {
                      end: column + " " + schedObj.date_out.split(" ")[1]
                  }, true);
             }
+        }
+
+        if (msg.scheduleHourLookup) {
+            scheduleHourLookup = msg.scheduleHourLookup;
+        } else {
+            console.log(msg);
         }
     });
 });
