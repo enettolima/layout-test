@@ -2,119 +2,50 @@
 
 @section('content')
 
+<script src="/js/Chart.js/Chart.js"></script>
+
 <div class="jumbotron">
 
-    <h2>Welcome to EBT Passport, {{ Auth::user()->fname }}</h2>
-
+    <h3>Welcome to EBT Passport, {{ Auth::user()->fname }}</h3>
     <p>
-        Logged in as {{ Auth::user()->username }}. {{ HTML::link('users/logout', '[Logout]') }}
+        You are logged in as {{ Auth::user()->username }}. {{ HTML::link('users/logout', '[Logout]') }}
     </p>
-
 </div>
 
-<p>
-    <?php 
-        if (Session::has('storeContext')) {
-            echo "Store context set to: " . Session::get('storeContext');
-        } else {
-            echo "Store context not set.";
-        }
-    ?>
-</p>
 
-
-<p><?php echo Auth::user()->getAuthIdentifier(); ?> </p>
-
-<p><?php echo Auth::user()->getReminderEmail(); ?> </p>
-
-<p><?php echo Auth::user()->getAuthPassword(); ?> </p>
-
-<p><?php var_dump(Auth::user()->getStores()); ?> </p>
-
-<p><?php var_dump(Auth::user()->getStoreRoles()); ?> </p>
-
-<h4>Roles</h4>
-
-<ul>
-    <?php
-    foreach (Auth::user()->getStoreRoles() as $role) {
-        echo "<li>" . $role->name . "</li>";
-    }
-    ?>
-</ul>
-
-<h2>Without Rows:</h2>
-
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-    culpa qui officia deserunt mollit anim id est laborum.
-</p>
-
-
-<h2>With Rows</h2>
 
 <div class="row">
-    <div class="col-xs-6">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+    <div class="col-xs-8">
+		<h3>Arbitrary Chart</h3>
+		<canvas id="myChart" width="665" height="303"></canvas>
+		<script src="/js/hpchart.js" type="text/javascript" charset="utf-8"></script>
     </div>
-    <div class="col-xs-6">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+    <div class="col-xs-4">
+		<h3>Document Feed</h3>
+		<p>Here are the last 5 document updates:</p>
+		<ul>
+			<li><a href=""><strong>One Voice</strong> &mdash; <?php echo date("D, M d");?></a></li>
+			<li><a href=""><strong>One Voice</strong> &mdash; <?php echo date("D, M d", strtotime('yesterday'));?></a></li>
+			<li><a href=""><strong>Merchandise Alert</strong> &mdash; <?php echo date("D, M d", strtotime('last monday'));?></a></li>
+			<li><a href=""><strong>Employee Handbook</strong> &mdash; <?php echo date("D, M d", strtotime('1/1/2014'));?></a></li>
+			<li><a href=""><strong>One Voice</strong> &mdash; <?php echo date("D, M d", strtotime('yesterday'));?></a></li>
+		</ul>
+		<p>
+			<h3>Here is some News:</h3>
+			<img class="img-responsive img-rounded pull-right" src="/images/jpeg.jpg">
+			<strong>Lorem ipsum dolor sit amet</strong>, consectetur adipisicing elit, sed do eiusmod tempor
+			incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+			nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+			fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+			culpa qui officia deserunt mollit anim id est laborum.
+		</p>
     </div>
 </div>
 
-
-<?php
-
-    /*
-    $password = Hash::make('secret');
-
-    if (Hash::check('secret', $password)) {
-        echo "Hey that worked!";
-    }
-    */
-
-    /*
-    $User = User::findOrFail(1);
-    $User->password = Hash::make('secret');
-    $User->save();
-    var_dump($User);
-    */
-
-    /*
-    if (Auth::attempt(array('email' => 'chad.davis@gmail.com', 'password' => 'secreto'))) {
-        echo "Good password";
-    } else {
-        echo "Nope";
-    }
-    */
-
-    /*
-    if (Auth::check()) {
-        echo "User " . Auth::user()->email . " is logged in";
-        Auth::logout();
-    } else {
-        echo "User is not logged in";
-    }
-    */
-
-?>
+<div class="row">
+	<div class="col-xs-8">
+	</div>
+</div>
 
 @stop
