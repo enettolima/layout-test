@@ -29,7 +29,7 @@ $app = new \Slim\Slim();
 
 $app->response->headers->set('Content-Type', 'application/json');
 
-$db = new PDO('mysql:host=localhost;dbname=ebt_dev;charset=utf8', 'root', '123');
+$db = new PDO('mysql:host=localhost;dbname=dbname;charset=utf8', 'dbuser', 'dbpass');
 
 $logger = true;
 
