@@ -1,7 +1,6 @@
 var empMasterDatabase = employeesFromService; // from employees.js
 var associateInOuts = {};
 var loadedEvents = Array();
-var serviceURL = "http://cdev.newpassport.com/svc/index.php";
 var dayTargetData;
 var scheduleHourLookup = null;
 
@@ -30,7 +29,7 @@ $(document).ready(function() {
     });
 
     var loadFromDB = $.ajax({
-        url:  serviceURL + "/storeDaySchedule/"+currentStore+"/"+targetDate,
+        url:  slimServiceURL + "/storeDaySchedule/"+currentStore+"/"+targetDate,
         type: "GET"
     });
 
@@ -124,7 +123,7 @@ $(document).ready(function() {
             var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
 
             var request = $.ajax({
-                url: serviceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
+                url: slimServiceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
                 type: "POST"
             });
 
@@ -158,7 +157,7 @@ $(document).ready(function() {
 
 
             var request = $.ajax({
-                url: serviceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
+                url: slimServiceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
                 type: "PUT"
             });
 
@@ -171,7 +170,7 @@ $(document).ready(function() {
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
 
             var request = $.ajax({
-                url: serviceURL + "/inOutResize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
+                url: slimServiceURL + "/inOutResize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
                 type: "PUT"
             });
 
@@ -185,7 +184,7 @@ $(document).ready(function() {
                 $('#calendar').fullCalendar('removeEvents', event.id);
 
                 var request = $.ajax({
-                    url: serviceURL + "/inOut/" + event.id+"/"+currentStore+"/"+targetDate,
+                    url: slimServiceURL + "/inOut/" + event.id+"/"+currentStore+"/"+targetDate,
                     type: "DELETE"
                 });
 

@@ -1,7 +1,6 @@
 var empMasterDatabase = employeesFromService; // from employees.js
 var currentEmployees  = Array;
 var currentStore      = parseInt($("#current-store").html());
-var serviceURL = "http://cdev.newpassport.com/svc/index.php";
 
 function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
 
@@ -37,7 +36,7 @@ function addEmployeeToSchedule(employeeObj)
     currentEmployees.push(employeeObj.id);
 
     var request = $.ajax({
-        url: serviceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+employeeObj.id,
+        url: slimServiceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+employeeObj.id,
         type: "PUT"
     })
 
@@ -89,7 +88,7 @@ function loadSchedule(strDate) {
     }
 
     var request = $.ajax({
-        url: serviceURL + "/storeWeekSchedule/"+currentStore+"/" + strDate,
+        url: slimServiceURL + "/storeWeekSchedule/"+currentStore+"/" + strDate,
         type: "GET"
     });
 
@@ -249,7 +248,7 @@ $(document).on("click", "#staff-remove-modal-confirm", function(){
     var weekOf = $("#rangeSelector").val();
 
     var request = $.ajax({
-        url: serviceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
+        url: slimServiceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
         type: "DELETE"
     });
 

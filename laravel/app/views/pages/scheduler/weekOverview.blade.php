@@ -239,6 +239,10 @@
 
     <input type="hidden" id="currentWeekOf" name="currentWeekOf" value="<?php echo Session::has('schedulerCurrentWeekOf') ? Session::get('schedulerCurrentWeekOf') : ''; ?>">
 
+	<script type="text/javascript" charset="utf-8">
+		var slimServiceURL = "<?php echo $_ENV['slim_service_url']?>"
+	</script>
+
     <script src="/js/jquery-git.js"></script>
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
     <script src="/js/scheduler/employees.js" type="text/javascript" charset="utf-8"></script>

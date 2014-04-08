@@ -52,6 +52,10 @@
         </div>
     </div>
 
+	<script type="text/javascript" charset="utf-8">
+		var slimServiceURL = "<?php echo $_ENV['slim_service_url']?>"
+	</script>
+
     <script src="/js/jquery-git.js"></script>
 
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
