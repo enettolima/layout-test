@@ -54,10 +54,10 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'dbname',
-			'username'  => 'dbuser',
-			'password'  => 'dbpasso',
+			'host'      => $_ENV['mysql_host'],
+			'database'  => $_ENV['mysql_database'],
+			'username'  => $_ENV['mysql_username'],
+			'password'  => $_ENV['mysql_password'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -76,10 +76,10 @@ return array(
 
 		'sqlsrv' => array(
 			'driver'   => 'sqlsrv',
-			'host'     => 'superman',
-			'database' => 'EBTGOOGLE',
-			'username' => 'sa',
-			'password' => 'report',
+			'host'     => $_ENV['sqlsrv_host'],
+			'database' => $_ENV['sqlsrv_database'],
+			'username' => $_ENV['sqlsrv_username'],
+			'password' => $_ENV['sqlsrv_password'],
 			'prefix'   => '',
 		),
 
