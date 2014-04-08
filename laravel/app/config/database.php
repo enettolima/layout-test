@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'dbname',
 			'username'  => 'dbuser',
-			'password'  => 'dbpass',
+			'password'  => 'dbpasso',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

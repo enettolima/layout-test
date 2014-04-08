@@ -24,11 +24,25 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
+/*
 $env = $app->detectEnvironment(array(
-
-	'local' => array('your-machine-name'),
-
+    'local' => array('your-machine-name'),
+    'cdev' => array('precise64'),
 ));
+*/
+
+$env = $app->detectEnvironment(function()
+{
+    switch ($_SERVER['HTTP_HOST']) {
+        case 'cdev.newpassport.com':
+            return 'cdev';
+        break;
+        case 'ppdev.earthboundtrading.com':
+            return 'ppdev';
+        break;
+    }
+});
+
 
 /*
 |--------------------------------------------------------------------------
