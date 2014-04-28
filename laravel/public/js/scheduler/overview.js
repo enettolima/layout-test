@@ -67,7 +67,7 @@ function loadSchedule(strDate) {
     // the PHP session
     if (strDate != $("#currentWeekOf").val()) {
         $.ajax({
-            url: '/lsvc/set-scheduler-current-week-of/' + strDate,
+            url: '/lsvc/scheduler-set-current-week-of/' + strDate,
             type: "GET"
         });
     }
@@ -88,7 +88,7 @@ function loadSchedule(strDate) {
     }
 
     var request = $.ajax({
-        url: slimServiceURL + "/storeWeekSchedule/"+currentStore+"/" + strDate,
+        url: "/lsvc/scheduler-store-week-schedule/"+currentStore+"/" + strDate,
         type: "GET"
     });
 
