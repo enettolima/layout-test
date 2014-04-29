@@ -25,15 +25,10 @@ casper.then(function fillForm(){
 });
 
 casper.thenOpen('http://cdev.newpassport.com/scheduler', function openScheduler(){
-    this.capture('scheduler-screenshot.png');
-});
-
-casper.then(function afterLogin() {
-    this.wait(2000, function() {
-        this.capture('screenshot.png');
+    this.echo('Waiting to give scheduler a chance to draw....');
+    this.wait(3000, function() {
+        this.capture('scheduler-screenshot-01.png');
     });
 });
 
-casper.run(function() {
-    // this.echo(links.length);
-});
+casper.run();
