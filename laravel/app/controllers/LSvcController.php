@@ -12,6 +12,74 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function deleteSchedulerRemoveUser()
+    {
+
+        $storeNumber = Request::segment(3);
+        $userId      = Request::segment(4);
+        $weekOf      = Request::segment(5);
+
+        $SQL = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$weekOf'
+        ";
+
+        $RES = DB::connection('mysql')->select($SQL);
+
+        $performUpdate = false;
+
+        if (count($RES) === 1){
+
+            $metaArray = json_decode($RES[0]->{'data'}, true);
+
+            $currentSequence = $metaArray['sequence'];
+            if (in_array($userId, $currentSequence)) {
+                foreach($currentSequence as $key=>$val) {
+                    if ($val == $userId) {
+                        unset($currentSequence[$key]);
+                        $performUpdate = true;
+                    }
+                }
+            }
+        }
+
+        if ($performUpdate) {
+            $metaArray['sequence'] = array_values($currentSequence);
+            $newData = json_encode($metaArray);
+            $updateSQL = "UPDATE schedule_day_meta set data = '$newData' where id = {$RES[0]->{'id'}}";
+            $updateRES = DB::connection('mysql')->update($updateSQL);
+             
+            if ($updateRES) {
+
+                $nextSunday = date("Y-m-d", strtotime('next sunday', strtotime($weekOf)));
+
+                $deleteScheduleSQL = "
+                    DELETE FROM
+                        scheduled_inout
+                    WHERE
+                        date_in >= '$weekOf' AND
+                        date_in < '$nextSunday' AND
+                        associate_id = '$userId' AND
+                        store_id = $storeNumber
+                ";
+
+                $deleteScheduleRES = DB::connection('mysql')->delete($deleteScheduleSQL);
+
+                return Response::json(array('status' => 1));
+            } else {
+                return Response::json(array('status' => 0));
+            }
+
+        } else {
+            return Response::json(array('status' => 1));
+        }
+    }
+
     public function putSchedulerInOutColumn()
     {
         $storeNumber = Request::segment(3);

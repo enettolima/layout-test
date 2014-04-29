@@ -248,7 +248,7 @@ $(document).on("click", "#staff-remove-modal-confirm", function(){
     var weekOf = $("#rangeSelector").val();
 
     var request = $.ajax({
-        url: slimServiceURL + "/removeUserFromSchedule/"+currentStore+"/" + userId + "/" + weekOf,
+        url: "/lsvc/scheduler-remove-user/"+currentStore+"/" + userId + "/" + weekOf,
         type: "DELETE"
     });
 
