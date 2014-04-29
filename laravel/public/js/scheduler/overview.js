@@ -36,7 +36,7 @@ function addEmployeeToSchedule(employeeObj)
     currentEmployees.push(employeeObj.id);
 
     var request = $.ajax({
-        url: slimServiceURL + "/inOutColumn/"+currentStore+"/"+targetDate+"/"+employeeObj.id,
+        url: "/lsvc/scheduler-in-out-column/"+currentStore+"/"+targetDate+"/"+employeeObj.id,
         type: "PUT"
     })
 

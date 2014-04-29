@@ -9,8 +9,63 @@ class LSvcController extends BaseController
 
     public function postIndex()
     {
-
         // Log::info('asdf', array('username', Auth::check()));
+    }
+
+    public function putSchedulerInOutColumn()
+    {
+        $storeNumber = Request::segment(3);
+        $date        = Request::segment(4);
+        $userId      = Request::segment(5);
+
+        $SQL = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$date'
+        ";
+
+        $RES = DB::connection('mysql')->select($SQL);
+
+        $addData = array('type'=>false);
+
+        if (count($RES) === 1){
+            $metaArray = json_decode($RES[0]->{'data'}, true);
+            $currentSequence = $metaArray['sequence'];
+            if (! in_array($userId, $currentSequence)) {
+                $currentSequence[] = $userId;
+                $metaArray['sequence'] = $currentSequence;
+                $newData = json_encode($metaArray);
+                $addData['type'] = 'update';
+                $addData['SQL'] = "UPDATE schedule_day_meta set data = '$newData' where id = {$RES[0]->{'id'}}";
+            } 
+        } else {
+            $metaArray = array();
+            $metaArray['sequence'][] = $userId;
+            $newData = json_encode($metaArray);
+            $addData['type'] = 'insert';
+            $addData['SQL'] = "INSERT INTO schedule_day_meta (store_id, date, data) VALUES ($storeNumber, '$date', '$newData')";
+        }
+
+        if ($addData['type']) {
+
+            if ($addData['type'] == 'insert') {
+                $RES = DB::connection('mysql')->insert($addData['SQL']);
+            } elseif ($addData['type'] == 'update') {
+                $RES = DB::connection('mysql')->update($addData['SQL']);
+            }
+
+            if ($RES) {
+                return Response::json(array('status' => 1));
+            } else {
+                return Response::json(array('status' => 0));
+            }
+        } else {
+            return Response::json(array('status' => 1));
+        }
     }
 
     public function postSchedulerInOut()

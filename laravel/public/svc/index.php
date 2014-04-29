@@ -20,60 +20,6 @@ if ($_SERVER['HTTP_HOST'] == 'cdev.newpassport.com') {
 
 $logger = true;
 
-
-// Add a column
-$app->put(
-    '/inOutColumn/:storeNumber/:date/:userId',
-    function($storeNumber, $date, $userId) use ($logger, $app, $db)
-    {
-        // Get the metadata for this store/day...
-
-        $query = "
-            SELECT
-                *
-            FROM
-                schedule_day_meta
-            WHERE
-                store_id = $storeNumber AND
-                date = '$date'
-        ";
-
-        $sth = $db->prepare($query);
-
-        $sth->execute(); //TODO: Handle errors
-
-        if ($res = $sth->fetch()){
-            $metaArray = json_decode($res['data'], true);
-            $currentSequence = $metaArray['sequence'];
-            if (! in_array($userId, $currentSequence)) {
-                $currentSequence[] = $userId;
-                $metaArray['sequence'] = $currentSequence;
-                $newData = json_encode($metaArray);
-                $addQuery = "UPDATE schedule_day_meta set data = '$newData' where id = {$res['id']}";
-            } else {
-                $addQuery = false;
-            }
-        } else {
-            $metaArray = array();
-            $metaArray['sequence'][] = $userId;
-            $newData = json_encode($metaArray);
-            $addQuery = "INSERT INTO schedule_day_meta (store_id, date, data) VALUES ($storeNumber, '$date', '$newData')";
-        }
-
-        if ($addQuery) {
-            $sth = $db->prepare($addQuery);
-             
-            if ($sth->execute()) {
-                echo json_encode(array('status' => 1));
-            } else {
-                echo json_encode(array('status' => 0));
-            }
-        } else {
-            echo json_encode(array('status' => 1));
-        }
-    }
-);
-
 $app->delete(
     '/removeUserFromSchedule/:storeNumber/:userId/:weekOf',
     function($storeNumber, $userId, $weekOf) use ($logger, $app, $db)
