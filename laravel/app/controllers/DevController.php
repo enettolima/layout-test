@@ -50,6 +50,11 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getChromephp()
+    {
+        ChromePhp::log(array(1 => 'foo', 2 => 'bar'));
+    }
+
     public function getRoles()
     {
         ob_start();
