@@ -12,6 +12,96 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function deleteSchedulerInOut()
+    {
+        $inOutId = Request::segment(3);
+        $storeNumber = Request::segment(4);
+
+        $deleteSQL = "
+            DELETE FROM
+                scheduled_inout
+            WHERE
+                id = $inOutId
+        ";
+
+        if (DB::connection('mysql')->delete($deleteSQL)) {
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+            return Response::json(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
+
+        } else {
+            return Response::json(array('status' => 0));
+        }
+
+    }
+
+    public function putSchedulerInOutMove()
+    {
+        $userId = Request::segment(3);
+        $inOutId = Request::segment(4);
+        $delta = Request::segment(5);
+        $date = Request::segment(6);
+        $storeNumber = Request::segment(7);
+
+        $SQL = "
+            UPDATE scheduled_inout
+            SET
+                associate_id = '$userId',
+                date_in = DATE_ADD(date_in, INTERVAL $delta MINUTE),
+                date_out = DATE_ADD(date_out, INTERVAL $delta MINUTE)
+            WHERE
+                id = $inOutId
+        ";
+
+        if (DB::connection('mysql')->update($SQL)) {
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+            return Response::json(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
+        } else {
+            return Response::json(array( 'status' => 0));
+        }
+    }
+
+    public function putSchedulerInOutResize()
+    {
+        $inOutId     = Request::segment(3);
+        $delta       = Request::segment(4);
+        $storeNumber = Request::segment(5);
+        $date        = Request::segment(6);
+
+        $SQL = "
+            UPDATE scheduled_inout
+            SET
+                date_out = DATE_ADD(date_out, INTERVAL $delta MINUTE)
+            WHERE
+                id = $inOutId
+        ";
+
+        if (DB::connection('mysql')->update($SQL)) {
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+            return Response::json(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+            ));
+
+        } else {
+            return Response::json(array('status' => 0));
+        }
+    }
+
     public function deleteSchedulerRemoveUser()
     {
 

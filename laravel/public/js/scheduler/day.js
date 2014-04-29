@@ -149,7 +149,7 @@ $(document).ready(function() {
 
 
             var request = $.ajax({
-                url: slimServiceURL + "/inOutMove/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
+                url: "/lsvc/scheduler-in-out-move/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
                 type: "PUT"
             });
 
@@ -162,7 +162,7 @@ $(document).ready(function() {
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
 
             var request = $.ajax({
-                url: slimServiceURL + "/inOutResize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
+                url: "/lsvc/scheduler-in-out-resize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
                 type: "PUT"
             });
 
