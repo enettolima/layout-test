@@ -33,13 +33,17 @@ $env = $app->detectEnvironment(array(
 
 $env = $app->detectEnvironment(function()
 {
-    switch ($_SERVER['HTTP_HOST']) {
-        case 'cdev.newpassport.com':
-            return 'cdev';
-        break;
-        case 'ppdev.earthboundtrading.com':
-            return 'ppdev';
-        break;
+    if (isset($_SERVER['HTTP_HOST'])) {
+        switch ($_SERVER['HTTP_HOST']) {
+            case 'cdev.newpassport.com':
+                return 'cdev';
+            break;
+            case 'ppdev.earthboundtrading.com':
+                return 'ppdev';
+            break;
+        }
+    } else {
+        return 'cdev';
     }
 });
 
