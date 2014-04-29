@@ -115,7 +115,7 @@ $(document).ready(function() {
             var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
 
             var request = $.ajax({
-                url: slimServiceURL + "/inOut/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
+                url: "/lsvc/scheduler-in-out/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
                 type: "POST"
             });
 

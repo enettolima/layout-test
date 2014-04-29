@@ -20,50 +20,6 @@ if ($_SERVER['HTTP_HOST'] == 'cdev.newpassport.com') {
 
 $logger = true;
 
-$app->post(
-    '/inOut/:storeNumber/:userId/:inString/:outString/:date', 
-    function($storeNumber, $userId, $inString, $outString, $date) use ($logger, $app, $db)
-    {
-        $in  = date('Y-m-d H:i:s', strtotime($inString));
-        $out = date('Y-m-d H:i:s', strtotime($outString));
-
-        if ($userId != "undefined") {
-
-            $query = "
-                INSERT INTO scheduled_inout (
-                    associate_id, 
-                    store_id, 
-                    date_in, 
-                    date_out
-                ) VALUES (
-                    '$userId', 
-                    $storeNumber, 
-                    '$in', 
-                    '$out'
-                )
-            ";
-            
-            if ($db->exec($query)) {
-                $id = $db->lastInsertId();
-
-                $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
-                $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
-                $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
-
-                echo json_encode(array(
-                    'status' => 1,
-                    'id' => $id, 
-                    'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
-                ));
-
-            } else {
-                echo json_encode(array('id' => null));
-            }
-        } else {
-            echo json_encode(array('id' => null));
-        }
-    }
-);
 
 // Add a column
 $app->put(

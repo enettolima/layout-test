@@ -2,7 +2,6 @@
 
 class LSvcController extends BaseController
 {
-
     public function getIndex()
     {
         // Log::info('asdf', array('username', Auth::check()));
@@ -12,6 +11,54 @@ class LSvcController extends BaseController
     {
 
         // Log::info('asdf', array('username', Auth::check()));
+    }
+
+    public function postSchedulerInOut()
+    {
+        $storeNumber = Request::segment(3);
+        $userId      = Request::segment(4);
+        $inString    = Request::segment(5);
+        $outString   = Request::segment(6);
+        $date        = Request::segment(7);
+
+        $in  = date('Y-m-d H:i:s', strtotime(urldecode($inString)));
+        $out = date('Y-m-d H:i:s', strtotime(urldecode($outString)));
+
+        if ($userId != "undefined") {
+
+            $SQL = "
+                INSERT INTO scheduled_inout (
+                    associate_id, 
+                    store_id, 
+                    date_in, 
+                    date_out
+                ) VALUES (
+                    '$userId', 
+                    $storeNumber, 
+                    '$in', 
+                    '$out'
+                )
+            ";
+
+            if (DB::connection('mysql')->insert($SQL)) {
+
+                $id = DB::connection('mysql')->getPdo()->lastInsertId();
+
+                $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+                $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+                return Response::json(array(
+                    'status' => 1,
+                    'id' => $id, 
+                    'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                ));
+
+            } else {
+                return Response::json(array('id' => null));
+            }
+        } else {
+            return Response::json(array('id' => null));
+        }
     }
 
     public function getSchedulerStoreDaySchedule()
