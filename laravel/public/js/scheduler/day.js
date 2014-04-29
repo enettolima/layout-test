@@ -14,25 +14,10 @@ $(document).ready(function() {
 
     var dayOffset = parseInt($('#dayOffset').val());
 
-    var getTargets = $.ajax({
-        url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
-        type: 'GET'
-    });
-
-    getTargets.done(function(data){
-        console.log('getTargets');
-        console.log(data);
-        dayTargetData = data[dayOffset+1];
-        console.log(dayTargetData);
-        updateSummaries(scheduleHourLookup);
-        console.log('/getTargets');
-    });
-
     var loadFromDB = $.ajax({
-        url:  slimServiceURL + "/storeDaySchedule/"+currentStore+"/"+targetDate,
+        url:  "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate,
         type: "GET"
     });
-
 
     var onEvent = 0;
 
@@ -40,6 +25,15 @@ $(document).ready(function() {
  
     loadFromDB.done(function(msg) {
 
+        var getTargets = $.ajax({
+            url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
+            type: 'GET'
+        });
+
+        getTargets.done(function(data){
+            dayTargetData = data[dayOffset+1];
+            updateSummaries(scheduleHourLookup);
+        });
 
         var view = $('#calendar').fullCalendar('getView');
 
@@ -62,8 +56,6 @@ $(document).ready(function() {
         }
 
         if (msg.schedule.length) {
-
-            // Here we populate scheduleRef, right?
 
             for (var b=0; b<msg.schedule.length; b++) {
 
@@ -208,6 +200,7 @@ $(document).ready(function() {
 
 function updateSummaries(scheduleRef)
 {
+
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
     $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );

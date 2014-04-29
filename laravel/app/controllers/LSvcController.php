@@ -14,6 +14,67 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getSchedulerStoreDaySchedule()
+    {
+        $storeNumber = Request::segment(3);
+
+        $sundayDate = Request::segment(4);
+
+        $date = date('Y-m-d', strtotime($sundayDate));
+
+        $returnval = array();
+
+        $scheduleSQL = "
+            SELECT
+                s.`id`,
+                s.`associate_id`,
+                s.`store_id`, 
+                s.`date_in`, 
+                s.`date_out` 
+            FROM 
+                scheduled_inout s 
+            WHERE
+                s.`store_id` = $storeNumber AND
+                DATE(date_in) = '$date';
+        ";
+
+        $scheduleRES = DB::connection('mysql')->select($scheduleSQL);
+
+        // Metadata currently resides at the week point...
+
+        $ts = strtotime($date);
+        $sundayTimestamp = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
+        $sundayDate = date('Y-m-d', $sundayTimestamp);
+
+        $metaSQL = "
+            SELECT
+                data
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$sundayDate'
+        ";
+
+        $metaRES = DB::connection('mysql')->select($metaSQL);
+
+        if (! isset($metaRES[0])) {
+            $metaRES[0] = (object) '';
+            $metaRES[0]->{'data'} = null;
+        } 
+
+        $metaArray = json_decode($metaRES[0]->{'data'}, true);
+
+        $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+        $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+        return Response::json(array(
+            'meta' => $metaArray,
+            'schedule' => $scheduleRES,
+            'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+        ));
+    }
+
     public function getSchedulerStoreWeekSchedule()
     {
         $storeNumber = Request::segment(3);
