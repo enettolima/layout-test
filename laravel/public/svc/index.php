@@ -1,24 +1,5 @@
 <?php
 
-function elog ($thing)
-{
-    if (is_array($thing) || is_object($thing))
-    {
-        ob_start();
-        echo var_export($thing);
-        $logLine = ob_get_contents();
-        ob_end_clean();
-    }
-    else
-    {
-        $logLine = $thing;
-    }
-
-    $fp = fopen('log.txt', 'aw');
-    fwrite($fp, "[" . date("c") . "]: " . $logLine . "\n");
-    fclose($fp);
-}
-
 require ('empInfoHelper.class.php');
 
 $e = new empInfoHelper();
@@ -38,93 +19,6 @@ if ($_SERVER['HTTP_HOST'] == 'cdev.newpassport.com') {
 }
 
 $logger = true;
-
-// Get store schedule for a day
-$app->get(
-    '/storeDaySchedule/:storeNumber/:date', 
-    function($storeNumber, $date) use($logger, $db)
-    {
-
-        $date = date('Y-m-d', strtotime($date));
-
-        $returnval = array();
-
-        $querySchedule = "
-            SELECT
-                s.`id`,
-                s.`associate_id`,
-                s.`store_id`, 
-                s.`date_in`, 
-                s.`date_out` 
-            FROM 
-                scheduled_inout s 
-            WHERE
-                s.`store_id` = $storeNumber AND
-                DATE(date_in) = '$date';
-        ";
-
-        $stmtSchedule = $db->query($querySchedule);
-
-        $resultsSchedule = $stmtSchedule->fetchAll(PDO::FETCH_ASSOC);
-
-        // Metadata currently resides at the week point...
-
-        $ts = strtotime($date);
-        $sundayTimestamp = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
-        $sundayDate = date('Y-m-d', $sundayTimestamp);
-
-        $queryMeta = "
-            SELECT
-                data
-            FROM
-                schedule_day_meta
-            WHERE
-                store_id = $storeNumber AND
-                date = '$sundayDate'
-        ";
-
-        $stmtMeta = $db->query($queryMeta);
-
-        $resultsMeta = $stmtMeta->fetchAll(PDO::FETCH_ASSOC);
-
-        if (! isset($resultsMeta[0])) {
-            $resultsMeta[0] = array();
-            $resultsMeta[0]['data'] = null;
-        }
-
-        $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
-        $scheduleHalfHourLookupSTMT = $db->query($scheduleHalfHourLookupSQL);
-        $scheduleHalfHourLookupRES  = $scheduleHalfHourLookupSTMT->fetchAll(PDO::FETCH_ASSOC);
-
-        $scheduleHourLookup = array();
-
-        /*
-        for ($i=0;$i<48;$i++) {
-
-            $stamp = mktime(0, (30 * $i));
-
-            $halfKey = date("H:i", $stamp);
-            $fullKey = date("H", $stamp);
-
-            // Init the index the avoid warnings
-            if (! array_key_exists($fullKey, $scheduleHourLookup)) {
-                $scheduleHourLookup[$fullKey]['staffCount'] = 0;
-            }
-
-            $scheduleHourLookup[$fullKey]['staffCount'] = $scheduleHourLookup[$fullKey]['staffCount'] + $scheduleHalfHourLookupRES[0][$halfKey];
-
-        }
-        */
-
-        // var_dump($resultsMeta[0]['data']);
-
-        echo json_encode(array(
-            'meta' => json_decode($resultsMeta[0]['data']), 
-            'schedule' => $resultsSchedule,
-            'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
-        ));
-    }
-);
 
 $app->post(
     '/inOut/:storeNumber/:userId/:inString/:outString/:date', 
@@ -480,12 +374,5 @@ $app->delete(
         }
     }
 );
-
-
-/*
-$app->get('/associateScheduleDay/:associateId', function($associateId){
-    echo "Get all the pairs for this associate $associateId";
-});
-*/
 
 $app->run();
