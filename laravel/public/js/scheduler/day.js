@@ -176,7 +176,7 @@ $(document).ready(function() {
                 $('#calendar').fullCalendar('removeEvents', event.id);
 
                 var request = $.ajax({
-                    url: slimServiceURL + "/inOut/" + event.id+"/"+currentStore+"/"+targetDate,
+                    url: "/lsvc/scheduler-in-out/" + event.id+"/"+currentStore+"/"+targetDate,
                     type: "DELETE"
                 });
 

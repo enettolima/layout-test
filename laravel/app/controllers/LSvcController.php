@@ -16,6 +16,7 @@ class LSvcController extends BaseController
     {
         $inOutId = Request::segment(3);
         $storeNumber = Request::segment(4);
+        $date = Request::segment(5);
 
         $deleteSQL = "
             DELETE FROM
