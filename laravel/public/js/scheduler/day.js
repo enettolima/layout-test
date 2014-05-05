@@ -3,16 +3,20 @@ var associateInOuts = {};
 var loadedEvents = Array();
 var dayTargetData;
 var scheduleHourLookup = null;
+var currentStore = null;
+var targetDate = null;
+var weekOf = null;
+var dayOffset = null;
 
 $(document).ready(function() {
 
-    var targetDate = $('#targetDate').val();
+    targetDate = $('#targetDate').val();
 
-    var currentStore = parseInt($("#current-store").html());
+    currentStore = parseInt($("#current-store").html());
 
-    var weekOf = $('#weekOf').val();
+    weekOf = $('#weekOf').val();
 
-    var dayOffset = parseInt($('#dayOffset').val());
+    dayOffset = parseInt($('#dayOffset').val());
 
     var loadFromDB = $.ajax({
         url:  "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate,
@@ -172,18 +176,10 @@ $(document).ready(function() {
         },
 
         eventClick: function(event, jsEvent, view) {
-            if (confirm('Delete this block?')) {
-                $('#calendar').fullCalendar('removeEvents', event.id);
 
-                var request = $.ajax({
-                    url: "/lsvc/scheduler-in-out/" + event.id+"/"+currentStore+"/"+targetDate,
-                    type: "DELETE"
-                });
-
-                request.done(function(msg) {
-                    updateSummaries(msg.scheduleHourLookup);
-                });
-            }
+            $("#block-remove-modal-content").html("<p>To delete this block, click <strong>Confirm Deletion</strong>.</p>"); 
+            $("#block-remove-modal-confirm").attr("data-event-id", event.id);
+            $("#block-remove-modal").modal('show');
         },
 
         editable: true
@@ -293,3 +289,21 @@ function getEmpNameFromCode(strCode){
         return false;
     }
 }
+
+$(document).on("click", "#block-remove-modal-confirm", function(){
+
+    var eventId = $(this).attr('data-event-id');
+
+    $("#block-remove-modal").modal('hide');
+
+    $('#calendar').fullCalendar('removeEvents', eventId);
+
+    var request = $.ajax({
+        url: "/lsvc/scheduler-in-out/" + eventId + "/" + currentStore + "/" + targetDate,
+        type: "DELETE"
+    });
+
+    request.done(function(msg) {
+        updateSummaries(msg.scheduleHourLookup);
+    });
+});

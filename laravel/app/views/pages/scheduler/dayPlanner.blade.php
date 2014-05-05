@@ -52,6 +52,22 @@
         </div>
     </div>
 
+    <div id="block-remove-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Block Deletion</h4>
+                </div>
+                <div id="block-remove-modal-content" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="block-remove-modal-confirm" type="button" data-event-id="" class="btn btn-danger">Confirm Deletion</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
 	<script type="text/javascript" charset="utf-8">
 		var slimServiceURL = "<?php echo $_ENV['slim_service_url']?>"
 	</script>
