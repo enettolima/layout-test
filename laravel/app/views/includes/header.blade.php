@@ -25,7 +25,8 @@
 
                             <?php
                                 if (Session::has('storeContext')) {
-                                    echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - Shady Brook, AL</span></strong>';
+                                    $sl = StoresLookup::where('code', Session::get('storeContext'))->first();
+                                echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$sl->store_name.'</span></strong>';
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
