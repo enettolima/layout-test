@@ -10,7 +10,7 @@ vagrantfile-local:
         provider:
             virtualbox:
                 modifyvm:
-                    name: cdev.newpassport.com
+                    name: cdev.ebtpassport.com
                     # These appear to mess up the DNS on OSX
                     # natdnshostresolver1: on
                     # natdnsproxy1: on
@@ -56,8 +56,8 @@ apache:
         - php
         - rewrite
     vhosts:
-        cdev.newpassport.com:
-            servername: cdev.newpassport.com
+        cdev.ebtpassport.com:
+            servername: cdev.ebtpassport.com
             docroot: /var/www/docroot
             port: '80'
             setenv:
