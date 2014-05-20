@@ -39,7 +39,7 @@ class CronRefreshStores extends Command {
 	{
         try {
 
-            $stores = json_decode(file_get_contents("http://devapi.earthboundtrading.com/stores", true));
+            $stores = json_decode(file_get_contents("http://dev.api.earthboundtrading.com/stores", true));
 
             $onlineStoresLookup = array();
             $storesChanged = array();
