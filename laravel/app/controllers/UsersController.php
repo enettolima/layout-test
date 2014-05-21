@@ -38,17 +38,29 @@ class UsersController extends BaseController
 
 					//$u = User::where('rpro_id', $rpResults->userData->empl_id)->firstOrCreate();
 
-					$u = User::firstOrNew(array('rpro_id' => $rpResults->userData->empl_id));
+					$u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
 
-					if (! $u->id) {
-						// Need to save new user
-						$u->rpro_user = true;
-						$u->username = Input::get('username');
-						$u->rpro_id = $rpResults->userData->empl_id;
-						$u->save();
-					}
+                    // Repopulate these every time in case there are changes
+                    $u->rpro_user = true;
+                    $u->username = Input::get('username');
+                    $u->rpro_id = $rpResults->userData->empl_id;
+                    $u->full_name = $rpResults->userData->rpro_full_name;
+                    $u->save();
 
 					Auth::login($u);
+
+                    // Roles Stuff: if the user has the 'M' flag, give 
+                    // them the manager role and the role for the store 
+                    // they belong to.
+                    //
+                    // All others initially have only the 'Guest' role 
+                    // (better name for that?)
+                    //
+                    // Managers can assign the associate role to other 
+                    // users for their store. Maybe they can see a list 
+                    // of users with their store prefix and can manage 
+                    // guest vs associate from there?
+
 				}
 			}
 		}
