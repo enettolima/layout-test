@@ -11,7 +11,7 @@ function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
             addClass = 'text-muted';
         }
 
-        $("#staff-picker").append('<tr class="staffmember-row '+addClass+'" data-emp-id="'+emp.userId+'" data-emp-name="'+emp.firstName+' '+emp.lastName+'"><td>'+emp.userId+'</td><td>'+emp.firstName+' '+emp.lastName+'</td></tr>');
+        $("#staff-picker").append('<tr class="staffmember-row '+addClass+'" data-emp-id="'+emp.userId+'" data-emp-name="'+emp.fullName+'"><td>'+emp.userId+'</td><td>'+emp.fullName+'</td></tr>');
     }
 
     $("#staff-picker tr.staffmember-row").on("click", function(){
@@ -103,7 +103,7 @@ function loadSchedule(strDate) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
                 var userId = msg.meta.sequence[iEmp];
                 var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                $("#empList").append($("<li></li>").html(result[0].firstName + " " + result[0].lastName + " <a data-user-name=\""+result[0].firstName + " " + result[0].lastName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
                 currentEmployees.push(userId);
             }
         }
