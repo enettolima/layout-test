@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new CronRefreshStores);
+Artisan::add(new CronRefreshEmployees);
