@@ -42,9 +42,10 @@ class UsersController extends BaseController
 
                     // Repopulate these every time in case there are changes
                     $u->rpro_user = true;
-                    $u->username = Input::get('username');
+                    $u->username = $rpResults->userData->empl_name; //Input::get('username');
                     $u->rpro_id = $rpResults->userData->empl_id;
                     $u->full_name = $rpResults->userData->rpro_full_name;
+                    $u->last_login = date("Y-m-d H:i:s");
                     $u->save();
 
 					Auth::login($u);
