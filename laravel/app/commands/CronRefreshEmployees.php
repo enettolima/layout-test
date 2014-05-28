@@ -11,14 +11,14 @@ class CronRefreshEmployees extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'command:name';
+	protected $name = 'cron:refresh-employees';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Refresh employees lookup database from Retail Pro.';
 
 	/**
 	 * Create a new command instance.
@@ -177,7 +177,7 @@ class CronRefreshEmployees extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
+			// array('example', InputArgument::REQUIRED, 'An example argument.'),
 		);
 	}
 
@@ -189,7 +189,7 @@ class CronRefreshEmployees extends Command {
 	protected function getOptions()
 	{
 		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+			// array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
 		);
 	}
 

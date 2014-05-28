@@ -11,14 +11,14 @@ class CronRefreshStores extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'command:name';
+	protected $name = 'cron:refresh-stores';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Refresh stores lookup database from Retail Pro.';
 
 	/**
 	 * Create a new command instance.
@@ -135,8 +135,16 @@ class CronRefreshStores extends Command {
                 }
             }
 
-            echo "New Stores: " . count($newStores) . "\n";
+            $atts = array('code', 'store_name', 'street', 'ste', 'state', 'city', 'zip', 'phone', 'tz_offset', 'is_tourist');
+
+            echo "\nNew Stores: " . count($newStores) . "\n";
             foreach ($newStores as $newStore) {
+                $temp = array();
+                foreach ($atts as $att) {
+                    $temp[$att] = $newStore->$att;
+                }
+                echo json_encode($temp) . "\n";
+                /*
                 echo $newStore->code . "\n";
                 echo $newStore->store_name . "\n";
                 echo $newStore->street . "\n";
@@ -148,49 +156,34 @@ class CronRefreshStores extends Command {
                 echo $newStore->phone . "\n";
                 echo $newStore->tz_offset . "\n";
                 echo $newStore->is_tourist . "\n\n";
+                */
             }
 
-            echo "Stores Changed: " . count($storesChanged) . "\n";
+            echo "\nStores Changed: " . count($storesChanged) . "\n";
             foreach ($storesChanged as $changedStore) {
-                echo "\n";
-                echo $changedStore['before']->code . " Before:\n";
-                echo $changedStore['before']->store_name . "\n";
-                echo $changedStore['before']->street . "\n";
-                echo $changedStore['before']->ste . "\n";
-                echo $changedStore['before']->state . "\n";
-                echo $changedStore['before']->city . "\n";
-                echo $changedStore['before']->state . "\n";
-                echo $changedStore['before']->zip . "\n";
-                echo $changedStore['before']->phone . "\n";
-                echo $changedStore['before']->tz_offset . "\n";
-                echo $changedStore['before']->is_tourist . "\n\n";
 
-                echo $changedStore['after']->code . " After:\n";
-                echo $changedStore['after']->store_name . "\n";
-                echo $changedStore['after']->street . "\n";
-                echo $changedStore['after']->ste . "\n";
-                echo $changedStore['after']->state . "\n";
-                echo $changedStore['after']->city . "\n";
-                echo $changedStore['after']->state . "\n";
-                echo $changedStore['after']->zip . "\n";
-                echo $changedStore['after']->phone . "\n";
-                echo $changedStore['after']->tz_offset . "\n";
-                echo $changedStore['after']->is_tourist . "\n\n";
+                $temp = array();
+                foreach ($atts as $att) {
+                    $temp[$att] = $changedStore['before']->$att;
+                }
+                echo "Before: " . json_encode($temp) . "\n";
+
+                $temp = array();
+                foreach ($atts as $att) {
+                    $temp[$att] = $changedStore['after']->$att;
+                }
+                echo "After: " . json_encode($temp) . "\n";
             }
 
-            echo "Stores Removed: " . count($storesRemoved) . "\n";
+            echo "\nStores Removed: " . count($storesRemoved) . "\n";
             foreach ($storesRemoved as $removedStore) {
-                echo $removedStore->code . "\n";
-                echo $removedStore->store_name . "\n";
-                echo $removedStore->street . "\n";
-                echo $removedStore->ste . "\n";
-                echo $removedStore->state . "\n";
-                echo $removedStore->city . "\n";
-                echo $removedStore->state . "\n";
-                echo $removedStore->zip . "\n";
-                echo $removedStore->phone . "\n";
-                echo $removedStore->tz_offset . "\n";
-                echo $removedStore->is_tourist . "\n\n";
+
+                $temp = array();
+                foreach ($atts as $att) {
+                    $temp[$att] = $removedStore->$att;
+                }
+
+                echo json_encode($temp) . "\n";
             }
 
         } catch(Exception $e) {
@@ -207,7 +200,7 @@ class CronRefreshStores extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
+			// array('example', InputArgument::REQUIRED, 'An example argument.'),
 		);
 	}
 
@@ -219,7 +212,7 @@ class CronRefreshStores extends Command {
 	protected function getOptions()
 	{
 		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+			// array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
 		);
 	}
 
