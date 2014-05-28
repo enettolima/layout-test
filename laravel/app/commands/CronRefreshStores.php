@@ -39,7 +39,8 @@ class CronRefreshStores extends Command {
 	{
         try {
 
-            $stores = json_decode(file_get_contents($_ENV['ebt_api_address'] . "/stores", true));
+            $api = new EBTAPI;
+            $stores = $api->get('/stores');
 
             $onlineStoresLookup = array();
             $storesChanged = array();
