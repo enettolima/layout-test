@@ -39,7 +39,8 @@ class CronRefreshEmployees extends Command {
 	{
         try {
 
-            $employees = json_decode(file_get_contents($_ENV['ebt_api_address'] . "/rproemployees/active", true));
+            $api = new EBTAPI;
+            $employees = $api->get('/rproemployees/active');
 
             $activeEmployeesLookup = array();
             $employeesChanged = array();
@@ -116,47 +117,50 @@ class CronRefreshEmployees extends Command {
                 }
             }
 
-            echo "New Employees: " . count($newEmployees) . "\n";
+            $empAtts = array('empl_id', 'empl_name', 'rpro_full_name', 'description', 'empl_no1', 'empl_no2');
+
+            echo "\nNew Employees: " . count($newEmployees) . "\n";
             foreach ($newEmployees as $newEmployee) {
-                echo $newEmployee->active . "\n\n";
-                echo $newEmployee->description . "\n\n";
-                echo $newEmployee->empl_id . "\n\n";
-                echo $newEmployee->empl_name . "\n\n";
-                echo $newEmployee->empl_no1 . "\n\n";
-                echo $newEmployee->empl_no2 . "\n\n";
-                echo $newEmployee->rpro_full_name . "\n\n";
+                echo "\n";
+
+                $temp = array();
+
+                foreach ($empAtts as $attribute) {
+                    $temp[$attribute] = $newEmployee->$attribute;
+                }
+
+                echo json_encode($temp) . "\n";
             }
 
-            echo "Employees Changed: " . count($employeesChanged) . "\n";
+            echo "\nEmployees Changed: " . count($employeesChanged) . "\n";
             foreach ($employeesChanged as $changedEmployee) {
                 echo "\n";
-                echo $changedEmployee['before']->empl_id . " Before:\n";
-                echo $changedEmployee['before']->active . "\n";
-                echo $changedEmployee['before']->description . "\n";
-                echo $changedEmployee['before']->empl_name. "\n";
-                echo $changedEmployee['before']->empl_no1 . "\n";
-                echo $changedEmployee['before']->empl_no2 . "\n";
-                echo $changedEmployee['before']->rpro_full_name . "\n\n";
 
-                echo $changedEmployee['after']->empl_id . " After:\n";
-                echo $changedEmployee['after']->active . "\n";
-                echo $changedEmployee['after']->description . "\n";
-                echo $changedEmployee['after']->empl_name. "\n";
-                echo $changedEmployee['after']->empl_no1 . "\n";
-                echo $changedEmployee['after']->empl_no2 . "\n";
-                echo $changedEmployee['after']->rpro_full_name . "\n\n";
+                $tempBefore = array();
+                foreach ($empAtts as $attribute) {
+                    $tempBefore[$attribute] = $changedEmployee['before']->$attribute;
+                }
+                echo json_encode($tempBefore) . "\n";
+
+                $tempAfter = array();
+                foreach ($empAtts as $attribute) {
+                    $tempAfter[$attribute] = $changedEmployee['after']->$attribute;
+                }
+                echo json_encode($tempAfter) . "\n";
 
             }
 
-            echo "Employees Removed: " . count($employeesRemoved) . "\n";
+            echo "\nEmployees Removed: " . count($employeesRemoved) . "\n";
             foreach ($employeesRemoved as $removedEmployee) {
-                echo $removedEmployee->empl_id . "\n";
-                echo $removedEmployee->active . "\n";
-                echo $removedEmployee->description . "\n";
-                echo $removedEmployee->empl_name . "\n";
-                echo $removedEmployee->empl_no1 . "\n";
-                echo $removedEmployee->empl_no2 . "\n";
-                echo $removedEmployee->rpro_full_name . "\n\n";
+                echo "\n";
+
+                $temp = array();
+
+                foreach ($empAtts as $attribute) {
+                    $temp[$attribute] = $removedEmployee->$attribute;
+                }
+
+                echo json_encode($temp) . "\n";
             }
 
         } catch(Exception $e) {
