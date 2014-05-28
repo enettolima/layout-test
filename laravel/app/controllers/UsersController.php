@@ -25,10 +25,11 @@ class UsersController extends BaseController
 
 			$data = array('user' => Input::get('username'), 'password' => Input::get('password'));
 
-			$response = Requests::post($_ENV['ebt_api_address'] . '/rprousers/auth', array(), $data);
+            $api = new EBTAPI;
 
-			if ($response->success) {
-				$rpResults = json_decode($response->body);
+            $rpResults = $api->post('/rprousers/auth', $data);
+
+			if ($rpResults) {
 
 				if ($rpResults->userAuthSuccess && $rpResults->userRetrieved) {
 					$goodLogin = true;
