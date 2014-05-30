@@ -27,7 +27,9 @@ class UsersController extends BaseController
 
             $api = new EBTAPI;
 
-            $rpResults = $api->post('/rprousers/auth', $data);
+            // MOCK MOCK MOCK
+            // $rpResults = $api->post('/rprousers/auth', $data);
+            $rpResults = $api->post('/rprousers/mockauth', $data);
 
 			if ($rpResults) {
 
@@ -42,12 +44,38 @@ class UsersController extends BaseController
 					$u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
 
                     // Repopulate these every time in case there are changes
-                    $u->rpro_user = true;
-                    $u->username = $rpResults->userData->empl_name; //Input::get('username');
-                    $u->rpro_id = $rpResults->userData->empl_id;
-                    $u->full_name = $rpResults->userData->rpro_full_name;
+                    $u->rpro_user  = true;
+                    $u->username   = $rpResults->userData->empl_name; //Input::get('username');
+                    $u->rpro_id    = $rpResults->userData->empl_id;
+                    $u->full_name  = $rpResults->userData->rpro_full_name;
                     $u->last_login = date("Y-m-d H:i:s");
                     $u->save();
+
+                    $storeNumber = substr($u->username, 0, 3);
+
+                    if (preg_match('/^(\d\d\d).*$/', $u->username, $matches)) {
+                        $homeStoreRole = 'Store' . $matches[1];
+
+                        // Make sure that role exists, create it if not
+                        if (! $role = Role::where('name', '=', $homeStoreRole)->first()) {
+                            $role = new Role;
+                            $role->name = $homeStoreRole;
+                            $role->save();
+                        }
+
+                        // Make sure the user is assigned that role
+                        if (! $u->hasRole($homeStoreRole)) {
+                            $u->roles()->sync(array($role->id));
+                        }
+
+                        // If the user doesn't already have a default store
+                        // assign this new one
+                        if (! $u->defaultStore) {
+                            $u->defaultStore = $storeNumber;
+                            $u->save();
+                        }
+
+                    }
 
 					Auth::login($u);
 
@@ -75,8 +103,7 @@ class UsersController extends BaseController
 				Session::set('storeContext', Auth::user()->getStores()[0]);
 			}
 
-			return Redirect::to('/home')
-				->with('message', 'You are now logged in');
+			return Redirect::to('/home');// ->with('message', 'You are now logged in');
 		} else {
 
 			return Redirect::to('users/login')
