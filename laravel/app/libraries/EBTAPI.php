@@ -3,11 +3,9 @@
 class EBTAPI
 {
 	protected $token = null;
-	protected $debug = true;
 
 	public function __construct()
 	{
-
 		if (! isset ($_ENV['ebt_api_host'])) {
 			throw new Exception ("\$_ENV['ebt_api_host'] not set");
 		}
@@ -26,30 +24,21 @@ class EBTAPI
 
 
 		if (! $this->token) {
-			$this->log(__METHOD__ . ' $this->token not set');
+			// Clog::log(__METHOD__ . ' $this->token not set');
 
 			$this->token = Session::get('api_token');
 
 			if (! $this->token) {
-				$this->log(__METHOD__ . ' $this->token not populated from session ');
+				// Clog::log(__METHOD__ . ' $this->token not populated from session ');
 				$this->getToken();
 			} else {
-				$this->log(__METHOD__ . ' $this->token retreived from session');
+				// Clog::log(__METHOD__ . ' $this->token retreived from session');
 			}
-		}
-	}
-
-	protected function log($string)
-	{
-		if ($this->debug) {
-			Log::info($string);
 		}
 	}
 
 	protected function getToken()
 	{
-		$this->log(__METHOD__);
-
 		$tokenRequestURL = $_ENV['ebt_api_host'] . '/auth';
 
 		$tokenRequest = Requests::post(
@@ -63,7 +52,7 @@ class EBTAPI
 
 		if ($tokenRequest->success && $token = json_decode($tokenRequest->body)->token) {
 
-			$this->log(__METHOD__ . 'new token received, setting session and local');
+			// Clog::log(__METHOD__ . 'new token received, setting session and local');
 
 			Session::set('api_token', $token);
 
@@ -81,23 +70,23 @@ class EBTAPI
 
 	protected function resetToken()
 	{
-		$this->log(__METHOD__);
+		// Clog::log(__METHOD__);
 		Session::remove('api_token');
 		$this->getToken();
 	}
 
 	public function get($resource)
 	{
-		$this->log(__METHOD__);
+		// Clog::log(__METHOD__);
 		$returnval = false;
 
 		$response = Requests::get($_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource, array('X-Auth-Token' => $this->token));
 
 		if ($response->success) {
-			$this->log(__METHOD__ . ' success');
+			// Clog::log(__METHOD__ . ' success');
 			$returnval = json_decode($response->body);
 		} elseif($response->status_code === 401) {
-			$this->log(__METHOD__ . ' 401 Unauthorized');
+			// Clog::log(__METHOD__ . ' 401 Unauthorized');
 			$this->resetToken();
 			$returnval = $this->get($resource);
 		}
@@ -107,15 +96,29 @@ class EBTAPI
 
 	public function post($resource, $vals)
 	{
+		// Clog::log(__METHOD__);
+
 		$returnval = false;
 
-		$response = Requests::post($_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource, array('X-Auth-Token' => $this->token), $vals);
+		$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		$headers = array('X-Auth-Token' => $this->token);
+
+		// Clog::log($url);
+		// Clog::log($headers);
+		// Clog::log($vals);
+
+
+		$response = Requests::post($url, $headers, $vals);
+
+		// Clog::log($response);
 
 		if ($response->success) {
+			// Clog::log(1);
 			$returnval = json_decode($response->body);
 		} elseif($response->status_code === 401) {
+			// Clog::log(2);
 			$this->resetToken();
-			$this->get($resource);
+			$returnval = $this->post($resource, $vals);
 		}
 
 		return $returnval;
