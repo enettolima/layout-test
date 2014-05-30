@@ -6,7 +6,7 @@
 
 <div class="jumbotron">
 
-    <h3>Welcome to EBT Passport, {{ Auth::user()->fname }}</h3>
+    <h3>Welcome to EBT Passport, {{ Auth::user()->full_name }}</h3>
     <p>
         You are logged in as {{ Auth::user()->username }}. {{ HTML::link('users/logout', '[Logout]') }}
     </p>

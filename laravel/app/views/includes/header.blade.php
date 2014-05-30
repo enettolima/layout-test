@@ -25,8 +25,13 @@
 
                             <?php
                                 if (Session::has('storeContext')) {
-                                    $sl = StoresLookup::where('code', Session::get('storeContext'))->first();
-                                echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$sl->store_name.'</span></strong>';
+									if (Session::get('storeContext') == '000') {
+										$storeName = 'Corporate';
+									} else {
+										$storeName = StoresLookup::where('code', Session::get('storeContext'))->first()->store_name;
+									}
+                                    //$sl = StoresLookup::where('code', Session::get('storeContext'))->first();
+                                echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$storeName.'</span></strong>';
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
@@ -45,7 +50,8 @@
                         </li>
 
                         <li class="dropdown <?php echo Request::is('settings*') ? 'active' : '' ?>">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo Auth::user()->username ?> <b class="caret" /></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<?php echo Auth::user()->username ?> (<?php echo Auth::user()->full_name ?>)<b class="caret" /></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header"><?php echo Auth::user()->fname . ' ' . Auth::user()->lname ?></li>
                                 <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings">Settings</a></li>
