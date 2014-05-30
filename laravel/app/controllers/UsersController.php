@@ -49,23 +49,36 @@ class UsersController extends BaseController
                     $u->rpro_id    = $rpResults->userData->empl_id;
                     $u->full_name  = $rpResults->userData->rpro_full_name;
                     $u->last_login = date("Y-m-d H:i:s");
+
                     $u->save();
+
 
                     $storeNumber = substr($u->username, 0, 3);
 
                     if (preg_match('/^(\d\d\d).*$/', $u->username, $matches)) {
-                        $homeStoreRole = 'Store' . $matches[1];
+                        $homeStoreRoleName = 'Store' . $matches[1];
 
                         // Make sure that role exists, create it if not
-                        if (! $role = Role::where('name', '=', $homeStoreRole)->first()) {
-                            $role = new Role;
-                            $role->name = $homeStoreRole;
-                            $role->save();
+                        if (! $homeStoreRole = Role::where('name', '=', $homeStoreRoleName)->first()) {
+                            $homeStoreRole = new Role;
+                            $homeStoreRole->name = $homeStoreRoleName;
+                            $homeStoreRole->save();
                         }
 
                         // Make sure the user is assigned that role
                         if (! $u->hasRole($homeStoreRole)) {
-                            $u->roles()->sync(array($role->id));
+
+
+                            $userRoles = array();
+
+                            foreach ($u->roles()->get() as $role) {
+                                $userRoles[] = $role->id;
+                            }
+
+                            $userRoles[] = $homeStoreRole->id;
+
+
+                            $u->roles()->sync($userRoles);
                         }
 
                         // If the user doesn't already have a default store
@@ -75,6 +88,41 @@ class UsersController extends BaseController
                             $u->save();
                         }
 
+                    }
+
+                    // Manage "Manager" role sync
+                    if (preg_match('/^m$/i', $rpResults->userData->empl_no2)) {
+                        // This user should have "Manager"
+                        $managerRole = Role::where('name', '=', 'Manager')->first();
+
+                        if (! $u->hasRole($managerRole)) {
+
+                            $userRoles = array();
+
+                            foreach ($u->roles()->get() as $role) {
+                                $userRoles[] = $role->id;
+                            }
+
+                            $userRoles[] = $managerRole->id;
+
+
+                            $u->roles()->sync($userRoles);
+                        }
+
+                    } else {
+                        // This user should not have "Manager". This is probably a wonky way to do this
+                        // but I'm not sure how to pluck one role from a user.
+
+                        if ($u->hasRole($managerRole)) {
+                            $userRoles = array();
+                            foreach ($u->roles()->get() as $role) {
+                                if ($role->id !== $managerRole->id) {
+                                    $userRoles[] = $role->id;
+                                }
+                            }
+
+                            $u->roles()->sync($userRoles);
+                        }
                     }
 
 					Auth::login($u);

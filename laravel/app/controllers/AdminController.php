@@ -70,6 +70,7 @@ class AdminController extends BaseController
             $user = User::find($targetUser);
         }
 
+		/*
         $user->fname = Input::get('fname');
         $user->lname = Input::get('lname');
         $user->username = Input::get('username');
@@ -77,6 +78,7 @@ class AdminController extends BaseController
         if (Input::get('password')) {
             $user->password = Input::get('password');
         }
+		*/
 
         if (! $storeRoles = Input::get('stores')) {
             $storeRoles = array();
@@ -145,10 +147,4 @@ class AdminController extends BaseController
     {
         return View::make('pages.dev.styles');
     }
-
-    public function getFoo()
-    {
-        var_dump(Input::all());
-    }
 }
-

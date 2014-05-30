@@ -14,20 +14,16 @@
 
 
             <div class="form-group">
-                {{ Form::label('fname', 'First Name') }}
-                {{ Form::text('fname', ($user ? $user->fname : null), array('class'=>'form-control', 'placeholder'=>'First Name')) }}
-            </div>
-
-            <div class="form-group">
-                {{ Form::label('lname', 'Last Name') }}
-                {{ Form::text('lname', ($user ? $user->lname : null), array('class'=>'form-control', 'placeholder'=>'Last Name')) }}
+                {{ Form::label('full_name', 'Full Name') }}
+                {{ Form::text('full_name', ($user ? $user->full_name : null), array('class'=>'form-control', 'placeholder'=>'Full Name', 'disabled' => true)) }}
             </div>
 
             <div class="form-group">
                 {{ Form::label('username', 'Username') }}
-                {{ Form::text('username', ($user ? $user->username : null), array('class'=>'form-control', 'placeholder'=>'Username')) }}
+                {{ Form::text('username', ($user ? $user->username : null), array('class'=>'form-control', 'placeholder'=>'Username' , 'disabled' => true)) }}
             </div>
-
+				
+			<?php /*
             <div class="form-group">
                 {{ Form::label('email', 'Email') }}
                 {{ Form::text('email', ($user ? $user->email : null), array('class'=>'form-control', 'placeholder'=>'Email')) }}
@@ -40,6 +36,8 @@
                     <span class="help-block">Entering a password will change the user's password. If you don't want to change the user's password, leave this blank.</span>
                 @endif
             </div>
+			 */
+			?>
 
             {{ Form::hidden('userId', ($user ? $user->id : "new")) }}
 
