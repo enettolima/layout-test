@@ -24,29 +24,25 @@ class AdminController extends BaseController
         $mainRoles = array();
         $storeRoles = array();
 
-        if ($targetUser == 'new') {
-
-            $user = null;
-
-            foreach (Role::all() as $role) {
-                if (!preg_match('/^Store\d\d\d$/i', $role->name)) {
-                    $mainRoles[] = array('name' => $role->name, 'has' => false);
-                } else {
-                    $storeRoles[] = array('name' => $role->name, 'has' => false);
-                }
-            }
-
-        } elseif (is_numeric($targetUser) && User::find($targetUser)) {
+        if (is_numeric($targetUser) && User::find($targetUser)) {
             $user = User::find($targetUser);
 
-            foreach (Role::all() as $role) {
-                if (!preg_match('/^Store\d\d\d$/i', $role->name)) {
+            $sr = StoresResolver::getInstance();
+
+            foreach (DB::table('roles')->orderBy('name')->get() /*Role::all()*/ as $role) {
+                if (!preg_match('/^Store(\d\d\d)$/i', $role->name, $matches)) {
                     $mainRoles[] = array('name' => $role->name, 'has' => $user->hasRole($role->name));
                 } else {
-                    $storeRoles[] = array('name' => $role->name, 'has' => $user->hasRole($role->name));
+                    if ($matches[1] == '000') {
+                        $label = 'Corporate';
+                    } else {
+                        $store = $sr->getStore($matches[1]);
+                        $label = $store->store_name . ' - ' . $store->city . ', ' . $store->state; 
+                    }
+
+                    $storeRoles[] = array('name' => $role->name, 'label' => $label, 'has' => $user->hasRole($role->name));
                 }
             }
-
         } else {
             App::abort(403, 'Invalid User');
         }

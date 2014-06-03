@@ -8,7 +8,7 @@
 
     {{ Form::open(array('url' => 'admin/user-save')) }}
 
-    <div class="col-xs-4">
+    <div class="col-xs-3">
 
         <h4>General Info</h4>
 
@@ -49,7 +49,7 @@
 
     </div>
 
-    <div class="col-xs-3 col-xs-offset-1">
+    <div class="col-xs-2 col-xs-offset-1">
         <h4>Assigned Roles</h4>
         <ul class="list-unstyled">
         @foreach ($mainRoles as $role)
@@ -58,11 +58,14 @@
         </ul>
     </div>
 
-    <div class="col-xs-3">
+    <div class="col-xs-5">
         <h4>Assigned Stores</h4>
         <ul class="list-unstyled">
         @foreach ($storeRoles as $role)
-            <li>{{ Form::checkbox("stores[" . $role['name'] . "]", $role['name'], $role['has']) }} {{ $role['name'] }}</li>
+            <li>
+                {{ Form::checkbox("stores[" . $role['name'] . "]", $role['name'], $role['has']) }} 
+                {{ $role['name'] }} - {{ $role['label'] }}
+            </li>
         @endforeach
         </ul>
     </div>
