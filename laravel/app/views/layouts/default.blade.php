@@ -21,5 +21,13 @@
 
         <script src="/js/bootstrap.js"></script>
 
+        <?php
+            if (isset($extraJS) && count($extraJS) > 0) {
+                foreach ($extraJS as $extraJSSource) {
+                    echo "<script src=\"$extraJSSource\"></script>\n";
+                }
+            }
+        ?>
+
     </body>
 </html>

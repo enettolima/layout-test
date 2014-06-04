@@ -50,6 +50,13 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getElastic()
+    {
+        return View::make('pages.dev', array(
+            'extraJS' => array ('/js/elasticsearch.jquery.min.js')
+        ));
+    }
+
     public function getChromephp()
     {
         ChromePhp::log(array(1 => 'foo', 2 => 'bar'));

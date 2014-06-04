@@ -3,6 +3,7 @@
 <!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
 
 <!-- Bootstrap core CSS -->
+
 <link rel="stylesheet" href="/css/bootstrap.css">
 
 <link rel="stylesheet" href="/css/local.css">
@@ -16,5 +17,11 @@
 <?php 
     if (isset($extraHead)) {
         echo $extraHead;
+    }
+
+    if (isset($extraCSS) && count($extraCSS) > 0) {
+        foreach ($extraCSS as $stylesheet) {
+            echo "<link rel=\"stylesheet\" href=\"$stylesheet\">\n";
+        }
     }
 ?>
