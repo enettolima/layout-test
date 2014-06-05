@@ -84,6 +84,12 @@ $(document).ready(function() {
     });
 
 
+    var editAccess = false;
+
+    if (typeof userCanManage !== 'undefined' && userCanManage) {
+        editAccess = true;
+    }
+
     var calendar = $('#calendar').fullCalendar({
         // We don't really care what time 
         // the calendar thinks it is because in the context 
@@ -109,8 +115,8 @@ $(document).ready(function() {
             center: '',
             right: ''
         },
-        selectable: true,
-        selectHelper: true,
+        selectable: editAccess,
+        selectHelper: editAccess,
         select: function(start, end, allDay, jsEvent, view) {
 
             var normalizedDate = new Date (start.getFullYear(), start.getMonth(), start.getDate()); 
@@ -177,12 +183,15 @@ $(document).ready(function() {
 
         eventClick: function(event, jsEvent, view) {
 
-            $("#block-remove-modal-content").html("<p>To delete this block, click <strong>Confirm Deletion</strong>.</p>"); 
-            $("#block-remove-modal-confirm").attr("data-event-id", event.id);
-            $("#block-remove-modal").modal('show');
+            if (typeof userCanManage !== 'undefined' && userCanManage) {
+
+                $("#block-remove-modal-content").html("<p>To delete this block, click <strong>Confirm Deletion</strong>.</p>"); 
+                $("#block-remove-modal-confirm").attr("data-event-id", event.id);
+                $("#block-remove-modal").modal('show');
+            }
         },
 
-        editable: true
+        editable: editAccess
     });
 
     // Disable all the columns on initial load; we will then enable them

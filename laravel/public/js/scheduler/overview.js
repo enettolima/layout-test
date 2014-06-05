@@ -103,7 +103,11 @@ function loadSchedule(strDate) {
             for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
                 var userId = msg.meta.sequence[iEmp];
                 var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                if (typeof userCanManage != 'undefined' && userCanManage) {
+                    $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                } else {
+                    $("#empList").append($("<li></li>").html(result[0].fullName));
+                }
                 currentEmployees.push(userId);
             }
         }

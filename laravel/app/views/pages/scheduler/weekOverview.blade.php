@@ -34,8 +34,6 @@
 
                             foreach ($ranges as $range) {
                                 $weekOf = date('Y-m-d', $range['start']);
-                                // $logger->addInfo("currentWeekOf:$currentWeekOf");
-                                // $logger->addInfo("weekOf:$weekOf");
                                 if ($currentWeekOf == $weekOf) {
                                     $selected = 'selected';
                                 } else {
@@ -51,14 +49,15 @@
     </div>
     <!-- /Week Selector -->
 
-
     <!-- Staff Row -->
     <div class="row" style="padding-top:10px; margin-left:4px;">
         <div id="emplist-container">
             <strong>Staff:</strong>
             <!-- <img id="emplist&#45;loading&#45;image" src="/images/ajax&#45;loader&#45;arrows.gif"> -->
             <ul id="empList"></ul>
-            <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staffPickerModal">+</button>
+            @if ($userCanManage)
+                <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staffPickerModal">+</button>
+            @endif
         </div>
     </div>
     <!-- /Staff Row -->
@@ -238,6 +237,11 @@
     <!-- Summary Section -->
 
     <input type="hidden" id="currentWeekOf" name="currentWeekOf" value="<?php echo Session::has('schedulerCurrentWeekOf') ? Session::get('schedulerCurrentWeekOf') : ''; ?>">
+
+    {{-- TODO: Hack: this is a terrible way to let Javascript know what rights the user has --}}
+    @if ($userCanManage)
+    <script type="text/javascript" charset="utf-8">var userCanManage = true;</script>  
+    @endif
 
     <script src="/js/jquery-git.js"></script>
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>

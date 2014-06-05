@@ -68,6 +68,12 @@
         </div>
     </div>
 
+
+    {{-- TODO: Hack: this is a terrible way to let Javascript know what rights the user has --}}
+    @if ($userCanManage)
+    <script type="text/javascript" charset="utf-8">var userCanManage = true;</script>  
+    @endif
+
     <script src="/js/jquery-git.js"></script>
 
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>

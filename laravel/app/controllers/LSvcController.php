@@ -405,7 +405,7 @@ class LSvcController extends BaseController
         // This: is getting super messy
         foreach ($returnval as $day => $val) {
 
-            Log::info('val', $val);
+            // Log::info('val', $val);
 
             if (! isset($dayNum)) {
                 $dayNum = 0;

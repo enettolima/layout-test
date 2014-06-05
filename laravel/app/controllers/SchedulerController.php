@@ -2,38 +2,34 @@
 
 class SchedulerController extends BaseController
 {
+    protected $userHasAccess = false;
+    protected $userCanManage = false;
 
     /* Require Auth on Everything Here */
     public function __construct()
     {
         $this->beforeFilter('auth', array());
+        $this->initAccess();
     }
 
-    protected function ensurePermission($stringPermission, $moreInfo = null)
+    /*
+     * Todo: refactor this so that 1) it makes sense and 2) we get better 
+     * "no access" feedback
+     */
+    protected function initAccess()
     {
-        $hasPermission = true;
-
         $user = Auth::user();
 
-        if (! $user->hasRole('Store' . Session::get('storeContext'))) {
-            $hasPermission = false;
-        }
-
-        if (! $user->can($stringPermission)) {
-            $hasPermission = false;
-        }
-
-        return $hasPermission;
-
-        if (! $hasPermission) {
-            Log::info('need to redirect');
-            return View::make(
-                'pages.permissionDenied', array(
-                    'moreInfo' => $moreInfo
-                )
-            );
-        }
-
+        if ($user->hasRole('Store' . Session::get('storeContext'))) {
+            if ($user->hasRole('Manager'))
+            {
+                $this->userHasAccess = true;
+                $this->userCanManage = true;
+            } elseif ($user->hasRole('Associate')) {
+                $this->userHasAccess = true;
+                $this->userCanManage = false;
+            }
+        } 
     }
 
     public function getIndex()
@@ -43,24 +39,10 @@ class SchedulerController extends BaseController
 
     public function getWeekOverview()
     {
-
-        if (! $this->ensurePermission('scheduler_manage')) {
-
-            $moreInfo = "Click here to request access to this...";
-
-            return View::make(
-                'pages.permissionDenied', array(
-                    'moreInfo' => $moreInfo
-                )
-            );
+        if (! $this->userHasAccess) {
+            Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
+            return Response::view('pages.permissionDenied');
         }
-
-
-        /*
-        if (! $currentWeekOf = Input::get('weekOf')) {
-            $currentWeekOf = '2014-02-23';
-        }
-        */
 
         $extraHead = '
             <script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
@@ -69,23 +51,16 @@ class SchedulerController extends BaseController
         return View::make(
             'pages.scheduler.weekOverview', array(
                 'extraHead' => $extraHead,
-                // 'currentWeekOf' => $currentWeekOf,
+                'userCanManage' => $this->userCanManage
             )
         );
     }
 
     public function getDayPlanner()
     {
-
-        if (! $this->ensurePermission('scheduler_manage')) {
-
-            $moreInfo = "Click here to request access to this...";
-
-            return View::make(
-                'pages.permissionDenied', array(
-                    'moreInfo' => $moreInfo
-                )
-            );
+        if (! $this->userHasAccess) {
+            Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
+            return Response::view('pages.permissionDenied');
         }
 
         $extraHead = '
@@ -104,7 +79,8 @@ class SchedulerController extends BaseController
                 'weekOf' => $weekOf,
                 'dayOffset' => $dayOffset,
                 'targetDay' => $targetDay,
-                'selectorDateFormat' => $selectorDateFormat
+                'selectorDateFormat' => $selectorDateFormat,
+                'userCanManage' => $this->userCanManage
             )
         );
     }

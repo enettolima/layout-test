@@ -90,10 +90,11 @@ class UsersController extends BaseController
 
                     }
 
+                    $managerRole = Role::where('name', '=', 'Manager')->first();
+
                     // Manage "Manager" role sync
                     if (preg_match('/^m$/i', $rpResults->userData->empl_no2)) {
                         // This user should have "Manager"
-                        $managerRole = Role::where('name', '=', 'Manager')->first();
 
                         if (! $u->hasRole($managerRole)) {
 
