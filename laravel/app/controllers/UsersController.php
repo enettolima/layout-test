@@ -13,6 +13,41 @@ class UsersController extends BaseController
         return View::make('pages.users.login');
     }
 
+    protected function getUserLevel($rpResults)
+    {
+        $isGuest = false;
+        $isAssociate = false;
+        $isManager = false;
+
+        if (preg_match('/^m$/i', $rpResults->userData->empl_no2)) {
+            $isManager = true;
+        } else {
+            foreach ($rpResults->userData->groups as $group) {
+                switch ($group->user_grp_name) {
+                    case 'EBTPASSPORT_GUEST':
+                        $isGuest = true;
+                        break;
+                    case 'EBTPASSPORT_ASSOCIATE':
+                        $isAssociate = true;
+                        break;
+                }
+            }
+        }
+
+        /*
+         * NOTE: These Directly Correspond to the Role Names
+         */
+        if ($isManager) {
+            return 'Manager';
+        } elseif ($isAssociate) {
+            return 'Associate';
+        } elseif ($isGuest) {
+            return 'Guest';
+        } else {
+            return false;
+        }
+    }
+
     public function postSignin()
     {
 		$goodLogin = false;
@@ -33,13 +68,9 @@ class UsersController extends BaseController
 
 			if ($rpResults) {
 
-				if ($rpResults->userAuthSuccess && $rpResults->userRetrieved) {
+				if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
+
 					$goodLogin = true;
-
-					// Here we need to populate the DB accordingly on our side
-					// and log in the user
-
-					//$u = User::where('rpro_id', $rpResults->userData->empl_id)->firstOrCreate();
 
 					$u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
 
@@ -52,7 +83,9 @@ class UsersController extends BaseController
 
                     $u->save();
 
-
+                    /*
+                     * HANDLE ASSIGNATION OF USER TO THEIR STORE ROLE
+                     */
                     $storeNumber = substr($u->username, 0, 3);
 
                     if (preg_match('/^(\d\d\d).*$/', $u->username, $matches)) {
@@ -90,8 +123,46 @@ class UsersController extends BaseController
 
                     }
 
-                    $managerRole = Role::where('name', '=', 'Manager')->first();
+                    /*
+                     * HANDLE ASSIGNATION OF USER TO THEIR 'LEVEL' ROLE
+                     *
+                     * They can only have one out of validRoles, so we
+                     * verify they have the one they need and none they don't.
+                     */
 
+                    $validRoles = array('Manager', 'Associate', 'Guest');
+
+                    $userLevelRole = Role::where('name', '=', $userLevel)->firstOrFail();
+
+                    // These are the roles we want to make sure the user doesn't
+                    $removeRoles = array_diff($validRoles, array($userLevel));
+
+                    $removeRoleIds = array();
+                    foreach ($removeRoles as $removeRole) {
+                        $removeRoleObj = Role::where('name', '=', $removeRole)->firstOrFail();
+                        $removeRoleIds[] = $removeRoleObj->id;
+                    }
+
+                    // These are what we're going to set the roles to
+                    $userRoles = array();
+
+                    foreach ($u->roles()->get() as $role) {
+                        if (! in_array($role->id, $removeRoleIds)) {
+                            $userRoles[] = $role->id;
+                        }
+                    }
+
+                    if (! in_array($userLevelRole->id, $userRoles)) {
+                        $userRoles[] = $userLevelRole->id;
+                    }
+
+                    $userRoles[] = $userLevelRole->id;
+
+                    $u->roles()->sync($userRoles);
+
+                    // $managerRole = Role::where('name', '=', 'Manager')->first();
+
+                    /*
                     // Manage "Manager" role sync
                     if (preg_match('/^m$/i', $rpResults->userData->empl_no2)) {
                         // This user should have "Manager"
@@ -125,6 +196,7 @@ class UsersController extends BaseController
                             $u->roles()->sync($userRoles);
                         }
                     }
+                    */
 
 					Auth::login($u);
 
