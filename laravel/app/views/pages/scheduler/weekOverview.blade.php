@@ -54,7 +54,7 @@
         <div id="emplist-container">
             <strong>Staff:</strong>
             <!-- <img id="emplist&#45;loading&#45;image" src="/images/ajax&#45;loader&#45;arrows.gif"> -->
-            <ul id="empList"></ul>
+            <ul id="empList"><li></li></ul>
             @if ($userCanManage)
                 <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staffPickerModal">+</button>
             @endif

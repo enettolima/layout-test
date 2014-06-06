@@ -63,6 +63,8 @@ var bonsaiMovie = bonsai.run(
 
 function loadSchedule(strDate) {
 
+    $("#empList").html("<li><img src=\"/images/ajax-loader-arrows.gif\"></li>");
+
     // Look to see if we've changed date; if so need to change it in
     // the PHP session
     if (strDate != $("#currentWeekOf").val()) {
@@ -100,16 +102,20 @@ function loadSchedule(strDate) {
         $("#staff-picker tbody").empty();
         // Populate Staff listing on the page and currentEmployees
         if (msg.meta && msg.meta.sequence) {
-            for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
-                var userId = msg.meta.sequence[iEmp];
-                var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                if (typeof userCanManage != 'undefined' && userCanManage) {
-                    $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
-                } else {
-                    $("#empList").append($("<li></li>").html(result[0].fullName));
+            if (msg.meta.sequence.length > 0) {
+                for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
+                    var userId = msg.meta.sequence[iEmp];
+                    var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
+                    if (typeof userCanManage != 'undefined' && userCanManage) {
+                        $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                    } else {
+                        $("#empList").append($("<li></li>").html(result[0].fullName));
+                    }
+                    currentEmployees.push(userId);
                 }
-                currentEmployees.push(userId);
-            }
+            } 
+        } else {
+            $("#empList").append($("<li><em>No staffmembers have been added to this schedule.</em></li>"));
         }
 
         populateEmployeeSelector(empMasterDatabase, currentEmployees);
