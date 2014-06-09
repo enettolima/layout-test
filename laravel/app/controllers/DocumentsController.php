@@ -10,6 +10,8 @@ class DocumentsController extends BaseController
 
     public function getIndex()
     {
-        return View::make('pages.documents.index');
+        return View::make('pages.documents.index', array(
+            'extraJS' => array ('/js/elasticsearch.jquery.min.js')
+        ));
     }
 }
