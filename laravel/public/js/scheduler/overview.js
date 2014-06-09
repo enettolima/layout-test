@@ -43,7 +43,7 @@ function addEmployeeToSchedule(employeeObj)
     .done(function(msg) {
 
         if (parseInt(msg.status) === 1) {
-            $("#empList").append($("<li></li>").html(employeeObj.name + " <a href=\"#\" class=\"user-del\">x</a>"));
+            $("#empList").append($("<li></li>").html(employeeObj.name + " <a data-user-name=\""+employeeObj.name +"\" data-user-id=\""+employeeObj.id+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
         }
     })
 

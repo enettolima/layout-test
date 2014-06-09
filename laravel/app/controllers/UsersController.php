@@ -13,6 +13,10 @@ class UsersController extends BaseController
         return View::make('pages.users.login');
     }
 
+    /*
+     * Todo: among other issues here, the biggest is the fact that this
+     * is currently bound via a label instead of an id.
+     */
     protected function getUserLevel($rpResults)
     {
         $isGuest = false;
@@ -128,6 +132,8 @@ class UsersController extends BaseController
                      *
                      * They can only have one out of validRoles, so we
                      * verify they have the one they need and none they don't.
+                     *
+                     * Todo: This is currently bound using the label instead of the Group's ID
                      */
 
                     $validRoles = array('Manager', 'Associate', 'Guest');
