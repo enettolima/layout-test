@@ -13,7 +13,7 @@
 </div>
 
 
-
+<!--
 <div class="row">
     <div class="col-xs-8">
 		<h3>Arbitrary Chart</h3>
@@ -47,5 +47,6 @@
 	<div class="col-xs-8">
 	</div>
 </div>
+-->
 
 @stop

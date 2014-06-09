@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h2 class="text-danger">Permission Denied</h2>
+    <h3 class="text-danger">Permission Denied</h3>
 
     <p>You don't have sufficient permissions to complete this action.</p>
 
