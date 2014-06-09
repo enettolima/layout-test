@@ -28,6 +28,8 @@ $(document).ready(function() {
     var empDateMap = {};
  
     loadFromDB.done(function(msg) {
+        console.log('loadFromDB done...');
+        console.log(msg);
 
         var getTargets = $.ajax({
             url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
@@ -35,6 +37,8 @@ $(document).ready(function() {
         });
 
         getTargets.done(function(data){
+            console.log('getTargets done...');
+            console.log(data);
             dayTargetData = data[dayOffset+1];
             updateSummaries(scheduleHourLookup);
         });
@@ -206,6 +210,9 @@ $(document).ready(function() {
 function updateSummaries(scheduleRef)
 {
 
+    console.log("updateSummaries");
+    console.log(scheduleRef);
+
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
     $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
@@ -214,6 +221,20 @@ function updateSummaries(scheduleRef)
 
     var openHour = parseInt(dayTargetData.open);
     var closeHour= parseInt(dayTargetData.close);
+
+
+
+    /*
+     * NEW SHIT
+     */
+
+    $("#new-day-hours-detail tbody").empty();
+    for(var h=openHour; h<closeHour; h++) {
+        var row = "";
+        row += '<tr><td>'+h+'</td></tr>';
+        $("#new-day-hours-detail tbody").append(row);
+    }
+
     
     for(var h=openHour; h<closeHour; h++) {
         for (var i=1; i<3; i++) {

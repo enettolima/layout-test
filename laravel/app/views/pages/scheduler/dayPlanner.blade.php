@@ -38,6 +38,16 @@
         </div>
         <div class="col-xs-6">
             <div id="targets">
+                <h4>New Goals Status</h4>
+                <table id="new-day-hours-detail" class="table table-striped">
+                    <thead>
+                        <th class="text-center">Hour</th>
+                        <th class="text-right">Target</th>
+                        <th class="text-center">Staff Count</th>
+                        <th class="text-right">Distrib Goal</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 <h4>Hours Status</h4>
                 <table id="day-hours-detail" class="table table-striped">
                     <thead>

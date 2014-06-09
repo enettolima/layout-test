@@ -30,7 +30,12 @@ function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
 
 function addEmployeeToSchedule(employeeObj)
 {
+
     var targetDate = $("#rangeSelector").val();
+
+    if (currentEmployees.length == 0) {
+        $("#empList").empty();
+    }
 
     // Add the user to current list of employees
     currentEmployees.push(employeeObj.id);
@@ -114,7 +119,9 @@ function loadSchedule(strDate) {
                     currentEmployees.push(userId);
                 }
             } 
-        } else {
+        } 
+
+        if (currentEmployees.length < 1) {
             $("#empList").append($("<li><em>No staffmembers have been added to this schedule.</em></li>"));
         }
 
