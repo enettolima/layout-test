@@ -7,7 +7,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                     @if(Auth::check())
-                        <!--<li class="<?php echo Request::is('home*') ? 'active' : '' ?>"><a href="/">Home</a></li>-->
+                        <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Documents</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
                         <li class="<?php echo Request::is('forms*') ?  'active' : '' ?>"><a href="/forms">Forms</a></li>
                         @if(Auth::user()->hasRole('Developer'))

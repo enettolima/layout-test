@@ -5,10 +5,7 @@ Route::get('/', array('before'=>'auth', function()
     return Redirect::to('/home');
 }));
 
-Route::get('/home', array('before'=>'auth', function()
-{
-    return View::make('pages.home.home');
-}));
+Route::controller('/home', 'HomeController');
 
 Route::controller('/forms', 'FormsController'); 
 
@@ -23,3 +20,5 @@ Route::controller('/users', 'UsersController');
 Route::controller('/scheduler', 'SchedulerController');
 
 Route::controller('/settings', 'SettingsController');
+
+Route::controller('/documents', 'DocumentsController');
