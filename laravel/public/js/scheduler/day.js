@@ -2,11 +2,11 @@ var empMasterDatabase = employeesFromService; // from employees.js
 var associateInOuts = {};
 var loadedEvents = Array();
 var dayTargetData;
-var scheduleHourLookup = null;
 var currentStore = null;
 var targetDate = null;
 var weekOf = null;
 var dayOffset = null;
+
 
 var inOuts = [];
 var goals = [];
@@ -38,8 +38,6 @@ $(document).ready(function() {
 
     var url  = "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate;
 
-    console.log(url);
-
     var loadFromDB = $.ajax({
         url:  url,
         type: "GET"
@@ -50,12 +48,9 @@ $(document).ready(function() {
     var empDateMap = {};
  
     loadFromDB.done(function(msg) {
-        // console.log('loadFromDB response:');
-        // console.log(msg);
 
         if (msg.schedule) {
             inOuts = msg.schedule;
-            // console.log(inOuts);
         }
 
         var getTargets = $.ajax({
@@ -64,8 +59,6 @@ $(document).ready(function() {
         });
 
         getTargets.done(function(data){
-            // console.log('getTargets done...');
-            // console.log(data);
 
             // TODO: Can I remove this from the global scope?
             dayTargetData = data[dayOffset+1];
@@ -74,10 +67,6 @@ $(document).ready(function() {
                 goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
             }
 
-            // console.log("Here are the goals!");
-            // console.log(goals);
-
-            // updateSummaries(scheduleHourLookup);
             newUpdateSummaries();
         });
 
@@ -118,11 +107,6 @@ $(document).ready(function() {
             }
         }
 
-        if (msg.scheduleHourLookup) {
-            scheduleHourLookup = msg.scheduleHourLookup;
-        } else {
-            // console.log(msg);
-        }
     });
 
 
@@ -184,8 +168,7 @@ $(document).ready(function() {
                         },
                         true
                     );
-                    // updateSummaries(msg.scheduleHourLookup);
-                    console.log(msg);
+
                     inOuts = msg.schedule;
                     newUpdateSummaries();
 
@@ -209,8 +192,6 @@ $(document).ready(function() {
             });
 
             request.done(function(msg) {
-                // updateSummaries(msg.scheduleHourLookup);
-                console.log(msg);
                 inOuts = msg.schedule;
                 newUpdateSummaries();
             });
@@ -224,8 +205,6 @@ $(document).ready(function() {
             });
 
             request.done(function(msg) {
-                // updateSummaries(msg.scheduleHourLookup);
-                console.log(msg);
                 inOuts = msg.schedule;
                 newUpdateSummaries();
             });
@@ -255,27 +234,15 @@ $(document).ready(function() {
 
 function newUpdateSummaries()
 {
-    console.log('newUpdateSummaries');
-    console.log("my inouts are....");
-    console.log(inOuts);
+    $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
+
+    $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
 
     $("#new-day-hours-detail tbody").empty();
 
-    // console.log('inOuts:');
-    // console.log(inOuts);
-
     var openHour = parseInt(dayTargetData.open);
-    // console.log("openHour: " + openHour);
 
     var closeHour= parseInt(dayTargetData.close);
-    // console.log("closeHour: " + closeHour);
-
-    // console.log("dayTargetData:");
-    // console.log(dayTargetData.hours);
-
-    for (var key in dayTargetData.hours) {
-        // console.log(key);
-    }
 
     var mins = [];
 
@@ -297,10 +264,6 @@ function newUpdateSummaries()
 
     }
 
-    console.log('BOOKED MINS');
-
-    console.log(mins);
-
     for (var g=0; g<goals.length; g++) {
 
         // Figure out the range for this hour... 
@@ -319,8 +282,6 @@ function newUpdateSummaries()
 
         var budget = goals[g].goal / empMin;
 
-        // console.log("for " + goals[g].hour + ", I'm trying to divide " + goals[g].goal + " by " + empMin);
-
         /*(
         console.log({
             "hour": goals[g].hour, 
@@ -332,84 +293,28 @@ function newUpdateSummaries()
         });
            */
 
+
+
+        var extraClasses = '';
+
+        var budgetOutput = '';
+
+        if (budget === Infinity) {
+            extraClasses += "danger ";
+            budgetOutput = "NEED STAFF!";
+        } else {
+            budgetOutput = "$" + budget.toFixed(2);
+        }
+
         var row = "";
-        row += '<tr>';
+        row += '<tr class="'+extraClasses+'">';
         row += '    <td>'+goals[g].hour+'</td>';
-        row += '    <td>'+budget+'</td>';
+        row += '    <td align="right">$'+parseFloat(goals[g].goal).toFixed(2)+'</td>';
+        row += '    <td class="text-center">'+empMin+'</td>';
+        row += '    <td align="right">'+budgetOutput+'</td>';
         row += '</tr>';
 
         $("#new-day-hours-detail tbody").append(row);
-    }
-}
-
-function oldupdateSummaries(scheduleRef)
-{
-
-    // console.log("updateSummaries");
-    // console.log(scheduleRef);
-
-    $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
-
-    $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
-
-    $("#day-hours-detail tbody").empty();
-
-    var openHour = parseInt(dayTargetData.open);
-    var closeHour= parseInt(dayTargetData.close);
-
-
-
-    /*
-     * NEW SHIT
-     */
-
-    $("#new-day-hours-detail tbody").empty();
-    for(var h=openHour; h<closeHour; h++) {
-        var row = "";
-        row += '<tr><td>'+h+'</td></tr>';
-        $("#new-day-hours-detail tbody").append(row);
-    }
-
-    
-    for(var h=openHour; h<closeHour; h++) {
-        for (var i=1; i<3; i++) {
-
-            if (!dayTargetData.hours[h]) {
-                dayTargetData.hours[h] = {"budget" : "0.00"};
-            }
-
-            var halfHourBudget = parseFloat(dayTargetData.hours[h].budget / 2).toFixed(2);
-
-            var timeKey = (h < 10 ? '0' : '') + h + ':' + (i == 1 ? '00' : '30'); 
-
-            var staffCount = parseInt(scheduleRef[timeKey]);
-
-            var distributedGoal; 
-            var extraClasses = '';
-
-            if (halfHourBudget > 0) {
-                if (staffCount === 0) {
-                    distributedGoal = "NEED STAFF!";
-                    extraClasses += "danger ";
-                } else {
-                    distributedGoal = "$" + (halfHourBudget / staffCount).toFixed(2);
-                }
-            } else {
-                extraClasses += "info ";
-                distributedGoal = "<em>No Goals Specified</em>";
-            }
-
-
-            var row = "";
-            row += '<tr class="'+extraClasses+'">';
-            row += '    <td class="text-center">'+timeKey+'</td>';
-            row += '    <td class="text-right">$'+halfHourBudget+'</td>';
-            row += '    <td class="text-center">'+staffCount+'</td>';
-            row += '    <td class="text-right">'+distributedGoal+'</td>';
-
-            row += '</tr>';
-            $("#day-hours-detail").append(row);
-        }
     }
 }
 
@@ -470,16 +375,9 @@ $(document).on("click", "#block-remove-modal-confirm", function(){
 
     request.done(function(msg) {
 
-        console.log('OK DELETED');
-        console.log(msg);
-
         inOuts = msg.schedule;
-
-        console.log(inOuts);
 
         newUpdateSummaries();
 
-        // TODO: Here I need to get the updated schedule back with the message
-        // updateSummaries(msg.scheduleHourLookup);
     });
 });
