@@ -2,6 +2,8 @@
 
 @section('content')
 
+<?php //echo Session::get('schedulerCurrentWeekOf'); ?>
+
     <!-- Week Selector -->
     <div class="row" style="">
         <div class="col-xs-5">
@@ -11,8 +13,10 @@
                         <?php
 
                             if (Session::has('schedulerCurrentWeekOf')) {
+                                Clog::log('has currentweekof');
                                 $currentWeekOf = Session::get('schedulerCurrentWeekOf');
                             } else { 
+                                Clog::log('doesnt have it');
                                 $currentWeekOf = date('Y-m-d', strtotime('last sunday'));
                             }
 
