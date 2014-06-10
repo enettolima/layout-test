@@ -32,7 +32,8 @@ class LSvcController extends BaseController
 
             return Response::json(array(
                 'status' => 1,
-                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
             ));
 
         } else {
@@ -66,7 +67,8 @@ class LSvcController extends BaseController
 
             return Response::json(array(
                 'status' => 1,
-                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
             ));
         } else {
             return Response::json(array( 'status' => 0));
@@ -95,7 +97,8 @@ class LSvcController extends BaseController
 
             return Response::json(array(
                 'status' => 1,
-                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
             ));
 
         } else {
@@ -264,7 +267,8 @@ class LSvcController extends BaseController
                 return Response::json(array(
                     'status' => 1,
                     'id' => $id, 
-                    'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
+                    'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                    'schedule' => $this->getDaySchedule($storeNumber, $date)
                 ));
 
             } else {
@@ -275,13 +279,9 @@ class LSvcController extends BaseController
         }
     }
 
-    public function getSchedulerStoreDaySchedule()
+    protected function getDaySchedule($storeNumber, $targetDate)
     {
-        $storeNumber = Request::segment(3);
-
-        $sundayDate = Request::segment(4);
-
-        $date = date('Y-m-d', strtotime($sundayDate));
+        $date = date('Y-m-d', strtotime($targetDate));
 
         $returnval = array();
 
@@ -301,11 +301,24 @@ class LSvcController extends BaseController
 
         $scheduleRES = DB::connection('mysql')->select($scheduleSQL);
 
+        return $scheduleRES;
+    }
+
+    public function getSchedulerStoreDaySchedule()
+    {
+        $storeNumber = Request::segment(3);
+
+        $targetDate = Request::segment(4);
+
+        $scheduleRES = $this->getDaySchedule($storeNumber, $targetDate);
+
+        $date = date('Y-m-d', strtotime($targetDate));
+
         // Metadata currently resides at the week point...
 
-        $ts = strtotime($date);
+        $ts = strtotime($targetDate);
         $sundayTimestamp = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
-        $sundayDate = date('Y-m-d', $sundayTimestamp);
+        $targetDate = date('Y-m-d', $sundayTimestamp);
 
         $metaSQL = "
             SELECT
@@ -314,7 +327,7 @@ class LSvcController extends BaseController
                 schedule_day_meta
             WHERE
                 store_id = $storeNumber AND
-                date = '$sundayDate'
+                date = '$targetDate'
         ";
 
         $metaRES = DB::connection('mysql')->select($metaSQL);

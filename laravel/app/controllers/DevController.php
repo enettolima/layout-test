@@ -50,6 +50,11 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getTest()
+    {
+        return View::make('pages.test');
+    }
+
     public function getElastic()
     {
         return View::make('pages.dev', array(

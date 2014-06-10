@@ -8,6 +8,24 @@ var targetDate = null;
 var weekOf = null;
 var dayOffset = null;
 
+var inOuts = [];
+var goals = [];
+
+function timeToMin(dateString) {
+
+    var returnval = false;
+
+    var re = /^\d{4}-\d{2}-\d{2}\s(\d{2}):(\d{2}):(\d{2})$/;
+
+    var matches = re.exec(dateString);
+
+    if (matches) {
+        returnval = (parseInt(matches[1]) * 60) + parseInt(matches[2]);
+    } 
+
+    return returnval;
+}
+
 $(document).ready(function() {
 
     targetDate = $('#targetDate').val();
@@ -18,8 +36,12 @@ $(document).ready(function() {
 
     dayOffset = parseInt($('#dayOffset').val());
 
+    var url  = "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate;
+
+    console.log(url);
+
     var loadFromDB = $.ajax({
-        url:  "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate,
+        url:  url,
         type: "GET"
     });
 
@@ -28,8 +50,13 @@ $(document).ready(function() {
     var empDateMap = {};
  
     loadFromDB.done(function(msg) {
-        console.log('loadFromDB done...');
-        console.log(msg);
+        // console.log('loadFromDB response:');
+        // console.log(msg);
+
+        if (msg.schedule) {
+            inOuts = msg.schedule;
+            // console.log(inOuts);
+        }
 
         var getTargets = $.ajax({
             url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
@@ -37,10 +64,21 @@ $(document).ready(function() {
         });
 
         getTargets.done(function(data){
-            console.log('getTargets done...');
-            console.log(data);
+            // console.log('getTargets done...');
+            // console.log(data);
+
+            // TODO: Can I remove this from the global scope?
             dayTargetData = data[dayOffset+1];
-            updateSummaries(scheduleHourLookup);
+
+            for (var key in data[dayOffset+1].hours) {
+                goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
+            }
+
+            // console.log("Here are the goals!");
+            // console.log(goals);
+
+            // updateSummaries(scheduleHourLookup);
+            newUpdateSummaries();
         });
 
         var view = $('#calendar').fullCalendar('getView');
@@ -83,7 +121,7 @@ $(document).ready(function() {
         if (msg.scheduleHourLookup) {
             scheduleHourLookup = msg.scheduleHourLookup;
         } else {
-            console.log(msg);
+            // console.log(msg);
         }
     });
 
@@ -146,7 +184,10 @@ $(document).ready(function() {
                         },
                         true
                     );
-                    updateSummaries(msg.scheduleHourLookup);
+                    // updateSummaries(msg.scheduleHourLookup);
+                    console.log(msg);
+                    inOuts = msg.schedule;
+                    newUpdateSummaries();
 
                 } else {
                     calendar.fullCalendar('unselect');
@@ -168,9 +209,11 @@ $(document).ready(function() {
             });
 
             request.done(function(msg) {
-                updateSummaries(msg.scheduleHourLookup);
+                // updateSummaries(msg.scheduleHourLookup);
+                console.log(msg);
+                inOuts = msg.schedule;
+                newUpdateSummaries();
             });
-
         },
 
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
@@ -181,7 +224,10 @@ $(document).ready(function() {
             });
 
             request.done(function(msg) {
-                updateSummaries(msg.scheduleHourLookup);
+                // updateSummaries(msg.scheduleHourLookup);
+                console.log(msg);
+                inOuts = msg.schedule;
+                newUpdateSummaries();
             });
         },
 
@@ -207,11 +253,100 @@ $(document).ready(function() {
 
 });
 
-function updateSummaries(scheduleRef)
+function newUpdateSummaries()
+{
+    console.log('newUpdateSummaries');
+    console.log("my inouts are....");
+    console.log(inOuts);
+
+    $("#new-day-hours-detail tbody").empty();
+
+    // console.log('inOuts:');
+    // console.log(inOuts);
+
+    var openHour = parseInt(dayTargetData.open);
+    // console.log("openHour: " + openHour);
+
+    var closeHour= parseInt(dayTargetData.close);
+    // console.log("closeHour: " + closeHour);
+
+    // console.log("dayTargetData:");
+    // console.log(dayTargetData.hours);
+
+    for (var key in dayTargetData.hours) {
+        // console.log(key);
+    }
+
+    var mins = [];
+
+    // Create a lookup of the empMins  
+    for (var d=0; d<inOuts.length; d++) {
+
+        var start = timeToMin(inOuts[d].date_in);
+
+        var end = timeToMin(inOuts[d].date_out);
+
+        for (var onMin = start; onMin < end; onMin++) {
+
+            if (typeof mins[onMin] === "undefined") {
+                mins[onMin] = 0;
+            }
+
+            mins[onMin]++;
+        }
+
+    }
+
+    console.log('BOOKED MINS');
+
+    console.log(mins);
+
+    for (var g=0; g<goals.length; g++) {
+
+        // Figure out the range for this hour... 
+
+        var empMin = 0;
+
+        var minsFrom = (goals[g].hour * 60);
+
+        var minsTo = minsFrom + 59;
+
+        for (atMin = minsFrom; atMin <= minsTo; atMin++) {
+            if (typeof mins[atMin] !== "undefined") {
+                empMin = empMin + mins[atMin];
+            }
+        }
+
+        var budget = goals[g].goal / empMin;
+
+        // console.log("for " + goals[g].hour + ", I'm trying to divide " + goals[g].goal + " by " + empMin);
+
+        /*(
+        console.log({
+            "hour": goals[g].hour, 
+            "goal" : goals[g].goal,
+            "minsFrom" : minsFrom,
+            "minsTo" : minsTo,
+            "empMin" : empMin,
+            "budget" : budget
+        });
+           */
+
+        var row = "";
+        row += '<tr>';
+        row += '    <td>'+goals[g].hour+'</td>';
+        row += '    <td>'+budget+'</td>';
+        row += '</tr>';
+
+        $("#new-day-hours-detail tbody").append(row);
+    }
+}
+
+function oldupdateSummaries(scheduleRef)
 {
 
-    console.log("updateSummaries");
-    console.log(scheduleRef);
+    // console.log("updateSummaries");
+    // console.log(scheduleRef);
 
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
@@ -334,6 +469,17 @@ $(document).on("click", "#block-remove-modal-confirm", function(){
     });
 
     request.done(function(msg) {
-        updateSummaries(msg.scheduleHourLookup);
+
+        console.log('OK DELETED');
+        console.log(msg);
+
+        inOuts = msg.schedule;
+
+        console.log(inOuts);
+
+        newUpdateSummaries();
+
+        // TODO: Here I need to get the updated schedule back with the message
+        // updateSummaries(msg.scheduleHourLookup);
     });
 });
