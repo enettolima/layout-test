@@ -86,7 +86,7 @@ $(function() {
 
 <style type="text/css">
 #results em {
-    background-color:yellow;
+    background-color:#FCF8E6;
     font-weight:bold;
 }
 </style>
