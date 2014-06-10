@@ -7,39 +7,46 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
 
+    $("#spinny").hide();
+
     var client = new $.es.Client({
         hosts: 'dev.ebtpassport.com:9200'
     });
 
     $("form.search").on("submit", function(event){
+
+        $("#spinny").show();
+
         event.preventDefault();
 
         $("#results").empty();
 
         var query = $(".searchfield").val();
 
-        var searchBody = {
-            "fields" : [],
-            "query" : {
-                "query_string" : {
-                    "query" : query 
-                }
-            },
-            "highlight" : {
-                "fields" : {
-                    "file" : {}
+        var search = {
+            "_source" : true, 
+            "index": "docs",
+            "body": {
+                "fields" : [],
+                "query" : {
+                    "query_string" : {
+                        "query" : query
+                    }
+                },
+                "highlight" : {
+                    "fields" : {
+                        "file" : {}
+                    }
                 }
             }
         };
 
-        var foo = {
-            "_source" : true, 
-            "index": "docs",
-            "body": searchBody
-        };
+        client.search(search).then(function (body) {
 
-        client.search(foo).then(function (body) {
+            $("#spinny").hide();
+
             var hits = body.hits.hits;
+                console.log(hits.length);
             for(var i=0; i< hits.length; i++) {
                 var html = '';
                 console.log(hits[i]);
@@ -69,10 +76,17 @@ $(function() {
 
 <form class="search" method="GET">
     <input type="text" name="search" class="searchfield" placeholder="Enter Search Term">
-    <input type="submit" val="Submit">
+    <input type="submit" val="Submit">&nbsp;<span style="" id="spinny"><img src="/images/ajax-loader-arrows.gif"></span>
 </form>
 
 <h3>Results</h3>
+
+<style type="text/css">
+#results em {
+    background-color:yellow;
+    font-weight:bold;
+}
+</style>
 
 <ul id="results">
 </ul>
