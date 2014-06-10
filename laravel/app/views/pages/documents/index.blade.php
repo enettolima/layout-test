@@ -50,7 +50,8 @@ $(function() {
             if (hits.length) {
                 for(var i=0; i< hits.length; i++) {
                     var html = '';
-                    var fileloc = encodeURIComponent(hits[i]._source.filename);
+                    //var fileloc = encodeURIComponent(hits[i]._source.filename);
+                    var fileloc = hits[i]._source.filename;
                     html += "<li><a href=\"/docs/" + fileloc + "\">" + hits[i]._source.filename + "</a><ul>";
                     /*console.log(hits[i]._source.filename);*/
                     console.log("here comes highlight");
