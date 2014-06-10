@@ -46,24 +46,27 @@ $(function() {
             $("#spinny").hide();
 
             var hits = body.hits.hits;
-                console.log(hits.length);
-            for(var i=0; i< hits.length; i++) {
-                var html = '';
-                console.log(hits[i]);
-                var fileloc = encodeURIComponent(hits[i]._source.filename);
-                html += "<li><a href=\"/docs/" + fileloc + "\">" + hits[i]._source.filename + "</a><ul>";
-                /*console.log(hits[i]._source.filename);*/
-                console.log("here comes highlight");
-                console.log(hits[i]);
-                /*console.log(hits[i].highlight);*/
-                /*console.log(hits[i].highlight.file);*/
-                var highlights = hits[i].highlight.file;
-                for (var h=0; h < highlights.length; h++) {
-                    console.log(highlights[h]);
-                    html += "<li>" + highlights[h] + "</li>";
+
+            if (hits.length) {
+                for(var i=0; i< hits.length; i++) {
+                    var html = '';
+                    var fileloc = encodeURIComponent(hits[i]._source.filename);
+                    html += "<li><a href=\"/docs/" + fileloc + "\">" + hits[i]._source.filename + "</a><ul>";
+                    /*console.log(hits[i]._source.filename);*/
+                    console.log("here comes highlight");
+                    console.log(hits[i]);
+                    /*console.log(hits[i].highlight);*/
+                    /*console.log(hits[i].highlight.file);*/
+                    var highlights = hits[i].highlight.file;
+                    for (var h=0; h < highlights.length; h++) {
+                        console.log(highlights[h]);
+                        html += "<li>" + highlights[h] + "</li>";
+                    }
+                    html += "</ul></li>";
+                    $("#results").append(html);
                 }
-                html += "</ul></li>";
-                $("#results").append(html);
+            } else {
+                $("#results").append("<li>No results found.</li>");
             }
         }, function (error) {
             console.trace(error.message);
