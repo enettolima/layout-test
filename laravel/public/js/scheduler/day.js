@@ -259,9 +259,24 @@ function updateSummaries()
             budgetOutput = "$" + budgetByHour[b].budget.toFixed(2);
         }
 
+        var hourLabel = '';
+
+        var hour = budgetByHour[b].hour; 
+
+        if (hour > 12) {
+            hourLabel = (hour - 12) + 'pm';
+        } else if (hour === 0) {
+            hourLabel = '12am';
+        } else if (hour == 12) {
+            hourLabel = '12pm';
+        } else {
+            hourLabel = hour + 'am';
+        }
+
         row = "";
         row += '<tr class="'+extraClasses+'">';
-        row += '    <td>'+budgetByHour[b].hour+'</td>';
+        // row += '    <td>'+budgetByHour[b].hour+'</td>';
+        row += '    <td>'+hourLabel+'</td>';
         row += '    <td align="right">$'+parseFloat(budgetByHour[b].goal).toFixed(2)+'</td>';
         row += '    <td class="text-center">'+budgetByHour[b].empMin+'</td>';
         row += '    <td align="right">'+budgetOutput+'</td>';
