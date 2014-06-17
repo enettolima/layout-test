@@ -1,16 +1,14 @@
 var empMasterDatabase = employeesFromService; // from employees.js
-var associateInOuts = {};
-var loadedEvents = Array();
 var dayTargetData;
 var currentStore = null;
 var targetDate = null;
 var weekOf = null;
 var dayOffset = null;
 
-
 var inOuts = [];
 var goals = [];
 
+/*
 function timeToMin(dateString) {
 
     var returnval = false;
@@ -25,6 +23,7 @@ function timeToMin(dateString) {
 
     return returnval;
 }
+*/
 
 $(document).ready(function() {
 
@@ -67,7 +66,7 @@ $(document).ready(function() {
                 goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
             }
 
-            newUpdateSummaries();
+            updateSummaries();
         });
 
         var view = $('#calendar').fullCalendar('getView');
@@ -170,7 +169,7 @@ $(document).ready(function() {
                     );
 
                     inOuts = msg.schedule;
-                    newUpdateSummaries();
+                    updateSummaries();
 
                 } else {
                     calendar.fullCalendar('unselect');
@@ -193,7 +192,8 @@ $(document).ready(function() {
 
             request.done(function(msg) {
                 inOuts = msg.schedule;
-                newUpdateSummaries();
+                updateSummaries();
+            
             });
         },
 
@@ -206,7 +206,7 @@ $(document).ready(function() {
 
             request.done(function(msg) {
                 inOuts = msg.schedule;
-                newUpdateSummaries();
+                updateSummaries();
             });
         },
 
@@ -232,7 +232,7 @@ $(document).ready(function() {
 
 });
 
-function newUpdateSummaries()
+function updateSummaries()
 {
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
@@ -240,82 +240,51 @@ function newUpdateSummaries()
 
     $("#new-day-hours-detail tbody").empty();
 
-    var openHour = parseInt(dayTargetData.open);
+    var SS = new SchedulerSummary(goals, inOuts);
 
-    var closeHour= parseInt(dayTargetData.close);
+    var budgetByHour = SS.getBudgetByHour();
 
-    var mins = [];
+    var row = null;
 
-    // Create a lookup of the empMins  
-    for (var d=0; d<inOuts.length; d++) {
-
-        var start = timeToMin(inOuts[d].date_in);
-
-        var end = timeToMin(inOuts[d].date_out);
-
-        for (var onMin = start; onMin < end; onMin++) {
-
-            if (typeof mins[onMin] === "undefined") {
-                mins[onMin] = 0;
-            }
-
-            mins[onMin]++;
-        }
-
-    }
-
-    for (var g=0; g<goals.length; g++) {
-
-        // Figure out the range for this hour... 
-
-        var empMin = 0;
-
-        var minsFrom = (goals[g].hour * 60);
-
-        var minsTo = minsFrom + 59;
-
-        for (atMin = minsFrom; atMin <= minsTo; atMin++) {
-            if (typeof mins[atMin] !== "undefined") {
-                empMin = empMin + mins[atMin];
-            }
-        }
-
-        var budget = goals[g].goal / empMin;
-
-        /*(
-        console.log({
-            "hour": goals[g].hour, 
-            "goal" : goals[g].goal,
-            "minsFrom" : minsFrom,
-            "minsTo" : minsTo,
-            "empMin" : empMin,
-            "budget" : budget
-        });
-           */
-
-
-
+    for (var b=0; b<budgetByHour.length; b++) {
+        
         var extraClasses = '';
 
         var budgetOutput = '';
 
-        if (budget === Infinity) {
+        if (budgetByHour[b].budget === Infinity) {
             extraClasses += "danger ";
             budgetOutput = "NEED STAFF!";
         } else {
-            budgetOutput = "$" + budget.toFixed(2);
+            budgetOutput = "$" + budgetByHour[b].budget.toFixed(2);
         }
 
-        var row = "";
+        row = "";
         row += '<tr class="'+extraClasses+'">';
-        row += '    <td>'+goals[g].hour+'</td>';
-        row += '    <td align="right">$'+parseFloat(goals[g].goal).toFixed(2)+'</td>';
-        row += '    <td class="text-center">'+empMin+'</td>';
+        row += '    <td>'+budgetByHour[b].hour+'</td>';
+        row += '    <td align="right">$'+parseFloat(budgetByHour[b].goal).toFixed(2)+'</td>';
+        row += '    <td class="text-center">'+budgetByHour[b].empMin+'</td>';
         row += '    <td align="right">'+budgetOutput+'</td>';
         row += '</tr>';
 
         $("#new-day-hours-detail tbody").append(row);
     }
+
+    $("#emp-hours-summary tbody").empty();
+
+    var budgetByEmployee = SS.getBudgetByEmployee();
+
+    for (var emp in budgetByEmployee) {
+        row = "";
+        row += "<tr>";
+        row += "<td>"+emp+"</td>";
+        row += "<td>"+getEmpNameFromCode(emp)+"</td>";
+        row += "<td class=\"text-right\">$"+parseFloat(budgetByEmployee[emp]).toFixed(2)+"</td>";
+        row += "</tr>";
+
+        $("#emp-hours-summary tbody").append(row);
+    }
+
 }
 
 function getNextAvailableColumn(){
@@ -377,7 +346,6 @@ $(document).on("click", "#block-remove-modal-confirm", function(){
 
         inOuts = msg.schedule;
 
-        newUpdateSummaries();
-
+        updateSummaries();
     });
 });

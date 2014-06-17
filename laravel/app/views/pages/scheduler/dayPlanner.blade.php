@@ -34,11 +34,20 @@
                     <tr><td>Day Target:</td><td id="day-target"></td></tr>
                     <tr><td>Store Hours from DB:</td><td id="day-hours"></td></tr>
                 </table>
+                <h4>Day Goals Per Employee</h4>
+                <table id="emp-hours-summary" class="table table-striped">
+                    <thead>
+                        <th class="text-left">Emp Code</th>
+                        <th class="text-left">Name</th>
+                        <th class="text-right">Day Goal</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
         <div class="col-xs-6">
             <div id="targets">
-                <h4>Budget Status</h4>
+                <h4>Schedule Coverage</h4>
                 <table id="new-day-hours-detail" class="table table-striped">
                     <thead>
                         <th class="text-left">Hour</th>
@@ -77,6 +86,8 @@
     <script src="/js/jquery-git.js"></script>
 
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
+
+    <script src="/js/scheduler/summary-functions.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="/js/scheduler/employees.js" type="text/javascript" charset="utf-8"></script>
 
