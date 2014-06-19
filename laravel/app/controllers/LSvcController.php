@@ -548,17 +548,10 @@ class LSvcController extends BaseController
 
     public function getSchedulerSetCurrentWeekOf($string)
     {
-        // Clog::log(__METHOD__ . ":" . $string);
 
         if (preg_match('/^\d\d\d\d-\d\d-\d\d$/', Request::segment(3))) {
-
             Session::set('schedulerCurrentWeekOf', Request::segment(3));
 
-            /*
-            if (Session::has('schedulerCurrentWeekOf')) {
-                echo "I has currentWeekOf and it is " . Session::get('schedulerCurrentWeekOf');
-            }
-            */
         }
     }
 

@@ -72,10 +72,11 @@ function loadSchedule(strDate) {
 
     // Look to see if we've changed date; if so need to change it in
     // the PHP session
-    if (strDate != $("#currentWeekOf").val()) {
+    if (strDate != $("#schedulerCurrentWeekOf").val()) {
         $.ajax({
             url: '/lsvc/scheduler-set-current-week-of/' + strDate,
-            type: "GET"
+            type: "GET",
+            async: false
         });
     }
 
@@ -227,8 +228,8 @@ function loadSchedule(strDate) {
 
 $(document).ready(function(){
 
-    if ($("#currentWeekOf").val()) {
-        loadSchedule($('#currentWeekOf').val());
+    if ($("#schedulerCurrentWeekOf").val()) {
+        loadSchedule($('#schedulerCurrentWeekOf').val());
     } else {
         loadSchedule($('#rangeSelector').val());
     }

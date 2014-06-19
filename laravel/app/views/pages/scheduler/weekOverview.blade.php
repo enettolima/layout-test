@@ -2,8 +2,6 @@
 
 @section('content')
 
-<?php //echo Session::get('schedulerCurrentWeekOf'); ?>
-
     <!-- Week Selector -->
     <div class="row" style="">
         <div class="col-xs-5">
@@ -12,6 +10,20 @@
                     <select id="rangeSelector" class="form-control input">
                         <?php
 
+                            if (! Session::has('schedulerCurrentWeekOf')) {
+
+                                $schedulerCurrentWeekOf = date('Y-m-d', strtotime('last sunday'));
+
+                                Session::set('schedulerCurrentWeekOf', $schedulerCurrentWeekOf);
+                            } else {
+
+                                    $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
+
+                                    Clog::log("Got schedulerCurrentWeekOf = $schedulerCurrentWeekOf from session");
+
+                            }
+
+                            /*
                             if (Session::has('schedulerCurrentWeekOf')) {
                                 Clog::log('has currentweekof');
                                 $currentWeekOf = Session::get('schedulerCurrentWeekOf');
@@ -19,6 +31,7 @@
                                 Clog::log('doesnt have it');
                                 $currentWeekOf = date('Y-m-d', strtotime('last sunday'));
                             }
+                            */
 
 
                             $futureWeekCount = 10;
@@ -38,7 +51,7 @@
 
                             foreach ($ranges as $range) {
                                 $weekOf = date('Y-m-d', $range['start']);
-                                if ($currentWeekOf == $weekOf) {
+                                if ($schedulerCurrentWeekOf == $weekOf) {
                                     $selected = 'selected';
                                 } else {
                                     $selected = '';
@@ -240,7 +253,7 @@
     </div>
     <!-- Summary Section -->
 
-    <input type="hidden" id="currentWeekOf" name="currentWeekOf" value="<?php echo Session::has('schedulerCurrentWeekOf') ? Session::get('schedulerCurrentWeekOf') : ''; ?>">
+    <input type="hidden" id="schedulerCurrentWeekOf" name="schedulerCurrentWeekOf" value="<?php echo Session::has('schedulerCurrentWeekOf') ? Session::get('schedulerCurrentWeekOf') : ''; ?>">
 
     {{-- TODO: Hack: this is a terrible way to let Javascript know what rights the user has --}}
     @if ($userCanManage)
