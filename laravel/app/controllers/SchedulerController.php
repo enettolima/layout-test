@@ -9,7 +9,6 @@ class SchedulerController extends BaseController
     public function __construct()
     {
         $this->beforeFilter('auth', array());
-        $this->initAccess();
     }
 
     /*
@@ -21,7 +20,7 @@ class SchedulerController extends BaseController
         $user = Auth::user();
 
         if ($user->hasRole('Store' . Session::get('storeContext'))) {
-            if ($user->hasRole('Manager'))
+            if ($user->hasRole('Manager') || $user->hasRole('AssistantManager'))
             {
                 $this->userHasAccess = true;
                 $this->userCanManage = true;
@@ -39,6 +38,8 @@ class SchedulerController extends BaseController
 
     public function getWeekOverview()
     {
+        $this->initAccess();
+
         if (! $this->userHasAccess) {
             Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
             return Response::view('pages.permissionDenied');
@@ -58,6 +59,8 @@ class SchedulerController extends BaseController
 
     public function getDayPlanner()
     {
+        $this->initAccess();
+
         if (! $this->userHasAccess) {
             Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
             return Response::view('pages.permissionDenied');

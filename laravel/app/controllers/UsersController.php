@@ -23,9 +23,11 @@ class UsersController extends BaseController
         $isAssociate = false;
         $isManager = false;
 
+        // Look for "M" in Retail Pro column 'empl_no2', signifying manager
         if (preg_match('/^m$/i', $rpResults->userData->empl_no2)) {
             $isManager = true;
         } else {
+            // Assign various levels based on group membership
             foreach ($rpResults->userData->groups as $group) {
                 switch ($group->user_grp_name) {
                     case 'EBTPASSPORT_GUEST':
@@ -33,6 +35,9 @@ class UsersController extends BaseController
                         break;
                     case 'EBTPASSPORT_ASSOCIATE':
                         $isAssociate = true;
+                        break;
+                    case 'EBTPASSPORT_AMAN':
+                        $isManager = true;
                         break;
                 }
             }
@@ -67,8 +72,8 @@ class UsersController extends BaseController
             $api = new EBTAPI;
 
             // MOCK MOCK MOCK
-            $rpResults = $api->post('/rprousers/auth', $data);
-            // $rpResults = $api->post('/rprousers/mockauth', $data);
+            // $rpResults = $api->post('/rprousers/auth', $data);
+            $rpResults = $api->post('/rprousers/mockauth', $data);
 
 			if ($rpResults) {
 
@@ -136,7 +141,7 @@ class UsersController extends BaseController
                      * Todo: This is currently bound using the label instead of the Group's ID
                      */
 
-                    $validRoles = array('Manager', 'Associate', 'Guest');
+                    $validRoles = array('Manager', 'Assistant Manager', 'Associate', 'Guest');
 
                     $userLevelRole = Role::where('name', '=', $userLevel)->firstOrFail();
 
