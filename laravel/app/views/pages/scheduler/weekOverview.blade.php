@@ -9,30 +9,12 @@
                 <form action="" class="form-horizontal"> 
                     <select id="rangeSelector" class="form-control input">
                         <?php
-
                             if (! Session::has('schedulerCurrentWeekOf')) {
-
                                 $schedulerCurrentWeekOf = date('Y-m-d', strtotime('last sunday'));
-
                                 Session::set('schedulerCurrentWeekOf', $schedulerCurrentWeekOf);
                             } else {
-
-                                    $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
-
-                                    Clog::log("Got schedulerCurrentWeekOf = $schedulerCurrentWeekOf from session");
-
+                                $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
                             }
-
-                            /*
-                            if (Session::has('schedulerCurrentWeekOf')) {
-                                Clog::log('has currentweekof');
-                                $currentWeekOf = Session::get('schedulerCurrentWeekOf');
-                            } else { 
-                                Clog::log('doesnt have it');
-                                $currentWeekOf = date('Y-m-d', strtotime('last sunday'));
-                            }
-                            */
-
 
                             $futureWeekCount = 10;
                             // Get the Sunday for this week
