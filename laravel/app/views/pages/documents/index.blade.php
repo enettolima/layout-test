@@ -27,7 +27,7 @@ $(function() {
                     _all: $('.searchfield').val()
                 }
             },
-            fields : ["filename", "url"],
+            fields : ["filename", "url", "path.virtual"],
             size : 10000,
             highlight : {
                 "fields" : {
@@ -55,8 +55,6 @@ $(function() {
                     $("#resultsHeader").html(data.length + " Results").show();
                     for (var i = 0; i < data.length; i++) {
 
-                        console.log(data[i]);
-
                         source = data[i].fields;
 
                         var url = source["file.url"][0];
@@ -67,7 +65,7 @@ $(function() {
 
                             var fixed = url.match(re)[1];
 
-                            var full = "/docs/" + fixed;
+                            var full = "/docs" + source["path.virtual"][0] + encodeURIComponent(source["file.filename"][0]);
 
                             var row = '';
 
