@@ -64,7 +64,13 @@ $(function() {
 
                         if (url) {
 
-                            var highlight = data[i].highlight.content[0];
+                            var highlight = "<em>Summary Not Available</em>";
+
+                            if (data[i].highlight) {
+
+                                highlight = data[i].highlight.content[0];
+
+                             }
 
                             var fixed = url.match(re)[1];
 
