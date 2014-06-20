@@ -71,7 +71,7 @@ $(function() {
 
                             var row = '';
 
-                            $("#results").append("<li><a href=\""+full+"\">"+full+"</a></li>");
+                            $("#results").append("<li><a target=\"_blank\" href=\""+full+"\">"+full+"</a></li>");
                         }
 
                     }
