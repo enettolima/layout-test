@@ -55,6 +55,7 @@ $(function() {
                     $("#resultsHeader").html(data.length + " Results").show();
                     for (var i = 0; i < data.length; i++) {
 
+
                         source = data[i].fields;
 
                         var url = source["file.url"][0];
@@ -63,13 +64,17 @@ $(function() {
 
                         if (url) {
 
+                            var highlight = data[i].highlight.content[0];
+
                             var fixed = url.match(re)[1];
 
-                            var full = "/docs" + source["path.virtual"][0] + encodeURIComponent(source["file.filename"][0]);
+                            var filename = source["file.filename"][0];
+
+                            var full = "/docs" + source["path.virtual"][0] + encodeURIComponent(filename);
 
                             var row = '';
 
-                            $("#results").append("<li><a target=\"_blank\" href=\""+full+"\">"+full+"</a></li>");
+                            $("#results").append("<li><a target=\"_blank\" href=\""+full+"\">"+filename+"</a><blockquote>"+highlight+"</blockquote></li>");
                         }
 
                     }
