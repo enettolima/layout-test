@@ -9,73 +9,87 @@ $(function() {
 
     $("#spinny").hide();
 
-    var client = new $.es.Client({
-        hosts: 'dev.ebtpassport.com:9200'
-    });
-
     $("form.search").on("submit", function(event){
 
         $("#spinny").show();
 
+        $("#resultsHeader").hide();
+
         event.preventDefault();
+
 
         $("#results").empty();
 
-        var query = $(".searchfield").val();
 
-        var search = {
-            "_source" : true, 
-            "index": "docs",
-            "body": {
-                "fields" : [],
-                "query" : {
-                    "query_string" : {
-                        "query" : query
-                    }
-                },
-                "highlight" : {
-                    "fields" : {
-                        "file" : {}
-                    }
+        var data = {
+            query: {
+                match: {
+                    _all: $('.searchfield').val()
+                }
+            },
+            fields : ["filename", "url"],
+            size : 10000,
+            highlight : {
+                "fields" : {
+                    "content" : {}
                 }
             }
-        };
+            // fields: '_id'
+        }; 
 
-        client.search(search).then(function (body) {
+        $.ajax({
+            url: 'http://dev.ebtpassport.com:9200/mydocs/doc/_search',
+            type: 'POST',
+            //contentType: 'application/json; charset=UTF-8',
+            crossDomain: true,
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                $("#spinny").hide();
+                var data = response.hits.hits;
+                var doc_ids = [];
+                var source = null;
+                var content = '';
 
-            $("#spinny").hide();
+                if (data.length > 0) {
+                    $("#resultsHeader").html(data.length + " Results").show();
+                    for (var i = 0; i < data.length; i++) {
 
-            var hits = body.hits.hits;
+                        console.log(data[i]);
 
-            if (hits.length) {
-                for(var i=0; i< hits.length; i++) {
-                    var html = '';
-                    //var fileloc = encodeURIComponent(hits[i]._source.filename);
-                    var fileloc = hits[i]._source.filename;
-                    html += "<li><a href=\"/docs/" + fileloc + "\">" + hits[i]._source.filename + "</a><ul>";
-                    /*console.log(hits[i]._source.filename);*/
-                    console.log("here comes highlight");
-                    console.log(hits[i]);
-                    /*console.log(hits[i].highlight);*/
-                    /*console.log(hits[i].highlight.file);*/
-                    var highlights = hits[i].highlight.file;
-                    for (var h=0; h < highlights.length; h++) {
-                        console.log(highlights[h]);
-                        html += "<li>" + highlights[h] + "</li>";
+                        source = data[i].fields;
+
+                        var url = source["file.url"][0];
+
+                        var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
+
+                        if (url) {
+
+                            var fixed = url.match(re)[1];
+
+                            var full = "/docs/" + fixed;
+
+                            var row = '';
+
+                            $("#results").append("<li><a href=\""+full+"\">"+full+"</a></li>");
+                        }
+
                     }
-                    html += "</ul></li>";
-                    $("#results").append(html);
+
+                } else {
+                    $("#resultsHeader").html("No Results").show();
                 }
-            } else {
-                $("#results").append("<li>No results found.</li>");
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                var jso = jQuery.parseJSON(jqXHR.responseText);
+                error_note('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
             }
-        }, function (error) {
-            console.trace(error.message);
         });
 
     });
-
 });
+
 </script>
 
 <form class="search" method="GET">
@@ -83,7 +97,7 @@ $(function() {
     <input type="submit" val="Submit">&nbsp;<span style="" id="spinny"><img src="/images/ajax-loader-arrows.gif"></span>
 </form>
 
-<h3>Results</h3>
+<h3 id="resultsHeader">Results</h3>
 
 <style type="text/css">
 #results em {
