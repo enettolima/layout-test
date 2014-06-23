@@ -232,11 +232,28 @@ $(document).ready(function() {
 
 });
 
+function milToStandard(hour)
+{
+    var hourLabel = '';
+
+    if (hour > 12) {
+        hourLabel = (hour - 12) + 'pm';
+    } else if (hour === 0) {
+        hourLabel = '12am';
+    } else if (hour == 12) {
+        hourLabel = '12pm';
+    } else {
+        hourLabel = hour + 'am';
+    }
+
+    return hourLabel;
+}
+
 function updateSummaries()
 {
     $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
-    $("#day-hours").html(dayTargetData.open + " - " + dayTargetData.close );
+    $("#day-hours").html(milToStandard(dayTargetData.open) + " - " + milToStandard(dayTargetData.close));
 
     $("#new-day-hours-detail tbody").empty();
 
@@ -259,19 +276,7 @@ function updateSummaries()
             budgetOutput = "$" + budgetByHour[b].budget.toFixed(2);
         }
 
-        var hourLabel = '';
-
-        var hour = budgetByHour[b].hour; 
-
-        if (hour > 12) {
-            hourLabel = (hour - 12) + 'pm';
-        } else if (hour === 0) {
-            hourLabel = '12am';
-        } else if (hour == 12) {
-            hourLabel = '12pm';
-        } else {
-            hourLabel = hour + 'am';
-        }
+        var hourLabel = milToStandard(budgetByHour[b].hour);
 
         row = "";
         row += '<tr class="'+extraClasses+'">';
