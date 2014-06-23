@@ -20,7 +20,7 @@ class SchedulerController extends BaseController
         $user = Auth::user();
 
         if ($user->hasRole('Store' . Session::get('storeContext'))) {
-            if ($user->hasRole('Manager') || $user->hasRole('AssistantManager'))
+            if ($user->hasRole('Manager') || $user->hasRole('Assistant Manager'))
             {
                 $this->userHasAccess = true;
                 $this->userCanManage = true;
