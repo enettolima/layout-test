@@ -378,10 +378,16 @@ class LSvcController extends BaseController
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
 
+        $metaArray['days'] = array();
+
         // So we get 7 total days starting from sunday...
         for ($i=0; $i <=6; $i++) {
 
             $onDate = date('Y-m-d', strtotime($sundayDate) + ($i * 86400));
+            $onDayName = date("D", strtotime($onDate));
+            $onDayMD = date("n/j", strtotime($onDate));
+
+            $metaArray['days'][] = array('Ymd' => $onDate, 'md' => $onDayMD, 'dayName' => $onDayName);
 
             /*
              * Following is a copy from /storeDaySchedule below, which
@@ -476,6 +482,7 @@ class LSvcController extends BaseController
         }
 
         $summary['empHoursByDayNum'] = $e->getInOutStringsArray();
+
         $summary['empHoursByEmp'] = $e->getEmpHoursWeekSummaryArray();
 
         $returnArray = array('meta' => $metaArray, 'schedule' => $nr, 'summary' => $summary);

@@ -169,3 +169,20 @@ a.schedule-graphic-header:hover{
 #staff-picker tr.picked:hover {
 	cursor:default;
 }
+
+.new-day-summary tr.summary-header{
+    background:#efefef;
+}
+
+.new-day-summary .day-header td {
+    font-weight:bold;
+}
+
+.new-day-summary .emp-header td {
+    font-weight:bold;
+}
+
+.new-day-summary .day-header td.day-label {
+    font-size:20px;
+}
+

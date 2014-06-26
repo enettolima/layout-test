@@ -28,12 +28,56 @@ function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
     });
 }
 
+/*
+ * take two datetime strings: 2013-01-01 13:45:00
+ * and, disregarding the date itself, return the elapsed
+ * hours
+ */
+function hoursFromInOut(date_in, date_out)
+{
+    var inParts = date_in.split(" ")[1].split(":");
+    var inMins = (parseInt(inParts[0]) * 60) + parseInt(inParts[1]); 
+    var outParts = date_out.split(" ")[1].split(":");
+    var outMins = (parseInt(outParts[0]) * 60) + parseInt(outParts[1]); 
+
+    return (outMins - inMins) / 60;
+}
+
+/*
+ * take 2014-01-01 11:00:00 and return "11:00am"
+ */
+function inOutLabel(dateString)
+{
+    var timeArr = dateString.split(" ")[1].split(":");
+
+    var hour = timeArr[0];
+    var mins = timeArr[1];
+
+    var hourLabel = '';
+    var ampm = '';
+
+    if (hour > 12) {
+        hour = (hour - 12);
+        ampm = 'pm';
+    } else if (hour === 0) {
+        hour = '12';
+        ampm = 'am';
+    } else if (hour == 12) {
+        hour = '12';
+        ampm = 'pm';
+    } else {
+        ampm = 'am';
+    }
+
+    return hour + ":" + mins + ampm;
+}
+
 function addEmployeeToSchedule(employeeObj)
 {
 
     var targetDate = $("#rangeSelector").val();
 
-    if (currentEmployees.length == 0) {
+    if (currentEmployees.length === 0) {
         $("#empList").empty();
     }
 
@@ -95,22 +139,28 @@ function loadSchedule(strDate) {
         $('.day-button').eq(i).html(dayNames[thisDateObj.getDay()] + ' ' + thisMonth + '/' + thisDate);
     }
 
-    var request = $.ajax({
+    var weekScheduleRequest = $.ajax({
         url: "/lsvc/scheduler-store-week-schedule/"+currentStore+"/" + strDate,
         type: "GET"
     });
 
-    request.done(function(msg) {
+    weekScheduleRequest.done(function(weekSchedule) {
+
+        var targetsRequest = $.ajax({
+            url: "/lsvc/scheduler-targets/"+currentStore+"/"+strDate,
+            type: "GET",
+            async: false
+        });
 
         // Refresh the employees list
         $("#empList").empty();
         currentEmployees = [];
         $("#staff-picker tbody").empty();
         // Populate Staff listing on the page and currentEmployees
-        if (msg.meta && msg.meta.sequence) {
-            if (msg.meta.sequence.length > 0) {
-                for(iEmp=0; iEmp<msg.meta.sequence.length; iEmp++) {
-                    var userId = msg.meta.sequence[iEmp];
+        if (weekSchedule.meta && weekSchedule.meta.sequence) {
+            if (weekSchedule.meta.sequence.length > 0) {
+                for(iEmp=0; iEmp<weekSchedule.meta.sequence.length; iEmp++) {
+                    var userId = weekSchedule.meta.sequence[iEmp];
                     var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
                     if (typeof userCanManage != 'undefined' && userCanManage) {
                         $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
@@ -132,98 +182,193 @@ function loadSchedule(strDate) {
         bonsaiMovie.sendMessage('externalData', {
             nodeData: { 
                 "command" : "drawSchedule",
-                "schedule" : msg.schedule,
-                "meta" : msg.meta,
+                "schedule" : weekSchedule.schedule,
+                "meta" : weekSchedule.meta,
                 "strDate" : strDate
             } 
         });
 
-        // Populate the Day Summary
+        // Populate the new Day Summary
+        targetsRequest.done(function(targetsData){
 
-        $("#day-summary").empty();
+            var weekSummaryData = [];
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Sunday ["+msg.summary.hoursByDayNum[0]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[0]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[0][emp]+"</td></tr>");
-        }
+            // Populate the Day Summary
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Monday ["+msg.summary.hoursByDayNum[1]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[1]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[1][emp]+"</td></tr>");
-        }
+            for (var day=0; day <weekSchedule.meta.days.length; day++) {
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Tuesday ["+msg.summary.hoursByDayNum[2]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[2]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[2][emp]+"</td></tr>");
-        }
+                var dayObj = weekSchedule.meta.days[day];
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Wednesday ["+msg.summary.hoursByDayNum[3]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[3]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[3][emp]+"</td></tr>");
-        }
+                var daySummaryData = {};
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Thursday ["+msg.summary.hoursByDayNum[4]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[4]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[4][emp]+"</td></tr>");
-        }
+                daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
+                daySummaryData.dayName = dayObj.dayName;
+                daySummaryData.dateLabel = dayObj.md;
+                daySummaryData.empTarget = 0.00; // Initialize this
+                daySummaryData.scheduledEmps = [];
+                daySummaryData.totalHours = 0;
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Friday ["+msg.summary.hoursByDayNum[5]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[5]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[5][emp]+"</td></tr>");
-        }
+                var empInOuts = [];
 
-        $("#day-summary").append("<tr><td colspan=\"2\" class=\"heady\">Saturday ["+msg.summary.hoursByDayNum[6]+" Hours]</td></tr>");
-        for (var emp in msg.summary.empHoursByDayNum[6]) {
-            $("#day-summary").append("<tr><td>"+emp+":</td><td>"+msg.summary.empHoursByDayNum[6][emp]+"</td></tr>");
-        }
+                // For each Person attached to this schedule
+                for (var emp=0; emp<weekSchedule.meta.sequence.length; emp++) {
 
-        // Populate the Week Summary
-        $("#week-summary").empty();
+                    var empID = weekSchedule.meta.sequence[emp];
 
-        for (var emp in msg.summary.empHoursByEmp) {
+                    if (weekSchedule.schedule[day].length) {
+                        // This day has some inouts. Iterate through them looking
+                        // for our current person
+                        for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
 
-            var totalHours = msg.summary.empHoursByEmp[emp].total;
-            var days = msg.summary.empHoursByEmp[emp].days;
+                            var inOutSet = weekSchedule.schedule[day][sumIO];
 
-            $("#week-summary").append("<tr><td class=\"heady\" colspan=\"2\">"+emp+" ["+totalHours+" Hours]</td></tr>");
+                            if (inOutSet.eid === empID) {
+                                for (var empIO=0; empIO<inOutSet.inouts.length; empIO++) {
 
-            if (typeof(days[0].string) === "undefined") {
-                days[0].string = '<em>No hours</em>';
+                                    empInOuts.push({
+                                        "associate_id" : empID,
+                                        "date_in" : "2014-01-01 " + inOutSet.inouts[empIO].in + ":00",
+                                        "date_out" : "2014-01-01 " + inOutSet.inouts[empIO].out + ":00",
+                                        "id" : "000",
+                                        "store_id" : "000"
+                                    });
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (empInOuts.length) {
+
+                    var goals = [];
+
+                    for (var hour in targetsData[day+1].hours) {
+                        goals.push({
+                            "goal" : targetsData[day+1].hours[hour].budget,
+                            "hour" : hour
+                        });
+                    }
+
+                    // I HAVE THE empInOuts and the goals for SS!
+                    var SS = new SchedulerSummary(goals, empInOuts);
+                    var budgetByEmployee = SS.getBudgetByEmployee();
+
+                    for (var bar in budgetByEmployee) {
+
+                        var thisEmpTotalHours = 0;
+
+                        var thisEmpInOuts = [];
+
+                        for(var eio=0; eio<empInOuts.length; eio++) {
+                            if (empInOuts[eio].associate_id === bar) {
+
+                                var hoursElapsed = hoursFromInOut(empInOuts[eio].date_in, empInOuts[eio].date_out);
+
+                                daySummaryData.totalHours += parseFloat(hoursElapsed);
+
+                                thisEmpTotalHours += hoursElapsed;
+
+                                empInOuts[eio].hoursElapsed = hoursElapsed;
+
+                                thisEmpInOuts.push(empInOuts[eio]);
+                            }
+                        } 
+
+                        var thisEmp = {
+                            "empID" : bar, 
+                            "empTarget" : budgetByEmployee[bar],
+                            "empInOuts" : thisEmpInOuts,
+                            "empTotalHours" : thisEmpTotalHours
+                        };
+
+                        daySummaryData.empTarget += budgetByEmployee[bar];
+
+                        daySummaryData.scheduledEmps.push(thisEmp);
+                    }
+                }
+
+                weekSummaryData.push(daySummaryData);
             }
-            $("#week-summary").append("<tr><td>Sunday:</td><td>"+days[0].string+"</td></tr>");
 
-            if (typeof(days[1].string) === "undefined") {
-                days[1].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Monday:</td><td>"+days[1].string+"</td></tr>");
+            // Need an array of days...
+            $("#scheduler-day-summary").empty();
 
-            if (typeof(days[2].string) === "undefined") {
-                days[2].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Tuesday:</td><td>"+days[2].string+"</td></tr>");
+            var daySumHTML = [];
 
-            if (typeof(days[3].string) === "undefined") {
-                days[3].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Wednesday:</td><td>"+days[3].string+"</td></tr>");
+            console.log(weekSummaryData);
 
-            if (typeof(days[4].string) === "undefined") {
-                days[4].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Thursday:</td><td>"+days[4].string+"</td></tr>");
-            
-            if (typeof(days[5].string) === "undefined") {
-                days[5].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Friday:</td><td>"+days[5].string+"</td></tr>");
+            for (var d=0; d<weekSummaryData.length; d++) {
 
-            if (typeof(days[6].string) === "undefined") {
-                days[6].string = '<em>No hours</em>';
-            }
-            $("#week-summary").append("<tr><td>Saturday:</td><td>"+days[6].string+"</td></tr>");
+                var summaryDay = weekSummaryData[d];
 
-        }
+                summaryDay.target = parseFloat(summaryDay.target).toFixed(2);
+                summaryDay.empTarget = parseFloat(summaryDay.empTarget).toFixed(2);
+                summaryDay.diff = parseFloat(summaryDay.empTarget - summaryDay.target).toFixed(2);
+
+                daySumHTML.push([
+                    "<tr class='info day-header'>",
+                        "<td align='center' rowspan='2' class='day-label'>" + summaryDay.dayName + "<br />" + summaryDay.dateLabel + "</td>",
+                        "<td align='right'>Sales</td>",
+                        "<td align='right'>EmpTarget</td>",
+                        "<td align='right'>Diff</td>",
+                        "<td align='right'>Hours</td>",
+                    "</tr>",
+                    "<tr class='info day-header'>",
+                        "<td align='right'>$"+summaryDay.target+"</td>",
+                        "<td align='right'>$"+summaryDay.empTarget+"</td>",
+                        "<td align='right'>$"+summaryDay.diff+"</td>",
+                        "<td align='right'>"+parseFloat(summaryDay.totalHours).toFixed(2)+"</td>",
+                    "</tr>"
+                ]);
+
+                if (weekSummaryData[d].scheduledEmps.length) {
+
+                    for (var changeMeA=0; changeMeA<weekSummaryData[d].scheduledEmps.length; changeMeA++) {
+
+                        var e = weekSummaryData[d].scheduledEmps[changeMeA];
+
+                        e.empTarget = parseFloat(e.empTarget).toFixed(2);
+                        e.empTotalHours = parseFloat(e.empTotalHours).toFixed(2);
+
+                        daySumHTML.push([
+                            "<tr class='warning emp-header'>",
+                                "<td align='right'>"+e.empID+"</td>",
+                                "<td align='right'></td>",
+                                "<td align='right'>$"+e.empTarget+"</td>",
+                                "<td align='right'></td>",
+                                "<td align='right'>"+e.empTotalHours+"</td>",
+                            "</tr>"
+                        ]);
+
+                        for (var cio=0; cio<e.empInOuts.length; cio++) {
+
+                            var changeMeB = e.empInOuts[cio];
+
+                            changeMeB.date_in = inOutLabel(changeMeB.date_in);
+                            changeMeB.date_out = inOutLabel(changeMeB.date_out);
+
+                            daySumHTML.push([
+                                "<tr>",
+                                    "<td></td>",
+                                    "<td></td>",
+                                    "<td align='right'>"+changeMeB.date_in+"</td>",
+                                    "<td align='right'>"+changeMeB.date_out+"</td>",
+                                    "<td align='right'>"+changeMeB.hoursElapsed.toFixed(2)+"</td>",
+                                "</tr>"
+                            ]);
+
+                        }
+                    }
+                }
+            }
+
+            $("#scheduler-day-summary").html(daySumHTML.join(""));
+
+        });
+
     });
+
 }
 
 $(document).ready(function(){
