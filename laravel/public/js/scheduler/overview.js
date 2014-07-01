@@ -298,8 +298,6 @@ function loadSchedule(strDate) {
 
             var daySumHTML = [];
 
-            console.log(weekSummaryData);
-
             for (var d=0; d<weekSummaryData.length; d++) {
 
                 var summaryDay = weekSummaryData[d];
