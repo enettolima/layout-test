@@ -16,20 +16,24 @@
                                 $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
                             }
 
-                            $futureWeekCount = 10;
                             // Get the Sunday for this week
-                            $lastSunday = strtotime('last sunday');
-                            $futureWeekCount = 10;
+                            $pastWeekCount = 4;
+                            $futureWeekCount = 8;
                             $selectorDateFormat = 'D, M jS, Y';
                             $ranges = array();
 
                             // Get the Sunday for this week
                             $lastSunday = strtotime('last sunday');
 
-                            for ($i=0; $i<$futureWeekCount; $i++) {
-                                $ranges[] = array('start' => $lastSunday, 'end' => $lastSunday + (86400 * 6));
-                                $lastSunday = $lastSunday + (86400 * 7);
+                            $start = $lastSunday - ($pastWeekCount * 7 * 24 * 60 * 60);
+
+                            for ($i=0; $i<$pastWeekCount+$futureWeekCount; $i++) {
+                                $ranges[] = array('start' => $start, 'end' => $start + (86400 * 6));
+                                $start = $start + (86400 * 7);
                             }
+
+                            Clog::log('foo');
+                            Clog::log($ranges);
 
                             foreach ($ranges as $range) {
                                 $weekOf = date('Y-m-d', $range['start']);
@@ -223,7 +227,6 @@
     <div class="row">
 
 
-        <!-- TEMPLATE STUFF
 
         <br /> <br />
         <p class="bg-danger">bg-danger</p>
@@ -396,7 +399,6 @@
                 </tr>
             </table>
         </div>
-        -->
 
         <div class="col-xs-5">
             <h4>Schedule Summary by Day</h4>
