@@ -211,28 +211,30 @@ function loadSchedule(strDate) {
                 var empInOuts = [];
 
                 // For each Person attached to this schedule
-                for (var emp=0; emp<weekSchedule.meta.sequence.length; emp++) {
+                if (typeof weekSchedule.meta.sequence !== 'undefined' && weekSchedule.meta.sequence.length) {
+                    for (var emp=0; emp<weekSchedule.meta.sequence.length; emp++) {
 
-                    var empID = weekSchedule.meta.sequence[emp];
+                        var empID = weekSchedule.meta.sequence[emp];
 
-                    if (weekSchedule.schedule[day].length) {
-                        // This day has some inouts. Iterate through them looking
-                        // for our current person
-                        for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
+                        if (weekSchedule.schedule[day].length) {
+                            // This day has some inouts. Iterate through them looking
+                            // for our current person
+                            for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
 
-                            var inOutSet = weekSchedule.schedule[day][sumIO];
+                                var inOutSet = weekSchedule.schedule[day][sumIO];
 
-                            if (inOutSet.eid === empID) {
-                                for (var empIO=0; empIO<inOutSet.inouts.length; empIO++) {
+                                if (inOutSet.eid === empID) {
+                                    for (var empIO=0; empIO<inOutSet.inouts.length; empIO++) {
 
-                                    empInOuts.push({
-                                        "associate_id" : empID,
-                                        "date_in" : "2014-01-01 " + inOutSet.inouts[empIO].in + ":00",
-                                        "date_out" : "2014-01-01 " + inOutSet.inouts[empIO].out + ":00",
-                                        "id" : "000",
-                                        "store_id" : "000"
-                                    });
+                                        empInOuts.push({
+                                            "associate_id" : empID,
+                                            "date_in" : "2014-01-01 " + inOutSet.inouts[empIO].in + ":00",
+                                            "date_out" : "2014-01-01 " + inOutSet.inouts[empIO].out + ":00",
+                                            "id" : "000",
+                                            "store_id" : "000"
+                                        });
 
+                                    }
                                 }
                             }
                         }
