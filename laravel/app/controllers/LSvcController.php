@@ -490,6 +490,7 @@ class LSvcController extends BaseController
         return Response::json($returnArray);
     }
 
+    // TODO: Move this to API
     public function getSchedulerTargets()
     {
         // /scheduler-targets/301/2014-01-01
@@ -542,14 +543,92 @@ class LSvcController extends BaseController
         return Response::json($returnval);
     }
 
+    // TODO: Move this to API
+    public function getSchedulerActuals()
+    {
+        // /scheduler-targets/301/2014-01-01
+
+        $store = Request::segment(3);
+
+        $weekOf = Request::segment(4);
+
+        $from = date("m/d/Y", strtotime($weekOf)); // Sunday, or "Week Of"
+
+        $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6));
+
+        $targetsSQL = "
+            SELECT
+                CODE,
+                DATE,
+                DayWk,
+                EMPL_NAME,
+                EXT_PRICE,
+                LastPollTime
+            FROM
+                SCHED_SALES_BY_EMPLOYEE
+            WHERE
+                CODE = $store AND
+                DATE >= convert(datetime, '$from', 101) AND
+                DATE <= convert(datetime, '$to', 101)
+        ";
+
+        $targetsRES = DB::connection('sqlsrv')->select($targetsSQL);
+
+        $returnval = array(
+            'summaries' => array(
+                'byDate' => array(),
+                'byEmp' => array()
+            ),
+            'total' => 0.00,
+            'minPollTimestamp' => null 
+        );
+
+        foreach ($targetsRES as $result) {
+
+            $dateFmt = date("Y-m-d", strtotime($result->DATE));
+
+            // Fill out the 'byDate' summary
+            if (! array_key_exists($dateFmt, $returnval['summaries']['byDate'])) {
+                $returnval['summaries']['byDate'][$dateFmt] = array('total' => 0.00, 'emps' => array());
+            }
+
+            if (! array_key_exists($result->EMPL_NAME, $returnval['summaries']['byDate'][$dateFmt]['emps'])) {
+                $returnval['summaries']['byDate'][$dateFmt]['emps'][$result->EMPL_NAME] = 0.00;
+            }
+
+            $returnval['summaries']['byDate'][$dateFmt]['total'] += $result->EXT_PRICE;
+
+            $returnval['summaries']['byDate'][$dateFmt]['emps'][$result->EMPL_NAME] += $result->EXT_PRICE;
+
+            // Fill out the byEmp summary
+            if (! array_key_exists($result->EMPL_NAME, $returnval['summaries']['byEmp'])){
+                $returnval['summaries']['byEmp'][$result->EMPL_NAME] = array('total' => 0.00, 'dates' => array());
+            }
+
+            if (! array_key_exists($dateFmt, $returnval['summaries']['byEmp'][$result->EMPL_NAME]['dates'])) {
+                $returnval['summaries']['byEmp'][$result->EMPL_NAME]['dates'][$dateFmt] = 0.00;
+            }
+
+            $returnval['summaries']['byEmp'][$result->EMPL_NAME]['dates'][$dateFmt] += $result->EXT_PRICE;
+            $returnval['summaries']['byEmp'][$result->EMPL_NAME]['total'] += $result->EXT_PRICE;
+
+            $returnval['total'] += $result->EXT_PRICE;
+
+            if (! $returnval['minPollTimestamp'] || strtotime($result->LastPollTime) < $returnval['minPollTimestamp']) {
+                $returnval['minPollTimestamp'] = strtotime($result->LastPollTime);
+            }
+
+        }
+
+        return Response::json($returnval);
+    }
+
     /*
      * Currently a "stub" function which will probably be hooked into Oracle
      */
     public function getEmployees()
     {
-
         $emps = DB::connection('mysql')->table('employees_lookup')->select('empl_name as userId', 'rpro_full_name as fullName')->orderBy('empl_name')->get();
-
         return Response::json($emps);
     }
 

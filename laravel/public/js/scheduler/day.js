@@ -84,7 +84,7 @@ $(document).ready(function() {
                 $(".fc-col" + i).removeClass("fc-state-off");
 
                 // Label the column
-                $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i]) );
+                $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i], empMasterDatabase) );
             }
 
         }
@@ -298,7 +298,7 @@ function updateSummaries()
         row = "";
         row += "<tr>";
         row += "<td>"+emp+"</td>";
-        row += "<td>"+getEmpNameFromCode(emp)+"</td>";
+        row += "<td>"+getEmpNameFromCode(emp, empMasterDatabase)+"</td>";
         row += "<td class=\"text-right\">$"+parseFloat(budgetByEmployee[emp]).toFixed(2)+"</td>";
         row += "</tr>";
 
@@ -337,6 +337,7 @@ function getNextAvailableColumn(){
     return returnval;
 }
 
+/*
 function getEmpNameFromCode(strCode){
     var results = $.grep(empMasterDatabase, function(e){ return e.userId === strCode; });
 
@@ -348,6 +349,7 @@ function getEmpNameFromCode(strCode){
         return false;
     }
 }
+*/
 
 $(document).on("click", "#block-remove-modal-confirm", function(){
 
