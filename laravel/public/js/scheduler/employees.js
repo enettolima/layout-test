@@ -19,10 +19,10 @@ function getEmpNameFromCode(strCode, empMasterDatabase){
     var results = $.grep(empMasterDatabase, function(e){ return e.userId === strCode; });
 
     if (results.length === 0) {
-        return 'Name Lookup Error';
+        return '';
     } else if (results.length === 1) {
         return results[0].fullName;
     } else {
-        return 'Name Lookup Error';
+        return '';
     }
 }

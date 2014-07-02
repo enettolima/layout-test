@@ -316,7 +316,7 @@ function loadSchedule(strDate) {
                             if (typeof budgetByEmployee[empFromActual] === "undefined") {
 
                                 var unscheduledEmp = {
-                                    "empID" : empFromActual + " (unscheduled)",
+                                    "empID" : empFromActual + " (U)",
                                     "empTarget" : 0,
                                     "empInOuts" : [],
                                     "empActual": empsFromActuals[empFromActual],
