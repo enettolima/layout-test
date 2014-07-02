@@ -370,7 +370,7 @@ function loadSchedule(strDate) {
                         "<tr class='info day-header'>",
                             "<td align='right'>"+summaryDay.target+"</td>",
                             "<td align='right'>"+summaryDay.empTarget+"</td>",
-                            "<td align='right'>"+summaryDay.actual+"</td>",
+                            "<td align='right'>"+summaryDay.actual.toFixed(2)+"</td>",
                             "<td align='right'>"+summaryDay.diff+"</td>",
                             "<td align='right'>"+parseFloat(summaryDay.totalHours).toFixed(2)+"</td>",
                         "</tr>"
