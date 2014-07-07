@@ -223,9 +223,15 @@
     <!-- Summary Section -->
     <div class="row">
 
-        <div class="col-xs-5">
-            <h4>Schedule Summary by Day</h4>
+        <div class="col-xs-6">
+            <h4>Week Summary by Day</h4>
             <table id="scheduler-day-summary" class="new-day-summary summary-table table table-condensed">
+                <tr><td><em>Loading...</em></td></tr>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <h4>Week Summary by Employee</h4>
+            <table id="scheduler-emp-summary" class="new-emp-summary summary-table table table-condensed">
                 <tr><td><em>Loading...</em></td></tr>
             </table>
         </div>

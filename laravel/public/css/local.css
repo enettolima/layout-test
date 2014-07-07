@@ -155,7 +155,7 @@ a.schedule-graphic-header:hover{
     cursor: pointer;
 }
 
-/* Scheduler Week Overview */
+/* Scheduler Overview */
 #staff-picker tr.staffmember-row:not(.text-muted):hover{
     cursor:pointer;
 	background-color:#428bca;
@@ -170,6 +170,8 @@ a.schedule-graphic-header:hover{
 	cursor:default;
 }
 
+
+/* Schedule Summary by Day */
 .new-day-summary tr.summary-header{
     background:#efefef;
 }
@@ -186,3 +188,19 @@ a.schedule-graphic-header:hover{
     font-size:20px;
 }
 
+/* Schedule Summary by Employee */
+.new-emp-summary tr.summary-header{
+    background:#efefef;
+}
+
+.new-emp-summary .emp-header td {
+    font-weight:bold;
+}
+
+.new-emp-summary .day-header td {
+    font-weight:bold;
+}
+
+.new-emp-summary .day-header td.day-label {
+    font-size:20px;
+}
