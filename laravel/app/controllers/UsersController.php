@@ -84,8 +84,6 @@ class UsersController extends BaseController
             $rpResults = $api->post('/rprousers/auth', $data);
             // $rpResults = $api->post('/rprousers/mockauth', $data);
 
-            Clog::log($rpResults);
-
 			if ($rpResults) {
 
 				if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
@@ -182,8 +180,8 @@ class UsersController extends BaseController
 
                     $u->roles()->sync($userRoles);
 
+                    UserLog::logSuccess($u->username);
 					Auth::login($u);
-
 				}
 			}
 		}
@@ -198,6 +196,8 @@ class UsersController extends BaseController
 
 			return Redirect::to('/home');// ->with('message', 'You are now logged in');
 		} else {
+
+            UserLog::logFailure(Input::get('username'));
 
 			return Redirect::to('users/login')
 				->with('loginMessage', 'Invalid Login') ->withInput();
