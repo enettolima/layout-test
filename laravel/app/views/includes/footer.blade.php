@@ -1,7 +1,7 @@
 <?php
 
 // Todo: Make this respect live/dev (which will make more sense when we have a real live site
-if (! getenv("HTTP_HOST") == 'cdev.ebtpassport.com') {
+if (getenv("HTTP_HOST") != 'cdev.ebtpassport.com') {
 
 ?>
 
