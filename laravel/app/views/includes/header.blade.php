@@ -9,10 +9,10 @@
                     @if(Auth::check())
                         <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Documents</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
-                        <li class="<?php echo Request::is('forms*') ?  'active' : '' ?>"><a href="/forms">Forms</a></li>
 
                         @if(Auth::user()->hasRole('Developer'))
                             <!--<li class="<?php echo Request::is('dev*') ? 'active' : '' ?>"><a href="/dev">Dev</a></li>-->
+                            <li class="<?php echo Request::is('forms*') ?  'active' : '' ?>"><a href="/forms">Forms</a></li>
                         @endif
 
                         @if(Auth::user()->hasRole('Administrator'))
