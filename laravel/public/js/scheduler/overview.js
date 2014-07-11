@@ -97,7 +97,7 @@ function addEmployeeToSchedule(employeeObj)
     })
 
     .fail(function(jaXHR, textStatus){
-        console.log(textStatus);
+        // console.log(textStatus);
     });
 }
 
@@ -112,9 +112,9 @@ var bonsaiMovie = bonsai.run(
 
 function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
-    console.log(weekSchedule);
-    console.log(targetsData);
-    console.log(actualsData);
+    // console.log(weekSchedule);
+    // console.log(targetsData);
+    // console.log(actualsData);
 
     var summaryData = [];
 
@@ -122,7 +122,7 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
         for (var empKey in weekSchedule.meta.sequence) {
 
             var empID =  weekSchedule.meta.sequence[empKey];
-            console.log("----------------- on " + empID + " -----------------------");
+            // console.log("----------------- on " + empID + " -----------------------");
 
             var empSummaryData = {};
 
@@ -135,7 +135,7 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
             for (var dayKey in weekSchedule.schedule) {
 
-                console.log("----------------- on day " + dayKey + " -----------------------");
+                // console.log("----------------- on day " + dayKey + " -----------------------");
 
                 dayKey = parseInt(dayKey);
 
@@ -147,12 +147,23 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
                 daySummary.hours          = 0;
                 daySummary.scheduledSales = 0;
 
-                var actualsForDay = actualsData.summaries.byEmp[empID].dates[daySummary.Ymd];
+                // console.log('--------------------------');
+                // console.log(actualsData.summaries.byEmp[empID]);
+                /*
 
-                if (typeof actualsForDay !== "undefined") {
-                    daySummary.actualSales = actualsForDay;
-                } else {
+                var actualsForDay = actualsData.summaries.byEmp[empID].dates[daySummary.Ymd];
+               */
+
+                // console.log("typeof actualsData.summaries.byEmp[empID]:");
+                // console.log(typeof actualsData.summaries.byEmp[empID]);
+                // console.log(actualsData.summaries.byEmp[empID]);
+                if (typeof actualsData.summaries.byEmp[empID] === "undefined" || typeof actualsData.summaries.byEmp[empID].dates[daySummary.Ymd] === "undefined") {
+                    // console.log("Setting daySummary.actualsales to 0");
                     daySummary.actualSales    = 0;
+                } else {
+                    // console.log("Setting daySummary.actualsales to " + actualsData.summaries.byEmp[empID].dates[daySummary.Ymd]);
+                    // console.log("this day:" + daySummary.Ymd);
+                    daySummary.actualSales = actualsData.summaries.byEmp[empID].dates[daySummary.Ymd];
                 }
 
                 empSummaryData.totalActualSales += daySummary.actualSales;
@@ -189,10 +200,10 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
                     }
                 }
 
-                console.log("Total Hours: " + daySummary.hours); 
+                // console.log("Total Hours: " + daySummary.hours); 
 
                 if (allEmpInOuts.length) {
-                    console.log("got all the emp inouts for this day, do the budget...");
+                    // console.log("got all the emp inouts for this day, do the budget...");
 
                     var goals = [];
 
@@ -215,8 +226,8 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
                     }
                 }
 
-                console.log("daySummary:");
-                console.log(daySummary);
+                // console.log("daySummary:");
+                // console.log(daySummary);
 
                 empSummaryData.schedDays.push(daySummary);
             }
@@ -225,7 +236,7 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
         }
     }
 
-    console.log(summaryData);
+    // console.log(summaryData);
 
     // Get the emps that are on the schedule and have data, then 
     // go back and add non-scheduled emps. Don't show emps that have no inouts?
@@ -479,7 +490,7 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
                 var empNameShortened = empNameString;
 
                 if (empNameArray.length === 2) {
-                    empNameShortened = empNameArray[0] + " " + empNameArray[1].substr(1,1).toUpperCase() + ".";
+                    empNameShortened = empNameArray[0] + " " + empNameArray[1].substr(0,1).toUpperCase() + ".";
                 }
 
                 daySumHTML.push([
