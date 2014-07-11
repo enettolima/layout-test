@@ -112,13 +112,13 @@ var bonsaiMovie = bonsai.run(
 
 function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
-    // console.log(weekSchedule);
+    console.log(weekSchedule);
     // console.log(targetsData);
     // console.log(actualsData);
 
     var summaryData = [];
 
-    if (weekSchedule.meta.sequence.length) {
+    if (weekSchedule.meta.sequence && weekSchedule.meta.sequence.length) {
         for (var empKey in weekSchedule.meta.sequence) {
 
             var empID =  weekSchedule.meta.sequence[empKey];
@@ -236,49 +236,53 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
         }
     }
 
-    // console.log(summaryData);
+    console.log(summaryData.length);
 
     // Get the emps that are on the schedule and have data, then 
     // go back and add non-scheduled emps. Don't show emps that have no inouts?
 
     var summaryHTML = [];
 
-    for (var summaryKey in summaryData) {
+    if (summaryData.length) {
+        for (var summaryKey in summaryData) {
 
-        var diffWeekSales = summaryData[summaryKey].totalActualSales - summaryData[summaryKey].totalScheduledSales;
-
-        summaryHTML.push([
-            "<tr class='info day-header'>",
-                "<td class='info day-label' rowspan='2'>"+summaryData[summaryKey].empID+"</td>",
-                "<td align='right'>Sch Sales</td>",
-                "<td align='right'>Act Sales</td>",
-                "<td align='right'>Diff</td>",
-                "<td align='right'>Sch Hours</td>",
-            "</tr>",
-            "<tr class='info day-header'>",
-                "<td align='right'>"+summaryData[summaryKey].totalScheduledSales.toFixed(2)+"</td>",
-                "<td align='right'>"+summaryData[summaryKey].totalActualSales.toFixed(2)+"</td>",
-                "<td align='right'>"+diffWeekSales.toFixed(2)+"</td>",
-                "<td align='right'>"+summaryData[summaryKey].totalHours.toFixed(2)+"</td>",
-            "</tr>"
-        ]);
-
-        for (var schedDayKey in summaryData[summaryKey].schedDays){
-
-            var schedDay = summaryData[summaryKey].schedDays[schedDayKey];
-
-            var diffDaySales = schedDay.actualSales - schedDay.scheduledSales;
+            var diffWeekSales = summaryData[summaryKey].totalActualSales - summaryData[summaryKey].totalScheduledSales;
 
             summaryHTML.push([
-                "<tr>",
-                    "<td align='right'>"+schedDay.dayName+" "+schedDay.md+"</td>",
-                    "<td align='right'>"+schedDay.scheduledSales.toFixed(2)+"</td>",
-                    "<td align='right'>"+schedDay.actualSales.toFixed(2)+"</td>",
-                    "<td align='right'>"+diffDaySales.toFixed(2)+"</td>",
-                    "<td align='right'>"+schedDay.hours.toFixed(2)+"</td>",
+                "<tr class='info day-header'>",
+                    "<td class='info day-label' rowspan='2'>"+summaryData[summaryKey].empID+"</td>",
+                    "<td align='right'>Sch Sales</td>",
+                    "<td align='right'>Act Sales</td>",
+                    "<td align='right'>Diff</td>",
+                    "<td align='right'>Sch Hours</td>",
+                "</tr>",
+                "<tr class='info day-header'>",
+                    "<td align='right'>"+summaryData[summaryKey].totalScheduledSales.toFixed(2)+"</td>",
+                    "<td align='right'>"+summaryData[summaryKey].totalActualSales.toFixed(2)+"</td>",
+                    "<td align='right'>"+diffWeekSales.toFixed(2)+"</td>",
+                    "<td align='right'>"+summaryData[summaryKey].totalHours.toFixed(2)+"</td>",
                 "</tr>"
             ]);
+
+            for (var schedDayKey in summaryData[summaryKey].schedDays){
+
+                var schedDay = summaryData[summaryKey].schedDays[schedDayKey];
+
+                var diffDaySales = schedDay.actualSales - schedDay.scheduledSales;
+
+                summaryHTML.push([
+                    "<tr>",
+                        "<td align='right'>"+schedDay.dayName+" "+schedDay.md+"</td>",
+                        "<td align='right'>"+schedDay.scheduledSales.toFixed(2)+"</td>",
+                        "<td align='right'>"+schedDay.actualSales.toFixed(2)+"</td>",
+                        "<td align='right'>"+diffDaySales.toFixed(2)+"</td>",
+                        "<td align='right'>"+schedDay.hours.toFixed(2)+"</td>",
+                    "</tr>"
+                ]);
+            }
         }
+    } else {
+        summaryHTML.push(["<tr><td><em>No staffmembers have been added to this schedule.</em></td></tr>"]);
     }
 
     $("#scheduler-emp-summary").empty().html(summaryHTML.join(""));
