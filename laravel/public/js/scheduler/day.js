@@ -9,9 +9,9 @@ var inOuts = [];
 var goals = [];
 
 $(document).bind("ajaxSend", function(){
-    $("#page-cover").css("opacity",0.3).fadeIn(200);
+    $("#page-cover").css("opacity",0.15).fadeIn(100);
 }).bind("ajaxComplete", function(){
-    $("#page-cover").css("opacity",0.3).fadeOut(10);
+    $("#page-cover").hide();
 });
 
 $(document).ready(function() {
