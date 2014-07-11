@@ -2,6 +2,8 @@
 
 @section('content')
 
+    <div id="page-cover"></div>
+
     <div class="row">
         <div class="col-xs-5">
             <div role="form" class="form-horizontal">

@@ -8,22 +8,11 @@ var dayOffset = null;
 var inOuts = [];
 var goals = [];
 
-/*
-function timeToMin(dateString) {
-
-    var returnval = false;
-
-    var re = /^\d{4}-\d{2}-\d{2}\s(\d{2}):(\d{2}):(\d{2})$/;
-
-    var matches = re.exec(dateString);
-
-    if (matches) {
-        returnval = (parseInt(matches[1]) * 60) + parseInt(matches[2]);
-    } 
-
-    return returnval;
-}
-*/
+$(document).bind("ajaxSend", function(){
+    $("#page-cover").css("opacity",0.3).fadeIn(200);
+}).bind("ajaxComplete", function(){
+    $("#page-cover").css("opacity",0.3).fadeOut(10);
+});
 
 $(document).ready(function() {
 
@@ -39,7 +28,8 @@ $(document).ready(function() {
 
     var loadFromDB = $.ajax({
         url:  url,
-        type: "GET"
+        type: "GET",
+        global: false
     });
 
     var onEvent = 0;
@@ -54,7 +44,8 @@ $(document).ready(function() {
 
         var getTargets = $.ajax({
             url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
-            type: 'GET'
+            type: 'GET',
+            global: false
         });
 
         getTargets.done(function(data){

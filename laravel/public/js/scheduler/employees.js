@@ -11,6 +11,7 @@ var employeeRequest = $.ajax({
     type: "GET",
     async: false,
     cache: true,
+    global: false
 }).done(function(msg){
     employeesFromService = msg;
 });
