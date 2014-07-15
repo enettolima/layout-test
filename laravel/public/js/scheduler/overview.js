@@ -292,7 +292,7 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
     // Populate the Day Summary Data
     var weekSummaryData = [];
 
-    if (targetsData.length) {
+    if (Object.keys(targetsData).length) {
 
         for (var day=0; day <weekSchedule.meta.days.length; day++) {
 
