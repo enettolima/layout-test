@@ -375,12 +375,12 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
                     }
                 } 
 
-                var empActual = actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp];
+                var empActual = 0.00;
 
-                if (typeof empActual === "undefined") {
-                    empActual = 0.00;
-                } else {
-                    empActual = empActual.toFixed(2);
+                if (typeof actualsData.summaries.byDate[daySummaryData.dateFull] !== "undefined") {
+                    if (typeof actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp] !== "undefined") {
+                        empActual = actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp];
+                    }
                 }
 
                 var thisEmp = {
@@ -398,22 +398,24 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
             // Here I need to add employees that got time but weren't in the schedule.
 
-            var empsFromActuals = actualsData.summaries.byDate[daySummaryData.dateFull].emps;
+            if (typeof actualsData.summaries.byDate[daySummaryData.dateFull] !== "undefined") {
+                var empsFromActuals = actualsData.summaries.byDate[daySummaryData.dateFull].emps;
 
-            for (var empFromActual in empsFromActuals) {
+                for (var empFromActual in empsFromActuals) {
 
-                if (typeof budgetByEmployee[empFromActual] === "undefined") {
+                    if (typeof budgetByEmployee[empFromActual] === "undefined") {
 
-                    var unscheduledEmp = {
-                        "empID" : empFromActual + " (U)",
-                        "empTarget" : 0,
-                        "empInOuts" : [],
-                        "empActual": empsFromActuals[empFromActual],
-                        "empTotalHours" : undefined
-                    };
+                        var unscheduledEmp = {
+                            "empID" : empFromActual + " (U)",
+                            "empTarget" : 0,
+                            "empInOuts" : [],
+                            "empActual": empsFromActuals[empFromActual],
+                            "empTotalHours" : undefined
+                        };
 
-                    daySummaryData.scheduledEmps.push(unscheduledEmp);
+                        daySummaryData.scheduledEmps.push(unscheduledEmp);
 
+                    }
                 }
             }
 
