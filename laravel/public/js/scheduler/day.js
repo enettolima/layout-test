@@ -53,11 +53,15 @@ $(document).ready(function() {
             // TODO: Can I remove this from the global scope?
             dayTargetData = data[dayOffset+1];
 
-            for (var key in data[dayOffset+1].hours) {
-                goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
-            }
+            if (typeof dayTargetData !== "undefined") {
+                for (var key in data[dayOffset+1].hours) {
+                    goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
+                }
 
-            updateSummaries();
+                updateSummaries();
+            } else {
+                updateSummariesNotReady();
+            }
         });
 
         var view = $('#calendar').fullCalendar('getView');
@@ -238,6 +242,14 @@ function milToStandard(hour)
     }
 
     return hourLabel;
+}
+
+function updateSummariesNotReady()
+{
+    $("#day-target").html("<em>Target data not available yet.</em>"); 
+    $("#day-hours").html("<em>Target data not available yet.</em>"); 
+    $("#new-day-hours-detail tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
+    $("#emp-hours-summary tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
 }
 
 function updateSummaries()

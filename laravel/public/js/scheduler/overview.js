@@ -112,7 +112,7 @@ var bonsaiMovie = bonsai.run(
 
 function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
-    console.log(weekSchedule);
+    // console.log(weekSchedule);
     // console.log(targetsData);
     // console.log(actualsData);
 
@@ -236,7 +236,6 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
         }
     }
 
-    console.log(summaryData.length);
 
     // Get the emps that are on the schedule and have data, then 
     // go back and add non-scheduled emps. Don't show emps that have no inouts?
@@ -293,135 +292,138 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
     // Populate the Day Summary Data
     var weekSummaryData = [];
 
-    for (var day=0; day <weekSchedule.meta.days.length; day++) {
+    if (targetsData.length) {
 
-        var dayObj = weekSchedule.meta.days[day];
+        for (var day=0; day <weekSchedule.meta.days.length; day++) {
 
-        var daySummaryData = {};
+            var dayObj = weekSchedule.meta.days[day];
 
-        daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
-        daySummaryData.dayName = dayObj.dayName;
-        daySummaryData.dateLabel = dayObj.md;
-        daySummaryData.dateFull = dayObj.Ymd;
-        daySummaryData.empTarget = 0.00; // Initialize this
-        daySummaryData.scheduledEmps = [];
-        daySummaryData.totalHours = 0;
+            var daySummaryData = {};
 
-        var empInOuts = [];
+            daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
+            daySummaryData.dayName = dayObj.dayName;
+            daySummaryData.dateLabel = dayObj.md;
+            daySummaryData.dateFull = dayObj.Ymd;
+            daySummaryData.empTarget = 0.00; // Initialize this
+            daySummaryData.scheduledEmps = [];
+            daySummaryData.totalHours = 0;
 
-        // For each Person attached to this schedule
-        if (typeof weekSchedule.meta.sequence !== "undefined" && weekSchedule.meta.sequence.length) {
-            for (var emp=0; emp<weekSchedule.meta.sequence.length; emp++) {
+            var empInOuts = [];
 
-                var empID = weekSchedule.meta.sequence[emp];
+            // For each Person attached to this schedule
+            if (typeof weekSchedule.meta.sequence !== "undefined" && weekSchedule.meta.sequence.length) {
+                for (var emp=0; emp<weekSchedule.meta.sequence.length; emp++) {
 
-                if (weekSchedule.schedule[day].length) {
-                    // This day has some inouts. Iterate through them looking
-                    // for our current person
-                    for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
+                    var empID = weekSchedule.meta.sequence[emp];
 
-                        var inOutSet = weekSchedule.schedule[day][sumIO];
+                    if (weekSchedule.schedule[day].length) {
+                        // This day has some inouts. Iterate through them looking
+                        // for our current person
+                        for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
 
-                        if (inOutSet.eid === empID) {
-                            for (var empIO=0; empIO<inOutSet.inouts.length; empIO++) {
+                            var inOutSet = weekSchedule.schedule[day][sumIO];
 
-                                empInOuts.push({
-                                    "associate_id" : empID,
-                                    "date_in" : "2014-01-01 " + inOutSet.inouts[empIO].in + ":00",
-                                    "date_out" : "2014-01-01 " + inOutSet.inouts[empIO].out + ":00",
-                                    "id" : "000",
-                                    "store_id" : "000"
-                                });
+                            if (inOutSet.eid === empID) {
+                                for (var empIO=0; empIO<inOutSet.inouts.length; empIO++) {
+
+                                    empInOuts.push({
+                                        "associate_id" : empID,
+                                        "date_in" : "2014-01-01 " + inOutSet.inouts[empIO].in + ":00",
+                                        "date_out" : "2014-01-01 " + inOutSet.inouts[empIO].out + ":00",
+                                        "id" : "000",
+                                        "store_id" : "000"
+                                    });
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        if (empInOuts.length) {
+            if (empInOuts.length) {
 
-            var goals = [];
+                var goals = [];
 
-            for (var hour in targetsData[day+1].hours) {
-                goals.push({
-                    "goal" : targetsData[day+1].hours[hour].budget,
-                    "hour" : hour
-                });
-            }
+                for (var hour in targetsData[day+1].hours) {
+                    goals.push({
+                        "goal" : targetsData[day+1].hours[hour].budget,
+                        "hour" : hour
+                    });
+                }
 
-            // I HAVE THE empInOuts and the goals for SS!
-            var SS = new SchedulerSummary(goals, empInOuts);
-            var budgetByEmployee = SS.getBudgetByEmployee();
+                // I HAVE THE empInOuts and the goals for SS!
+                var SS = new SchedulerSummary(goals, empInOuts);
+                var budgetByEmployee = SS.getBudgetByEmployee();
 
-            for (var budgetedEmp in budgetByEmployee) {
+                for (var budgetedEmp in budgetByEmployee) {
 
-                var thisEmpTotalHours = 0;
+                    var thisEmpTotalHours = 0;
 
-                var thisEmpInOuts = [];
+                    var thisEmpInOuts = [];
 
-                for(var eio=0; eio<empInOuts.length; eio++) {
-                    if (empInOuts[eio].associate_id === budgetedEmp) {
+                    for(var eio=0; eio<empInOuts.length; eio++) {
+                        if (empInOuts[eio].associate_id === budgetedEmp) {
 
-                        var hoursElapsed = hoursFromInOut(empInOuts[eio].date_in, empInOuts[eio].date_out);
+                            var hoursElapsed = hoursFromInOut(empInOuts[eio].date_in, empInOuts[eio].date_out);
 
-                        daySummaryData.totalHours += parseFloat(hoursElapsed);
+                            daySummaryData.totalHours += parseFloat(hoursElapsed);
 
-                        thisEmpTotalHours += hoursElapsed;
+                            thisEmpTotalHours += hoursElapsed;
 
-                        empInOuts[eio].hoursElapsed = hoursElapsed;
+                            empInOuts[eio].hoursElapsed = hoursElapsed;
 
-                        thisEmpInOuts.push(empInOuts[eio]);
+                            thisEmpInOuts.push(empInOuts[eio]);
+                        }
+                    } 
+
+                    var empActual = 0.00;
+
+                    if (typeof actualsData.summaries.byDate[daySummaryData.dateFull] !== "undefined") {
+                        if (typeof actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp] !== "undefined") {
+                            empActual = actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp];
+                        }
                     }
-                } 
 
-                var empActual = 0.00;
+                    var thisEmp = {
+                        "empID" : budgetedEmp, 
+                        "empTarget" : budgetByEmployee[budgetedEmp],
+                        "empInOuts" : thisEmpInOuts,
+                        "empTotalHours" : thisEmpTotalHours,
+                        "empActual" : empActual
+                    };
+
+                    daySummaryData.empTarget += budgetByEmployee[budgetedEmp];
+
+                    daySummaryData.scheduledEmps.push(thisEmp);
+                }
+
+                // Here I need to add employees that got time but weren't in the schedule.
 
                 if (typeof actualsData.summaries.byDate[daySummaryData.dateFull] !== "undefined") {
-                    if (typeof actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp] !== "undefined") {
-                        empActual = actualsData.summaries.byDate[daySummaryData.dateFull].emps[budgetedEmp];
+                    var empsFromActuals = actualsData.summaries.byDate[daySummaryData.dateFull].emps;
+
+                    for (var empFromActual in empsFromActuals) {
+
+                        if (typeof budgetByEmployee[empFromActual] === "undefined") {
+
+                            var unscheduledEmp = {
+                                "empID" : empFromActual + " (U)",
+                                "empTarget" : 0,
+                                "empInOuts" : [],
+                                "empActual": empsFromActuals[empFromActual],
+                                "empTotalHours" : undefined
+                            };
+
+                            daySummaryData.scheduledEmps.push(unscheduledEmp);
+
+                        }
                     }
                 }
 
-                var thisEmp = {
-                    "empID" : budgetedEmp, 
-                    "empTarget" : budgetByEmployee[budgetedEmp],
-                    "empInOuts" : thisEmpInOuts,
-                    "empTotalHours" : thisEmpTotalHours,
-                    "empActual" : empActual
-                };
-
-                daySummaryData.empTarget += budgetByEmployee[budgetedEmp];
-
-                daySummaryData.scheduledEmps.push(thisEmp);
             }
 
-            // Here I need to add employees that got time but weren't in the schedule.
-
-            if (typeof actualsData.summaries.byDate[daySummaryData.dateFull] !== "undefined") {
-                var empsFromActuals = actualsData.summaries.byDate[daySummaryData.dateFull].emps;
-
-                for (var empFromActual in empsFromActuals) {
-
-                    if (typeof budgetByEmployee[empFromActual] === "undefined") {
-
-                        var unscheduledEmp = {
-                            "empID" : empFromActual + " (U)",
-                            "empTarget" : 0,
-                            "empInOuts" : [],
-                            "empActual": empsFromActuals[empFromActual],
-                            "empTotalHours" : undefined
-                        };
-
-                        daySummaryData.scheduledEmps.push(unscheduledEmp);
-
-                    }
-                }
-            }
-
+            weekSummaryData.push(daySummaryData);
         }
-
-        weekSummaryData.push(daySummaryData);
     }
 
     $("#scheduler-day-summary").empty();
@@ -429,107 +431,112 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
     // Create the Day Summary HTML
     var daySumHTML = [];
 
-    for (var d=0; d<weekSummaryData.length; d++) {
+    if (weekSummaryData.length) {
 
-        var summaryDay = weekSummaryData[d];
+        for (var d=0; d<weekSummaryData.length; d++) {
 
-        summaryDay.actual = 0;
+            var summaryDay = weekSummaryData[d];
 
-        if (actualsData.summaries.byDate[summaryDay.dateFull]) {
-            summaryDay.actual = actualsData.summaries.byDate[summaryDay.dateFull].total;
-        }
+            summaryDay.actual = 0;
 
-        summaryDay.target    = parseFloat(summaryDay.target).toFixed(2);
-        summaryDay.empTarget = parseFloat(summaryDay.empTarget).toFixed(2);
-        summaryDay.diff      = parseFloat(summaryDay.actual - summaryDay.target).toFixed(2);
+            if (actualsData.summaries.byDate[summaryDay.dateFull]) {
+                summaryDay.actual = actualsData.summaries.byDate[summaryDay.dateFull].total;
+            }
 
-        if (summaryDay.diff < 0) {
-            summaryDay.diff = "<span class=\"text-danger bg-danger\">" + summaryDay.diff + "</span>";
-        } else if (summaryDay.diff > 0) {
-            summaryDay.diff = "<span class=\"text-success\">" + summaryDay.diff + "</span>";
-        }
+            summaryDay.target    = parseFloat(summaryDay.target).toFixed(2);
+            summaryDay.empTarget = parseFloat(summaryDay.empTarget).toFixed(2);
+            summaryDay.diff      = parseFloat(summaryDay.actual - summaryDay.target).toFixed(2);
 
-        daySumHTML.push([
-            "<tr class='info day-header'>",
-            "<td align='left' rowspan='2' class='day-label'>" + summaryDay.dayName + "<br />" + summaryDay.dateLabel + "</td>",
-            "<td align='right'>Goal</td>",
-            "<td align='right'>Scheduled</td>",
-            "<td align='right'>Actual</td>",
-            "<td align='right'>Diff</td>",
-            "<td align='right'>Hours</td>",
-            "</tr>",
-            "<tr class='info day-header'>",
-            "<td align='right'>"+summaryDay.target+"</td>",
-            "<td align='right'>"+summaryDay.empTarget+"</td>",
-            "<td align='right'>"+summaryDay.actual.toFixed(2)+"</td>",
-            "<td align='right'>"+summaryDay.diff+"</td>",
-            "<td align='right'>"+parseFloat(summaryDay.totalHours).toFixed(2)+"</td>",
-            "</tr>"
-        ]);
+            if (summaryDay.diff < 0) {
+                summaryDay.diff = "<span class=\"text-danger bg-danger\">" + summaryDay.diff + "</span>";
+            } else if (summaryDay.diff > 0) {
+                summaryDay.diff = "<span class=\"text-success\">" + summaryDay.diff + "</span>";
+            }
 
-        if (weekSummaryData[d].scheduledEmps.length) {
+            daySumHTML.push([
+                "<tr class='info day-header'>",
+                "<td align='left' rowspan='2' class='day-label'>" + summaryDay.dayName + "<br />" + summaryDay.dateLabel + "</td>",
+                "<td align='right'>Goal</td>",
+                "<td align='right'>Scheduled</td>",
+                "<td align='right'>Actual</td>",
+                "<td align='right'>Diff</td>",
+                "<td align='right'>Hours</td>",
+                "</tr>",
+                "<tr class='info day-header'>",
+                "<td align='right'>"+summaryDay.target+"</td>",
+                "<td align='right'>"+summaryDay.empTarget+"</td>",
+                "<td align='right'>"+summaryDay.actual.toFixed(2)+"</td>",
+                "<td align='right'>"+summaryDay.diff+"</td>",
+                "<td align='right'>"+parseFloat(summaryDay.totalHours).toFixed(2)+"</td>",
+                "</tr>"
+            ]);
 
-            for (var changeMeA=0; changeMeA<weekSummaryData[d].scheduledEmps.length; changeMeA++) {
+            if (weekSummaryData[d].scheduledEmps.length) {
 
-                var e = weekSummaryData[d].scheduledEmps[changeMeA];
+                for (var changeMeA=0; changeMeA<weekSummaryData[d].scheduledEmps.length; changeMeA++) {
 
-                e.empTarget = parseFloat(e.empTarget).toFixed(2);
-                e.empDiff = parseFloat(e.empActual - e.empTarget).toFixed(2);
+                    var e = weekSummaryData[d].scheduledEmps[changeMeA];
 
-                if (e.empDiff < 0) {
-                    e.empDiff = "<span class=\"text-danger bg-danger\">" + e.empDiff + "</span>";
-                } else if (e.empDiff > 0) {
-                    e.empDiff = "<span class=\"text-success\">" + e.empDiff + "</span>";
-                }
+                    e.empTarget = parseFloat(e.empTarget).toFixed(2);
+                    e.empDiff = parseFloat(e.empActual - e.empTarget).toFixed(2);
+
+                    if (e.empDiff < 0) {
+                        e.empDiff = "<span class=\"text-danger bg-danger\">" + e.empDiff + "</span>";
+                    } else if (e.empDiff > 0) {
+                        e.empDiff = "<span class=\"text-success\">" + e.empDiff + "</span>";
+                    }
 
 
-                if (e.empTotalHours === undefined) {
-                    e.empTotalHours = "N/A";
-                } else {
-                    e.empTotalHours = parseFloat(e.empTotalHours).toFixed(2);
-                }
+                    if (e.empTotalHours === undefined) {
+                        e.empTotalHours = "N/A";
+                    } else {
+                        e.empTotalHours = parseFloat(e.empTotalHours).toFixed(2);
+                    }
 
-                var empNameString = getEmpNameFromCode(e.empID, empMasterDatabase);
+                    var empNameString = getEmpNameFromCode(e.empID, empMasterDatabase);
 
-                empNameArray = empNameString.split(" "); //[0] + " " + empNameString.split(" ")[1].substring(1,1) + ".";
+                    empNameArray = empNameString.split(" "); //[0] + " " + empNameString.split(" ")[1].substring(1,1) + ".";
 
-                var empNameShortened = empNameString;
+                    var empNameShortened = empNameString;
 
-                if (empNameArray.length === 2) {
-                    empNameShortened = empNameArray[0] + " " + empNameArray[1].substr(0,1).toUpperCase() + ".";
-                }
-
-                daySumHTML.push([
-                    "<tr class='warning emp-header'>",
-                    "<td align='left' colspan='2'>"+e.empID+" ("+empNameShortened+")</td>",
-                    "<td align='right'>"+e.empTarget+"</td>",
-                    "<td align='right'>"+parseFloat(e.empActual).toFixed(2)+"</td>",
-                    "<td align='right'>"+e.empDiff+"</td>",
-                    "<td align='right'>"+e.empTotalHours+"</td>",
-                    "</tr>"
-                ]);
-
-                for (var cio=0; cio<e.empInOuts.length; cio++) {
-
-                    var changeMeB = e.empInOuts[cio];
-
-                    changeMeB.date_in = inOutLabel(changeMeB.date_in);
-                    changeMeB.date_out = inOutLabel(changeMeB.date_out);
+                    if (empNameArray.length === 2) {
+                        empNameShortened = empNameArray[0] + " " + empNameArray[1].substr(0,1).toUpperCase() + ".";
+                    }
 
                     daySumHTML.push([
-                        "<tr>",
-                        "<td></td>",
-                        "<td></td>",
-                        "<td></td>",
-                        "<td align='right'>"+changeMeB.date_in+"</td>",
-                        "<td align='right'>"+changeMeB.date_out+"</td>",
-                        "<td align='right'>"+changeMeB.hoursElapsed.toFixed(2)+"</td>",
+                        "<tr class='warning emp-header'>",
+                        "<td align='left' colspan='2'>"+e.empID+" ("+empNameShortened+")</td>",
+                        "<td align='right'>"+e.empTarget+"</td>",
+                        "<td align='right'>"+parseFloat(e.empActual).toFixed(2)+"</td>",
+                        "<td align='right'>"+e.empDiff+"</td>",
+                        "<td align='right'>"+e.empTotalHours+"</td>",
                         "</tr>"
                     ]);
 
+                    for (var cio=0; cio<e.empInOuts.length; cio++) {
+
+                        var changeMeB = e.empInOuts[cio];
+
+                        changeMeB.date_in = inOutLabel(changeMeB.date_in);
+                        changeMeB.date_out = inOutLabel(changeMeB.date_out);
+
+                        daySumHTML.push([
+                            "<tr>",
+                            "<td></td>",
+                            "<td></td>",
+                            "<td></td>",
+                            "<td align='right'>"+changeMeB.date_in+"</td>",
+                            "<td align='right'>"+changeMeB.date_out+"</td>",
+                            "<td align='right'>"+changeMeB.hoursElapsed.toFixed(2)+"</td>",
+                            "</tr>"
+                        ]);
+
+                    }
                 }
             }
         }
+    } else {
+        daySumHTML.push("<tr><td><em>Targets data doesn't exist yet.</em></td></tr>");
     }
 
     $("#scheduler-day-summary").html(daySumHTML.join(""));
