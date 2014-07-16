@@ -20,24 +20,25 @@ function doSearch(searchstring) {
                 }
             },
             fields : ["filename", "url", "path.virtual", "lastdate", "date"],
-            size : 10000,
+            size : 1000,
             highlight : {
                 "fields" : {
                     "content" : {}
                 }
             }
-            // fields: '_id'
         }; 
 
         $.ajax({
-            url: 'http://dev.ebtpassport.com:9200/mydocs/doc/_search',
+            url: '/lsvc/docs-search',
             type: 'POST',
-            //contentType: 'application/json; charset=UTF-8',
+            contentType: 'application/json; charset=UTF-8',
             crossDomain: true,
             dataType: 'json',
             data: JSON.stringify(data),
             success: function(response) {
+
                 $("#spinny").hide();
+
                 var data = response.hits.hits;
                 var doc_ids = [];
                 var source = null;
@@ -62,7 +63,6 @@ function doSearch(searchstring) {
                             m += 1;  // JavaScript months are 0-11
                             var y = formattedDate.getFullYear();
 
-                            //dateString = source["meta.date"][0];
                             dateString = m + "/" + d + "/" + y;
                         }
 

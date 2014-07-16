@@ -12,6 +12,21 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function postDocsSearch()
+    {
+
+        $json = Input::getContent();
+
+        $req = Requests::post(
+            'http://dev.ebtpassport.com:9200/mydocs/doc/_search',
+            array(),
+            $json
+        );
+
+        return $req->body;
+
+    }
+
     public function deleteSchedulerInOut()
     {
         $inOutId = Request::segment(3);
