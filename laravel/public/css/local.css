@@ -215,3 +215,16 @@ a.schedule-graphic-header:hover{
     top: 0;
     left: 0;
 }
+
+.doc-search form {
+    margin-bottom:20px;
+}
+
+.doc-search ul{
+    list-style:none;
+}
+
+.doc-search em {
+    background-color:#dff0d8;
+    color: #3c763d;
+}

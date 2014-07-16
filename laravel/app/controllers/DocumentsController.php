@@ -14,4 +14,11 @@ class DocumentsController extends BaseController
             'extraJS' => array ('/js/elasticsearch.jquery.min.js')
         ));
     }
+
+    public function getTemplate()
+    {
+        return View::make('pages.documents.template', array(
+            // 'extraJS' => array ('/js/elasticsearch.jquery.min.js')
+        ));
+    }
 }

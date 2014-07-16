@@ -2,32 +2,24 @@
 
 @section('content')
 
-<h3>Documents</h3>
-
 <script type="text/javascript" charset="utf-8">
-$(function() {
 
-    $("#spinny").hide();
-
-    $("form.search").on("submit", function(event){
-
+function doSearch(searchstring) {
         $("#spinny").show();
 
         $("#resultsHeader").hide();
 
         event.preventDefault();
 
-
         $("#results").empty();
-
 
         var data = {
             query: {
                 match: {
-                    _all: $('.searchfield').val()
+                    _all: searchstring
                 }
             },
-            fields : ["filename", "url", "path.virtual"],
+            fields : ["filename", "url", "path.virtual", "lastdate", "date"],
             size : 10000,
             highlight : {
                 "fields" : {
@@ -55,16 +47,30 @@ $(function() {
                     $("#resultsHeader").html(data.length + " Results").show();
                     for (var i = 0; i < data.length; i++) {
 
-
                         source = data[i].fields;
 
                         var url = source["file.url"][0];
+
+                        var dateString = undefined;
+
+                        if (typeof source["meta.date"] !== "undefined") {
+
+                            var formattedDate = new Date(source["meta.date"][0]);
+
+                            var d = formattedDate.getDate();
+                            var m =  formattedDate.getMonth();
+                            m += 1;  // JavaScript months are 0-11
+                            var y = formattedDate.getFullYear();
+
+                            //dateString = source["meta.date"][0];
+                            dateString = m + "/" + d + "/" + y;
+                        }
 
                         var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
 
                         if (url) {
 
-                            var highlight = "<em>Summary Not Available</em>";
+                            var highlight = "Summary Not Available";
 
                             if (data[i].highlight) {
 
@@ -78,9 +84,19 @@ $(function() {
 
                             var full = "/docs" + source["path.virtual"][0] + encodeURIComponent(filename);
 
-                            var row = '';
+                            var row = "";
 
-                            $("#results").append("<li><a target=\"_blank\" href=\""+full+"\">"+filename+"</a><blockquote>"+highlight+"</blockquote></li>");
+                            row += "<li>";
+                            row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
+                            row += "<ul>";
+                            if (typeof dateString !== "undefined") {
+                                row += "<li><strong>File Date:</strong> "+dateString+"</li>";
+                            }
+                            row += "<li>"+highlight+"</li>";
+                            row += "</ul>";
+                            row += "</li>";
+
+                            $("#results").append(row); 
                         }
 
                     }
@@ -95,27 +111,34 @@ $(function() {
                 error_note('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
             }
         });
+}
 
+$(document).ready(function(){
+
+    if ($('.searchfield').val()) {
+        doSearch($('.searchfield').val());
+    }
+
+    $("form").on("submit", function(event){
+        doSearch($('.searchfield').val());
     });
 });
 
 </script>
 
-<form class="search" method="GET">
-    <input type="text" name="search" class="searchfield" placeholder="Enter Search Term">
-    <input type="submit" val="Submit">&nbsp;<span style="" id="spinny"><img src="/images/ajax-loader-arrows.gif"></span>
+<div class="doc-search">
+
+<h3>Earthbound Documents</h3>
+
+<form role="form" method="GET">
+  <div class="form-group">
+      <input value="<?php echo Input::get('search'); ?>" type="text" class="form-control searchfield" name="search" name="search" placeholder="Search Documents" autofocus>
+  </div>
+  <input val="Search" type="submit" class="btn btn-default">&nbsp;<span style="display:none;" id="spinny"><img src="/images/ajax-loader-arrows.gif"></span>
 </form>
 
-<h3 id="resultsHeader">Results</h3>
+<ul id="results"></ul>
 
-<style type="text/css">
-#results em {
-    background-color:#FCF8E6;
-    font-weight:bold;
-}
-</style>
-
-<ul id="results">
-</ul>
+</div>
 
 @stop
