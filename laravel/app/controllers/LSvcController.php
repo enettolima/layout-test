@@ -657,7 +657,7 @@ class LSvcController extends BaseController
             }
         }
 
-        if (! preg_match('/^[A-Z]+$/i', $username)) {
+        if (! preg_match('/^\d\d\d[A-Z]+$/i', $username)) {
             App::abort(403, "'$username' not a properly-formatted username");
         }
 

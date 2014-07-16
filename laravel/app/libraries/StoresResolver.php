@@ -20,7 +20,18 @@ class StoresResolver
 
     public function getStore($storeCode)
     {
-        return (static::$storesLookup[$storeCode]);
+        if (array_key_exists($storeCode, static::$storesLookup)) {
+            $returnval = static::$storesLookup[$storeCode];
+        } else {
+            $returnval = new stdclass();
+            if ($storeCode === "000") {
+                $returnval->store_name = "Corporate";
+            } else {
+                $returnval->store_name = "Not Found (?)";
+            }
+        }
+
+        return $returnval;
     }
 
     protected static function init()
