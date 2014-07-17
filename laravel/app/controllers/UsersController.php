@@ -39,7 +39,7 @@ class UsersController extends BaseController
             // The following defines the Valid groups from Retail Pro, in the order of most privileged to 
             // least. If the user is a member of one of these groups in Retail Pro, they will be processed
             // according to the first one that matches.
-            $rpGroupPermOrder = array ('EBTPASSPORT_AMAN', 'EBTPASSPORT_ASSOCIATE', 'EBTPASSPORT_GUEST');
+            $rpGroupPermOrder = array ('EBTPASSPORT_DM', 'EBTPASSPORT_AMAN', 'EBTPASSPORT_ASSOCIATE', 'EBTPASSPORT_GUEST');
 
             $rpGroup = null;
 
@@ -51,6 +51,9 @@ class UsersController extends BaseController
             }
 
             switch ($rpGroup) {
+                case 'EBTPASSPORT_DM':
+                    $returnval = 'District Manager';
+                    break;
                 case 'EBTPASSPORT_AMAN':
                     $returnval = 'Assistant Manager';
                     break;
@@ -81,8 +84,10 @@ class UsersController extends BaseController
             $api = new EBTAPI;
 
             // MOCK MOCK MOCK
-            $rpResults = $api->post('/rprousers/auth', $data);
-            // $rpResults = $api->post('/rprousers/mockauth', $data);
+            // $rpResults = $api->post('/rprousers/auth', $data);
+            $rpResults = $api->post('/rprousers/mockauth', $data);
+
+            Clog::log($rpResults);
 
 			if ($rpResults) {
 
@@ -150,7 +155,7 @@ class UsersController extends BaseController
                      * Todo: This is currently bound using the label instead of the Group's ID
                      */
 
-                    $validRoles = array('Manager', 'Assistant Manager', 'Associate', 'Guest');
+                    $validRoles = array('District Manager', 'Manager', 'Assistant Manager', 'Associate', 'Guest');
 
                     $userLevelRole = Role::where('name', '=', $userLevel)->firstOrFail();
 
@@ -202,7 +207,6 @@ class UsersController extends BaseController
 			return Redirect::to('users/login')
 				->with('loginMessage', 'Invalid Login') ->withInput();
 		}
-
     }
 
     public function getLogout()
