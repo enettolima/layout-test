@@ -57,11 +57,10 @@ $(document).ready(function() {
                 for (var key in data[dayOffset+1].hours) {
                     goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
                 }
-
-                updateSummaries();
-            } else {
-                updateSummariesNotReady();
             }
+
+            updateSummaries();
+
         });
 
         var view = $('#calendar').fullCalendar('getView');
@@ -254,60 +253,67 @@ function updateSummariesNotReady()
 
 function updateSummaries()
 {
-    $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
+    //if (true) {
+    if (typeof dayTargetData !== "undefined") {
+        $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
 
-    $("#day-hours").html(milToStandard(dayTargetData.open) + " - " + milToStandard(dayTargetData.close));
+        $("#day-hours").html(milToStandard(dayTargetData.open) + " - " + milToStandard(dayTargetData.close));
 
-    $("#new-day-hours-detail tbody").empty();
+        $("#new-day-hours-detail tbody").empty();
 
-    var SS = new SchedulerSummary(goals, inOuts);
+        var SS = new SchedulerSummary(goals, inOuts);
 
-    var budgetByHour = SS.getBudgetByHour();
+        var budgetByHour = SS.getBudgetByHour();
 
-    var row = null;
+        var row = null;
 
-    for (var b=0; b<budgetByHour.length; b++) {
-        
-        var extraClasses = '';
+        for (var b=0; b<budgetByHour.length; b++) {
+            
+            var extraClasses = '';
 
-        var budgetOutput = '';
+            var budgetOutput = '';
 
-        if (budgetByHour[b].budget === Infinity) {
-            extraClasses += "danger ";
-            budgetOutput = "NEED STAFF!";
-        } else {
-            budgetOutput = "$" + budgetByHour[b].budget.toFixed(2);
+            if (budgetByHour[b].budget === Infinity) {
+                extraClasses += "danger ";
+                budgetOutput = "NEED STAFF!";
+            } else {
+                budgetOutput = "$" + budgetByHour[b].budget.toFixed(2);
+            }
+
+            var hourLabel = milToStandard(budgetByHour[b].hour);
+
+            row = "";
+            row += '<tr class="'+extraClasses+'">';
+            // row += '    <td>'+budgetByHour[b].hour+'</td>';
+            row += '    <td>'+hourLabel+'</td>';
+            row += '    <td align="right">$'+parseFloat(budgetByHour[b].goal).toFixed(2)+'</td>';
+            row += '    <td class="text-center">'+budgetByHour[b].empMin+'</td>';
+            row += '    <td align="right">'+budgetOutput+'</td>';
+            row += '</tr>';
+
+            $("#new-day-hours-detail tbody").append(row);
         }
 
-        var hourLabel = milToStandard(budgetByHour[b].hour);
+        $("#emp-hours-summary tbody").empty();
 
-        row = "";
-        row += '<tr class="'+extraClasses+'">';
-        // row += '    <td>'+budgetByHour[b].hour+'</td>';
-        row += '    <td>'+hourLabel+'</td>';
-        row += '    <td align="right">$'+parseFloat(budgetByHour[b].goal).toFixed(2)+'</td>';
-        row += '    <td class="text-center">'+budgetByHour[b].empMin+'</td>';
-        row += '    <td align="right">'+budgetOutput+'</td>';
-        row += '</tr>';
+        var budgetByEmployee = SS.getBudgetByEmployee();
 
-        $("#new-day-hours-detail tbody").append(row);
+        for (var emp in budgetByEmployee) {
+            row = "";
+            row += "<tr>";
+            row += "<td>"+emp+"</td>";
+            row += "<td>"+getEmpNameFromCode(emp, empMasterDatabase)+"</td>";
+            row += "<td class=\"text-right\">$"+parseFloat(budgetByEmployee[emp]).toFixed(2)+"</td>";
+            row += "</tr>";
+
+            $("#emp-hours-summary tbody").append(row);
+        }
+    }else{
+        $("#day-target").html("<em>Target data not available yet.</em>"); 
+        $("#day-hours").html("<em>Target data not available yet.</em>"); 
+        $("#new-day-hours-detail tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
+        $("#emp-hours-summary tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
     }
-
-    $("#emp-hours-summary tbody").empty();
-
-    var budgetByEmployee = SS.getBudgetByEmployee();
-
-    for (var emp in budgetByEmployee) {
-        row = "";
-        row += "<tr>";
-        row += "<td>"+emp+"</td>";
-        row += "<td>"+getEmpNameFromCode(emp, empMasterDatabase)+"</td>";
-        row += "<td class=\"text-right\">$"+parseFloat(budgetByEmployee[emp]).toFixed(2)+"</td>";
-        row += "</tr>";
-
-        $("#emp-hours-summary tbody").append(row);
-    }
-
 }
 
 function getNextAvailableColumn(){
