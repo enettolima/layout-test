@@ -2,6 +2,12 @@
 
 class LSvcController extends BaseController
 {
+    /* Require Auth on Everything Here */
+    public function __construct()
+    {
+        $this->beforeFilter('auth', array());
+    }
+
     public function getIndex()
     {
         // Log::info('asdf', array('username', Auth::check()));
