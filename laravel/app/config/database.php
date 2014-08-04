@@ -74,12 +74,21 @@ return array(
 			'schema'   => 'public',
 		),
 
-		'sqlsrv' => array(
+		'sqlsrv_ebtgoogle' => array(
 			'driver'   => 'sqlsrv',
-			'host'     => $_ENV['sqlsrv_host'],
-			'database' => $_ENV['sqlsrv_database'],
-			'username' => $_ENV['sqlsrv_username'],
-			'password' => $_ENV['sqlsrv_password'],
+			'host'     => $_ENV['sqlsrv_ebtgoogle_host'],
+			'database' => $_ENV['sqlsrv_ebtgoogle_database'],
+			'username' => $_ENV['sqlsrv_ebtgoogle_username'],
+			'password' => $_ENV['sqlsrv_ebtgoogle_password'],
+			'prefix'   => '',
+		),
+
+		'sqlsrv_ebt' => array(
+			'driver'   => 'sqlsrv',
+			'host'     => $_ENV['sqlsrv_ebt_host'],
+			'database' => $_ENV['sqlsrv_ebt_database'],
+			'username' => $_ENV['sqlsrv_ebt_username'],
+			'password' => $_ENV['sqlsrv_ebt_password'],
 			'prefix'   => '',
 		),
 

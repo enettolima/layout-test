@@ -548,7 +548,7 @@ class LSvcController extends BaseController
                 PROF_HOUR_NEW
         ";
 
-        $targetsRES = DB::connection('sqlsrv')->select($targetsSQL);
+        $targetsRES = DB::connection('sqlsrv_ebtgoogle')->select($targetsSQL);
 
         $returnval = array();
 
@@ -593,7 +593,7 @@ class LSvcController extends BaseController
                 DATE <= convert(datetime, '$to', 101)
         ";
 
-        $targetsRES = DB::connection('sqlsrv')->select($targetsSQL);
+        $targetsRES = DB::connection('sqlsrv_ebtgoogle')->select($targetsSQL);
 
         $returnval = array(
             'summaries' => array(
