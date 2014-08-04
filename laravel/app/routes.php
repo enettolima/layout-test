@@ -19,6 +19,6 @@ Route::controller('/users', 'UsersController');
 
 Route::controller('/scheduler', 'SchedulerController');
 
-Route::controller('/settings', 'SettingsController');
+Route::controller('/preferences', 'PreferencesController');
 
 Route::controller('/documents', 'DocumentsController');

@@ -8,6 +8,12 @@
 
 class DevController extends BaseController
 {
+    /* Require Auth on Everything Here */
+    public function __construct()
+    {
+        $this->beforeFilter('auth', array());
+    }
+
     /**
      * Spit out a link for every getMethod in this class (except this 
      * one).

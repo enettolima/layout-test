@@ -53,12 +53,12 @@
                             </ul>
                         </li>
 
-                        <li class="dropdown <?php echo Request::is('settings*') ? 'active' : '' ?>">
+                        <li class="dropdown <?php echo Request::is('preferences*') ? 'active' : '' ?>">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<?php echo Auth::user()->username ?> (<?php echo Auth::user()->full_name ?>)<b class="caret" /></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header"><?php echo Auth::user()->fname . ' ' . Auth::user()->lname ?></li>
-                                <li class="<?php echo Request::is('settings*') ? 'active' : '' ?>"><a href="/settings">Settings</a></li>
+                                <li class="<?php echo Request::is('preferences*') ? 'active' : '' ?>"><a href="/preferences">Preferences</a></li>
                                 <li><a href="/users/logout">Logout</a></li>
                             </ul>
                         </li>
