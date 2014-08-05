@@ -66,6 +66,7 @@ class CronWeatherGetAlerts extends Command {
                     $wa->alert_expires = date("Y-m-d H:i:s", $alert['expires_epoch']);
                     $wa->all_clear = false;
                     $wa->timezone = $alert['tz_short'];
+                    $wa->message = $alert['message'];
 
                 }
             } else {
