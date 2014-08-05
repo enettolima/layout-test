@@ -12,9 +12,9 @@ class AddMessageColumn extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('weather_alerts', function(Blueprint $table)
+		Schema::connection('sqlsrv_ebt')->table('weather_alerts', function(Blueprint $table)
 		{
-			//
+            $table->text('message')->nullable();
 		});
 	}
 
