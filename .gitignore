@@ -1,3 +1,4 @@
 laravel/.env.*.php
 .DS_Store
 log.txt
+public/docs
