@@ -81,7 +81,7 @@ class CronWeatherGetAlerts extends Command {
                 $this->error("Couldn't save row!");
             }
 
-            $this->info("Sleeping for $sleeptime");
+            $this->info("Sleeping for $sleepTime");
             sleep($sleepTime);
             $this->info("Done sleeping");
         }
