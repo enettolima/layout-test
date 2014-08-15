@@ -38,7 +38,7 @@ class CronWeatherGetAlerts extends Command {
     public function fire()
     {
 
-        $sleepTime = 120; // this is ridiculous
+        $sleepTime = 10;
 
         foreach (StoresLookup::all() as $store) {
             $this->info("On {$store->code} {$store->city}, {$store->state}");
