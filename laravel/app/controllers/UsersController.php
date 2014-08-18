@@ -84,10 +84,10 @@ class UsersController extends BaseController
             $api = new EBTAPI;
 
             // MOCK MOCK MOCK
-            $rpResults = $api->post('/rprousers/auth', $data);
-            // $rpResults = $api->post('/rprousers/mockauth', $data);
+            // $rpResults = $api->post('/rprousers/auth', $data);
+            $rpResults = $api->post('/rprousers/mockauth', $data);
 
-            Clog::log($rpResults);
+            //Clog::log($rpResults);
 
 			if ($rpResults) {
 
