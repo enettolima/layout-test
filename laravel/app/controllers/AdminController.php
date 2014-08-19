@@ -43,7 +43,12 @@ class AdminController extends BaseController
                         $label = 'Corporate';
                     } else {
                         $store = $sr->getStore($matches[1]);
-                        $label = $store->store_name . ' - ' . $store->city . ', ' . $store->state; 
+
+                        if (isset($store->store_name) && isset($store->city) && isset($store->state)) {
+                            $label = $store->store_name . ' - ' . $store->city . ', ' . $store->state; 
+                        } else {
+                            $label = $matches[1] . " (Can't find store label?)";
+                        }
                     }
 
                     $storeRoles[] = array('name' => $role->name, 'label' => $label, 'has' => $user->hasRole($role->name));
