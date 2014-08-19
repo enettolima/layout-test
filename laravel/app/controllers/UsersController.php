@@ -197,6 +197,7 @@ class UsersController extends BaseController
                      * will need to be changed when we implement the 'Regional Manager' concept
                      */
 
+
                     if ($u->hasRole('District Manager')) {
 
                         $userRoles = array();
@@ -205,6 +206,7 @@ class UsersController extends BaseController
                             $userRoles[] = $role->id;
                         }
 
+                        //TODO: move to API. Also, THIS REALLY SUCKS.
                         $sql = "select [Code #] as store from PASSPORT_STORES_DM_RM where RM_RP_LOGIN = '{$u->username}' or DM_RP_LOGIN = '{$u->username}'";
                         $managerStoresRes = DB::connection('sqlsrv_ebt')->select($sql);
 
