@@ -124,7 +124,6 @@ class UsersController extends BaseController
                         // Make sure the user is assigned that role
                         if (! $u->hasRole($homeStoreRole)) {
 
-
                             $userRoles = array();
 
                             foreach ($u->roles()->get() as $role) {
@@ -143,7 +142,6 @@ class UsersController extends BaseController
                             $u->defaultStore = $storeNumber;
                             $u->save();
                         }
-
                     }
 
                     /*
@@ -184,6 +182,48 @@ class UsersController extends BaseController
                     $userRoles[] = $userLevelRole->id;
 
                     $u->roles()->sync($userRoles);
+
+
+                    /*
+                     * HANDLE ASSIGNATION OF STORE ROLES TO DMs and RMs
+                     * 
+                     * We also need to assign all the stores managed by any DMs or RMs
+                     *
+                     * Currently in Retail Pro we are only assigning the group
+                     * 'District Manager' to users who are in the RetailPro Group 'PASSPORT_DM'.
+                     *
+                     * This fails to account for the difference between an Earthbound 'District
+                     * Manager' and an Earthbound 'Regional Manager', so this is a bit messy and
+                     * will need to be changed when we implement the 'Regional Manager' concept
+                     */
+
+                    if ($u->hasRole('District Manager')) {
+
+                        $userRoles = array();
+
+                        foreach ($u->roles()->get() as $role) {
+                            $userRoles[] = $role->id;
+                        }
+
+                        $sql = "select [Code #] as store from PASSPORT_STORES_DM_RM where RM_RP_LOGIN = '{$u->username}' or DM_RP_LOGIN = '{$u->username}'";
+                        $managerStoresRes = DB::connection('sqlsrv_ebt')->select($sql);
+
+                        foreach ($managerStoresRes as $result) {
+
+                            $targetStore = 'Store'.$result->store;
+
+                            if (! $storeRole = Role::where('name', '=', $targetStore)->first()) {
+                                $storeRole = new Role;
+                                $storeRole->name = $targetStore;
+                                $storeRole->save();
+                            }
+
+                            $userRoles[] = $storeRole->id;
+
+                        }
+
+                        $u->roles()->sync($userRoles);
+                    }
 
                     UserLog::logSuccess($u->username);
 					Auth::login($u);
