@@ -138,6 +138,11 @@ $(document).ready(function() {
         selectHelper: editAccess,
         select: function(start, end, allDay, jsEvent, view) {
 
+            /* Ugly day-border issue hack #1: set "midnight" to 11:59:59 */
+            if ((end.getHours() === 0) && (end.getMinutes() === 0) && (end.getSeconds() === 0)) {
+                end.setSeconds(end.getSeconds() - 1);
+            }
+
             var normalizedDate = new Date (start.getFullYear(), start.getMonth(), start.getDate()); 
             var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
             var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
@@ -173,6 +178,13 @@ $(document).ready(function() {
             onEvent++;
         },
         eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+
+            /* Ugly day-border issue hack #2: subtract 1 min from delta on a "midnight" end  */
+            if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+                minuteDelta = minuteDelta - 1;
+            }
+
+
             var normalizedDate = new Date (event.start.getFullYear(), event.start.getMonth(), event.start.getDate()); 
             var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
             var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
@@ -192,6 +204,12 @@ $(document).ready(function() {
         },
 
         eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+
+            /* Ugly day-border issue hack #3: subtract 1 min from delta on a "midnight" end  */
+            /* This is extra-janky because the UI lets you select past 12:00 */
+            if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+                minuteDelta = minuteDelta - 1;
+            }
 
             var request = $.ajax({
                 url: "/lsvc/scheduler-in-out-resize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
