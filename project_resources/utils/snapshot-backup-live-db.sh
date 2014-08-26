@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBNAME="ppdev_01"
+DBNAME="passport_live"
 DBUSER="dbuser"
 DBPASS="this is literally the password for dbuser"
 DBHOST="dev.ebtpassport.com"
@@ -11,6 +11,6 @@ mysqldump --skip-extended-insert --complete-insert -u${DBUSER} -p"${DBPASS}" -h$
 
 bzip2 dbdump.${STAMP}.sql
 
-scp dbdump.${STAMP}.sql.bz2 ebtbackup@web02.earthboundtrading.com:backup/ppdev_01_database/
+scp dbdump.${STAMP}.sql.bz2 ebtbackup@web02.earthboundtrading.com:backup/passport_live/
 
 rm dbdump.${STAMP}.sql.bz2
