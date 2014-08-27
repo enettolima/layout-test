@@ -33,6 +33,9 @@ App::after(function($request, $response)
 |
 */
 
+Entrust::routeNeedsRole('dev', array('Administrator'), View::make('pages.permissionDenied'));
+Entrust::routeNeedsRole('admin', array('Administrator'), View::make('pages.permissionDenied'));
+
 Route::filter('auth', function()
 {
 	if (Auth::guest()) return Redirect::guest('users/login');
