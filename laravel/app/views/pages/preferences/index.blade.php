@@ -4,12 +4,25 @@
 
 <h3>Your Passport Preferences</h3>
 
-<br />
+<?php 
+if ($errors->count() > 0) {
+
+    echo "<div class='alert alert-danger'>";
+        echo "<h4>There were errors with your submission:</h4>";
+        echo "<ul>";
+            foreach ($errors->getMessages() as $key) {
+                foreach ($key as $error) {
+                    echo "<li>$error</li>";
+                }
+            }
+        echo "</ul>";
+    echo "</div>";
+}
+?>
 
 <div class="row">
 
     <div class="col-md-4">
-
 
         {{ Form::open(array('url' => 'preferences/update', 'role' => 'form')) }}
 
@@ -36,7 +49,13 @@
             </span>
         </div>
 
-        <br />
+        <div class="form-group">
+            <label for="preferredEmail" class="control-label">Preferred Contact Email:</label>
+            {{ Form::text('preferredEmail', (Input::old('preferredEmail') ? Input::old('preferredEmail') : Auth::user()->preferred_email), array('class'=>'form-control', 'placeholder'=>'someone@example.com')) }}
+            <span class="help-block">
+                Please provide the email address which you'd like Earthbound-based updates to be sent to.
+            </span>
+        </div>
 
         {{ Form::submit('Save Changes', array('class' => 'btn btn-primary btn-block')) }}
 
