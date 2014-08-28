@@ -2,6 +2,8 @@
 
 @section('content')
 
+    <div id="page-cover"></div>
+
     <!-- Week Selector -->
     <div class="row" style="">
         <div class="col-xs-5">
@@ -43,6 +45,8 @@
                             }
                         ?>
                     </select>
+
+
                 </form>
             </div>
         </div>
@@ -56,19 +60,19 @@
             <!-- <img id="emplist&#45;loading&#45;image" src="/images/ajax&#45;loader&#45;arrows.gif"> -->
             <ul id="empList"><li></li></ul>
             @if ($userCanManage)
-                <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staffPickerModal">+</button>
+                <button id="emplist-add-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#staff-picker-modal">Add Staff</button>
+                <button id="copy-schedule-button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#copy-schedule-modal" style="display:none;">Copy Schedule from a Previous Week</button>
             @endif
         </div>
     </div>
     <!-- /Staff Row -->
 
     <!-- Staff Selector Modal -->
-    <div class="modal " id="staffPickerModal" tabindex="-1" role="dialog" aria-labelledby="staffPickerModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width:420px;">
-            <div class="modal-content">
+    <div class="modal " id="staff-picker-modal" tabindex="-1" role="dialog" aria-labelledby="staff-picker-modal-label" aria-hidden="true"> 
+        <div class="modal-dialog" style="width:420px;"> <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="staffPickerModalLabel">Click on staff member to add to schedule</h4>
+                    <h4 class="modal-title" id="staff-picker-modal-label">Click on staff member to add to schedule</h4>
                 </div>
                 <div class="modal-body">
 
@@ -104,6 +108,49 @@
         </div>
     </div>
     <!-- /Staff Selector Modal -->
+
+    <!-- Copy Schedule Modal -->
+    <div class="modal " id="copy-schedule-modal" tabindex="-1" role="dialog" aria-labelledby="copy-schedule-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="copy-schedule-modal-label">Copy Schedule from Previous Week</h4>
+                    <br />
+                    <p>Because this week has no employees assigned to it yet, you may copy the schedule from a previous week into it to save time.</p>
+                </div>
+                <div class="modal-body">
+
+                    <div style="">
+
+                        <div class="form-group">
+
+                            @if (count($prevSchedules) > 0)
+                                <label for="schedule-to-copy" class="control-label">Choose a Schedule to Copy From:</label>
+                                <select id="schedule-to-copy" name="schedule-to-copy" class="form-control">
+                                    <option value="NULL">Choose Schedule...</option>
+                                    @foreach ($prevSchedules as $prevSchedule)
+                                        <option value="{{ $prevSchedule->date }}">{{ $prevSchedule->date }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <em>Sorry, there are no previous schedules to copy from.</em>
+                            @endif
+
+                        </div>
+
+                        <h5>Schedule Overview:</h5>
+
+                        <div id="copy-schedule-overview">
+                            <em>Please choose a schedule.</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Copy Schedule Modal -->
+
 
     <div id="staff-remove-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">

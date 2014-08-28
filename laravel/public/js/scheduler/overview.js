@@ -2,6 +2,12 @@ var empMasterDatabase = employeesFromService; // from employees.js
 var currentEmployees  = Array;
 var currentStore      = parseInt($("#current-store").html());
 
+$(document).bind("ajaxSend", function(){
+    $("#page-cover").css("opacity",0.15).fadeIn(100);
+}).bind("ajaxComplete", function(){
+    $("#page-cover").hide();
+});
+
 function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
 
     for (var i=0; i<empMasterDatabase.length; i++) {
@@ -19,11 +25,16 @@ function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
             // Already added; just do nothing TODO: give some sort of feedback?
         }else{
             $(this).addClass('text-muted');
-            $("#staffPickerModal").modal('hide');
+            $("#staff-picker-modal").modal('hide');
             addEmployeeToSchedule({
                 "id" : $(this).attr("data-emp-id"),
                 "name" : $(this).attr("data-emp-name")
             });
+
+            // Hide this just in case it was showing, since it would now
+            // be unavailable
+            $("#copy-schedule-button").hide();
+
         }
     });
 }
@@ -580,6 +591,12 @@ function loadSchedule(strDate) {
 
     weekScheduleRequest.done(function(weekSchedule) {
 
+        if ((typeof weekSchedule.meta.sequence == 'undefined') || weekSchedule.meta.sequence.length === 0) {
+            $("#copy-schedule-button").show();
+        } else {
+            $("#copy-schedule-button").hide();
+        }
+
         var targetsRequest = $.ajax({
             url: "/lsvc/scheduler-targets/"+currentStore+"/"+strDate,
             type: "GET",
@@ -658,6 +675,83 @@ $(document).ready(function(){
 
     $('#rangeSelector').change(function(){
         loadSchedule($(this).val());
+    });
+
+    $('#schedule-to-copy').change(function(){
+
+        var strDate = $(this).val();
+
+        var scheduleInfoRequest = $.ajax({
+            url: "/lsvc/scheduler-store-week-schedule/"+currentStore+"/" + strDate,
+            type: "GET"
+        });
+
+        scheduleInfoRequest.done(function(data) {
+
+            var html = [];
+
+            html.push("<table class='table table-striped' id='emp-hours-by-emp'>");
+
+                html.push("<tr>");
+                    html.push("<th>Day</th>");
+                    html.push("<th>Emps</th>");
+                    html.push("<th>Tot Hours</th>");
+                html.push("</tr>");
+
+                for (var i=0; i<7; i++) {
+                    var dateString = Object.keys(data.summary.hoursByDate)[i];
+
+                    var empsToday = '';
+
+                    for (var x=0; x<data.schedule[i].length; x++) {
+
+                        empsToday += data.schedule[i][x].eid;
+
+                        if (x != data.schedule[i].length - 1) {
+                            empsToday += ', ';
+                        }
+                    }
+
+                    var totalHours = data.summary.hoursByDate[dateString];
+
+                    html.push("<tr>");
+                        html.push("<td>"+dateString+"</td>");
+                        html.push("<td>"+empsToday+"</td>");
+                        html.push("<td>"+totalHours+"</td>");
+                    html.push("</tr>");
+                }
+
+            html.push("</table>");
+
+            html.push("<a href='' class='btn btn-primary' id='do-copy-schedule'>Import This Schedule</a>");
+
+            $("#copy-schedule-overview").html(html.join(""));
+
+        });
+
+    });
+
+    $(document).on("click", "#do-copy-schedule", function(e){
+
+        e.preventDefault();
+
+        var 
+            currentWeekOf = $("#schedulerCurrentWeekOf").val(),
+            sourceWeekOf = $("#schedule-to-copy").val();
+
+        var copyRequest = $.ajax({
+            url: "/lsvc/scheduler-copy-schedule/"+currentStore + "/" + sourceWeekOf + "/" + currentWeekOf,
+            type: "POST"
+        });
+
+        copyRequest.done(function(msg) {
+
+            $("#copy-schedule-modal").modal('hide');
+
+            loadSchedule(currentWeekOf);
+
+        });
+
     });
 
 });

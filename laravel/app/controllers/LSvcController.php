@@ -251,6 +251,78 @@ class LSvcController extends BaseController
         }
     }
 
+
+    public function postSchedulerCopySchedule()
+    {
+        $storeNumber   = Request::segment(3);
+        $schedDateFrom = Request::segment(4);
+        $schedDateTo   = Request::segment(5);
+
+
+        // Step 1: Get the metadata row
+        $metaRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateFrom'");
+
+        if (count($metaRes) === 1) {
+
+            // Clear it just in case there's any metadata hanging around
+            // Todo: this is probably pretty reckless. I'm not protecting any input.
+            DB::connection('mysql')->delete("delete from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
+            DB::connection('mysql')->insert('insert into schedule_day_meta (store_id, date, data) values (?, ?, ?)', array($storeNumber, $schedDateTo, $metaRes[0]->{'data'}));
+
+            // Step 2: Get all the in/outs
+
+            $fromWeekBoundary = date('Y-m-d', strtotime($schedDateFrom) + (86400 * 7));
+
+            $ioSQL = "
+                SELECT
+                    *
+                FROM
+                    scheduled_inout
+                WHERE
+                    store_id = $storeNumber AND
+                    date_in >= '$schedDateFrom' AND
+                    date_out < '$fromWeekBoundary'
+            ";
+
+            $ioRES = DB::connection('mysql')->select($ioSQL);
+
+            // Step 3: clear existing in/outs just in case
+            
+            $toWeekBoundary = date('Y-m-d', strtotime($schedDateTo) + (86400 * 7));
+
+            $ioClearSQL = "
+                DELETE FROM
+                    scheduled_inout
+                WHERE
+                    store_id = $storeNumber AND
+                    date_in >= '$schedDateTo' AND
+                    date_out < '$toWeekBoundary'
+            ";
+
+            DB::connection('mysql')->delete($ioClearSQL);
+
+            $dayDiff = (strtotime($schedDateTo) - strtotime($schedDateFrom)) / 86400;
+
+            foreach ($ioRES as $io) {
+
+                $result = DB::connection('mysql')->insert(
+                    "insert into scheduled_inout (associate_id, store_id, date_in, date_out) values (?, ?, ?, ?)",
+                    array(
+                        $io->{'associate_id'},
+                        $io->{'store_id'},
+                        date("Y-m-d H:i:s", strtotime($io->{'date_in'}) + (86400 * $dayDiff)),
+                        date("Y-m-d H:i:s", strtotime($io->{'date_out'}) + (86400 * $dayDiff)),
+                    )
+                );
+
+            }
+
+        } else {
+            throw new Exception();
+        }
+
+    }
+
     public function postSchedulerInOut()
     {
         $storeNumber = Request::segment(3);

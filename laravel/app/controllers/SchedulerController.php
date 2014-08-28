@@ -45,14 +45,33 @@ class SchedulerController extends BaseController
             return Response::view('pages.permissionDenied');
         }
 
-        $extraHead = '
-            <script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>
-        ';
+        $extraHead = '<script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>';
+
+
+        $prevSchedules = array();
+
+        // TODO: Find a more appropriate way of going about this.
+        // This data should probably be the product of an API call
+        if ($currentStore = Session::get('storeContext')) {
+            $prevSchedules = DB::connection('mysql')->select("
+                SELECT 
+                    * 
+                FROM 
+                    schedule_day_meta 
+                WHERE 
+                    store_id = $currentStore
+                ORDER BY
+                    date DESC
+                LIMIT
+                    15
+            "); 
+        }
 
         return View::make(
             'pages.scheduler.weekOverview', array(
                 'extraHead' => $extraHead,
-                'userCanManage' => $this->userCanManage
+                'userCanManage' => $this->userCanManage,
+                'prevSchedules' => $prevSchedules
             )
         );
     }
