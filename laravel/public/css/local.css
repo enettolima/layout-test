@@ -233,3 +233,16 @@ a.schedule-graphic-header:hover{
     max-height: 500px;
     overflow-y: auto;
 }
+
+.quickview {
+	font-size: 90%;
+}
+
+.quickview ul {
+	padding-left:0;
+	list-style:none;
+}
+
+.quickview li {
+	font-size:80%;
+}

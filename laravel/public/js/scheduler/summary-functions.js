@@ -1,4 +1,48 @@
 /*
+ * take 2014-01-01 11:00:00 and return "11:00am"
+ */
+function inOutLabel(dateString)
+{
+    var timeArr = dateString.split(" ")[1].split(":");
+
+    var hour = parseInt(timeArr[0]);
+    var mins = timeArr[1];
+
+    var hourLabel = '';
+    var ampm = '';
+
+    if (hour > 12) {
+        hour = (hour - 12);
+        ampm = 'pm';
+    } else if (hour === 0) {
+        hour = '12';
+        ampm = 'am';
+    } else if (hour == 12) {
+        hour = '12';
+        ampm = 'pm';
+    } else {
+        ampm = 'am';
+    }
+
+    return hour + ":" + mins + ampm;
+}
+
+/*
+ * take two datetime strings: 2013-01-01 13:45:00
+ * and, disregarding the date itself, return the elapsed
+ * hours
+ */
+function hoursFromInOut(date_in, date_out)
+{
+    var inParts = date_in.split(" ")[1].split(":");
+    var inMins = (parseInt(inParts[0]) * 60) + parseInt(inParts[1]); 
+    var outParts = date_out.split(" ")[1].split(":");
+    var outMins = (parseInt(outParts[0]) * 60) + parseInt(outParts[1]); 
+
+    return (outMins - inMins) / 60;
+}
+
+/*
  * This class is meant to be fed goals & inOuts for 
  * one day and the functions will return the appropriate
  * summaries. 

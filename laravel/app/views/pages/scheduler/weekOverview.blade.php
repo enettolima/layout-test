@@ -5,10 +5,8 @@
     <div id="page-cover"></div>
 
     <!-- Week Selector -->
-    <div class="row" style="">
+    <div class="row">
         <div class="col-xs-5">
-            <div role="form" class="form-horizontal">
-                <form action="" class="form-horizontal"> 
                     <select id="rangeSelector" class="form-control input">
                         <?php
                             if (! Session::has('schedulerCurrentWeekOf')) {
@@ -45,11 +43,13 @@
                             }
                         ?>
                     </select>
-
-
-                </form>
             </div>
-        </div>
+            <div class="col-xs-7">
+                <div class="btn-group pull-right">
+                    <a target="_blank" href="/scheduler/quickview/{{ Session::get('storeContext') }}/{{ $schedulerCurrentWeekOf }}" id="view-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Printable Quickview</a>
+                    <!--a href="" id="share-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-share"></span> Share Quickview</a-->
+                </div>
+            </div>
     </div>
     <!-- /Week Selector -->
 

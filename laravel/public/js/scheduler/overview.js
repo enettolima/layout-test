@@ -39,50 +39,6 @@ function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
     });
 }
 
-/*
- * take two datetime strings: 2013-01-01 13:45:00
- * and, disregarding the date itself, return the elapsed
- * hours
- */
-function hoursFromInOut(date_in, date_out)
-{
-    var inParts = date_in.split(" ")[1].split(":");
-    var inMins = (parseInt(inParts[0]) * 60) + parseInt(inParts[1]); 
-    var outParts = date_out.split(" ")[1].split(":");
-    var outMins = (parseInt(outParts[0]) * 60) + parseInt(outParts[1]); 
-
-    return (outMins - inMins) / 60;
-}
-
-/*
- * take 2014-01-01 11:00:00 and return "11:00am"
- */
-function inOutLabel(dateString)
-{
-    var timeArr = dateString.split(" ")[1].split(":");
-
-    var hour = timeArr[0];
-    var mins = timeArr[1];
-
-    var hourLabel = '';
-    var ampm = '';
-
-    if (hour > 12) {
-        hour = (hour - 12);
-        ampm = 'pm';
-    } else if (hour === 0) {
-        hour = '12';
-        ampm = 'am';
-    } else if (hour == 12) {
-        hour = '12';
-        ampm = 'pm';
-    } else {
-        ampm = 'am';
-    }
-
-    return hour + ":" + mins + ampm;
-}
-
 function addEmployeeToSchedule(employeeObj)
 {
 
@@ -122,10 +78,6 @@ var bonsaiMovie = bonsai.run(
 );
 
 function summaryByEmpReport(weekSchedule, targetsData, actualsData){
-
-    // console.log(weekSchedule);
-    // console.log(targetsData);
-    // console.log(actualsData);
 
     var summaryData = [];
 

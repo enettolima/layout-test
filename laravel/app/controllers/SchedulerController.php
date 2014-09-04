@@ -36,6 +36,40 @@ class SchedulerController extends BaseController
         return Redirect::to('/scheduler/week-overview');
     }
 
+    public function getQuickview()
+    {
+        $storeNumber = Request::segment(3);
+        $weekOf      = Request::segment(4);
+
+        // TODO: add in checks to make sure people can't put in their own urls
+
+        $this->initAccess();
+
+        if (! $this->userHasAccess) {
+            Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
+            return Response::view('pages.permissionDenied');
+        }
+
+        $extraHead = '';
+
+        $dateHeaderFormat = "D, M d, Y";
+        $sunDate = strtotime($weekOf);
+        $sunFormatted = date($dateHeaderFormat, $sunDate);
+        $satDate = strtotime($weekOf) + (86400 * 6);
+        $satFormatted = date($dateHeaderFormat, $satDate);
+
+        $scheduleHeader = "EBT $storeNumber Schedule &mdash; $sunFormatted - $satFormatted"; 
+
+        $data = array(
+            'scheduleHeader' => $scheduleHeader,
+            'storeNumber'    => $storeNumber,
+            'weekOf'         => $weekOf,
+            'extraHead'      => $extraHead,
+        );
+
+        return View::make( 'pages.scheduler.quickview', $data );
+    }
+
     public function getWeekOverview()
     {
         $this->initAccess();
