@@ -519,6 +519,8 @@ function loadSchedule(strDate) {
             type: "GET",
             async: false
         });
+
+        $("#view-quickview-button").attr('href', '/scheduler/quickview/' + currentStore + '/' + strDate);
     }
 
     var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
