@@ -41,6 +41,8 @@
                 <div class="btn-group pull-right">
                     <a target="_blank" href="/scheduler/quickview/{{ Session::get('storeContext') }}/{{ $schedulerCurrentWeekOf }}" id="view-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Printable Quickview</a>
                     <button id="share-quickview-button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#share-quickview-modal"><span class="glyphicon glyphicon-share"></span> Share Quickview</button>
+                    <a href="/scheduler/override-hours" id="" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-save"></span> Store Hours Override</a>
+                    <!--a href="" id="share-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-share"></span> Share Quickview</a-->
                 </div>
             </div>
     </div>

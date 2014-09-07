@@ -65,6 +65,25 @@ class SchedulerController extends BaseController
         } 
     }
 
+    public function getOverrideHours()
+    {
+
+        if (! $store = Session::get('storeContext')) {
+            die("couldn't get store context");
+        }
+
+        $overrides = DB::connection('sqlsrv_ebtgoogle')->select("select * from StoreHoursOverrides where StoreCode = $store order by OpenHour DESC");
+
+        $data = array('overrides' => $overrides);
+
+        return View::make( 'pages.scheduler.overrides', $data );
+    }
+
+    public function postOverrideHours()
+    {
+    }
+
+
     public function getIndex()
     {
         return Redirect::to('/scheduler/week-overview');
