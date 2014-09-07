@@ -2,13 +2,41 @@
 
 class SchedulerController extends BaseController
 {
-    protected $userHasAccess = false;
-    protected $userCanManage = false;
+    protected $userHasAccess = FALSE;
+    protected $userCanManage = FALSE;
+    protected $isTokenAccess = FALSE;
 
     /* Require Auth on Everything Here */
     public function __construct()
     {
+        if ((Auth::check() === FALSE) && ($token = Request::get('token'))) {
+
+            // Get that token...
+            $token = ResourceToken::where('resource', Request::path())
+                ->where('token', $token)
+                ->where('expires_at', '>', date("Y-m-d H:i:s"))
+                ->where('active', 1)
+                ->get();
+
+            if ($token->count() === 1) {
+                $validToken = $token->first();
+
+                if ($user = User::find($validToken->creator_user_id)) {
+                    Session::set('storeContext', Request::segment(3));
+                    Auth::login($user);
+                    $this->isTokenAccess = TRUE;
+                }
+            }
+        }
+
         $this->beforeFilter('auth', array());
+    }
+
+    public function __destruct()
+    { 
+        if ($this->isTokenAccess) {
+            Auth::logout();
+        }
     }
 
     /*

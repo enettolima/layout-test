@@ -47,7 +47,7 @@
             <div class="col-xs-7">
                 <div class="btn-group pull-right">
                     <a target="_blank" href="/scheduler/quickview/{{ Session::get('storeContext') }}/{{ $schedulerCurrentWeekOf }}" id="view-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Printable Quickview</a>
-                    <!--a href="" id="share-quickview-button" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-share"></span> Share Quickview</a-->
+                    <button id="share-quickview-button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#share-quickview-modal"><span class="glyphicon glyphicon-share"></span> Share Quickview</button>
                 </div>
             </div>
     </div>
@@ -66,6 +66,28 @@
         </div>
     </div>
     <!-- /Staff Row -->
+
+    <!-- Share Quickview Modal -->
+    <div class="modal" id="share-quickview-modal" tabindex="-1" role="dialog" aria-labelledby="share-quickview-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="width:760px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="share-quickview-modal-label">Share Quickview</h4>
+                    <br />
+                    <p>You may generate a link you can share with anyone to let them view the Quickview for this schedule. Keep in mind that anyone with the link can view the schedule. Links will automatically expire in six weeks.</p>
+                </div>
+                <div class="modal-body">
+                    <button id="share-quickview-generate" class="btn btn-large btn-primary">Click Here to Generate Link for Sharing</button>
+                    <div>
+                        <br />
+                        <input class='form-control' type='text' id="share-quickview-link">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Copy Schedule Modal -->
 
     <!-- Staff Selector Modal -->
     <div class="modal " id="staff-picker-modal" tabindex="-1" role="dialog" aria-labelledby="staff-picker-modal-label" aria-hidden="true"> 

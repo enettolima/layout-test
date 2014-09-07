@@ -708,6 +708,29 @@ $(document).ready(function(){
 
     });
 
+    $(document).on("click", "#share-quickview-generate", function(e){
+
+        e.preventDefault();
+
+        var 
+            weekOf = $("#schedulerCurrentWeekOf").val();
+
+        var request = $.ajax({
+            url: "/lsvc/scheduler-quickview-share/"+currentStore+"/" + weekOf,
+            type: "POST"
+        });
+
+        request.done(function(msg) {
+            if (msg.token) {
+                var sharelink = window.location.origin + '/scheduler/quickview/' + currentStore + '/' + weekOf + '?token=' + msg.token;
+                $("#share-quickview-link").val(sharelink);
+            } else {
+                $("#share-quickview-link").val("Error creating token");
+            }
+        });
+
+    });
+
 });
 
 $(document).on("click", ".staff-remove", function(){

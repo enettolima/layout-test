@@ -33,6 +33,25 @@ class LSvcController extends BaseController
 
     }
 
+    public function postSchedulerQuickviewShare()
+    {
+        $storeNumber = Request::segment(3);
+        $weekOf = Request::segment(4);
+        $userId = Auth::user()->id;
+
+        $rt = new ResourceToken;
+
+        $rt->creator_user_id = $userId;
+        $rt->active = 1;
+        $rt->expires_at = date("Y-m-d H:i:s", strtotime("+6 week"));
+        $rt->resource = "scheduler/quickview/$storeNumber/$weekOf";
+        $rt->token = str_random(20);
+
+        if ($rt->save()) {
+            return Response::json(array('token' => $rt->token));
+        }
+    }
+
     public function deleteSchedulerInOut()
     {
         $inOutId = Request::segment(3);
