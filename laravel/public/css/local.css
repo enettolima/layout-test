@@ -246,3 +246,10 @@ a.schedule-graphic-header:hover{
 .quickview li {
 	font-size:80%;
 }
+
+#share-quickview-modal ul {
+    list-style:none;
+    /* background:red; */
+}
+
+

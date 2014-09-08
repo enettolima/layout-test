@@ -76,12 +76,22 @@
                     <h4 class="modal-title" id="share-quickview-modal-label">Share Quickview</h4>
                     <br />
                     <p>You may generate a link you can share with anyone to let them view the Quickview for this schedule. Keep in mind that anyone with the link can view the schedule. Links will automatically expire in six weeks.</p>
+                    <p>After you generate the link you will have the option to email it from this screen.</p>
                 </div>
                 <div class="modal-body">
                     <button id="share-quickview-generate" class="btn btn-large btn-primary">Click Here to Generate Link for Sharing</button>
                     <div>
                         <br />
                         <input class='form-control' type='text' id="share-quickview-link">
+                    </div>
+                    <div id="share-quickview-email" style="display:none;">
+                        <h4>Email Link</h4>
+                        <p>To automatically email the link out, specify recipients below.</p>
+                        <ul id="share-quickview-emails"></ul>
+                        <ul>
+                            <li><button class="btn btn-xs btn-default share-quickview-email-add">+ add email not listed above</button></li>
+                        </ul>
+                        <button id="share-quickview-send-email" class="btn btn-large btn-primary">Send Email With Link</button>
                     </div>
                 </div>
             </div>
