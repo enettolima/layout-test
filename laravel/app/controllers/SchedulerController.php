@@ -25,6 +25,7 @@ class SchedulerController extends BaseController
                     Session::set('storeContext', Request::segment(3));
                     Auth::login($user);
                     $this->isTokenAccess = TRUE;
+                    UserLog::logToken($user->username, $validToken);
                 }
             }
         }
@@ -35,7 +36,12 @@ class SchedulerController extends BaseController
     public function __destruct()
     { 
         if ($this->isTokenAccess) {
-            Auth::logout();
+            // This won't work because it will happen before our lsvc calls
+            // which need authentication. Maybe I should even be making those calls 
+            // with tokens, similar to the way I'm calling the actual API?
+            // Regardless TODO: Security Risk -> currently I'm using javascript to call the 
+            // api to log out after the page is written on token access
+            // Auth::logout();
         }
     }
 
@@ -89,6 +95,7 @@ class SchedulerController extends BaseController
         $scheduleHeader = "EBT $storeNumber Schedule &mdash; $sunFormatted - $satFormatted"; 
 
         $data = array(
+            'isTokenAccess'  => $this->isTokenAccess,
             'scheduleHeader' => $scheduleHeader,
             'storeNumber'    => $storeNumber,
             'weekOf'         => $weekOf,

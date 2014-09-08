@@ -33,6 +33,11 @@ class LSvcController extends BaseController
 
     }
 
+    public function getSchedulerCsa()
+    {
+        Auth::logout();
+    }
+
     public function postSchedulerQuickviewShare()
     {
         $storeNumber = Request::segment(3);

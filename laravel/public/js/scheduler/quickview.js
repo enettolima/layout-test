@@ -434,6 +434,7 @@ $(document).ready(function(){
 
         }
 
+        /*
         console.log("-------------------------------------------------");
         console.log("sched:");
         console.log(sched);
@@ -450,10 +451,19 @@ $(document).ready(function(){
         console.log("empSummaries:");
         console.log(empSummaries);
         console.log("-------------------------------------------------");
+        */
 
 
         // Write the HTML
         $("#quickview").html(html.join(""));
+
+        // TODO: !!!
+        if ($("#ita").val()) {
+            var close = $.ajax({
+                url: "/lsvc/scheduler-csa",
+                type: "GET"
+            });
+        } 
     });
 
 });

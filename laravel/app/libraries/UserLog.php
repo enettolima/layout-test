@@ -15,8 +15,18 @@ class UserLog
 
     protected static $infoArray = array();
 
+    public static function logToken($user, $token)
+    {
+        self::$infoArray['user'] = $user;
+        self::$infoArray['success'] = true;
+        self::$infoArray['method'] = 'token (' . $token->token . ')';
+        self::$infoArray['token'] = $token; 
+        self::createLog();
+    }
+
     public static function logSuccess($user)
     {
+        self::$infoArray['method'] = 'standard';
         self::$infoArray['user'] = $user;
         self::$infoArray['success'] = true;
         self::createLog();
@@ -24,6 +34,7 @@ class UserLog
 
     public static function logFailure($user)
     {
+        self::$infoArray['method'] = 'standard';
         self::$infoArray['user'] = $user;
         self::$infoArray['success'] = false;
         self::$infoArray['reason'] = "Failed login";
@@ -42,10 +53,10 @@ class UserLog
 
         switch (self::$infoArray['success']) {
             case true:
-                $message = "Successful login for user " . self::$infoArray['user'] . " from " . $ip;
+                $message = "Successful " . self::$infoArray['method'] . " login for user " . self::$infoArray['user'] . " from " . $ip;
                 break;
             case false:
-                $message = "Failed login for user " . self::$infoArray['user'] . " from " . $ip;
+                $message = "Failed " . self::$infoArray['method'] . " login for user " . self::$infoArray['user'] . " from " . $ip;
                 break;
             default:
                 $message = "Bad UserLog usage.";

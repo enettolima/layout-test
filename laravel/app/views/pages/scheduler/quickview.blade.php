@@ -4,6 +4,7 @@
 
 <input class="hidden" id="week-of" value="{{ $weekOf }}">
 <input class="hidden" id="store-number" value="{{ $storeNumber }}">
+<input class="hidden" id="ita" value="{{ $isTokenAccess }}">
 
 <div class="quickview">
 
