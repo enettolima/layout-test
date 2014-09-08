@@ -20,7 +20,6 @@ class LSvcController extends BaseController
 
     public function postDocsSearch()
     {
-
         $json = Input::getContent();
 
         $req = Requests::post(
@@ -31,6 +30,65 @@ class LSvcController extends BaseController
 
         return $req->body;
 
+    }
+
+    public function postSchedulerEmailQuickview()
+    {
+        $store = Input::get('currentStore');
+        $weekOf = Input::get('weekOf');
+        $recipients = Input::get('recipients');
+
+        $subject = "EBT #$store Schedule for $weekOf";
+
+        Mail::send('emails.scheduler.share', Input::all(), function($message) use ($recipients, $subject)
+        {
+            foreach ($recipients as $recipient) {
+                $message->to($recipient)->subject($subject);
+            }
+        });
+    }
+
+    public function getSchedulerEmployeeInfo()
+    {
+
+        $storeNumber = Request::segment(3);
+
+        $weekOf = Request::segment(4);
+
+        $SQL = "
+            SELECT
+                *
+            FROM
+                schedule_day_meta
+            WHERE
+                store_id = $storeNumber AND
+                date = '$weekOf'
+        ";
+
+        $RES = DB::connection('mysql')->select($SQL);
+
+        $returnval = array();
+
+        if ($RES[0]->data) {
+
+            $data = json_decode($RES[0]->data);
+
+            foreach ($data->sequence as $user) {
+
+                $returnval[$user] = array();
+
+                if ($userObj = User::where('username', $user)->first()){
+                    $returnval[$user]['email'] = $userObj->preferred_email;
+                    $returnval[$user]['full_name'] = $userObj->full_name;
+                } 
+            }
+        }
+
+        return Response::json(array(
+            'storeNumber' => $storeNumber, 
+            'weekOf' => $weekOf,
+            'users' => $returnval
+        ));
     }
 
     public function getSchedulerCsa()

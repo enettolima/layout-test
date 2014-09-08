@@ -708,27 +708,90 @@ $(document).ready(function(){
 
     });
 
-    $(document).on("click", "#share-quickview-generate", function(e){
 
-        e.preventDefault();
+});
 
-        var 
-            weekOf = $("#schedulerCurrentWeekOf").val();
+$(document).on("click", "#share-quickview-send-email", function(e){
 
-        var request = $.ajax({
-            url: "/lsvc/scheduler-quickview-share/"+currentStore+"/" + weekOf,
-            type: "POST"
-        });
+    var recipients = [];
+    var weekOf = $("#schedulerCurrentWeekOf").val();
 
-        request.done(function(msg) {
-            if (msg.token) {
-                var sharelink = window.location.origin + '/scheduler/quickview/' + currentStore + '/' + weekOf + '?token=' + msg.token;
-                $("#share-quickview-link").val(sharelink);
-            } else {
-                $("#share-quickview-link").val("Error creating token");
-            }
-        });
 
+    $("#share-quickview-emails li").each(function(idx, li){
+        recipients.push($(this).children('input').val());
+    });
+
+    var emailReq = $.ajax({
+        url: "/lsvc/scheduler-email-quickview",
+        type: "POST",
+        data: {
+            'recipients':recipients,
+            'weekOf':weekOf,
+            'currentStore':currentStore,
+            'link':$("#share-quickview-link").val()
+        }
+    });
+
+    emailReq.done(function(){
+        alert("Your Email has been sent!");
+    });
+
+});
+
+$(document).on("click", ".share-quickview-email-add", function(e){
+    $("#share-quickview-emails").append("<li><input class='additional-address' type='text' placeholder='Enter Email Address'> <button class='btn btn-primary btn-xs share-quickview-email-add-confirm'>Save New Address</button></li>");
+});
+
+$(document).on("click", ".share-quickview-email-add-confirm", function(e){
+    var newEmail = $(this).parent().children('.additional-address').val();
+        
+    if (true /* TODO: Test email */) { 
+        $(this).parent().html("<input type='checkbox' checked name='prefilled[]' value='"+newEmail+"'> "+newEmail);
+    }
+});
+
+$(document).on("click", "#share-quickview-generate", function(e){
+
+    e.preventDefault();
+
+    var 
+        weekOf = $("#schedulerCurrentWeekOf").val();
+
+    var request = $.ajax({
+        url: "/lsvc/scheduler-quickview-share/"+currentStore+"/" + weekOf,
+        type: "POST"
+    });
+
+    request.done(function(msg) {
+        if (msg.token) {
+            var sharelink = window.location.origin + '/scheduler/quickview/' + currentStore + '/' + weekOf + '?token=' + msg.token;
+            $("#share-quickview-link").val(sharelink);
+
+            var employeeRequest = $.ajax({
+                url: "/lsvc/scheduler-employee-info/"+currentStore+"/"+weekOf,
+                type: "GET"
+            });
+
+            employeeRequest.done(function(employeeRequestResponse){
+                console.log(Object.keys(employeeRequestResponse.users));
+
+
+                for (var empInfo=0; empInfo<Object.keys(employeeRequestResponse.users).length; empInfo++) {
+                    var empInfoKey = Object.keys(employeeRequestResponse.users)[empInfo];
+
+                    var thisEmp = employeeRequestResponse.users[empInfoKey];
+
+                    if (thisEmp.email) {
+                        $("#share-quickview-emails").append("<li><input type='checkbox' checked value='"+thisEmp.email+"'> "+thisEmp.email + " (" + empInfoKey + " &mdash; " + thisEmp.full_name + ")</li>");
+                    }
+                }
+
+            });
+
+            $("#share-quickview-email").show();
+        } else {
+            $("#share-quickview-link").val("Error creating token");
+        }
     });
 
 });
