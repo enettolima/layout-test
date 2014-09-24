@@ -289,10 +289,18 @@ $(document).ready(function(){
     $.when(weekScheduleRequest, targetsRequest, actualsRequest).done(function(schedRes, targetsRes, actualsRes){
 
         var sched = schedRes[0];
+        console.log(sched);
+
+
         var targets = targetsRes[0];
+        console.log(targets);
+
+
         var actuals = actualsRes[0];
+        console.log(actuals);
 
         var daySummaries = getDaySummaryData(sched, targets, actuals);
+        console.log(daySummaries);
 
         var empSummaries = getEmpSummaryData(sched, targets, actuals);
 
@@ -343,6 +351,31 @@ $(document).ready(function(){
                 daySummaries[projhours].goalPPPH = 999;
             }
             html.push("<td>"+hoursTotal.toFixed(2)+"</td>");
+        html.push("</tr>");
+
+        /*-------------------------------------------------------------------*/
+        var actualsTotal = 0;
+        html.push("<tr>");
+            html.push("<td><strong>Actual Sales</strong></td>");
+            for (var dayActual=0; dayActual<sched.meta.days.length; dayActual++) {
+                var dayActualYmd = sched.meta.days[dayActual].Ymd;
+                var dayActualObj = actuals.summaries.byDate[dayActualYmd];
+                var dayActualStr = '-';
+
+                if (typeof dayActualObj !== "undefined") {
+                    var dayActualAmt = parseFloat(dayActualObj.total).toFixed(2);
+                    dayActualStr = "$"+dayActualAmt;
+                    actualsTotal = actualsTotal + parseFloat(dayActualAmt);
+                }
+
+                html.push("<td class='text-center'>"+dayActualStr+"</td>");
+            }
+
+            if (actualsTotal === 0) {
+                html.push("<td>-</td>");
+            } else {
+                html.push("<td>$"+actualsTotal.toFixed(2)+"</td>");
+            }
         html.push("</tr>");
 
         /*-------------------------------------------------------------------*/
