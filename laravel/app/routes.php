@@ -5,6 +5,8 @@ Route::get('/', array('before'=>'auth', function()
     return Redirect::to('/home');
 }));
 
+Route::controller('/hb', 'HbController');
+
 Route::controller('/home', 'HomeController');
 
 Route::controller('/forms', 'FormsController'); 

@@ -4,7 +4,7 @@ class EBTAPI
 {
 	protected $token = null;
 
-	public function __construct()
+	public function __construct($allowTokenFromSession = TRUE)
 	{
 		if (! isset ($_ENV['ebt_api_host'])) {
 			throw new Exception ("\$_ENV['ebt_api_host'] not set");
@@ -26,7 +26,9 @@ class EBTAPI
 		if (! $this->token) {
 			// Clog::log(__METHOD__ . ' $this->token not set');
 
-			$this->token = Session::get('api_token');
+            if ($allowTokenFromSession) {
+                $this->token = Session::get('api_token');
+            }
 
 			if (! $this->token) {
 				// Clog::log(__METHOD__ . ' $this->token not populated from session ');
