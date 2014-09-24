@@ -77,162 +77,178 @@ class UsersController extends BaseController
 		if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')))) {
 			$goodLogin = true;
 		} else {
-			// Try authenticating against Retail Pro
+            // Try authenticating against Retail Pro. We only accept RPro users with the form NNNwhatever 
 
-			$data = array('user' => Input::get('username'), 'password' => Input::get('password'));
+            if (preg_match('/^(\d\d\d).*$/', Input::get('username'), $matches)) {
 
-            $api = new EBTAPI;
+                $storeNumber = $matches[1];
 
-            // Todo: Set this up in some sort of key-based fashion? 
-            // Reckless.
-            if (isset($_ENV['mock_rpro_auth']) && ($_ENV['mock_rpro_auth'] === TRUE) && ($_SERVER['HTTP_HOST'] !== 'dev.ebtpassport.com')) {
-                $rpResults = $api->post('/rprousers/mockauth', $data);
-            } else {
-                $rpResults = $api->post('/rprousers/auth', $data);
-            }
+                try {
+                    StoresLookup::where('code', $storeNumber)->firstOrFail();
+                    $validStore = true;
+                } catch(Exception $e) {
+                    if ($storeNumber == '000') {
+                        $validStore = true;
+                    } else {
+                        $validStore = false;
+                    }
+                }
 
-			if ($rpResults) {
+                if ($validStore){
 
-				if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
+                    $data = array('user' => Input::get('username'), 'password' => Input::get('password'));
 
-					$goodLogin = true;
+                    $api = new EBTAPI;
 
-					$u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
+                    // Todo: Set this up in some sort of key-based fashion? 
+                    // Reckless.
+                    if (isset($_ENV['mock_rpro_auth']) && ($_ENV['mock_rpro_auth'] === TRUE) && ($_SERVER['HTTP_HOST'] !== 'dev.ebtpassport.com')) {
+                        $rpResults = $api->post('/rprousers/mockauth', $data);
+                    } else {
+                        $rpResults = $api->post('/rprousers/auth', $data);
+                    }
 
-                    // Repopulate these every time in case there are changes
-                    $u->rpro_user  = true;
-                    $u->username   = $rpResults->userData->empl_name; //Input::get('username');
-                    $u->rpro_id    = $rpResults->userData->empl_id;
-                    $u->full_name  = $rpResults->userData->rpro_full_name;
-                    $u->last_login = date("Y-m-d H:i:s");
+                    if ($rpResults) {
 
-                    $u->save();
+                        if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
 
-                    /*
-                     * HANDLE ASSIGNATION OF USER TO THEIR STORE ROLE
-                     */
-                    $storeNumber = substr($u->username, 0, 3);
+                            $goodLogin = true;
 
-                    if (preg_match('/^(\d\d\d).*$/', $u->username, $matches)) {
-                        $homeStoreRoleName = 'Store' . $matches[1];
+                            $u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
 
-                        // Make sure that role exists, create it if not
-                        if (! $homeStoreRole = Role::where('name', '=', $homeStoreRoleName)->first()) {
-                            $homeStoreRole = new Role;
-                            $homeStoreRole->name = $homeStoreRoleName;
-                            $homeStoreRole->save();
-                        }
+                            // Repopulate these every time in case there are changes
+                            $u->rpro_user  = true;
+                            $u->username   = $rpResults->userData->empl_name; //Input::get('username');
+                            $u->rpro_id    = $rpResults->userData->empl_id;
+                            $u->full_name  = $rpResults->userData->rpro_full_name;
+                            $u->last_login = date("Y-m-d H:i:s");
 
-                        // Make sure the user is assigned that role
-                        if (! $u->hasRole($homeStoreRole)) {
+                            $u->save();
 
+                            /*
+                             * HANDLE ASSIGNATION OF USER TO THEIR STORE ROLE
+                             */
+
+                            $homeStoreRoleName = 'Store' . $storeNumber;
+
+                            // Make sure that role exists, create it if not
+                            if (! $homeStoreRole = Role::where('name', '=', $homeStoreRoleName)->first()) {
+                                $homeStoreRole = new Role;
+                                $homeStoreRole->name = $homeStoreRoleName;
+                                $homeStoreRole->save();
+                            }
+
+                            // Make sure the user is assigned that role
+                            if (! $u->hasRole($homeStoreRole)) {
+
+                                $userRoles = array();
+
+                                foreach ($u->roles()->get() as $role) {
+                                    $userRoles[] = $role->id;
+                                }
+
+                                $userRoles[] = $homeStoreRole->id;
+
+
+                                $u->roles()->sync($userRoles);
+                            }
+
+                            // If the user doesn't already have a default store
+                            // assign this new one
+                            if (! $u->defaultStore) {
+                                $u->defaultStore = $storeNumber;
+                                $u->save();
+                            }
+
+                            /*
+                             * HANDLE ASSIGNATION OF USER TO THEIR 'LEVEL' ROLE
+                             *
+                             * They can only have one out of validRoles, so we
+                             * verify they have the one they need and none they don't.
+                             *
+                             * Todo: This is currently bound using the label instead of the Group's ID
+                             */
+
+                            $validRoles = array('District Manager', 'Manager', 'Assistant Manager', 'Associate', 'Guest');
+
+                            $userLevelRole = Role::where('name', '=', $userLevel)->firstOrFail();
+
+                            // These are the roles we want to make sure the user doesn't
+                            $removeRoles = array_diff($validRoles, array($userLevel));
+
+                            $removeRoleIds = array();
+                            foreach ($removeRoles as $removeRole) {
+                                $removeRoleObj = Role::where('name', '=', $removeRole)->firstOrFail();
+                                $removeRoleIds[] = $removeRoleObj->id;
+                            }
+
+                            // These are what we're going to set the roles to
                             $userRoles = array();
 
                             foreach ($u->roles()->get() as $role) {
-                                $userRoles[] = $role->id;
+                                if (! in_array($role->id, $removeRoleIds)) {
+                                    $userRoles[] = $role->id;
+                                }
                             }
 
-                            $userRoles[] = $homeStoreRole->id;
+                            if (! in_array($userLevelRole->id, $userRoles)) {
+                                $userRoles[] = $userLevelRole->id;
+                            }
 
+                            $userRoles[] = $userLevelRole->id;
 
                             $u->roles()->sync($userRoles);
-                        }
-
-                        // If the user doesn't already have a default store
-                        // assign this new one
-                        if (! $u->defaultStore) {
-                            $u->defaultStore = $storeNumber;
-                            $u->save();
-                        }
-                    }
-
-                    /*
-                     * HANDLE ASSIGNATION OF USER TO THEIR 'LEVEL' ROLE
-                     *
-                     * They can only have one out of validRoles, so we
-                     * verify they have the one they need and none they don't.
-                     *
-                     * Todo: This is currently bound using the label instead of the Group's ID
-                     */
-
-                    $validRoles = array('District Manager', 'Manager', 'Assistant Manager', 'Associate', 'Guest');
-
-                    $userLevelRole = Role::where('name', '=', $userLevel)->firstOrFail();
-
-                    // These are the roles we want to make sure the user doesn't
-                    $removeRoles = array_diff($validRoles, array($userLevel));
-
-                    $removeRoleIds = array();
-                    foreach ($removeRoles as $removeRole) {
-                        $removeRoleObj = Role::where('name', '=', $removeRole)->firstOrFail();
-                        $removeRoleIds[] = $removeRoleObj->id;
-                    }
-
-                    // These are what we're going to set the roles to
-                    $userRoles = array();
-
-                    foreach ($u->roles()->get() as $role) {
-                        if (! in_array($role->id, $removeRoleIds)) {
-                            $userRoles[] = $role->id;
-                        }
-                    }
-
-                    if (! in_array($userLevelRole->id, $userRoles)) {
-                        $userRoles[] = $userLevelRole->id;
-                    }
-
-                    $userRoles[] = $userLevelRole->id;
-
-                    $u->roles()->sync($userRoles);
 
 
-                    /*
-                     * HANDLE ASSIGNATION OF STORE ROLES TO DMs and RMs
-                     * 
-                     * We also need to assign all the stores managed by any DMs or RMs
-                     *
-                     * Currently in Retail Pro we are only assigning the group
-                     * 'District Manager' to users who are in the RetailPro Group 'PASSPORT_DM'.
-                     *
-                     * This fails to account for the difference between an Earthbound 'District
-                     * Manager' and an Earthbound 'Regional Manager', so this is a bit messy and
-                     * will need to be changed when we implement the 'Regional Manager' concept
-                     */
+                            /*
+                             * HANDLE ASSIGNATION OF STORE ROLES TO DMs and RMs
+                             * 
+                             * We also need to assign all the stores managed by any DMs or RMs
+                             *
+                             * Currently in Retail Pro we are only assigning the group
+                             * 'District Manager' to users who are in the RetailPro Group 'PASSPORT_DM'.
+                             *
+                             * This fails to account for the difference between an Earthbound 'District
+                             * Manager' and an Earthbound 'Regional Manager', so this is a bit messy and
+                             * will need to be changed when we implement the 'Regional Manager' concept
+                             */
 
 
-                    if ($u->hasRole('District Manager')) {
+                            if ($u->hasRole('District Manager')) {
 
-                        $userRoles = array();
+                                $userRoles = array();
 
-                        foreach ($u->roles()->get() as $role) {
-                            $userRoles[] = $role->id;
-                        }
+                                foreach ($u->roles()->get() as $role) {
+                                    $userRoles[] = $role->id;
+                                }
 
-                        //TODO: move to API. Also, THIS REALLY SUCKS.
-                        $sql = "select [Code #] as store from PASSPORT_STORES_DM_RM where RM_RP_LOGIN = '{$u->username}' or DM_RP_LOGIN = '{$u->username}'";
-                        $managerStoresRes = DB::connection('sqlsrv_ebt')->select($sql);
+                                //TODO: move to API. Also, THIS REALLY SUCKS.
+                                $sql = "select [Code #] as store from PASSPORT_STORES_DM_RM where RM_RP_LOGIN = '{$u->username}' or DM_RP_LOGIN = '{$u->username}'";
+                                $managerStoresRes = DB::connection('sqlsrv_ebt')->select($sql);
 
-                        foreach ($managerStoresRes as $result) {
+                                foreach ($managerStoresRes as $result) {
 
-                            $targetStore = 'Store'.$result->store;
+                                    $targetStore = 'Store'.$result->store;
 
-                            if (! $storeRole = Role::where('name', '=', $targetStore)->first()) {
-                                $storeRole = new Role;
-                                $storeRole->name = $targetStore;
-                                $storeRole->save();
+                                    if (! $storeRole = Role::where('name', '=', $targetStore)->first()) {
+                                        $storeRole = new Role;
+                                        $storeRole->name = $targetStore;
+                                        $storeRole->save();
+                                    }
+
+                                    $userRoles[] = $storeRole->id;
+
+                                }
+
+                                $u->roles()->sync($userRoles);
                             }
 
-                            $userRoles[] = $storeRole->id;
-
+                            UserLog::logSuccess($u->username);
+                            Auth::login($u);
                         }
-
-                        $u->roles()->sync($userRoles);
                     }
-
-                    UserLog::logSuccess($u->username);
-					Auth::login($u);
-				}
-			}
+                }
+            }
 		}
 
 		if ($goodLogin) {
@@ -246,7 +262,11 @@ class UsersController extends BaseController
 			return Redirect::to('/home');// ->with('message', 'You are now logged in');
 		} else {
 
-            UserLog::logFailure(Input::get('username'));
+            if ($validStore) {
+                UserLog::logFailure(Input::get('username'));
+            } else {
+                UserLog::logFailure(Input::get('username') . ' (BAD STORE) ');
+            }
 
 			return Redirect::to('users/login')
 				->with('loginMessage', 'Invalid Login') ->withInput();
