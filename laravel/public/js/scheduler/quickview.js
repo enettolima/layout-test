@@ -286,21 +286,22 @@ $(document).ready(function(){
         type: "GET",
     });
 
+
     $.when(weekScheduleRequest, targetsRequest, actualsRequest).done(function(schedRes, targetsRes, actualsRes){
 
-        var sched = schedRes[0];
-        console.log(sched);
+        var headerData = [];
 
+        var sched = schedRes[0];
+        // console.log(sched);
 
         var targets = targetsRes[0];
-        console.log(targets);
-
+        // console.log(targets);
 
         var actuals = actualsRes[0];
-        console.log(actuals);
+        // console.log(actuals);
 
         var daySummaries = getDaySummaryData(sched, targets, actuals);
-        console.log(daySummaries);
+        // console.log(daySummaries);
 
         var empSummaries = getEmpSummaryData(sched, targets, actuals);
 
@@ -323,22 +324,39 @@ $(document).ready(function(){
 
         /*-------------------------------------------------------------------*/
         html.push("<tr>");
+
             html.push("<td><strong>Date</strong></td>");
+
             for (var i=0; i<sched.meta.days.length; i++) {
                 html.push("<td class='text-center'>" + sched.meta.days[i].md + "</td>");
+                headerData.push({'column' : sched.meta.days[i].Ymd});
             }
+
             html.push("<td></td>");
+
         html.push("</tr>");
+
+        headerData.push({'column' : 'total'});
+
 
         /*-------------------------------------------------------------------*/
         var targetTotal = 0;
         html.push("<tr>");
             html.push("<td><strong>Sales Goal</strong></td>");
+
             for (var salesgoal=1; salesgoal<=7; salesgoal++) {
-                html.push("<td class='text-center'>$" + parseFloat(targets[salesgoal].target).toFixed(2) + "</td>");
-                targetTotal = targetTotal + parseFloat(targets[salesgoal].target);
+
+                var salesgoalAct = parseFloat(targets[salesgoal].target);
+
+                html.push("<td class='text-center'>$" + salesgoalAct.toFixed(2) + "</td>");
+
+                targetTotal = targetTotal + salesgoalAct;
+
+                headerData[salesgoal-1].goal = salesgoalAct;
             }
-            html.push("<td>$"+targetTotal.toFixed(2)+"</td>");
+
+            headerData[7].goal = targetTotal;
+            html.push("<td class='text-center'>$"+targetTotal.toFixed(2)+"</td>");
         html.push("</tr>");
 
         /*-------------------------------------------------------------------*/
@@ -349,8 +367,10 @@ $(document).ready(function(){
                 html.push("<td class='text-center'>"+daySummaries[projhours].totalHours.toFixed(2)+"</td>");
                 hoursTotal = hoursTotal + parseFloat(daySummaries[projhours].totalHours);
                 daySummaries[projhours].goalPPPH = 999;
+                headerData[projhours].hours = daySummaries[projhours].totalHours;
             }
-            html.push("<td>"+hoursTotal.toFixed(2)+"</td>");
+            html.push("<td class='text-center'>"+hoursTotal.toFixed(2)+"</td>");
+            headerData[7].hours = hoursTotal;
         html.push("</tr>");
 
         /*-------------------------------------------------------------------*/
@@ -361,20 +381,38 @@ $(document).ready(function(){
                 var dayActualYmd = sched.meta.days[dayActual].Ymd;
                 var dayActualObj = actuals.summaries.byDate[dayActualYmd];
                 var dayActualStr = '-';
+                headerData[dayActual].actuals = 0;
 
                 if (typeof dayActualObj !== "undefined") {
                     var dayActualAmt = parseFloat(dayActualObj.total).toFixed(2);
                     dayActualStr = "$"+dayActualAmt;
                     actualsTotal = actualsTotal + parseFloat(dayActualAmt);
+                    headerData[dayActual].actuals = dayActualAmt;
                 }
 
                 html.push("<td class='text-center'>"+dayActualStr+"</td>");
             }
 
             if (actualsTotal === 0) {
-                html.push("<td>-</td>");
+                html.push("<td class='text-center'>-</td>");
             } else {
-                html.push("<td>$"+actualsTotal.toFixed(2)+"</td>");
+                html.push("<td class='text-center'>$"+actualsTotal.toFixed(2)+"</td>");
+            }
+            headerData[7].actuals = actualsTotal;
+        html.push("</tr>");
+
+        /*-------------------------------------------------------------------*/
+        html.push("<tr>");
+            html.push("<td><strong>PCT</strong></td>");
+            for (var pct=0; pct <= 7; pct++) {
+
+                if (headerData[pct].actuals === 0) {
+                    html.push("<td class='text-center'>n/a</td>");
+                } else {
+                    var pctString = ((parseFloat(headerData[pct].actuals) / parseFloat(headerData[pct].goal)) * 100).toFixed();
+                    html.push("<td class='text-center'><strong>"+pctString+"%</strong></td>");
+                }
+
             }
         html.push("</tr>");
 
@@ -392,6 +430,8 @@ $(document).ready(function(){
                 "<td></td>",
             "</tr>"
         );
+
+        // console.log(headerData);
 
         /*-------------------------------------------------------------------*/
         // EMPLOYEE LOOP
