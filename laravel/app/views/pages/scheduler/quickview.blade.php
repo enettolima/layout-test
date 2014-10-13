@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-xs-8">
-            <h4>{{ $scheduleHeader }}</h4>
+            <h4 class="quickview-header">{{ $scheduleHeader }}</h4>
         </div>
         <div class="col-xs-4"></div>
     </div>

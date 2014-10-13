@@ -621,7 +621,7 @@ function loadSchedule(strDate) {
                 summaryByEmpReport(weekSchedule, targetsData, actualsData);
 
                 if (Object.keys(targetsData).length === 0) {
-                    $(".overview-reports-section").before("<p class='overview-reports-warning'><br /><em class='bg-danger'>Note: Targets data not available yet and not included below.</em></p>");
+                    $(".overview-reports-section").before("<p class='overview-reports-warning'><br /><em class='bg-danger'>Note: Sales targets are not yet available for this week so they are not reflected below.</em></p>");
                 }
             });
         });
