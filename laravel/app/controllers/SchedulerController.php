@@ -287,6 +287,37 @@ class SchedulerController extends BaseController
         );
     }
 
+    public function getNewDayPlanner()
+    {
+        $this->initAccess();
+
+        if (! $this->userHasAccess) {
+            Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
+            return Response::view('pages.permissionDenied');
+        }
+
+        $extraHead = '
+            <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
+            <link rel="stylesheet" href="/css/scheduler/fullcalendar.print.css" media="print" />
+        ';
+
+        $weekOf = Request::input('weekOf');
+        $dayOffset = Request::input('dayOffset');
+        $targetDay = date('Y-m-d', strtotime($weekOf) + ($dayOffset * 86400));
+        $selectorDateFormat = 'D, M jS, Y';
+
+        return View::make(
+            'pages.scheduler.newDayPlanner', array(
+                'extraHead' => $extraHead,
+                'weekOf' => $weekOf,
+                'dayOffset' => $dayOffset,
+                'targetDay' => $targetDay,
+                'selectorDateFormat' => $selectorDateFormat,
+                'userCanManage' => $this->userCanManage
+            )
+        );
+    }
+
     public function getDayPlanner()
     {
         $this->initAccess();
