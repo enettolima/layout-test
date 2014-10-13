@@ -79,9 +79,14 @@ var bonsaiMovie = bonsai.run(
 
 function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
+    $("#scheduler-emp-summary").empty().html("<tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>");
+
     var summaryData = [];
 
+    // If people are on the schedule...
     if (weekSchedule.meta.sequence && weekSchedule.meta.sequence.length) {
+
+        // For each employee
         for (var empKey in weekSchedule.meta.sequence) {
 
             var empID =  weekSchedule.meta.sequence[empKey];
@@ -170,11 +175,14 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
                     var goals = [];
 
-                    for (var hour in targetsData[dayKey+1].hours) {
-                        goals.push({
-                            "goal" : targetsData[dayKey+1].hours[hour].budget,
-                            "hour" : hour
-                        });
+                    // Only try to gather goals if we have targets
+                    if (Object.keys(targetsData).length) {
+                        for (var hour in targetsData[dayKey+1].hours) {
+                            goals.push({
+                                "goal" : targetsData[dayKey+1].hours[hour].budget,
+                                "hour" : hour
+                            });
+                        }
                     }
 
                     // Todo: Modify this so that we aren't running it over and over.
@@ -202,6 +210,8 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
     // Get the emps that are on the schedule and have data, then 
     // go back and add non-scheduled emps. Don't show emps that have no inouts?
+
+
 
     var summaryHTML = [];
 
@@ -252,10 +262,9 @@ function summaryByEmpReport(weekSchedule, targetsData, actualsData){
 
 function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
+
     // Populate the Day Summary Data
     var weekSummaryData = [];
-
-    if (Object.keys(targetsData).length) {
 
         for (var day=0; day <weekSchedule.meta.days.length; day++) {
 
@@ -263,7 +272,11 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
             var daySummaryData = {};
 
-            daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
+            if (Object.keys(targetsData).length === 0) {
+                daySummaryData.target = 0;
+            } else {
+                daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
+            }
             daySummaryData.dayName = dayObj.dayName;
             daySummaryData.dateLabel = dayObj.md;
             daySummaryData.dateFull = dayObj.Ymd;
@@ -307,11 +320,13 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
                 var goals = [];
 
-                for (var hour in targetsData[day+1].hours) {
-                    goals.push({
-                        "goal" : targetsData[day+1].hours[hour].budget,
-                        "hour" : hour
-                    });
+                if (Object.keys(targetsData).length !== 0) {
+                    for (var hour in targetsData[day+1].hours) {
+                        goals.push({
+                            "goal" : targetsData[day+1].hours[hour].budget,
+                            "hour" : hour
+                        });
+                    }
                 }
 
                 // I HAVE THE empInOuts and the goals for SS!
@@ -387,14 +402,9 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
             weekSummaryData.push(daySummaryData);
         }
-    }
-
-    $("#scheduler-day-summary").empty();
 
     // Create the Day Summary HTML
     var daySumHTML = [];
-
-    if (weekSummaryData.length) {
 
         for (var d=0; d<weekSummaryData.length; d++) {
 
@@ -498,11 +508,8 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
                 }
             }
         }
-    } else {
-        daySumHTML.push("<tr><td><em>Targets data doesn't exist yet.</em></td></tr>");
-    }
 
-    $("#scheduler-day-summary").html(daySumHTML.join(""));
+    $("#scheduler-day-summary").empty().html(daySumHTML.join(""));
 
     var empWeekSummaryData = [];
 }
@@ -510,6 +517,10 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 function loadSchedule(strDate) {
 
     $("#empList").html("<li><img src=\"/images/ajax-loader-arrows.gif\"></li>");
+
+    $("#scheduler-day-summary").empty().html("<tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>");
+
+    $("#scheduler-emp-summary").empty().html("<tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>");
 
     // Look to see if we've changed date; if so need to change it in
     // the PHP session
@@ -603,9 +614,15 @@ function loadSchedule(strDate) {
 
             actualsRequest.done(function(actualsData){
 
+                $(".overview-reports-warning").remove();
+
                 summaryByDayReport(weekSchedule, targetsData, actualsData);
 
                 summaryByEmpReport(weekSchedule, targetsData, actualsData);
+
+                if (Object.keys(targetsData).length === 0) {
+                    $(".overview-reports-section").before("<p class='overview-reports-warning'><br /><em class='bg-danger'>Note: Targets data not available yet and not included below.</em></p>");
+                }
             });
         });
 
@@ -773,7 +790,7 @@ $(document).on("click", "#share-quickview-generate", function(e){
             });
 
             employeeRequest.done(function(employeeRequestResponse){
-                console.log(Object.keys(employeeRequestResponse.users));
+                // console.log(Object.keys(employeeRequestResponse.users));
 
 
                 for (var empInfo=0; empInfo<Object.keys(employeeRequestResponse.users).length; empInfo++) {

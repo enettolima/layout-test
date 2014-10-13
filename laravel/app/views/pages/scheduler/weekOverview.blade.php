@@ -300,18 +300,18 @@
     <!-- /Main Scheduling Grid Section -->
 
     <!-- Summary Section -->
-    <div class="row">
+    <div class="row overview-reports-section">
 
         <div class="col-xs-6">
             <h4>Week Summary by Day</h4>
             <table id="scheduler-day-summary" class="new-day-summary summary-table table table-condensed">
-                <tr><td><em>Loading...</em></td></tr>
+                <tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>
             </table>
         </div>
         <div class="col-xs-6">
             <h4>Week Summary by Employee</h4>
             <table id="scheduler-emp-summary" class="new-emp-summary summary-table table table-condensed">
-                <tr><td><em>Loading...</em></td></tr>
+                <tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>
             </table>
         </div>
 
