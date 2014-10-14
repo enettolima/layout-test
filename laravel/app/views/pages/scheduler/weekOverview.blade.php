@@ -28,8 +28,8 @@
                             $start = $lastSunday - ($pastWeekCount * 7 * 24 * 60 * 60);
 
                             for ($i=0; $i<$pastWeekCount+$futureWeekCount; $i++) {
-                                $ranges[] = array('start' => $start, 'end' => $start + (86400 * 6));
-                                $start = $start + (86400 * 7);
+                                $ranges[] = array('start' => $start, 'end' => strtotime('+6days', $start));
+                                $start = strtotime('+7days', $start);
                             }
 
                             foreach ($ranges as $range) {
