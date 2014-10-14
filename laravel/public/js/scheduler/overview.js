@@ -292,7 +292,7 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
                     var empID = weekSchedule.meta.sequence[emp];
 
-                    if (weekSchedule.schedule[day].length) {
+                    if (typeof weekSchedule.schedule[day] !== "undefined" && weekSchedule.schedule[day].length) {
                         // This day has some inouts. Iterate through them looking
                         // for our current person
                         for (var sumIO=0; sumIO<weekSchedule.schedule[day].length; sumIO++){
