@@ -174,7 +174,7 @@ $(document).on("click", ".btn-inout-add", function(){
     html.push("<div class='btn-group'>");
     html.push("<button class='btn btn-default btn-sm btn-inout-edit'>Edit</button>");
     html.push("</div>");
-    html.push("<button class='btn btn-default btn-sm'>Delete</button>");
+    html.push("<button class='btn btn-default btn-sm btn-inout-delete'>Delete</button>");
     html.push("</tr>");
     html.push("</tr>");
 
@@ -210,4 +210,30 @@ $(document).on("click", ".btn-inout-cancel", function(){
 
     // Remove the 'Cancel' button
     $(this).remove();
+});
+
+// "Delete Button" on an In/Out Row
+$(document).on("click", ".btn-inout-delete", function(){
+
+    var inoutRow = $(this).closest('tr');
+    var inoutId = inoutRow.attr("data-event-id");
+
+    $("#inout-delete-modal-content").html("<p>Are you sure you want to delete this In/Out?</p>"); 
+    $("#inout-delete-modal-confirm").attr("data-event-id", inoutId);
+    $("#inout-delete-modal").modal('show');
+});
+
+// "Confirm Delete" on an In/Out Row
+$(document).on("click", "#inout-delete-modal-confirm", function(){
+
+    var inoutId = $(this).attr('data-event-id');
+    var inoutRow = $("tr[data-event-id='"+inoutId+"']");
+
+    $("#inout-delete-modal").modal('hide');
+
+    inoutRow.remove();
+
+    console.log(inoutId);
+    console.log(inoutRow);
+
 });

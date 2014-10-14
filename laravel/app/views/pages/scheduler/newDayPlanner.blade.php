@@ -61,7 +61,7 @@
                                 <div class="btn-group">
                                     <button class="btn btn-default btn-sm btn-inout-edit">Edit</button>
                                 </div>
-                                <button class="btn btn-default btn-sm">Delete</button>
+                                <button class="btn btn-default btn-sm btn-inout-delete">Delete</button>
                             </tr>
                         </tr>
                         <tr>
@@ -116,17 +116,17 @@
         </div>
     </div>
 
-    <div id="block-remove-modal" class="modal" tabindex="-1" role="dialog">
+    <div id="inout-delete-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Block Deletion</h4>
+                    <h4 class="modal-title">Delete In/Out</h4>
                 </div>
-                <div id="block-remove-modal-content" class="modal-body"></div>
+                <div id="inout-delete-modal-content" class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="block-remove-modal-confirm" type="button" data-event-id="" class="btn btn-danger">Confirm Deletion</button> 
+                    <button id="inout-delete-modal-confirm" class="btn btn-danger" type="button" data-event-id="">Confirm Deletion</button> 
                 </div>
             </div>
         </div>
