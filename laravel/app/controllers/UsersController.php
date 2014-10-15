@@ -3,6 +3,8 @@
 class UsersController extends BaseController
 {
 
+    public $errorCode = null;
+
     public function getIndex()
     {
         return Redirect::to('/');
@@ -31,6 +33,14 @@ class UsersController extends BaseController
             // These need to be ordered as "most powerful first"
 
             $rpGroups = array();
+
+            if (! property_exists($rpResults->userData, 'groups')) {
+                $this->errorCode = 'E101'; // Couldn't find any RP Groups.
+                return $returnval;
+            }
+
+            // var_dump($rpResults->userData);
+            // exit;
 
             foreach ($rpResults->userData->groups as $group) {
                 $rpGroups[] = $group->user_grp_name;
@@ -262,14 +272,19 @@ class UsersController extends BaseController
 			return Redirect::to('/home');// ->with('message', 'You are now logged in');
 		} else {
 
-            if ($validStore) {
-                UserLog::logFailure(Input::get('username'));
-            } else {
+            $loginFailureMessage = 'Invalid Login';
+
+            if (! $validStore) {
                 UserLog::logFailure(Input::get('username') . ' (BAD STORE) ');
+            } elseif ($this->errorCode) {
+                UserLog::logFailure(Input::get('username') . " ({$this->errorCode}) ");
+                $loginFailureMessage = 'Invalid Login (' . $this->errorCode . ')';
+            } else {
+                UserLog::logFailure(Input::get('username'));
             }
 
 			return Redirect::to('users/login')
-				->with('loginMessage', 'Invalid Login') ->withInput();
+				->with('loginMessage', $loginFailureMessage) ->withInput();
 		}
     }
 
