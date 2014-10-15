@@ -254,6 +254,9 @@ class UsersController extends BaseController
                             }
 
                             UserLog::logSuccess($u->username);
+                            // Destroy any previous session first...
+                            Session::flush();
+
                             Auth::login($u);
                         }
                     }

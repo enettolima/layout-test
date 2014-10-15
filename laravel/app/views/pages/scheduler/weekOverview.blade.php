@@ -9,13 +9,6 @@
         <div class="col-xs-5">
                     <select id="rangeSelector" class="form-control input">
                         <?php
-                            if (! Session::has('schedulerCurrentWeekOf')) {
-                                $schedulerCurrentWeekOf = date('Y-m-d', strtotime('last sunday'));
-                                Session::set('schedulerCurrentWeekOf', $schedulerCurrentWeekOf);
-                            } else {
-                                $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
-                            }
-
                             // Get the Sunday for this week
                             $pastWeekCount = 4;
                             $futureWeekCount = 8;

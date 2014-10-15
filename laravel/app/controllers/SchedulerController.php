@@ -114,6 +114,13 @@ class SchedulerController extends BaseController
             return Response::view('pages.permissionDenied');
         }
 
+        if (! Session::has('schedulerCurrentWeekOf')) {
+            $schedulerCurrentWeekOf = date('Y-m-d', strtotime('last sunday'));
+            Session::set('schedulerCurrentWeekOf', $schedulerCurrentWeekOf);
+        } else {
+            $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
+        }
+
         $extraHead = '<script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>';
 
 
@@ -140,7 +147,8 @@ class SchedulerController extends BaseController
             'pages.scheduler.weekOverview', array(
                 'extraHead' => $extraHead,
                 'userCanManage' => $this->userCanManage,
-                'prevSchedules' => $prevSchedules
+                'prevSchedules' => $prevSchedules,
+                'schedulerCurrentWeekOf' => $schedulerCurrentWeekOf
             )
         );
     }
@@ -152,6 +160,13 @@ class SchedulerController extends BaseController
         if (! $this->userHasAccess) {
             Log::info(__METHOD__ . " access denied for user "  . Auth::user()->username);
             return Response::view('pages.permissionDenied');
+        }
+
+        if (! Session::has('schedulerCurrentWeekOf')) {
+            $schedulerCurrentWeekOf = date('Y-m-d', strtotime('last sunday'));
+            Session::set('schedulerCurrentWeekOf', $schedulerCurrentWeekOf);
+        } else {
+            $schedulerCurrentWeekOf = Session::get('schedulerCurrentWeekOf');
         }
 
         $extraHead = '
@@ -171,7 +186,8 @@ class SchedulerController extends BaseController
                 'dayOffset' => $dayOffset,
                 'targetDay' => $targetDay,
                 'selectorDateFormat' => $selectorDateFormat,
-                'userCanManage' => $this->userCanManage
+                'userCanManage' => $this->userCanManage,
+                'schedulerCurrentWeekOf' => $schedulerCurrentWeekOf
             )
         );
     }

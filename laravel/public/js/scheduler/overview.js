@@ -516,6 +516,8 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
 function loadSchedule(strDate) {
 
+//    console.log("LOADSCHEDULE: " + strDate);
+
     $("#empList").html("<li><img src=\"/images/ajax-loader-arrows.gif\"></li>");
 
     $("#scheduler-day-summary").empty().html("<tr><td><em>Loading</em>&nbsp;<img src='/images/ajax-loader-arrows.gif'></td></tr>");
