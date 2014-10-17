@@ -2,8 +2,6 @@
 
 class StoresResolver
 {
-    static $foo;
-
     static $storesLookup;
 
     public static function getInstance()
@@ -39,11 +37,6 @@ class StoresResolver
         foreach (StoresLookup::all() as $store) {
             static::$storesLookup[$store->code] = $store;
         }
-    }
-
-    protected static function bar()
-    {
-        echo "I ran bar";
     }
 
     protected function __construct()

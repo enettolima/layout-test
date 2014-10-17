@@ -46,7 +46,10 @@
                                 <li class="dropdown-header">Switch Store To:</li>
                                 <?php
                                     $sr = StoresResolver::getInstance();  
-                                    foreach (Auth::user()->getStores() as $store) {
+
+                                    $stores = Auth::user()->getStores();
+
+                                    foreach ($stores as $store) {
                                         $sl = $sr->getStore($store)->store_name;
                                         echo "<li><a data-store-number=\"$store\" class=\"change-store-context\" href=\"#\">$store - $sl</a></li>";
                                     }
