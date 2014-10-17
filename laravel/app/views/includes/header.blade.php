@@ -49,6 +49,8 @@
 
                                     $stores = Auth::user()->getStores();
 
+                                    sort($stores);
+
                                     foreach ($stores as $store) {
                                         $sl = $sr->getStore($store)->store_name;
                                         echo "<li><a data-store-number=\"$store\" class=\"change-store-context\" href=\"#\">$store - $sl</a></li>";
