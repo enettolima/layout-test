@@ -11,7 +11,9 @@
                         <select disabled id="rangeSelector" class="form-control input">
                             <?php
                                 $range['start'] = strtotime($_GET['weekOf']);
-                                $range['end'] = strtotime($_GET['weekOf']) + (86400 * 6) ;
+                                // Before: Probably DST Problem
+                                // $range['end'] = strtotime($_GET['weekOf']) + (86400 * 6) ;
+                                $range['end'] = strtotime('+6days', strtotime($_GET['weekOf']));
                                 echo "<option value=\"".date('Y-m-d', $range['start'])."\">".date($selectorDateFormat, $range['start'])." &mdash; ".date($selectorDateFormat, $range['end'])."</option>\n";
                             ?>
                         </select>
