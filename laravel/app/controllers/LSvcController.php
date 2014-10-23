@@ -353,7 +353,10 @@ class LSvcController extends BaseController
 
             // Step 2: Get all the in/outs
 
-            $fromWeekBoundary = date('Y-m-d', strtotime($schedDateFrom) + (86400 * 7));
+            // Before: Probably DST Problem
+            // $fromWeekBoundary = date('Y-m-d', strtotime($schedDateFrom) + (86400 * 7));
+            // After:
+            $fromWeekBoundary = date('Y-m-d', strtotime('+7days', strtotime($schedDateFrom)));
 
             $ioSQL = "
                 SELECT
@@ -370,7 +373,10 @@ class LSvcController extends BaseController
 
             // Step 3: clear existing in/outs just in case
             
-            $toWeekBoundary = date('Y-m-d', strtotime($schedDateTo) + (86400 * 7));
+            // Before: Probably DST Problem
+            // $toWeekBoundary = date('Y-m-d', strtotime($schedDateTo) + (86400 * 7));
+            // After:
+            $toWeekBoundary = date('Y-m-d', strtotime('+7days', strtotime($schedDateTo)));
 
             $ioClearSQL = "
                 DELETE FROM
@@ -383,7 +389,13 @@ class LSvcController extends BaseController
 
             DB::connection('mysql')->delete($ioClearSQL);
 
-            $dayDiff = (strtotime($schedDateTo) - strtotime($schedDateFrom)) / 86400;
+            // Before: Probably DST Problem
+            //$dayDiff = (strtotime($schedDateTo) - strtotime($schedDateFrom)) / 86400;
+
+            // After: 
+            $dtSchedDateTo = new DateTime($schedDateTo);
+            $dtSchedDateFrom = new DateTime($schedDateFrom);
+            $dayDiff = $dtSchedDateTo->diff($dtSchedDateFrom)->format("%a");
 
             foreach ($ioRES as $io) {
 
@@ -392,8 +404,13 @@ class LSvcController extends BaseController
                     array(
                         $io->{'associate_id'},
                         $io->{'store_id'},
-                        date("Y-m-d H:i:s", strtotime($io->{'date_in'}) + (86400 * $dayDiff)),
-                        date("Y-m-d H:i:s", strtotime($io->{'date_out'}) + (86400 * $dayDiff)),
+
+                        // Before: Probably DST Problem
+                        // date("Y-m-d H:i:s", strtotime($io->{'date_in'}) + (86400 * $dayDiff)),
+
+                        // After:
+                        date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_in'}))),
+                        date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_out'}))),
                     )
                 );
 
@@ -558,7 +575,11 @@ class LSvcController extends BaseController
         // So we get 7 total days starting from sunday...
         for ($i=0; $i <=6; $i++) {
 
-            $onDate = date('Y-m-d', strtotime($sundayDate) + ($i * 86400));
+            // Before: Probably DST Problem
+            // $onDate = date('Y-m-d', strtotime($sundayDate) + ($i * 86400));
+            // After:
+            $onDate = date('Y-m-d', strtotime('+'.$i.'days', strtotime($sundayDate)));
+
             $onDayName = date("D", strtotime($onDate));
             $onDayMD = date("n/j", strtotime($onDate));
 
@@ -676,7 +697,10 @@ class LSvcController extends BaseController
 
         $from = date("m/d/Y", strtotime($weekOf)); // Sunday, or "Week Of"
 
-        $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6)); // Sunday, or "Week Of"
+        // Before: Probably DST Problem
+        // $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6)); // Sunday, or "Week Of"
+        // After:
+        $to = date("m/d/Y", strtotime('+6days', strtotime($weekOf)));
 
         $targetsSQL = "
             SELECT
@@ -729,7 +753,10 @@ class LSvcController extends BaseController
 
         $from = date("m/d/Y", strtotime($weekOf)); // Sunday, or "Week Of"
 
-        $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6));
+        // Before: Probably DST Problem
+        // $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6));
+        // After: 
+        $to = date("m/d/Y", strtotime('+6days', strtotime($weekOf)));
 
         $targetsSQL = "
             SELECT
