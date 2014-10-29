@@ -523,6 +523,13 @@ $(document).ready(function(){
 
         }
 
+        if (empSummaries.length === 0) {
+            html.push("<tr>");
+                html.push("<td colspan='100'><strong><em>No staff has been added to this schedule.</em></strong></td>");
+            html.push("</tr>");
+        }
+
+
         /*
         console.log("-------------------------------------------------");
         console.log("sched:");
