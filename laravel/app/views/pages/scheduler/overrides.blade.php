@@ -5,9 +5,8 @@
 
 <div class="row">
 	<div class="col-xs-6">
-		<h3>Current Overrides:</h3>
+		<h3>Upcoming Overrides:</h3>
 
-		<small>(Most recent first)</small>
 		<table class="table table-striped">
 			<tr>
 				<th>Date</th>
@@ -32,15 +31,47 @@
 	<div class="col-xs-6">
 		<h3>Add Override:</h3>
 
+        <p>To add an override please specify the following parameters:</p>
+
 		<script>
 			$(function() {
-				$( "#datepicker" ).datepicker();
+				$( "#date" ).datepicker();
+				$( "#openTime" ).timepicker();
+				$( "#closeTime" ).timepicker();
 			});
 		</script>
 
-		<form class="form" action="" method="POST">
 
-			<input type="text" id="datepicker">
+        <link rel="stylesheet" href="/css/jquery.timepicker.css" title="" type="text/css" />
+        <script src="/js/jquery.timepicker.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<form class="form-horizontal" role="form" action="" method="POST">
+            <div class="form-group">
+                <label for="datepicker" class="col-xs-2 control-label">Date:</label>
+                <div class="col-xs-4">
+                    <input class="form-control" type="text" id="date" name="date">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="datepicker" class="col-xs-2 control-label">Open:</label>
+                <div class="col-xs-3">
+                    <input class="form-control" type="text" id="openTime" name="openTime">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="datepicker" class="col-xs-2 control-label">Close:</label>
+                <div class="col-xs-3">
+                    <input class="form-control" type="text" id="closeTime" name="closeTime">
+                </div>
+            </div>
+
+             <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                      <button id="add-override" class="btn btn-primary">Add Override</button>
+                </div>
+              </div>
 		</form>
 
 	</div>

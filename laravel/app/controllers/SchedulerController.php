@@ -72,15 +72,79 @@ class SchedulerController extends BaseController
             die("couldn't get store context");
         }
 
-        $overrides = DB::connection('sqlsrv_ebtgoogle')->select("select * from StoreHoursOverrides where StoreCode = $store order by OpenHour DESC");
+        $fromDate = strtotime("today");
 
-        $data = array('overrides' => $overrides);
+        $dateFormat = "Y-m-d H:i:s";
+
+        $sql = "
+            SELECT
+                *
+            FROM
+                StoreHoursOverrides
+            WHERE
+                StoreCode = ? and
+                Date >= ?
+            ORDER BY
+                Date
+        ";
+
+        $overrides = DB::connection('sqlsrv_ebtgoogle')->select($sql, array($store, date($dateFormat, $fromDate)));
+
+        $extraHead = '<script src="/js/jquery-ui-1.10.3.custom.js" type="text/javascript" charset="utf-8"></script>';
+
+        $data = array(
+            'overrides' => $overrides,
+            'extraHead' => $extraHead
+        );
 
         return View::make( 'pages.scheduler.overrides', $data );
     }
 
     public function postOverrideHours()
     {
+        $storeNumber = Session::get('storeContext');
+        $inStamp =  strtotime(Input::get('date') . ' ' . Input::get('openTime'));
+        $outStamp = strtotime(Input::get('date') . ' ' . Input::get('closeTime')); 
+        $dateFormat = "Y-m-d H:i:s";
+
+        $sql = " INSERT INTO StoreHoursOverrides ( StoreCode, Date, OpenHour, CloseHour, ModifiedOn, OpenMil, CloseMil) VALUES ( ?, ?, ?, ?, ?, ?, ?) ";
+
+        $date       = date($dateFormat, strtotime(date("Y-m-d", $inStamp)));
+        $openHour   = date($dateFormat, $inStamp);
+        $closeHour  = date($dateFormat, $outStamp);
+        $modifiedOn = date($dateFormat);
+        $openMil    = date("H", $inStamp);
+        $closeMil   = date("H", $outStamp);
+
+        $returnval = array();
+        $returnval['success'] = 0;
+
+        try {
+            DB::connection('sqlsrv_ebtgoogle')->insert($sql, array($storeNumber, $date, $openHour, $closeHour, $modifiedOn, $openMil, $closeMil));
+            $returnval['success'] = 1;
+        } catch (Exception $e) {
+
+            $message = $e->getMessage();
+
+            $error_reason = null;
+
+            if (preg_match('/error:\s(\d+)/', $message, $matches)) {
+                switch ($matches[1]) {
+                    case 2627:
+                        $error_reason = "Duplicate entry for day";
+                        break;
+                }
+            }
+
+            $returnval['error'] = $error_reason;
+        }
+
+
+        if ($returnval['success']) {
+            return Redirect::to('scheduler/override-hours')->with('message', 'Override has been added!');
+        } else {
+            return Redirect::to('scheduler/override-hours')->with('message', 'Error adding override.');
+        }
     }
 
 

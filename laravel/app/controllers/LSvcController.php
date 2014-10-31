@@ -18,6 +18,83 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getHoursOverride()
+    {
+        // GET http://domain.com/lsvc/hours-override
+        $storeNumber = Request::segment(3);
+
+        $fromDate = strtotime("today");
+
+        $dateFormat = "Y-m-d H:i:s";
+
+        $sql = "
+            SELECT
+                *
+            FROM
+                StoreHoursOverrides
+            WHERE
+                StoreCode = ? and
+                Date >= ?
+            ORDER BY
+                Date
+        ";
+
+        $overrides = DB::connection('sqlsrv_ebtgoogle')->select($sql, array($storeNumber, date($dateFormat, $fromDate)));
+
+        return Response::json($overrides);
+    }
+
+    public function postHoursOverride()
+    {
+        // POST http://domain.com/lsvc/hours-override
+        $storeNumber = Request::segment(3);
+        $inStamp = Request::segment(4);
+        $outStamp = Request::segment(5);
+        $dateFormat = "Y-m-d H:i:s";
+
+        $sql = " INSERT INTO StoreHoursOverrides ( StoreCode, Date, OpenHour, CloseHour, ModifiedOn, OpenMil, CloseMil) VALUES ( ?, ?, ?, ?, ?, ?, ?) ";
+
+        $date       = date($dateFormat, strtotime(date("Y-m-d", $inStamp)));
+        $openHour   = date($dateFormat, $inStamp);
+        $closeHour  = date($dateFormat, $outStamp);
+        $modifiedOn = date($dateFormat);
+        $openMil    = date("H", $inStamp);
+        $closeMil   = date("H", $outStamp);
+
+        $returnval = array();
+        $returnval['success'] = 0;
+
+        try {
+            DB::connection('sqlsrv_ebtgoogle')->insert($sql, array($storeNumber, $date, $openHour, $closeHour, $modifiedOn, $openMil, $closeMil));
+            $returnval['success'] = 1;
+        } catch (Exception $e) {
+
+            $message = $e->getMessage();
+
+            $error_reason = null;
+
+            if (preg_match('/error:\s(\d+)/', $message, $matches)) {
+                switch ($matches[1]) {
+                    case 2627:
+                        $error_reason = "Duplicate entry for day";
+                        break;
+                }
+            }
+
+            $returnval['error'] = $error_reason;
+        }
+
+        return Response::json($returnval);
+
+    }
+
+    public function deleteHoursOverride()
+    {
+        // DELETE http://domain.com/lsvc/hours-override 
+        $storeNumber = Request::segment(3);
+    }
+
+
     public function postDocsSearch()
     {
         $json = Input::getContent();
