@@ -90,7 +90,8 @@ class SchedulerController extends BaseController
 
         $overrides = DB::connection('sqlsrv_ebtgoogle')->select($sql, array($store, date($dateFormat, $fromDate)));
 
-        $extraHead = '<script src="/js/jquery-ui-1.10.3.custom.js" type="text/javascript" charset="utf-8"></script>';
+        $extraHead  = '<script src="/js/jquery-ui-1.10.3.custom.js" type="text/javascript" charset="utf-8"></script>';
+        $extraHead .= '<script src="/js/scheduler/overrides.js" type="text/javascript" charset="utf-8"></script>';
 
         $data = array(
             'overrides' => $overrides,
@@ -106,6 +107,10 @@ class SchedulerController extends BaseController
         $inStamp =  strtotime(Input::get('date') . ' ' . Input::get('openTime'));
         $outStamp = strtotime(Input::get('date') . ' ' . Input::get('closeTime')); 
         $dateFormat = "Y-m-d H:i:s";
+
+        if (! ($outStamp > $inStamp)) {
+            return Redirect::to('scheduler/override-hours')->with('message', 'Override not added - Close time earlier than Open!');
+        }
 
         $sql = " INSERT INTO StoreHoursOverrides ( StoreCode, Date, OpenHour, CloseHour, ModifiedOn, OpenMil, CloseMil) VALUES ( ?, ?, ?, ?, ?, ?, ?) ";
 
@@ -131,7 +136,7 @@ class SchedulerController extends BaseController
             if (preg_match('/error:\s(\d+)/', $message, $matches)) {
                 switch ($matches[1]) {
                     case 2627:
-                        $error_reason = "Duplicate entry for day";
+                        $error_reason = "Duplicate entry for day.";
                         break;
                 }
             }
@@ -139,13 +144,59 @@ class SchedulerController extends BaseController
             $returnval['error'] = $error_reason;
         }
 
-
         if ($returnval['success']) {
             return Redirect::to('scheduler/override-hours')->with('message', 'Override has been added!');
         } else {
-            return Redirect::to('scheduler/override-hours')->with('message', 'Error adding override.');
+            return Redirect::to('scheduler/override-hours')->with('message', 'Error adding override. ' . $error_reason);
         }
     }
+
+    public function getOverrideHoursDelete()
+    {
+        $overrideId = Request::segment(3);
+
+        $userHasAccess = false;
+        $overrideExists = false;
+
+        try {
+            // Step 1: Get Store # for this Override
+            $sql = "SELECT * FROM StoreHoursOverrides where id = ?";
+            $res = DB::connection('sqlsrv_ebtgoogle')->select($sql, array($overrideId));
+
+            if (count($res) === 1) {
+                $overrideExists = true;
+                $user = Auth::user();
+
+                if ($user->hasRole('Store' . trim($res[0]->StoreCode))) {
+                    if ($user->hasRole('District Manager') || $user->hasRole('Manager') || $user->hasRole('Assistant Manager'))
+                    {
+                        $userHasAccess = true;
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            return Redirect::to('scheduler/override-hours')->with('message', 'Override not deleted due to database error (1)');
+        }
+
+        if ($userHasAccess) {
+            if ($overrideExists) {
+                try {
+                    $sql = "DELETE FROM StoreHoursOverrides where ID = ?";
+                    $res = DB::connection('sqlsrv_ebtgoogle')->delete($sql, array($overrideId));
+                } catch (Exception $e) {
+                    return Redirect::to('scheduler/override-hours')->with('message', 'Override not deleted due to database error (1)');
+                }
+
+                return Redirect::to('scheduler/override-hours')->with('message', 'Override deleted.');
+            } else {
+                return Redirect::to('scheduler/override-hours')->with('message', 'Override not deleted - not found.');
+            }
+        } else {
+            return Redirect::to('scheduler/override-hours')->with('message', 'Override not deleted - access denied.');
+        }
+
+    }
+
 
 
     public function getIndex()

@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="row">
 	<div class="col-xs-6">
 		<h3>Upcoming Overrides:</h3>
@@ -12,22 +11,52 @@
 				<th>Date</th>
 				<th>Open</th>
 				<th>Close</th>
+                <th></th>
 			</tr>
 			@foreach ($overrides as $override)
 				<tr>
-					<td>
+					<td class="override-date">
 						{{ date("D, M dS, Y", strtotime($override->Date)) }}
 					</td>
-					<td>
+					<td class="override-open">
 						{{ date("h:ia", strtotime($override->OpenHour)) }}
 					</td>
-					<td>
+					<td class="override-close">
 						{{ date("h:ia", strtotime($override->CloseHour)) }}
 					</td>
+                    <td class="override-controls">
+                        <a 
+                            href="" 
+                            data-toggle="modal" 
+                            data-target="#remove-override-modal" 
+                            data-override-id="{{ $override->ID }}" 
+                            class="small remove-override">
+                                <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
 				</tr>
 			@endforeach
 		</table>
 	</div>
+
+    <!-- Delete Override Modal -->
+    <div id="remove-override-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Override Deletion</h4>
+                </div>
+                <div id="remove-override-modal-content" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a id="remove-override-modal-confirm" type="button" class="btn btn-danger">Yes - Delete It</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete Override Modal -->
+
 	<div class="col-xs-6">
 		<h3>Add Override:</h3>
 
@@ -75,5 +104,4 @@
 		</form>
 
 	</div>
-
 @stop
