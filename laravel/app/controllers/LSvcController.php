@@ -192,11 +192,13 @@ class LSvcController extends BaseController
         }
     }
 
+    // Todo: protect against unauthorized call
     public function deleteSchedulerInOut()
     {
-        $inOutId = Request::segment(3);
+
+        $inOutId     = Request::segment(3);
         $storeNumber = Request::segment(4);
-        $date = Request::segment(5);
+        $date        = Request::segment(5);
 
         $deleteSQL = "
             DELETE FROM
@@ -254,6 +256,7 @@ class LSvcController extends BaseController
             return Response::json(array( 'status' => 0));
         }
     }
+
 
     public function putSchedulerInOutResize()
     {
@@ -497,6 +500,42 @@ class LSvcController extends BaseController
             throw new Exception();
         }
 
+    }
+
+    public function putSchedulerInOut()
+    {
+        $storeNumber = Request::segment(3);
+        $inOutId     = Request::segment(4);
+        $inString    = Request::segment(5);
+        $outString   = Request::segment(6);
+        $date        = Request::segment(7);
+
+        $in  = date('Y-m-d H:i:s', strtotime(urldecode($inString)));
+        $out = date('Y-m-d H:i:s', strtotime(urldecode($outString)));
+
+        $SQL = "
+            UPDATE scheduled_inout
+            SET
+                date_in = '$in',
+                date_out = '$out'
+            WHERE
+                id = $inOutId
+        ";
+
+        if (DB::connection('mysql')->update($SQL)) {
+
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+            return Response::json(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
+            ));
+
+        } else {
+            return Response::json(array('status' => 0));
+        }
     }
 
     public function postSchedulerInOut()

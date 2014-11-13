@@ -198,7 +198,6 @@ class SchedulerController extends BaseController
     }
 
 
-
     public function getIndex()
     {
         return Redirect::to('/scheduler/week-overview');
@@ -299,6 +298,7 @@ class SchedulerController extends BaseController
         $extraHead = '
             <link rel="stylesheet" href="/css/scheduler/fullcalendar.css" />
             <link rel="stylesheet" href="/css/scheduler/fullcalendar.print.css" media="print" />
+            <script src="/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
         ';
 
         $weekOf = Request::input('weekOf');

@@ -29,54 +29,23 @@
     
     <div class="row">
         <div class="col-xs-4" style=""><h4>Staff</h4></div>
-        <div class="col-xs-8" style=""><h4>Stuff</h4></div>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <ul role="tablist">
+            <ul role="tablist" id="staff">
                 <li><a href="#overview" data-toggle="tab">Overview</a></li>
-                <li><a href="#414MW" data-toggle="tab">414MW Michelle Wantuchowicz</a></li>
-                <li><a href="#414ER" data-toggle="tab">414ER Edward Rodriguez</a></li>
-                <li><a href="#414JG" data-toggle="tab">414JG Jassiel Gomez</a></li>
-                <li><a href="#414MO" data-toggle="tab">414MO Madline Olvera</a></li>
-                <li><a href="#414BR" data-toggle="tab">414BR Brandon Ramirez</a></li>
             </ul>
         </div>
         <div class="col-md-6">
             <!-- Tab panes -->
-            <div class="tab-content">
+            <div class="tab-content" id="staff-inouts">
                 <div class="tab-pane active" id="overview">
-                    <table class="table table-inout-listing">
-                        <tr>
-                            <th>In</th>
-                            <th></th>
-                            <th>Out</th>
-                        </tr>
-                        <tr data-event-id="666">
-                            <td style="width:7em;"><input type="text" class="input-inout input-inout-in form-control input-sm" disabled value="09:00am" data-previous-value="09:00am"></td>
-                            <td style="width:.8em;">&mdash;</td>
-                            <td style="width:7em;"><input type="text" class="input-inout input-inout-out form-control input-sm" disabled value="11:00am" data-previous-value="11:00am"></td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="btn btn-default btn-sm btn-inout-edit">Edit</button>
-                                </div>
-                                <button class="btn btn-default btn-sm btn-inout-delete">Delete</button>
-                            </tr>
-                        </tr>
-                        <tr>
-                            <td colspan="100">
-                                <button class="btn btn-primary btn-sm btn-inout-add">Add Clock In/Out</button>
-                            </td>
-                    </table>
-
+                    <div class="jumbotron">
+                        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                        Click on a name to enter In/Outs.
+                    </div>
                 </div>
-
-                <div class="tab-pane" id="414MW"><img src="http://placehold.it/400x200&text=414ER" /></div>
-                <div class="tab-pane" id="414ER"><img src="http://placehold.it/400x200&text=414ER" /></div>
-                <div class="tab-pane" id="414JG"><img src="http://placehold.it/400x200&text=414JG" /></div>
-                <div class="tab-pane" id="414MO"><img src="http://placehold.it/400x200&text=414MO" /></div>
-                <div class="tab-pane" id="414BR"><img src="http://placehold.it/400x200&text=414BR" /></div>
             </div>
         </div>
     </div>

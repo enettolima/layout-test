@@ -23,10 +23,11 @@
 
     </div>
 
+	<small><a class="pull-right" href="/scheduler/new-day-planner?weekOf=<?php echo $_GET['weekOf'];?>&dayOffset=<?php echo $_GET['dayOffset'] ?>">Manual Entry (Experimental)</a></small>
+
     <h4>Modifying Schedule for <?php echo date($selectorDateFormat, strtotime($targetDay)); ?> [<a class="" href="week-overview?weekOf=<?php echo $_GET['weekOf'] ?>">Back to Overview</a>] </h4>
 
-
-    <div class="row" style="padding-top:10px;">
+    <div class="row " style="padding-top:10px;">
         <div id='calendar'></div>
     </div>
 

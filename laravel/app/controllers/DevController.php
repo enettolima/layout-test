@@ -56,6 +56,13 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getMoment()
+    {
+        return View::make('pages.dev.moment', array(
+            'extraJS' => array ('/js/moment.min.js')
+        ));
+    }
+
     public function getTest()
     {
         return View::make('pages.test');
