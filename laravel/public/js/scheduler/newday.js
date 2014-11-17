@@ -358,11 +358,17 @@ $(document).on("click", ".btn-inout-save", function(){
         // TODO: Input Validation
         var empId = $(this).closest("div.staffmember-inout-listing").attr("id");
 
-        var inString  = moment(targetDate + " " + inVal, "YYYY-MM-DD h:mma").format("YYYY-MM-DD HH:mm:00");
+        var inMoment  = moment(targetDate + " " + inVal, "YYYY-MM-DD h:mma"); //.format("YYYY-MM-DD HH:mm:00");
+        var inString  = inMoment.format("YYYY-MM-DD HH:mm:00");
         inString = encodeURIComponent(inString);
+        var inField = inMoment.format("h:mma");
+        inControl.val(inField);
 
-        var outString = moment(targetDate + " " + outVal, "YYYY-MM-DD h:mma").format("YYYY-MM-DD HH:mm:00");
+        var outMoment = moment(targetDate + " " + outVal, "YYYY-MM-DD h:mma"); //.format("YYYY-MM-DD HH:mm:00");
+        var outString = outMoment.format("YYYY-MM-DD HH:mm:00");
         outString = encodeURIComponent(outString);
+        var outField = outMoment.format("h:mma");
+        outControl.val(outField);
 
         var url = null;
         var request = null;
