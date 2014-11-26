@@ -586,10 +586,19 @@ function loadSchedule(strDate) {
                 for(iEmp=0; iEmp<weekSchedule.meta.sequence.length; iEmp++) {
                     var userId = weekSchedule.meta.sequence[iEmp];
                     var result = $.grep(empMasterDatabase, function(e){ return e.userId == userId; });
-                    if (typeof userCanManage !== "undefined" && userCanManage) {
-                        $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+
+                    if (typeof result[0] !== "undefined") {
+                        if (typeof userCanManage !== "undefined" && userCanManage) {
+                            $("#empList").append($("<li></li>").html(result[0].fullName + " <a data-user-name=\""+result[0].fullName +"\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                        } else {
+                            $("#empList").append($("<li></li>").html(result[0].fullName));
+                        }
                     } else {
-                        $("#empList").append($("<li></li>").html(result[0].fullName));
+                        if (typeof userCanManage !== "undefined" && userCanManage) {
+                            $("#empList").append($("<li></li>").html("DELETED EMP "+userId+" <a data-user-name=\"DELETED EMP\" data-user-id=\""+userId+"\" href=\"#\" class=\"small staff-remove\"><span class=\"glyphicon glyphicon-remove\"></span></a>"));
+                        } else {
+                            $("#empList").append($("<li></li>").html("DELETED EMP"));
+                        }
                     }
                     currentEmployees.push(userId);
                 }
