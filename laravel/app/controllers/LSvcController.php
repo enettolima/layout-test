@@ -413,22 +413,34 @@ class LSvcController extends BaseController
         }
     }
 
-
     public function postSchedulerCopySchedule()
     {
+
         $storeNumber   = Request::segment(3);
         $schedDateFrom = Request::segment(4);
         $schedDateTo   = Request::segment(5);
 
-
-        // Step 1: Get the metadata row
+        // Step 1: Get the metadata row on the FROM
         $metaRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateFrom'");
 
         if (count($metaRes) === 1) {
 
             // Clear it just in case there's any metadata hanging around
             // Todo: this is probably pretty reckless. I'm not protecting any input.
+
+            // Is the destination schedule really empty? We are having problems with copies blowing away 
+            // existing schedules
+            $copyToRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
+
+            if (count($copyToRes) !== 0) {
+                $data = json_decode($copyToRes[0]->data);
+                if (count($data->sequence) !== 0) {
+                    throw new Exception("Destination schedule $schedDateTo for $storeNumber not really empty");
+                }
+            } 
+
             DB::connection('mysql')->delete("delete from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
+
             DB::connection('mysql')->insert('insert into schedule_day_meta (store_id, date, data) values (?, ?, ?)', array($storeNumber, $schedDateTo, $metaRes[0]->{'data'}));
 
             // Step 2: Get all the in/outs
