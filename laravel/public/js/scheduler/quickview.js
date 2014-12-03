@@ -353,7 +353,7 @@ $(document).ready(function(){
 
         /*-------------------------------------------------------------------*/
         var targetTotal = 0;
-        html.push("<tr>");
+        html.push("<tr class='more-detail'>");
             html.push("<td><strong>Sales Goal</strong></td>");
 
             for (var salesgoal=1; salesgoal<=7; salesgoal++) {
@@ -377,7 +377,7 @@ $(document).ready(function(){
 
         /*-------------------------------------------------------------------*/
         var hoursTotal = 0;
-        html.push("<tr>");
+        html.push("<tr class='more-detail'>");
             html.push("<td><strong>Projected Working Hours</strong></td>");
             for (var projhours=0; projhours<daySummaries.length; projhours++) {
                 html.push("<td class='text-center'>"+daySummaries[projhours].totalHours.toFixed(2)+"</td>");
@@ -391,7 +391,7 @@ $(document).ready(function(){
 
         /*-------------------------------------------------------------------*/
         var actualsTotal = 0;
-        html.push("<tr>");
+        html.push("<tr class='more-detail'>");
             html.push("<td><strong>Actual Sales</strong></td>");
             for (var dayActual=0; dayActual<sched.meta.days.length; dayActual++) {
                 var dayActualYmd = sched.meta.days[dayActual].Ymd;
@@ -418,7 +418,7 @@ $(document).ready(function(){
         html.push("</tr>");
 
         /*-------------------------------------------------------------------*/
-        html.push("<tr>");
+        html.push("<tr class='more-detail'>");
             html.push("<td><strong>PCT Over/Under</strong></td>");
             for (var pct=0; pct <= 7; pct++) {
 
@@ -469,7 +469,7 @@ $(document).ready(function(){
 
             /*-------------------------------------------------------------------*/
             html.push(
-                "<tr class='bg-info'>",
+                "<tr class='bg-info' style='border-top:6px solid #428bca;'>",
                     "<th>"+getEmpNameFromCode(empID, empMasterDatabase)+"</th>",
                     "<th class='text-center'>Sun</th>",
                     "<th class='text-center'>Mon</th>",
@@ -516,7 +516,7 @@ $(document).ready(function(){
             html.push("</tr>");
 
             /*-------------------------------------------------------------------*/
-            html.push("<tr>");
+            html.push("<tr class='more-detail'>");
                 html.push("<td class='text-right'><strong>Sales Goal</strong></td>");
                 for (var sgDay=0; sgDay<7; sgDay++) {
                     html.push("<td class='text-center'>"+empSummaries[emp].schedDays[sgDay].scheduledSales.toFixed(2)+"</td>");
@@ -525,7 +525,7 @@ $(document).ready(function(){
             html.push("</tr>");
 
             /*-------------------------------------------------------------------*/
-            html.push("<tr>");
+            html.push("<tr class='more-detail'>");
                 html.push("<td class='text-right'><strong>Actual Sales</strong></td>");
                 for (var acDay=0; acDay<7; acDay++) {
                     html.push("<td class='text-center'>"+empSummaries[emp].schedDays[acDay].actualSales.toFixed(2)+"</td>");
@@ -564,6 +564,7 @@ $(document).ready(function(){
 
         // Write the HTML
         $("#quickview").html(html.join(""));
+        $(".more-detail").toggle();
 
         // TODO: !!!
         if ($("#ita").val()) {
@@ -574,4 +575,8 @@ $(document).ready(function(){
         } 
     });
 
+});
+
+$(document).on("click", "#toggle-detail", function(){
+    $(".more-detail").toggle();
 });

@@ -12,7 +12,7 @@
         <div class="col-xs-8">
             <h4 class="quickview-header">{{ $scheduleHeader }}</h4>
         </div>
-        <div class="col-xs-4"></div>
+        <div class="col-xs-4"><button id="toggle-detail" class="btn btn-xs btn-primary pull-right">Show / Hide Goals</button></div>
     </div>
 
     <table id="quickview" class="table">
