@@ -78,15 +78,16 @@
                     <div>
                         <br />
                         <input class='form-control' type='text' id="share-quickview-link">
+                        <span id="share-quickview-link-help" class="help-block" style="display:none;">Link Created! Anyone with the above link will now be able to view the Quickview for this date.</span>
                     </div>
-                    <div id="share-quickview-email" style="display:none;">
-                        <h4>Email Link</h4>
-                        <p>To automatically email the link out, specify recipients below.</p>
-                        <ul id="share-quickview-emails"></ul>
-                        <ul>
-                            <li><button class="btn btn-xs btn-default share-quickview-email-add">+ add email not listed above</button></li>
-                        </ul>
-                        <button id="share-quickview-send-email" class="btn btn-large btn-primary">Send Email With Link</button>
+                    <div id="share-quickview-email" class="row" style="display:none;">
+                        <div class="col-md-8">
+                            <h4>Would you like to email the link now?</h4>
+                            <p>To send an email with this link in it please specify recipients below.</p>
+                            <p><button class="btn btn-xs btn-default share-quickview-email-add">+ click here to add an email address</button></p>
+                            <ul id="share-quickview-emails"></ul>
+                            <button id="share-quickview-send-email" class="btn btn-large btn-primary">Send Email With Link</button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -516,7 +516,6 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
 function loadSchedule(strDate) {
 
-//    console.log("LOADSCHEDULE: " + strDate);
 
     $("#empList").html("<li><img src=\"/images/ajax-loader-arrows.gif\"></li>");
 
@@ -534,6 +533,8 @@ function loadSchedule(strDate) {
         });
 
         $("#view-quickview-button").attr('href', '/scheduler/quickview/' + currentStore + '/' + strDate);
+
+        $("#schedulerCurrentWeekOf").val(strDate);
     }
 
     var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -638,7 +639,6 @@ function loadSchedule(strDate) {
         });
 
     });
-
 }
 
 $(document).ready(function(){
@@ -739,6 +739,11 @@ $(document).ready(function(){
 
 });
 
+$('#share-quickview-modal').on('show.bs.modal', function (e) {
+    $("#share-quickview-link").val(null);
+    $("#share-quickview-email").hide();
+});
+
 $(document).on("click", "#share-quickview-send-email", function(e){
 
     var recipients = [];
@@ -767,7 +772,7 @@ $(document).on("click", "#share-quickview-send-email", function(e){
 });
 
 $(document).on("click", ".share-quickview-email-add", function(e){
-    $("#share-quickview-emails").append("<li><input class='additional-address' type='text' placeholder='Enter Email Address'> <button class='btn btn-primary btn-xs share-quickview-email-add-confirm'>Save New Address</button></li>");
+    $("#share-quickview-emails").append("<li><input class='additional-address' type='text' placeholder='Enter Email Address'> <button class='btn btn-primary btn-xs share-quickview-email-add-confirm'>Save Recipient</button></li>");
 });
 
 $(document).on("click", ".share-quickview-email-add-confirm", function(e){
@@ -778,12 +783,18 @@ $(document).on("click", ".share-quickview-email-add-confirm", function(e){
     }
 });
 
+// 'Click Here to Generate Link for Sharing'
 $(document).on("click", "#share-quickview-generate", function(e){
 
     e.preventDefault();
 
     var 
         weekOf = $("#schedulerCurrentWeekOf").val();
+
+    $("#share-quickview-link-help").hide();
+    $("#share-quickview-link").val('Generating link...');
+    $("#share-quickview-link").attr('disabled', true);
+    $("#share-quickview-email").hide();
 
     var request = $.ajax({
         url: "/lsvc/scheduler-quickview-share/"+currentStore+"/" + weekOf,
@@ -794,6 +805,8 @@ $(document).on("click", "#share-quickview-generate", function(e){
         if (msg.token) {
             var sharelink = window.location.origin + '/scheduler/quickview/' + currentStore + '/' + weekOf + '?token=' + msg.token;
             $("#share-quickview-link").val(sharelink);
+            $("#share-quickview-link").attr('disabled', false);
+            $("#share-quickview-link-help").fadeIn();
 
             var employeeRequest = $.ajax({
                 url: "/lsvc/scheduler-employee-info/"+currentStore+"/"+weekOf,
@@ -818,7 +831,7 @@ $(document).on("click", "#share-quickview-generate", function(e){
 
             $("#share-quickview-email").show();
         } else {
-            $("#share-quickview-link").val("Error creating token");
+            $("#share-quickview-link").val("Error creating token! Please contact support if this problem persists.");
         }
     });
 
