@@ -419,14 +419,26 @@ $(document).ready(function(){
 
         /*-------------------------------------------------------------------*/
         html.push("<tr>");
-            html.push("<td><strong>PCT</strong></td>");
+            html.push("<td><strong>PCT Over/Under</strong></td>");
             for (var pct=0; pct <= 7; pct++) {
+
 
                 if (headerData[pct].actuals === 0) {
                     html.push("<td class='text-center'>n/a</td>");
                 } else {
-                    var pctString = ((parseFloat(headerData[pct].actuals) / parseFloat(headerData[pct].goal)) * 100).toFixed();
-                    html.push("<td class='text-center'><strong>"+pctString+"%</strong></td>");
+                    //var pctString = ((parseFloat(headerData[pct].actuals) / parseFloat(headerData[pct].goal)) * 100).toFixed();
+                    var pctActuals = parseFloat(headerData[pct].actuals);
+                    var pctGoal = parseFloat(headerData[pct].goal);
+                    var pctString = (((pctActuals - pctGoal) / pctGoal) * 100).toFixed();
+                    var extraClass = '';
+
+                    if (pctString < 0) {
+                        extraClass = 'text-danger';
+                    } else if (pctString > 10) {
+                        extraClass = 'bg-warning text-success';
+                    }
+
+                    html.push("<td class='text-center'><strong class='"+extraClass+"'>"+pctString+"%</strong></td>");
                 }
 
             }
