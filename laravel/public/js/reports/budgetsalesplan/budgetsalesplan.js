@@ -35,7 +35,7 @@ $(document).ready(function(){
             html.push(
                 "<tr>",
 
-                    "<td>"+tr.dateMoment.format("ddd MMM ddo")+"</td>",
+                    "<td>"+tr.dateMoment.format("ddd MMM Do")+"</td>",
 
                     "<td>"+tr.STORE_NO+"</td>",
                     "<td>"+tr.STORE_CODE+"</td>",
