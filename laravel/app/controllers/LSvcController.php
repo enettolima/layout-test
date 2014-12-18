@@ -18,6 +18,21 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
+    public function getReportsBudgetSalesPlan()
+    {
+        $storeNumber = Request::segment(3);
+
+        $date = Request::segment(4);
+
+        list($year, $month) = explode('-', $date);
+
+        $details = DB::connection('sqlsrv_ebtgoogle')->select("exec WEB_GET_SALES_PLAN '$storeNumber','$month','$year','D';");
+        $totals = DB::connection('sqlsrv_ebtgoogle')->select("exec WEB_GET_SALES_PLAN '$storeNumber','$month','$year','T';");
+
+        return Response::json(array('details' => $details, 'totals' => $totals));
+    }
+
     public function getHoursOverride()
     {
         // GET http://domain.com/lsvc/hours-override
