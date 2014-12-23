@@ -1,7 +1,14 @@
-$(document).ready(function(){
 
-    var storeNumber = $("#storeNumber").val();
-    var reportDate = $("#reportDate").val();
+function loadReport(storeNumber, reportDate)
+{
+
+    $("#budget-sales-plan").empty();
+    $("#month-header").html("&mdash; " + moment(reportDate, "YYYY-MM").format("MMM YYYY"));
+    $("#budget-sales-plan").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
+
+    var momMonth = moment(reportDate, "YYYY-MM");
+
+    console.log(momMonth.format("MMM YYYY"));
 
     var reportRequest = $.ajax({
         url: "/lsvc/reports-budget-sales-plan/"+storeNumber+"/" + reportDate,
@@ -15,14 +22,11 @@ $(document).ready(function(){
         /*-------------------------------------------------------------------*/
         html.push(
             "<tr>",
-                "<td>BDATE</td>",
-                "<td>STORE_NO</td>",
-                "<td>STORE_CODE</td>",
-                "<td>DM</td>",
-                "<td>SALES</td>",
-                "<td>Budget</td>",
-                "<td>Diff</td>",
-                "<td>PerBud</td>",
+                "<td class='text-right'><strong>Date</strong></td>",
+                "<td class='text-right'><strong>Sales</strong></td>",
+                "<td class='text-right'><strong>Budget</strong></td>",
+                "<td class='text-right'><strong>Diff</strong></td>",
+                "<td class='text-right'><strong>Over/Under</strong></td>",
             "</tr>"
         );
 
@@ -32,18 +36,46 @@ $(document).ready(function(){
 
             tr.dateMoment = moment(tr.BDATE, "MMM D YYYY");
 
+            tr.pSales = parseFloat(tr.Sales).toFixed(2);
+
+            if (isNaN(tr.pSales)) {
+                tr.pSales = 'n/a';
+            }
+
+            tr.pBudget = parseFloat(tr.Budget).toFixed(2);
+
+            if (isNaN(tr.pBudget)) {
+                tr.pBudget = 'n/a';
+            }
+
+            tr.pDiff = parseFloat(tr.Diff).toFixed(2);
+
+            if (isNaN(tr.pDiff)) {
+                tr.pDiff = 'n/a';
+            }
+
+            tr.pPerBudClass = null;
+
+            tr.pPerBud = parseFloat(tr.PerBud * 100).toFixed();
+
+            if (isNaN(tr.pPerBud)) {
+                tr.pPerBud = 'n/a';
+            } else {
+                if (tr.pPerBud < 0) {
+                   tr.pPerBudClass = 'text-danger';
+                } else if (tr.pPerBud > 10) {
+                   tr.pPerBudClass = 'bg-warning text-success';
+                }
+            }
+
             html.push(
                 "<tr>",
 
-                    "<td>"+tr.dateMoment.format("ddd MMM Do")+"</td>",
-
-                    "<td>"+tr.STORE_NO+"</td>",
-                    "<td>"+tr.STORE_CODE+"</td>",
-                    "<td>"+tr.DM+"</td>",
-                    "<td>"+tr.Sales+"</td>",
-                    "<td>"+tr.Budget+"</td>",
-                    "<td>"+tr.Diff+"</td>",
-                    "<td>"+tr.PerBud+"</td>",
+                    "<td class='text-right'>"+tr.dateMoment.format("ddd MM/DD/YY")+"</td>",
+                    "<td class='text-right'>"+tr.pSales+"</td>",
+                    "<td class='text-right'>"+tr.pBudget+"</td>",
+                    "<td class='text-right'>"+tr.pDiff+"</td>",
+                    "<td class='text-right'><strong class='"+tr.pPerBudClass+"'>"+tr.pPerBud+"%</strong></td>",
                 "</tr>"
             );
         }
@@ -51,4 +83,21 @@ $(document).ready(function(){
         $("#budget-sales-plan").html(html.join(''));
     });
 
+
+}
+
+
+$(document).ready(function(){
+
+    var storeNumber = $("#storeNumber").val();
+
+    var reportDate = $("#reportDate").val();
+
+    loadReport(storeNumber, reportDate);
+
+    $("#monthSelector").change(function(){
+        loadReport(storeNumber, $(this).val());
+    });
+
 });
+
