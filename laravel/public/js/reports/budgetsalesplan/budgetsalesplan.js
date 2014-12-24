@@ -132,7 +132,11 @@ function loadReport(storeNumber, reportDate)
 		tots.pSales = parseCurrency(tots.Sales);
 		tots.pBudget = parseCurrency(tots.Budget);
 		tots.pDiff = parseCurrency(tots.Diff);
-		tots.pPerBud = parsePct(tots.PerBud);
+
+		tots.pPerMonth = parsePct(tots.PerMonth);
+		tots.pPerMTD = parsePct(tots.PerMTD);
+
+		console.log(tots);
 
 		html.push(
 		    "<tr>",
@@ -140,7 +144,10 @@ function loadReport(storeNumber, reportDate)
 			    "<td class='text-right'>"+tots.pSales.parsed+"</td>",
 			    "<td class='text-right'>"+tots.pBudget.parsed+"</td>",
 			    "<td class='text-right "+ ((tots.pDiff.isNegative) ? "text-danger" : "") +"'>"+tots.pDiff.parsed+"</td>",
-				"<td class='text-right'><strong class='"+((tots.pPerBud.isNegative) ? "text-danger" : "bg-warning text-success")+"'>"+tots.pPerBud.parsed+"</strong></td>",
+			    "<td class='text-right'>",
+				"<strong class='"+((tots.pPerMonth.isNegative) ? "text-danger" : "bg-warning text-success")+"'>"+tots.pPerMonth.parsed+"</strong> ",
+				"<strong class='"+((tots.pPerMTD.isNegative) ? "text-danger" : "bg-warning text-success")+"'>(MTD: "+tots.pPerMTD.parsed+")</strong>",
+			    "</td>",
 		    "</tr>"
 		);
 
