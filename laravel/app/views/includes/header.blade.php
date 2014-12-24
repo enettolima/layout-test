@@ -7,8 +7,9 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                     @if(Auth::check())
-                        <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Documents</a></li>
+                        <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Docs</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
+                        <li class="<?php echo Request::is('reports*') ? 'active' : '' ?>"><a href="/reports">Reports</a></li>
                         <li><a target="_blank" href="http://ebt.bz/newpassporthelp">Help</a></li>
 
                         @if(Auth::user()->hasRole('Developer'))
