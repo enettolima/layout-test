@@ -71,9 +71,16 @@ function parsePct(x)
 function loadReport(storeNumber, reportDate)
 {
 
-    $("#budget-sales-plan").empty();
-    $("#budget-sales-plan").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
 	$("#report-header-month").empty();
+    $("#budget-sales-plan").empty();
+
+    if (storeNumber === '000') {
+        $("#report-header").html("Invalid Store");
+        $("#budget-sales-plan").html("<tr><td><em>Unable to run report for Store "+storeNumber+".</em></td></tr>");
+        return;
+    }
+
+    $("#budget-sales-plan").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
 
     var momMonth = moment(reportDate, "YYYY-MM");
 

@@ -17,7 +17,7 @@
 
 <div class="row">
     <div class="col-xs-8">
-        <h3>Budget Sales Plan | Store {{ Session::get('storeContext') }} | <span id='report-header-month'></span> | DM: <span id='report-header-dm'></span></h3>
+        <h3 id="report-header">Budget Sales Plan | Store {{ Session::get('storeContext') }} | <span id='report-header-month'></span> | DM: <span id='report-header-dm'></span></h3>
     </div>
 </div>
 
