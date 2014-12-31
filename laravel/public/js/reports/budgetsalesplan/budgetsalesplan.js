@@ -21,7 +21,7 @@ function parseCurrency(x) {
 	}
 
 	if (x < 0) {
-		x = Math.abs(x);
+		x = Math.abs(x).toFixed(2);
 		retval.isNegative = true;
 	}
 
