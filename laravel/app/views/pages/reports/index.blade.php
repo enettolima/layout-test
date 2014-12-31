@@ -6,7 +6,7 @@
 
 <ul>
     <li><a href="reports/budget-sales-plan">Budget Sales Plan</a></li>
-    <li><a href="">Report Two</a></li>
+    <li><a href="reports/all-star">All Star</a></li>
 </ul>
 
 @stop
