@@ -56,6 +56,40 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getAllstar()
+    {
+        $storeNumber = 414;
+
+        // [Totals|Detail]
+        // [Month|Day|WeekNum]
+
+        $calls = array(
+
+            // Details & Totals for 12/2014
+            "WEB_GET_ALLSTAR '301', 'D', 'M', '12', '2014'",
+            "WEB_GET_ALLSTAR '301', 'T', 'M', '12', '2014'",
+
+            // Details & Totals for 12/20/2014
+            "WEB_GET_ALLSTAR '301', 'D', 'D', '12/20/2014'",
+            "WEB_GET_ALLSTAR '301', 'T', 'D', '12/20/2014'",
+
+            // Details & Totals for Week 49, 2014
+            "WEB_GET_ALLSTAR '301', 'D', 'W', '49', '2014'",
+            "WEB_GET_ALLSTAR '301', 'T', 'W', '49', '2014'",
+
+        );
+
+        // Working full call...
+        // $totals = DB::connection('sqlsrv_ebtgoogle')->select("exec WEB_GET_SALES_PLAN '$storeNumber','$month','$year','T';");
+
+        foreach ($calls as $call) {
+            var_dump("///////////////////////////////////////////////////////////////////////////////////////");
+            var_dump($call);
+            var_dump("///////////////////////////////////////////////////////////////////////////////////////");
+            var_dump(DB::connection('sqlsrv_ebtgoogle')->select($call));
+        }
+    }
+
     public function getMoment()
     {
         return View::make('pages.dev.moment', array(
