@@ -21,4 +21,19 @@ class ReportsController extends BaseController
             )
         );
     }
+
+    public function getAllStar()
+    {
+        $extraHead = '
+            <script src="/js/reports/allstar/allstar.js" type="text/javascript" charset="utf-8"></script>
+            <script src="/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
+        ';
+
+        return View::make(
+            'pages.reports.allstar',
+            array (
+                'extraHead' => $extraHead
+            )
+        );
+    }
 }
