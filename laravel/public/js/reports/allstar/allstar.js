@@ -20,10 +20,6 @@ function populateDropdowns()
     }
 }
 
-function showData(html)
-{
-}
-
 function loadReport(storeNumber, asRangeType, asRangeVal){
 
     $("#allstar-options-run").hide();
@@ -124,7 +120,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             tr.pDiffBud = parseCurrency(tr.DiffBud);
             tr.pADS = parseCurrency(tr.ADS);
             tr.pEmpTarget = parseCurrency(tr.EmpTarget);
-            tr.pHours = parseNum(tr.Hours, 0);
+            tr.pHours = parseNum(tr.Hours);
 
             tr.pSales = parseCurrency(tr.Sales);
             tr.pSalesWoHours = parseCurrency(tr.SalesWoHours);
@@ -171,7 +167,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         tots.pDiffBud = parseCurrency(tots.DiffBud);
         tots.pADS = parseCurrency(tots.ADS);
         tots.pEmpTarget = parseCurrency(tots.EmpTarget);
-        tots.pHours = parseNum(tots.Hours, 0);
+        tots.pHours = parseNum(tots.Hours);
 
         tots.pSales = parseCurrency(tots.Sales);
         tots.pSalesWoHours = parseCurrency(tots.SalesWoHours);
