@@ -137,7 +137,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                     "<td class='text-right'>"+tr.pEmpTarget.parsed+"</td>",
 
                     // "<td class='text-right'>"+tr.DiffBud+"</td>",
-                    "<td class='text-right'>"+tr.pDiffBud.parsed+"</td>",
+                    "<td class='text-right "+ ((tr.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffBud.parsed+"</td>",
 
                     // "<td class='text-right'>"+tr.ADS+"</td>",
                     "<td class='text-right "+ ((tr.pADS.isNegative) ? "text-danger" : "")+"'>"+tr.pADS.parsed+"</td>",
@@ -152,14 +152,13 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
 
                     // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
-                    "<td class='text-right'"+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
+                    "<td class='text-right "+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
                     // "<td class='text-right'>"+tr.Store_Code+"</td>",
 
                     //"<td class='text-right'>"+tr.UPT+"</td>",
                     "<td class='text-right'>"+tr.pUPT.parsed+"</td>",
                 "</tr>"
             );
-
         }
 
         var tots = data.totals[0];
@@ -184,7 +183,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 "<td class='text-right'>"+tots.pEmpTarget.parsed+"</td>",
 
                 // "<td class='text-right'>"+tr.DiffBud+"</td>",
-                "<td class='text-right'>"+tots.pDiffBud.parsed+"</td>",
+                "<td class='text-right "+ ((tots.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tots.pDiffBud.parsed+"</td>",
 
                 // "<td class='text-right'>"+tr.ADS+"</td>",
                 "<td class='text-right "+ ((tots.pADS.isNegative) ? "text-danger" : "")+"'>"+tots.pADS.parsed+"</td>",
@@ -199,7 +198,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
 
                 // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
-                "<td class='text-right'"+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
+                "<td class='text-right "+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
                 // "<td class='text-right'>"+tr.Store_Code+"</td>",
                 "<td class='text-right'>"+tots.pUPT.parsed+"</td>",
             "</tr>"
