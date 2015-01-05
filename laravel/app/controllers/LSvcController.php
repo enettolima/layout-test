@@ -18,6 +18,35 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getReportsAllStar()
+    {
+        $storeNumber = Request::segment(3);
+        $asRangeType = Request::segment(4);
+        $asRangeVal = Request::segment(5);
+
+        switch ($asRangeType) {
+            case 'month':
+
+                list($year, $month) = explode("-", $asRangeVal); //clog::log('asdf');
+
+                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'M', '$month', '$year'";
+                $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
+
+                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'M', '$month', '$year'";
+                $totalsRes = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
+
+                return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes));
+
+                break;
+            case 'week':
+                break;
+            case 'day':
+                break;
+            default:
+                exit(1);
+        }
+
+    }
 
     public function getReportsBudgetSalesPlan()
     {

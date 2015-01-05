@@ -1,3 +1,112 @@
+/*
+* -5817.55 -> ($5,817.55)
+*  0.00 -> $0.00
+*  7076.36 -> $7076.36
+*/
+
+function parseCurrency(x) {
+
+	var retval = {};
+
+	retval.input = x;
+	retval.isNegative = false;
+	retval.isNotAvailable = false;
+	retval.parsed = 'n/a';
+
+	x = parseFloat(x).toFixed(2);
+
+	if (isNaN(x)) {
+		retval.isNotAvailable = true;
+		return retval;
+	}
+
+	if (x < 0) {
+		x = Math.abs(x).toFixed(2);
+		retval.isNegative = true;
+	}
+
+	var parts = x.toString().split(".");
+
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	if (parts[1].length == 1) {
+        parts[1] = parts[1] + "0";
+	}
+
+	var numWithCommas = parts.join(".");
+
+	if (retval.isNegative) {
+		retval.parsed =  "($" + numWithCommas + ")";
+	} else {
+		retval.parsed = "$" + numWithCommas;
+	}
+
+	return retval;
+}
+
+function parsePct(x)
+{
+		var retval = {};
+		retval.input = x;
+		retval.isNegative = false;
+		retval.isNotAvailable = false;
+		retval.parsed = 'n/a';
+
+		x = parseFloat(x * 100).toFixed();
+
+		if (isNaN(x)) {
+				retval.isNotAvailable = true;
+				return retval;
+		}
+
+		if (x < 0) {
+				retval.isNegative = true;
+		} 
+
+		retval.parsed = x + "%";
+
+		return retval;
+}
+
+function parseNum(x, places)
+{
+        places = typeof places !== 'undefined' ? places : 2;
+
+		var retval = {};
+		retval.input = x;
+		retval.isNegative = false;
+		retval.isNotAvailable = false;
+		retval.parsed = 'n/a';
+
+		x = parseFloat(x).toFixed(places);
+
+		if (isNaN(x)) {
+				retval.isNotAvailable = true;
+				return retval;
+		}
+
+		if (x < 0) {
+				retval.isNegative = true;
+		} 
+
+        var parts = x.toString().split(".");
+
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        if (parts.length > 1) {
+
+            if (parts[1].length == 1) {
+                parts[1] = parts[1] + "0";
+            }
+
+            retval.parsed = parts.join(".");
+        } else {
+            retval.parsed = parts[0];
+        }
+
+		return retval;
+}
+
 $(document).ready(function(){
 
     $(".users-table tr").click(function(){

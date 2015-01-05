@@ -19,7 +19,7 @@
     <div class="col-xs-2 report-option">
         Choose Range:
         <select id="allstar-report-range" class="form-control">
-            <option value="week">Week</option>
+           <!--  <option value="week">Week</option> -->
             <option value="month">Month</option>
             <!-- <option value="day">One Day</option> -->
         </select>
@@ -28,11 +28,11 @@
         <div class="col-xs-3 report-option"> 
             Choose Week:
             <select id="allstar-week-number" class="form-control">
-                <option value="40-2014">40 - Sun, Dec 20th, 2014</option>
-                <option value="41-2014">41 - Sun, Dec 20th, 2014</option>
-                <option value="42-2014">42 - Sun, Dec 20th, 2014</option>
-                <option value="43-2014">43 - Sun, Dec 20th, 2014</option>
-                <option value="44-2014">44 - Sun, Dec 20th, 2014</option>
+                <!-- <option value="40&#45;2014">40 &#45; Sun, Dec 20th, 2014</option> -->
+                <!-- <option value="41&#45;2014">41 &#45; Sun, Dec 20th, 2014</option> -->
+                <!-- <option value="42&#45;2014">42 &#45; Sun, Dec 20th, 2014</option> -->
+                <!-- <option value="43&#45;2014">43 &#45; Sun, Dec 20th, 2014</option> -->
+                <!-- <option value="44&#45;2014">44 &#45; Sun, Dec 20th, 2014</option> -->
             </select>
         </div>
     </div>
@@ -45,7 +45,7 @@
     <div id="allstar-options-run" class="allstar-options" style="display:none;">
         <div class="col-xs-1 report-option">
             <br />
-            <button class="btn btn-primary">Show</button>
+            <button class="btn btn-primary">Run</button>
         </div>
     </div>
 </div>
@@ -60,7 +60,7 @@
 
 <div class="row">
     <div class="col-xs-8">
-        <table class="table table-striped" id="budget-sales-plan">
+        <table class="table table-striped" id="report-data">
         </table>
     </div>
 </div>
