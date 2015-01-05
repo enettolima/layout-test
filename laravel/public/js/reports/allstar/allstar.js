@@ -20,6 +20,10 @@ function populateDropdowns()
     }
 }
 
+function showData(html)
+{
+}
+
 function loadReport(storeNumber, asRangeType, asRangeVal){
 
     $("#allstar-options-run").hide();
@@ -70,7 +74,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
     }
 
-    console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
+    // console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
 
     var reportRequest = $.ajax({
         url: "/lsvc/reports-all-star/"+storeNumber+"/" + asRangeType + "/" + asRangeVal,
@@ -78,9 +82,14 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
     });
 
     reportRequest.done(function(data){
-        console.log(data);
 
         var html = [];
+
+        if (data.details.length === 0 || data.totals.length === 0) {
+            html.push("<tr><td><em>No data available for this time period.</em></td></tr>");
+            $("#report-data").html(html.join(''));
+            return;
+        }
 
         html.push(
             "<tr>",
