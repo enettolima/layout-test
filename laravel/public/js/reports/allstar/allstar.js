@@ -88,18 +88,19 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         }
 
         html.push(
+            "<thead>",
             "<tr>",
-                "<td class='text-right'><strong>Employee</strong></td>",
+                "<th class='text-right'><strong>Employee</strong></th>",
 
-                "<td class='text-right'><strong>Sales</strong></td>",
+                "<th class='text-right'><strong>Sales</strong></th>",
 
-                "<td class='text-right'><strong>Target</strong></td>",
+                "<th class='text-right'><strong>Target</strong></th>",
 
-                "<td class='text-right'><strong>Diff</strong></td>",
+                "<th class='text-right'><strong>Diff</strong></th>",
 
-                "<td class='text-right'><strong>ADS</strong></td>",
+                "<th class='text-right'><strong>ADS</strong></th>",
 
-                "<td class='text-right'><strong>Hours</strong></td>",
+                "<th class='text-right'><strong>Hours</strong></th>",
 
                 // These are always the same. Maybe they should be displayed outside of table?
                 // "<td class='text-right'><strong>MonthBudgetAmt</strong></td>",
@@ -107,11 +108,14 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
                 // "<td class='text-right'><strong>Store_Code</strong></td>",
 
-                "<td class='text-right' nowrap><strong>Sales W/O Hours</strong></td>",
+                "<th class='text-right' nowrap><strong>Sales W/O Hours</strong></th>",
 
-                "<td class='text-right'><strong>UPT</strong></td>",
-            "</tr>"
+                "<th class='text-right'><strong>UPT</strong></th>",
+            "</tr>",
+            "</thead>"
         );
+
+        html.push("<tbody>");
 
         for (var row=0; row<data.details.length; row++) 
         {
@@ -161,6 +165,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             );
         }
 
+        html.push("</tbody><tfoot>");
+
         var tots = data.totals[0];
 
         tots.pDiffBud = parseCurrency(tots.DiffBud);
@@ -204,7 +210,17 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             "</tr>"
         );
 
+        html.push("</tfoot>");
+
         $("#report-data").html(html.join(''));
+
+
+        $("#report-data").tablesorter(
+        {
+            theme: 'blue',
+            headerTemplate : '{content}{icon}',
+            widgets : ["columns"]
+        });
 
     });
 
