@@ -215,16 +215,11 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         $("#report-data").html(html.join(''));
 
 
-        $("#report-data").tablesorter(
-        {
-            theme: 'blue',
-            headerTemplate : '{content}{icon}',
-            widgets : ["columns"]
+        $("#report-data").tablesorter({
+            sortList : [[0,0]],
         });
 
     });
-
-
 }
 
 $(document).ready(function(){

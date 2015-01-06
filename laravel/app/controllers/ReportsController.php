@@ -28,7 +28,6 @@ class ReportsController extends BaseController
             <script src="/js/reports/allstar/allstar.js" type="text/javascript" charset="utf-8"></script>
             <script src="/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
             <script src="/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
-            <script src="/js/jquery.tablesorter.widgets.js" type="text/javascript" charset="utf-8"></script>
         ';
 
         return View::make(

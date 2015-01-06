@@ -252,4 +252,22 @@ a.schedule-graphic-header:hover{
     /* background:red; */
 }
 
-
+table.tablesorter th.tablesorter-headerUnsorted {
+    background-image: url('/images/bg.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+table.tablesorter th.tablesorter-headerAsc {
+    background-image: url('/images/asc.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+table.tablesorter th.tablesorter-headerDesc {
+    background-image: url('/images/desc.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+table.tablesorter th.tablesorter-header {
+    cursor: pointer;
+    padding-right:16px;
+}
