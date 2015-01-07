@@ -67,6 +67,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
     // $("#report-header").html("Loady Reporty");
     $("#report-data").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
+    $("#report-secondary").html("");
 
     var reportRangeControl = $("#allstar-report-range");
     reportRangeControl.val(asRangeType);
@@ -112,7 +113,6 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
     // console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
 
     var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+asRangeVal;
-    console.log(url);
 
     var reportRequest = $.ajax({
         url: url,
@@ -122,6 +122,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
     reportRequest.done(function(data){
 
         var html = [];
+
+        var secondaryHtml = [];
 
         if (data.details.length === 0 || data.totals.length === 0) {
             html.push("<tr><td><em>No data available for this time period.</em></td></tr>");
@@ -161,7 +163,14 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
         for (var row=0; row<data.details.length; row++) 
         {
+
             var tr = data.details[row];
+
+            if (row === 0) {
+                secondaryHtml.push("<li><strong>Orig Budget:</strong> " + parseCurrency(tr.MonthBudgetAmt).parsed + "</li>");
+                secondaryHtml.push("<li><strong>Total Sales:</strong> " + parseCurrency(tr.MonthSales).parsed + "</li>");
+                secondaryHtml.push("<li><strong>Above Goal?:</strong> " + tr.StrAboveMonthGoal + "</li>");
+            }
 
             tr.pDiffBud = parseCurrency(tr.DiffBud);
             tr.pADS = parseCurrency(tr.ADS);
@@ -255,11 +264,11 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         html.push("</tfoot>");
 
         $("#report-data").html(html.join(''));
-
-
         $("#report-data").tablesorter({
             sortList : [[0,0]],
         });
+
+        $("#report-secondary").html(secondaryHtml.join(''));
 
     });
 }

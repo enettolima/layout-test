@@ -57,6 +57,9 @@
         <table class="table table-striped" id="report-data">
         </table>
     </div>
+    <div class="col-xs-3">
+        <ul class="list-unstyled" id="report-secondary"></ul>
+    </div>
 </div>
 
 @stop
