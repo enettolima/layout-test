@@ -1,12 +1,47 @@
 var monthsPast = 12;
-var monthsFuture = 3;
+var monthsFuture = 1;
 
-function populateDropdowns()
+function makeWeekLabel(moment) {
+    return moment.format('WW-YYYY') + " (Ends " + moment.format('ddd M/D/YY') + ")";
+}
+
+function populateAllDropdowns()
 {
     console.log('Populating Dropdowns');
+    populateMonthDropdown();
+    populateWeekDropdown();
+}
 
+/*
+ * This does not work correctly at the year boundaries, but moving 
+ * past it at this point because it's becoming a waste of time.
+ *
+ * TODO: Reasses the entire logic of reporting on WW-YYYY when there's some down time
+ */
+function populateWeekDropdown()
+{
+    var momentNow = new moment().endOf('week');
+
+    var momentPast = new moment().subtract(1, 'years').endOf('week');
+
+    momentPast.subtract(1, 'week'); // This is for convenience and readability of the following loop: 
+
+    while (momentPast.format('WW-YYYY') !== momentNow.format('WW-YYYY')) {
+
+        momentPast.add(1, 'week');
+
+        var weekVal = momentPast.format('WW-YYYY');
+        //var weekLabel = momentPast.format('WW-YYYY') + " (Ending " + momentPast.format('ddd MMM Do YYYY') + ")";
+        var weekLabel = makeWeekLabel(momentPast);
+
+        $("#allstar-week").append($("<option />").attr('value', weekVal).text(weekLabel));
+
+    }
+}
+
+function populateMonthDropdown()
+{
     var m = new moment();
-    var addMonths = 0;
 
     m.subtract(12, 'months');
 
@@ -46,8 +81,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
         case 'month':
 
+            // This might be already set as so, but just in case...
             $("#allstar-month").val(asRangeVal);
-
             $("#allstar-options-month").show();
 
             var monthMoment = new moment(asRangeVal, "YYYY-MM");
@@ -57,7 +92,11 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             break;
 
         case 'week':
-            console.log('asdfasfd');
+            $("#allstar-week").val(asRangeVal);
+            $("#allstar-options-week").show();
+            var weekMoment = new moment(asRangeVal, "WW-YYYY").endOf('week');
+            var weekLabel = makeWeekLabel(weekMoment);
+            $("#report-header").html("All Star | Store "+storeNumber+" | Week " + weekLabel);
             break;
 
         case 'date':
@@ -72,8 +111,11 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
     // console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
 
+    var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+asRangeVal;
+    console.log(url);
+
     var reportRequest = $.ajax({
-        url: "/lsvc/reports-all-star/"+storeNumber+"/" + asRangeType + "/" + asRangeVal,
+        url: url,
         type: "GET"
     });
 
@@ -224,7 +266,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
 $(document).ready(function(){
 
-    populateDropdowns();
+    populateAllDropdowns();
 
     var asRangeType = null;
     var asRangeVal = null;
@@ -237,20 +279,26 @@ $(document).ready(function(){
         asRangeType = 'month';
     }
 
+    var mNow = new moment();
+
     if (asRangeType === 'month') {
         if ($.cookie('asRangeVal')) {
             asRangeVal = $.cookie('asRangeVal');
         } else {
-            var m = new moment();
-            asRangeVal = m.format("YYYY-MM");
+            asRangeVal = mNow.format("YYYY-MM");
         }
     } else if (asRangeType === 'week') {
-        asRangeVal = $.cookie('asRangeVal');
+        if ($.cookie('asRangeVal')) {
+            asRangeVal = $.cookie('asRangeVal');
+        } else {
+            asRangeVal = mNow.format("WW-YYYY");
+        }
     } else if (asRangeType === 'date') {
         asRangeType = $.cookie('reportDate');
     }
 
     loadReport(storeNumber, asRangeType, asRangeVal);
+
 
     $("#allstar-report-range").change(function(){
 
@@ -259,29 +307,51 @@ $(document).ready(function(){
         var reportRange = $("#allstar-report-range").val();
 
         if (reportRange == 'month') {
+
+            if (asRangeType === 'month') {
+                $("#allstar-month").val(asRangeVal);
+            } else {
+                $("#allstar-month").val(mNow.format("YYYY-MM"));
+            }
+
             $("#allstar-options-month").show();
             $("#allstar-options-run").show();
+
         } else if(reportRange == 'week') {
+
+            if (asRangeType === 'week') {
+                $("#allstar-week").val(asRangeVal);
+            } else {
+                $("#allstar-week").val(mNow.format("WW-YYYY"));
+            }
+
             $("#allstar-options-week").show();
             $("#allstar-options-run").show();
         }
     });
 
-    $("#allstar-options-month").change(function(){
+    $("#allstar-month").change(function(){
         $("#allstar-options-run").show();
     });
 
+    $("#allstar-week").change(function(){
+        $("#allstar-options-run").show();
+    });
+
+    // Run the report
     $("#allstar-options-run").on('click', function(){
+
         asRangeType = $("#allstar-report-range").val();
 
         switch (asRangeType) {
             case 'month':
                 asRangeVal = $("#allstar-month").val();
-                break;
+            break;
             case 'week':
                 asRangeVal = $("#allstar-week").val();
-                break;
+            break;
         }
+
         loadReport(storeNumber, asRangeType, asRangeVal);
     });
 });

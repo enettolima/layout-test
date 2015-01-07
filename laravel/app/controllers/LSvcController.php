@@ -28,23 +28,25 @@ class LSvcController extends BaseController
             case 'month':
 
                 list($year, $month) = explode("-", $asRangeVal); //clog::log('asdf');
-
                 $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'M', '$month', '$year'";
-                $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
-
                 $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'M', '$month', '$year'";
-                $totalsRes = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
-
-                return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes));
-
                 break;
+
             case 'week':
+                list($week, $year) = explode("-", $asRangeVal);
+                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'W', '$week', '$year'";
+                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'W', '$week', '$year'";
                 break;
             case 'day':
                 break;
             default:
                 exit(1);
         }
+
+        $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
+        $totalsRes = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
+
+        return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes));
 
     }
 
