@@ -171,12 +171,14 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 tr.pMonthBudgetAmt = parseCurrency(tr.MonthBudgetAmt);
                 tr.pMonthSales = parseCurrency(tr.MonthSales);
                 tr.pPct = parsePct((tr.MonthSales - tr.MonthBudgetAmt) / tr.MonthBudgetAmt);
+                tr.pDiff = parseCurrency(tr.MonthSales - tr.MonthBudgetAmt);
 
                 secondaryHtml.push("<tbody>");
-                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td> " + tr.pMonthBudgetAmt.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td> " + tr.pMonthSales.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>PCT:</strong></td><td> " + tr.pPct.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td> " + tr.StrAboveMonthGoal + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td class='text-right'> " + tr.pMonthBudgetAmt.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td class='text-right'> " + tr.pMonthSales.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Diff:</strong></td><td class='text-right'> " + tr.pDiff.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Diff PCT:</strong></td><td class='text-right'> " + tr.pPct.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td class='text-right'> " + tr.StrAboveMonthGoal + "</td></tr>");
                 secondaryHtml.push("</tbody>");
             }
 
