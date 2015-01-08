@@ -168,9 +168,14 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             var tr = data.details[row];
 
             if (row === 0) {
+                tr.pMonthBudgetAmt = parseCurrency(tr.MonthBudgetAmt);
+                tr.pMonthSales = parseCurrency(tr.MonthSales);
+                tr.pPct = parsePct((tr.MonthSales - tr.MonthBudgetAmt) / tr.MonthBudgetAmt);
+
                 secondaryHtml.push("<tbody>");
-                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td> " + parseCurrency(tr.MonthBudgetAmt).parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td> " + parseCurrency(tr.MonthSales).parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td> " + tr.pMonthBudgetAmt.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td> " + tr.pMonthSales.parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>PCT:</strong></td><td> " + tr.pPct.parsed + "</td></tr>");
                 secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td> " + tr.StrAboveMonthGoal + "</td></tr>");
                 secondaryHtml.push("</tbody>");
             }
