@@ -124,6 +124,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         var html = [];
 
         var secondaryHtml = [];
+        secondaryHtml.push("<thead><tr><th colspan='2'>Month Summary</th></tr></thead>");
 
         if (data.details.length === 0 || data.totals.length === 0) {
             html.push("<tr><td><em>No data available for this time period.</em></td></tr>");
@@ -167,9 +168,11 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             var tr = data.details[row];
 
             if (row === 0) {
-                secondaryHtml.push("<li><strong>Orig Budget:</strong> " + parseCurrency(tr.MonthBudgetAmt).parsed + "</li>");
-                secondaryHtml.push("<li><strong>Total Sales:</strong> " + parseCurrency(tr.MonthSales).parsed + "</li>");
-                secondaryHtml.push("<li><strong>Above Goal?:</strong> " + tr.StrAboveMonthGoal + "</li>");
+                secondaryHtml.push("<tbody>");
+                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td> " + parseCurrency(tr.MonthBudgetAmt).parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td> " + parseCurrency(tr.MonthSales).parsed + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td> " + tr.StrAboveMonthGoal + "</td></tr>");
+                secondaryHtml.push("</tbody>");
             }
 
             tr.pDiffBud = parseCurrency(tr.DiffBud);

@@ -58,7 +58,7 @@
         </table>
     </div>
     <div class="col-xs-3">
-        <ul class="list-unstyled" id="report-secondary"></ul>
+        <table class="table" id="report-secondary"></table>
     </div>
 </div>
 
