@@ -93,6 +93,12 @@ function buildInOuts(emp, inOuts)
 {
     var staffInOutsTableHtml = [];
 
+    var controlDisable = 'disabled="true"';
+
+    if (typeof userCanManage !== 'undefined' && userCanManage) {
+        controlDisable = null;
+    } 
+
     staffInOutsTableHtml.push("<div class='tab-pane staffmember-inout-listing' id='"+emp+"'>");
     staffInOutsTableHtml.push("<strong>"+emp+" - "+getEmpNameFromCode(emp, empMasterDatabase)+"</strong>");
     staffInOutsTableHtml.push("<table class='table table-inout-listing'>");
@@ -103,7 +109,7 @@ function buildInOuts(emp, inOuts)
     staffInOutsTableHtml.push("</tr>");
     staffInOutsTableHtml.push("<tr>");
     staffInOutsTableHtml.push("<td colspan='100'>");
-    staffInOutsTableHtml.push("<button class='btn btn-primary btn-sm btn-inout-add'>Add Clock In/Out</button>");
+    staffInOutsTableHtml.push("<button "+controlDisable+" class='btn btn-primary btn-sm btn-inout-add'>Add Clock In/Out</button>");
     staffInOutsTableHtml.push("</td>");
     staffInOutsTableHtml.push("</tr>");
     staffInOutsTableHtml.push("</table>");
@@ -263,15 +269,20 @@ function getInOutControlHtml(inOutId, inDateMoment, outDateMoment) {
         
     var html = [];
 
+    var controlDisable = 'disabled="true"';
+    if (typeof userCanManage !== 'undefined' && userCanManage) {
+        controlDisable = null;
+    } 
+
     html.push("<tr class='inout-control' data-inout-id='"+inOutId+"'>");
     html.push("<td style='width:7em;'><input type='text' class='input-inout input-inout-in form-control input-sm' disabled value='"+inDateString+"' data-previous-value='"+inDateString+"'></td>");
     html.push("<td style='width:.8em;'>&mdash;</td>");
     html.push("<td style='width:7em;'><input type='text' class='input-inout input-inout-out form-control input-sm' disabled value='"+outDateString+"' data-previous-value='"+outDateString+"'></td>");
     html.push("<td>");
     html.push("<div class='btn-group'>");
-    html.push("<button class='btn btn-default btn-sm btn-inout-edit'>Edit</button>");
+    html.push("<button "+controlDisable+" class='btn btn-default btn-sm btn-inout-edit'>Edit</button>");
     html.push("</div>");
-    html.push("<button class='btn btn-default btn-sm btn-inout-delete'>Delete</button>");
+    html.push("<button "+controlDisable+" class='btn btn-default btn-sm btn-inout-delete'>Delete</button>");
     html.push("</tr>");
     html.push("</tr>");
 
