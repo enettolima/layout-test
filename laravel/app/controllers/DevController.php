@@ -56,6 +56,30 @@ class DevController extends BaseController
         return View::make('pages.plain')->withContent($content);
     }
 
+    public function getRporder()
+    {
+        if ($mageOrderNumber = Request::segment(3)) {
+            if (preg_match('/^1\d\d\d\d\d\d\d\d$/', $mageOrderNumber)) {
+                $api = new EBTAPI;
+                $res = $api->get("/rproorders/order/$mageOrderNumber");
+
+                if (! isset($res->errors)) {
+                    var_dump($res->data);
+                } else {
+                    foreach ($res->errors as $error) {
+                        var_dump($error->title . " " . $error->detail);
+                    }
+                }
+
+            } else {
+                var_dump("bad order number $mageOrderNumber");
+            }
+        } else {
+            var_dump("no order number passed?");
+        }
+
+    }
+
     public function getAllstar()
     {
         $storeNumber = 414;
