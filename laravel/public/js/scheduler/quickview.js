@@ -140,7 +140,7 @@ function getDaySummaryData (sched, targets, actuals)
 
         daySummaryData.target        = 0;
 
-        if (Object.keys(targets).length !== 0) {
+        if (Object.keys(targets).length !== 0 && typeof targets[day+1] !== "undefined") {
             daySummaryData.target        = parseFloat(targets[day+1].target).toFixed(2);
         }
 
@@ -360,7 +360,7 @@ $(document).ready(function(){
 
                 var salesgoalAct = 0;
 
-                if (Object.keys(targets).length !== 0) {
+                if (Object.keys(targets).length !== 0 && typeof targets[salesgoal] !== "undefined") {
                     salesgoalAct = parseFloat(targets[salesgoal].target);
                 }
 

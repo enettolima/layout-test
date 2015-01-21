@@ -272,7 +272,7 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 
             var daySummaryData = {};
 
-            if (Object.keys(targetsData).length === 0) {
+            if (Object.keys(targetsData).length === 0 || typeof targetsData[day+1] === "undefined") {
                 daySummaryData.target = 0;
             } else {
                 daySummaryData.target = parseFloat(targetsData[day+1].target).toFixed(2);
