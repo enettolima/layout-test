@@ -80,44 +80,84 @@ class RpmsyncCompareOrders extends Command {
 		parent::__construct();
 	}
 
+    protected function valiDate($date, $date_format='Y-m-d')
+    {
+        $time = strtotime($date);
+
+        $is_valid = date($date_format, $time) == $date;
+
+        return ($is_valid);
+    }
+
     public function fire()
     {
         try {
 
-            $from = $this->argument('fromDate');
-            $to = $this->argument('toDate');
 
-            $mageURL = 'https://shop.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$from.'&to='.$to.'&statuses=complete';
+            $from = trim($this->argument('fromDate'));
+            if (! $this->valiDate($from)) {
+                throw new Exception("invalid from date '$from'");
+            }
 
-            $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>120, 'verify'=>false));
+            $to = trim($this->argument('toDate'));
+            if (! $this->valiDate($to)) {
+                throw new Exception("invalid to date '$from'");
+            }
 
-            if ($magentoOrderRequest->success) {
+            $daysDiff = (strtotime($to) - strtotime($from)) / 86400;
 
-                $mageOrders = json_decode($magentoOrderRequest->body)->data->orders;
+            if ($daysDiff < 0) {
+                throw new Exception("from date $from is older than to date $to");
+            } elseif ($daysDiff == 0) {
+                $to = date('Y-m-d', strtotime($to) + 86400);
+                $daysDiff = 1;
+            }
 
-                if (count($mageOrders) > 0) {
+            $allMageOrders = array();
 
-                    $api = new EBTAPI;
+            for ($day=0; $day<$daysDiff; $day++) {
+                $chunkFrom = date('Y-m-d', strtotime($from) + ($day * 86400));
+                $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
+                $this->info("Retrieving $chunkFrom to $chunkTo from Magento.");
+                $mageURL = 'https://shop.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
+                $this->info($mageURL);
+                $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
+                if ($magentoOrderRequest->success) {
+                    $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
 
-                    foreach ($mageOrders as $mageOrder) {
+                    if (count($chunkOrders) > 0) {
+                        $this->info('Got ' . count($chunkOrders) . ' orders');
+                        $allMageOrders = array_merge($allMageOrders, $chunkOrders);
+                    } else {
+                        $this->info('Got ' . count($chunkOrders) . ' orders!!!!');
+                    }
+                }
 
-                        $matchResults['pass'] = array();
-                        $matchResults['fail'] = array();
+            }
 
-                        $rpReceipt = $api->get('/rproorders/order/' . $mageOrder->increment_id);
+            if (count($allMageOrders) > 0) {
 
-                        if (isset($rpReceipt->data)) {
+                $api = new EBTAPI;
 
-                            $matchResults['pass'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'yes');
+                foreach ($allMageOrders as $mageOrder) {
 
-                            $mageTotal = (float) $mageOrder->total;
-                            $rpTotal = (float) $rpReceipt->data->calc_total;
+                    $matchResults['pass'] = array();
+                    $matchResults['fail'] = array();
 
-                            $mageTax = (float) $mageOrder->tax;
-                            $rpTax = (float) $rpReceipt->data->ext_tax;
+                    $rpReceipt = $api->get('/rproorders/order/' . $mageOrder->increment_id);
 
-                            $mageQty = (int) $mageOrder->qtysold;
-                            $rpQty = (int) $rpReceipt->data->qtysold;
+                    if (isset($rpReceipt->data)) {
+
+                        $matchResults['pass'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'yes');
+
+                        $mageTotal = (float) $mageOrder->total;
+                        $rpTotal = (float) $rpReceipt->data->calc_total;
+
+                        $mageTax = (float) $mageOrder->tax;
+                        $rpTax = (float) $rpReceipt->data->ext_tax;
+
+                        $mageQty = (int) $mageOrder->qtysold;
+                        $rpQty = (int) $rpReceipt->data->qtysold;
 
                             /*
                             $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
@@ -126,15 +166,14 @@ class RpmsyncCompareOrders extends Command {
                             } else {
                                 $matchResults['fail'][] = $testInfo;
                             }
-                            */
-                            
-                        } else {
-                            $matchResults['fail'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'missing');
-                        }
+                             */
 
-                        //report($mageOrder->increment_id, $matchMatches, $matchErrors);
-                        $this->report($mageOrder->increment_id, $matchResults);
+                    } else {
+                        $matchResults['fail'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'missing');
                     }
+
+                    //report($mageOrder->increment_id, $matchMatches, $matchErrors);
+                    $this->report($mageOrder->increment_id, $matchResults);
                 }
             }
 
