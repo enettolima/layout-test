@@ -127,7 +127,7 @@ class CronRPMagentoInventorySync extends Command {
                 $results = json_decode($postResultsReq->body);
 
                 if (isset($results->matches->updated)) {
-                    foreach ($results->matches->udpated as $rez) {
+                    foreach ($results->matches->updated as $rez) {
                         $inventoryLog->addInfo("UPDATED Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock);
                     }
                     $summary['mageUpdated'] = count($results->matches->updated);
