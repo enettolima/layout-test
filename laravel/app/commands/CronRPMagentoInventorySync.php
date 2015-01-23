@@ -3,83 +3,173 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class CronRPMagentoInventorySync extends Command {
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'cron:rp-magento-inventory-sync';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'cron:rp-magento-inventory-sync';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Sync Magento Inventory with Retail Pro Inventory';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Sync Magento Inventory with Retail Pro Inventory';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function fire()
     {
         try {
 
+            $inventoryLog = new Logger('log');
+            $inventoryLog->pushHandler(new StreamHandler(storage_path() . '/logs/invsync.' . date('YmdHis') . '.log', Logger::INFO));
+
+            if ($this->option('do_live_inventory') && filter_var($this->option('do_live_inventory'), FILTER_VALIDATE_BOOLEAN)) {
+                $mageURL = 'http://shop.earthboundtrading.com';
+                $this->info('##SYNCING LIVE INVENTORY!');
+            } else {
+                $this->info('##Syncing TEST inventory.');
+                $mageURL = 'http://testshop.earthboundtrading.com';
+            }
+
             /*
-            $req = Requests::post(
-                'http://dev.ebtpassport.com:9200/mydocs/doc/_search',
-                array(),
-                $json
-            );
-
-            return $req->body;
+             * STEP 1: Get list of products from Magento we plan on syncing inventory for
              */
-
             $headers = null;
             $options = null;
 
+            $this->info("Getting products from Magento...");
             $request = Requests::get(
-                'http://shop.earthboundtrading.com/ebtutil/inventory/getproducts.php'//,
+                $mageURL . '/ebtutil/inventory/getproducts.php'//,
                 //$headers,
                 //$options
             );
 
-            $products = array();
-
             if ($request->success) {
-                $api = new EBTAPI;
-                foreach (json_decode($request->body)->data as $sid) {
-                    $this->info($sid);
-                    //100003027
-                    // To be replaced with something real that gets the Inventory Amt..
-                    $productRequest = $api->get("/rproorders/order/100003027");
-                    $products[] = array('sid' => $sid, 'rpcount' => 10);
+                $this->info("Getting products from Magento complete (success).");
+                $mageProducts = json_decode($request->body)->data;
+            } else {
+                $this->info("Getting products from Magento complete (FAIL).");
+                throw new Exception('Error getting product list from Magento');
+            }
+
+            /*
+             * STEP 2: Get list of all products & inventory for our store in Retail Pro from the API
+             * 470 = 74
+             */
+            $api = new EBTAPI;
+            // TODO: Write the following into the api with this query:
+            // select item_sid, qty from cms.invn_sbs_qty where store_no = 74;
+            $this->info('Getting all inventory from RP...');
+            $rpProductsReq = $api->get('/rproproducts/store-products/74');
+
+            if (! isset ($rpProductsReq->errors)) {
+                $rpProducts = array();
+
+                foreach ($rpProductsReq->data as $rpProduct) {
+                    $rpProducts[$rpProduct->item_sid] = (int) $rpProduct->qty;
+                }
+                $this->info('Getting all inventory from RP complete.');// 
+                $summary['rpProducts'] = count($rpProducts);
+            }
+
+            $p = array();
+
+            $matchResults = array();
+
+            $summary['mageProducts'] = count((array) $mageProducts);
+
+            foreach ($mageProducts as $mageProductSid => $mageProductMeta) {
+                if (array_key_exists($mageProductSid, $rpProducts)) {
+                    $matchResults['matches'][] = array('sid' => $mageProductSid, 'qty' => $rpProducts[$mageProductSid], 'sku' => $mageProductMeta->sku, 'name' => $mageProductMeta->name);
+                } else {
+                    $matchResults['non-matches'][] = array('sid' => $mageProductSid, 'qty' => null, 'sku' => $mageProductMeta->sku, 'name' => $mageProductMeta->name);
                 }
             }
 
+            $summary['productMatches'] = count($matchResults['matches']);
+            $summary['productNonMatches'] = count($matchResults['non-matches']);
+
+            foreach ($matchResults['matches'] as $match) {
+                $inventoryLog->addInfo("MRPMATCH " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
+            }
+
+            foreach ($matchResults['matches'] as $match) {
+                $inventoryLog->addInfo("MRPMISS " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
+            }
+
+
+            $this->info('Posting new quantities to Magento...');
+            $postResultsReq = Requests::post(
+                $mageURL . '/ebtutil/inventory/syncinventory.php',
+                array(),
+                array('data' => json_encode($matchResults['matches'])),
+                array('timeout' => 120)
+            );
+
+            if ($postResultsReq->success) {
+                $this->info('Posting new quantities to Magento complete (success)');
+                $results = json_decode($postResultsReq->body);
+
+                if (isset($results->matches->updated)) {
+                    foreach ($results->matches->udpated as $rez) {
+                        $inventoryLog->addInfo("UPDATED Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock);
+                    }
+                    $summary['mageUpdated'] = count($results->matches->updated);
+                } else {
+                    $summary['mageUpdated'] = 0;
+                }
+
+                if (isset($results->matches->notchanged)) {
+                    foreach ($results->matches->notchanged as $rez) {
+                        $inventoryLog->addInfo("NOCHANGE Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock);
+                    }
+                    $summary['mageNoChange'] = count($results->matches->notchanged);
+                } else {
+                    $summary['mageNoChange'] = 0;
+                }
+
+            } else {
+                echo("POST fail");
+            }
+
+            $this->info('');
+            $this->info('##SUMMARY');
+            $this->info('Products in Magento: ' . $summary['mageProducts']);
+            $this->info('Products in Retail Pro: ' . $summary['rpProducts']);
+            $this->info('Non-Matching (Skipped) Products: ' . $summary['productNonMatches']);
+            $this->info('Matching (Processed) Products: ' . $summary['productMatches']);
+            $this->info('Magento Products Changed: ' . $summary['mageUpdated']);
+            $this->info('Magento Products Not Changed: ' . $summary['mageNoChange']);
 
         } catch(Exception $e) {
-            echo $e->getMessage();
+            echo $e->getMessage() . ' at line ' . $e->getLine();
             exit(1);
         }
     }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function examplefire()
-	{
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function examplefire()
+    {
         try {
 
             $api = new EBTAPI;
@@ -210,30 +300,30 @@ class CronRPMagentoInventorySync extends Command {
             echo $e->getMessage();
             exit(1);
         }
-	}
+    }
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return array(
-			// array('example', InputArgument::REQUIRED, 'An example argument.'),
-		);
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return array(
+            // array('example', InputArgument::REQUIRED, 'An example argument.'),
+        );
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-			// array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
-		);
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array(
+            array('do_live_inventory', null, InputOption::VALUE_OPTIONAL, 'Do live inventory', null),
+        );
+    }
 
 }
