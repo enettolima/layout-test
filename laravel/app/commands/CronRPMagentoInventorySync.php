@@ -102,8 +102,17 @@ class CronRPMagentoInventorySync extends Command {
                 }
             }
 
-            $summary['productMatches'] = count($matchResults['matches']);
-            $summary['productNonMatches'] = count($matchResults['non-matches']);
+            if (array_key_exists('matches', $matchResults)) {
+                $summary['productMatches'] = count($matchResults['matches']);
+            } else {
+                $summary['productMatches'] = 0;
+            }
+
+            if (array_key_exists('non-matches', $matchResults)) {
+                $summary['productNonMatches'] = count($matchResults['non-matches']);
+            } else {
+                $summary['productNonMatches'] = 0;
+            }
 
             foreach ($matchResults['matches'] as $match) {
                 $inventoryLog->addInfo("MRPMATCH " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
