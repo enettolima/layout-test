@@ -16,6 +16,7 @@ class AdminController extends BaseController
     public function getUserList()
     {
         $users = User::all();
+        $users = $users->sortBy('username');
 
         return View::make(
             'pages.admin.user.list', array(
