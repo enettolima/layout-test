@@ -226,12 +226,14 @@ class UsersController extends BaseController
 
                             if ($u->hasRole('District Manager')) {
 
+                                // Create array of existing roles
                                 $userRoles = array();
 
                                 foreach ($u->roles()->get() as $role) {
                                     $userRoles[] = $role->id;
                                 }
 
+                                // Get roles from database
                                 //TODO: move to API. Also, THIS REALLY SUCKS.
                                 $sql = "select [Code #] as store from PASSPORT_STORES_DM_RM where RM_RP_LOGIN = '{$u->username}' or DM_RP_LOGIN = '{$u->username}'";
                                 $managerStoresRes = DB::connection('sqlsrv_ebt')->select($sql);
@@ -240,16 +242,22 @@ class UsersController extends BaseController
 
                                     $targetStore = 'Store'.$result->store;
 
+                                    // Load up actual Role object for store or create one if it doesn't 
+                                    // already exist
                                     if (! $storeRole = Role::where('name', '=', $targetStore)->first()) {
                                         $storeRole = new Role;
                                         $storeRole->name = $targetStore;
                                         $storeRole->save();
                                     }
 
+                                    // Add this role to our array of roles this user should have.
+                                    // I assume this might create duplicates but that doesn't effect
+                                    // the sync method...
                                     $userRoles[] = $storeRole->id;
 
                                 }
 
+                                // Sync (assign) the roles to the user
                                 $u->roles()->sync($userRoles);
                             }
 
