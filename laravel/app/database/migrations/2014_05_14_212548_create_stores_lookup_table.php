@@ -19,8 +19,8 @@ class CreateStoresLookupTable extends Migration {
             $table->string('store_name');
             $table->string('street')->nullable();
             $table->string('ste')->nullable();
-            $table->string('state', 2);
-            $table->string('city');
+            $table->string('state', 2)->nullable();
+            $table->string('city')->nullable();
             $table->string('zip')->nullable();
             $table->string('phone', 20)->nullable();
             $table->integer('tz_offset')->nullable();
