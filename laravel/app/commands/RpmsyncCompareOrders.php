@@ -91,8 +91,14 @@ class RpmsyncCompareOrders extends Command {
 
     public function fire()
     {
+
+        $noisy = false;
+
         try {
 
+            if (! $noisy){
+                $this->info('Retrieving orders from Magento...');
+            }
 
             $from = trim($this->argument('fromDate'));
             if (! $this->valiDate($from)) {
@@ -118,24 +124,36 @@ class RpmsyncCompareOrders extends Command {
             for ($day=0; $day<$daysDiff; $day++) {
                 $chunkFrom = date('Y-m-d', strtotime($from) + ($day * 86400));
                 $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
-                $this->info("Retrieving $chunkFrom to $chunkTo from Magento.");
                 $mageURL = 'https://shop.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
-                $this->info($mageURL);
+
+                if ($noisy) {
+                    $this->info($mageURL);
+                }
+
                 $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
                     $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
 
                     if (count($chunkOrders) > 0) {
-                        $this->info('Got ' . count($chunkOrders) . ' orders');
+
+                        if ($noisy) {
+                            $this->info('Got ' . count($chunkOrders) . ' orders');
+                        }
+
                         $allMageOrders = array_merge($allMageOrders, $chunkOrders);
                     } else {
-                        $this->info('Got ' . count($chunkOrders) . ' orders!!!!');
+                        if ($noisy) {
+                            $this->info('Got ' . count($chunkOrders) . ' orders!!!!');
+                        }
                     }
                 }
 
+                $this->info("$chunkFrom to $chunkTo: Got " . count($chunkOrders) . " orders.");
             }
 
             if (count($allMageOrders) > 0) {
+
+                $this->info("Done. Now checking " . count($allMageOrders) . " orders...");
 
                 $api = new EBTAPI;
 
@@ -151,7 +169,7 @@ class RpmsyncCompareOrders extends Command {
                         $matchResults['pass'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'yes');
 
                         $mageTotal = (float) $mageOrder->total;
-                        $rpTotal = (float) $rpReceipt->data->calc_total;
+                        $rpTotal = (float) $rpReceipt->data->totalreceipt;
 
                         $mageTax = (float) $mageOrder->tax;
                         $rpTax = (float) $rpReceipt->data->ext_tax;
@@ -159,21 +177,19 @@ class RpmsyncCompareOrders extends Command {
                         $mageQty = (int) $mageOrder->qtysold;
                         $rpQty = (int) $rpReceipt->data->qtysold;
 
-                            /*
-                            $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
-                            if ($mageTotal === $rpTotal) {
-                                $matchResults['pass'][] = $testInfo;
-                            } else {
-                                $matchResults['fail'][] = $testInfo;
-                            }
-                             */
+                        $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
+                        if (($mageTotal === $rpTotal) || abs($mageTotal - $rpTotal) <= .01) {
+                            $matchResults['pass'][] = $testInfo;
+                        } else {
+                            $matchResults['fail'][] = $testInfo;
+                        }
 
                     } else {
                         $matchResults['fail'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'missing');
                     }
 
                     //report($mageOrder->increment_id, $matchMatches, $matchErrors);
-                    $this->report($mageOrder->increment_id, $matchResults);
+                    $this->report($mageOrder->increment_id, $mageOrder->created_at, $matchResults);
                 }
             }
 
@@ -183,8 +199,8 @@ class RpmsyncCompareOrders extends Command {
         }
     }
 
-    protected function report($i, $results) {
-        $showPass = true;
+    protected function report($i, $c, $results) {
+        $showPass = false;
 
         if (count($results['fail']) > 0) {
             $failString = '';
@@ -193,7 +209,7 @@ class RpmsyncCompareOrders extends Command {
                 $failString .= "[{$fail['datapoint']} mage={$fail['mage']} rp={$fail['rp']}] ";
             }
 
-            $this->info("FAIL $i => $failString");
+            $this->info("FAIL $i on $c => $failString");
         } else {
             if ($showPass) {
                 $this->info("PASS $i");
