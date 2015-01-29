@@ -90,7 +90,8 @@ class CronRPMagentoInventorySync extends Command {
 
             $p = array();
 
-            $matchResults = array();
+            $matchResults['matches'] = array();
+            $matchResults['non-matches'] = array();
 
             $summary['mageProducts'] = count((array) $mageProducts);
 
@@ -102,26 +103,30 @@ class CronRPMagentoInventorySync extends Command {
                 }
             }
 
+            // Summary Info
             if (array_key_exists('matches', $matchResults)) {
                 $summary['productMatches'] = count($matchResults['matches']);
             } else {
                 $summary['productMatches'] = 0;
             }
 
+            // Report on Matches
+            foreach ($matchResults['matches'] as $match) {
+                $inventoryLog->addInfo("MRPMATCH " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
+            }
+
+
+            // Summary Info
             if (array_key_exists('non-matches', $matchResults)) {
                 $summary['productNonMatches'] = count($matchResults['non-matches']);
             } else {
                 $summary['productNonMatches'] = 0;
             }
 
-            foreach ($matchResults['matches'] as $match) {
-                $inventoryLog->addInfo("MRPMATCH " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
-            }
-
-            foreach ($matchResults['matches'] as $match) {
+            // Report on Non-Matches
+            foreach ($matchResults['non-matches'] as $match) {
                 $inventoryLog->addInfo("MRPMISS " . $match['sid'] . ' ' . $match['sku'] . ' ' . $match['name'] . ' ' . $match['qty']);
             }
-
 
             $this->info('Posting new quantities to Magento...');
             $postResultsReq = Requests::post(
