@@ -100,6 +100,8 @@ class RpmsyncCompareOrders extends Command {
                 $this->info('Retrieving orders from Magento...');
             }
 
+	if ($this->argument('fromDate') && $this->argument('toDate')) {
+
             $from = trim($this->argument('fromDate'));
             if (! $this->valiDate($from)) {
                 throw new Exception("invalid from date '$from'");
@@ -109,6 +111,10 @@ class RpmsyncCompareOrders extends Command {
             if (! $this->valiDate($to)) {
                 throw new Exception("invalid to date '$from'");
             }
+	}else{
+		$from = date("Y-m-d", strtotime("7 days ago"));
+		$to = date("Y-m-d");
+	}
 
             $daysDiff = (strtotime($to) - strtotime($from)) / 86400;
 
@@ -225,8 +231,8 @@ class RpmsyncCompareOrders extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('fromDate', InputArgument::REQUIRED, 'From Date'),
-			array('toDate', InputArgument::REQUIRED, 'From Date'),
+			array('fromDate', InputArgument::OPTIONAL, 'From Date'),
+			array('toDate', InputArgument::OPTIONAL, 'From Date'),
 		);
 	}
 
