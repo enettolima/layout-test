@@ -514,6 +514,43 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
     var empWeekSummaryData = [];
 }
 
+function summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHoursData){
+    console.log(opHoursData);
+    var html = [];
+
+    var scheduled = 0;
+
+    if (weekSchedule.summary.hoursByDayNum.length) {
+        console.log(weekSchedule.summary.hoursByDayNum);
+
+        for (day=0; day<weekSchedule.summary.hoursByDayNum.length; day++) {
+            scheduled = scheduled + weekSchedule.summary.hoursByDayNum[day];
+        }
+    }
+
+    var availClass = '';
+
+    var diff = opHoursData.TotWk_BudPayHrs - scheduled;
+
+    if (diff < 0) {
+        availClass = 'text-danger bold';
+    }
+
+    html.push("<tr><td>Scheduled Hours Budget:</td><td>" + parseNum(opHoursData.TotWk_BudPayHrs).parsed + "</td></tr>");
+    html.push("<tr><td>Hours Scheduled:</td><td>" + parseNum(scheduled).parsed + "</td></tr>");
+    html.push("<tr><td>Available Hours:</td><td><span class='"+availClass+"'>" + parseNum(diff).parsed + "</span></td></tr>");
+    html.push("<tr><td>Week Budget:</td><td>" + parseCurrency(opHoursData.TotWk_BdAmt).parsed + "</td></tr>");
+    html.push("<tr><td>Overridden Days:</td><td>" + parseInt(opHoursData.DaysOvrd) + "</td></tr>");
+
+    $("#opoverview").empty().html(html.join(""));
+
+    //Hours Budget:           234.15 Hrs  
+    //Hours Scheduled:      200.00 Hrs
+    //Available Hours:          34.00hrs   (Budget - Scheduled)
+    //Week Budget:          $2345.87    (TotWk_BdAmt)
+    //Days Override:                3 Days
+}
+
 function loadSchedule(strDate) {
 
 
@@ -577,6 +614,11 @@ function loadSchedule(strDate) {
             // async: false
         });
 
+        var operationalHours = $.ajax({
+            url: "/lsvc/scheduler-operational-hours/"+currentStore+"/"+strDate,
+            type: "GET"
+        });
+
         // Refresh the employees list
         $("#empList").empty();
         currentEmployees = [];
@@ -626,15 +668,27 @@ function loadSchedule(strDate) {
 
             actualsRequest.done(function(actualsData){
 
-                $(".overview-reports-warning").remove();
+                operationalHours.done(function(operationalHours){
 
-                summaryByDayReport(weekSchedule, targetsData, actualsData);
+                    if ((typeof operationalHours !== "undefined") && (typeof operationalHours.data !== "undefined")) {
 
-                summaryByEmpReport(weekSchedule, targetsData, actualsData);
+                        var opHoursData = operationalHours.data[0];
 
-                if (Object.keys(targetsData).length === 0) {
-                    $(".overview-reports-section").before("<p class='overview-reports-warning'><br /><em class='bg-danger'>Note: Sales targets are not yet available for this week so they are not reflected below.</em></p>");
-                }
+                        summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHoursData);
+                    }
+
+                    $(".overview-reports-warning").remove();
+
+                    summaryByDayReport(weekSchedule, targetsData, actualsData);
+
+                    summaryByEmpReport(weekSchedule, targetsData, actualsData);
+
+
+                    if (Object.keys(targetsData).length === 0) {
+                        $(".overview-reports-section").before("<p class='overview-reports-warning'><br /><em class='bg-danger'>Note: Sales targets are not yet available for this week so they are not reflected below.</em></p>");
+                    }
+
+                });
             });
         });
 

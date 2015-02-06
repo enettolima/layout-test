@@ -295,6 +295,12 @@
     </div>
     <!-- /Main Scheduling Grid Section -->
 
+    <div class="row">
+        <div class="col-xs-5" style="padding-top:10px;">
+            <table class="table table-striped" id="opoverview"></table>
+        </div>
+    </div>
+
     <!-- Summary Section -->
     <div class="row overview-reports-section">
 

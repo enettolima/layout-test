@@ -18,6 +18,19 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getSchedulerOperationalHours()
+    {
+        $storeNumber = Request::segment(3);
+
+        $weekOf      = Request::segment(4);
+        list($year, $month, $day) = explode('-', $weekOf);
+        $weekOf = $month . '/' . $day . '/'  . $year;
+
+        $res = DB::connection('sqlsrv_ebtgoogle')->select("WEB_GET_OPER_HOURS '$storeNumber', '$weekOf'");
+
+        return Response::json(array('data' => $res));
+    }
+
     public function getReportsAllStar()
     {
         $storeNumber = Request::segment(3);
