@@ -27,3 +27,17 @@ function getEmpNameFromCode(strCode, empMasterDatabase){
         return '';
     }
 }
+
+function getEmpIsManager(strCode, empMasterDatabase) {
+    var results = $.grep(empMasterDatabase, function(e){ return e.userId === strCode; });
+
+    if (results.length === 0) {
+        return false;
+    } else if (results.length === 1) {
+		if (results[0].manager == 'M' || results[0].manager == 'm') {
+			return true;
+		}
+    } else {
+        return false;
+    }
+}

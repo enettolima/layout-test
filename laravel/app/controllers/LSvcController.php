@@ -1017,7 +1017,7 @@ class LSvcController extends BaseController
      */
     public function getEmployees()
     {
-        $emps = DB::connection('mysql')->table('employees_lookup')->select('empl_name as userId', 'rpro_full_name as fullName')->orderBy('empl_name')->get();
+        $emps = DB::connection('mysql')->table('employees_lookup')->select('empl_name as userId', 'rpro_full_name as fullName', 'empl_no2 as manager')->orderBy('empl_name')->get();
         return Response::json($emps);
     }
 
