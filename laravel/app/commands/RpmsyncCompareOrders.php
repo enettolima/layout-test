@@ -187,6 +187,8 @@ class RpmsyncCompareOrders extends Command {
                         if (($mageTotal === $rpTotal) || abs($mageTotal - $rpTotal) <= .01) {
                             $matchResults['pass'][] = $testInfo;
                         } else {
+                            $testInfo['mage'] = number_format($testInfo['mage'], 2);
+                            $testInfo['rp'] = number_format($testInfo['rp'], 2);
                             $matchResults['fail'][] = $testInfo;
                         }
 
