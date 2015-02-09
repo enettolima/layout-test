@@ -197,7 +197,8 @@ class RpmsyncCompareOrders extends Command {
                     }
 
                     //report($mageOrder->increment_id, $matchMatches, $matchErrors);
-                    $this->report($mageOrder->increment_id, $mageOrder->created_at, $matchResults);
+                    $dateString = date("Y-m-d H:i:s", strtotime($mageOrder->created_at));
+                    $this->report($mageOrder->increment_id, $dateString, $matchResults);
                 }
             }
 
