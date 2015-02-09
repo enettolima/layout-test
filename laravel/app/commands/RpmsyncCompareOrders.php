@@ -5,82 +5,80 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class RpmsyncCompareOrders extends Command {
+                            /*
+                              From Magento:
+                                class stdClass#744 (6) {
+                                    public $increment_id =>
+                                        string(9) "100002591"
+                                        public $created_at =>
+                                        string(19) "2014-12-30 23:28:43"
+                                        public $total =>
+                                        double(77.85)
+                                        public $tax =>
+                                        int(0)
+                                        public $before_tax =>
+                                        double(77.85)
+                                        public $qtysold =>
+                                        int(2)
+                                    }
 
-    /*
-     Data Structure Reference
-      From Magento:
-        class stdClass#744 (6) {
-            public $increment_id =>
-                string(9) "100002591"
-                public $created_at =>
-                string(19) "2014-12-30 23:28:43"
-                public $total =>
-                double(77.85)
-                public $tax =>
-                int(0)
-                public $before_tax =>
-                double(77.85)
-                public $qtysold =>
-                int(2)
-            }
+                                From RP: 
+                                    class stdClass#717 (1) {
+                                        public $data =>
+                                            class stdClass#722 (13) {
+                                                public $sbs_no =>
+                                                string(1) "1"
+                                                public $store_no =>
+                                                string(2) "74"
+                                                public $invc_no =>
+                                                string(9) "100002591"
+                                                public $invc_sid =>
+                                                string(10) "1100002591"
+                                                public $created_date =>
+                                                string(19) "2014-12-30 17:28:43"
+                                                public $ext_price =>
+                                                string(5) "74.90"
+                                                public $ext_tax =>
+                                                string(4) "0.00"
+                                                public $ext_return =>
+                                                string(1) "0"
+                                                public $qtysold =>
+                                                string(1) "2"
+                                                public $invc_type =>
+                                                string(1) "0"
+                                                public $so_no =>
+                                                NULL
+                                                public $so_no_web =>
+                                                NULL
+                                                public $calc_total =>
+                                                string(5) "74.90"
+                                            }
+                                    }
+                             */
 
-        From RP: 
-            class stdClass#717 (1) {
-                public $data =>
-                    class stdClass#722 (13) {
-                        public $sbs_no =>
-                        string(1) "1"
-                        public $store_no =>
-                        string(2) "74"
-                        public $invc_no =>
-                        string(9) "100002591"
-                        public $invc_sid =>
-                        string(10) "1100002591"
-                        public $created_date =>
-                        string(19) "2014-12-30 17:28:43"
-                        public $ext_price =>
-                        string(5) "74.90"
-                        public $ext_tax =>
-                        string(4) "0.00"
-                        public $ext_return =>
-                        string(1) "0"
-                        public $qtysold =>
-                        string(1) "2"
-                        public $invc_type =>
-                        string(1) "0"
-                        public $so_no =>
-                        NULL
-                        public $so_no_web =>
-                        NULL
-                        public $calc_total =>
-                        string(5) "74.90"
-                    }
-            }
-     */
+	/**
+	 * The console command name.
+	 *
+	 * @var string
+	 */
+	protected $name = 'rpmsync:compare-orders';
 
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'rpmsync:compare-orders';
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Compare completed orders in Magento vs Receipts in Retail Pro.';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Compare completed orders in Magento vs Receipts in Retail Pro.';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	/**
+	 * Create a new command instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
     protected function valiDate($date, $date_format='Y-m-d')
     {
@@ -102,7 +100,8 @@ class RpmsyncCompareOrders extends Command {
                 $this->info('Retrieving orders from Magento...');
             }
 
-            // Sort out the parameters we are running with
+	if ($this->argument('fromDate') && $this->argument('toDate')) {
+
             $from = trim($this->argument('fromDate'));
             if (! $this->valiDate($from)) {
                 throw new Exception("invalid from date '$from'");
@@ -112,11 +111,13 @@ class RpmsyncCompareOrders extends Command {
             if (! $this->valiDate($to)) {
                 throw new Exception("invalid to date '$from'");
             }
+	}else{
+		$from = date("Y-m-d", strtotime("7 days ago"));
+		$to = date("Y-m-d");
+	}
 
             $daysDiff = (strtotime($to) - strtotime($from)) / 86400;
 
-            // Figure out how many days we are running for so we can
-            // chunk up the calls to Magento
             if ($daysDiff < 0) {
                 throw new Exception("from date $from is older than to date $to");
             } elseif ($daysDiff == 0) {
@@ -126,7 +127,6 @@ class RpmsyncCompareOrders extends Command {
 
             $allMageOrders = array();
 
-            // Go get the data from Magento and add it to an array
             for ($day=0; $day<$daysDiff; $day++) {
                 $chunkFrom = date('Y-m-d', strtotime($from) + ($day * 86400));
                 $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
@@ -136,7 +136,6 @@ class RpmsyncCompareOrders extends Command {
                     $this->info($mageURL);
                 }
 
-                // Using the php-requests library...
                 $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
                     $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
@@ -164,13 +163,11 @@ class RpmsyncCompareOrders extends Command {
 
                 $api = new EBTAPI;
 
-                // For each order in Magento...
                 foreach ($allMageOrders as $mageOrder) {
 
                     $matchResults['pass'] = array();
                     $matchResults['fail'] = array();
 
-                    // Use our custom API call to retrieve that order's information from Retail Pro
                     $rpReceipt = $api->get('/rproorders/order/' . $mageOrder->increment_id);
 
                     if (isset($rpReceipt->data)) {
@@ -226,29 +223,29 @@ class RpmsyncCompareOrders extends Command {
         }
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array('fromDate', InputArgument::REQUIRED, 'From Date'),
-            array('toDate', InputArgument::REQUIRED, 'From Date'),
-        );
-    }
+	/**
+	 * Get the console command arguments.
+	 *
+	 * @return array
+	 */
+	protected function getArguments()
+	{
+		return array(
+			array('fromDate', InputArgument::OPTIONAL, 'From Date'),
+			array('toDate', InputArgument::OPTIONAL, 'From Date'),
+		);
+	}
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            // array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
-        );
-    }
+	/**
+	 * Get the console command options.
+	 *
+	 * @return array
+	 */
+	protected function getOptions()
+	{
+		return array(
+			// array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+		);
+	}
 
 }
