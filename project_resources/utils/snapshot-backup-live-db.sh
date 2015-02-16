@@ -3,7 +3,7 @@
 DBNAME="passport_live"
 DBUSER="dbuser"
 DBPASS="this is literally the password for dbuser"
-DBHOST="dev.ebtpassport.com"
+DBHOST="ebtpassport.com"
 
 STAMP="$(date +%Y%m%d%H%M%S)"
 

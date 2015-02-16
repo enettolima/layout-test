@@ -1,6 +1,6 @@
 #!/bin/bash
 
-svc="dev.ebtpassport.com:9200"
+svc="ebtpassport.com:9200"
 
 curl -XDELETE ${svc}/mydocs
 curl -XDELETE ${svc}/_river

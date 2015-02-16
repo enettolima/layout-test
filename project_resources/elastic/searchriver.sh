@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl -XGET dev.ebtpassport.com:9200/mydocs/doc/_search -d '
+curl -XGET ebtpassport.com:9200/mydocs/doc/_search -d '
 {
     "query" : {
         "match" : {

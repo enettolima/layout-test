@@ -112,7 +112,7 @@ class UsersController extends BaseController
 
                     // Todo: Set this up in some sort of key-based fashion? 
                     // Reckless.
-                    if (isset($_ENV['mock_rpro_auth']) && ($_ENV['mock_rpro_auth'] === TRUE) && ($_SERVER['HTTP_HOST'] !== 'dev.ebtpassport.com')) {
+                    if (isset($_ENV['mock_rpro_auth']) && ($_ENV['mock_rpro_auth'] === TRUE) && ($_SERVER['HTTP_HOST'] !== 'ebtpassport.com')) {
                         $rpResults = $api->post('/rprousers/mockauth', $data);
                     } else {
                         $rpResults = $api->post('/rprousers/auth', $data);

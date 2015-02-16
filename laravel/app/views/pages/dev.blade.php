@@ -6,7 +6,7 @@
 $(function() {
 
     var client = new $.es.Client({
-        hosts: 'dev.ebtpassport.com:9200'
+        hosts: 'ebtpassport.com:9200'
     });
 
     $("form.search").on("submit", function(event){

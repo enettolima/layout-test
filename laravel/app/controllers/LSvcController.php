@@ -159,7 +159,7 @@ class LSvcController extends BaseController
         $json = Input::getContent();
 
         $req = Requests::post(
-            'http://dev.ebtpassport.com:9200/mydocs/doc/_search',
+            'http://ebtpassport.com:9200/mydocs/doc/_search',
             array(),
             $json
         );
