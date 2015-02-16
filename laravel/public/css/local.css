@@ -3,6 +3,10 @@ body {
     padding-top:70px;
 }
 
+.top-buffer {
+    margin-top:20px;
+}
+
 .c01 { /* Blue */      background-color: rgba(42, 75, 215, 1); }
 .c02 { /* Lt. Green */ background-color: rgba(129, 197, 122, 1); }
 .c03 { /* Red */       background-color: rgba(173, 35, 35, 1); }
@@ -138,11 +142,6 @@ a.schedule-graphic-header:hover{
 
 .summary-table td:not(.heady) {
     padding-left:20px;
-}
-
-.login-container {
-    margin:0 auto;
-    width:200px;
 }
 
 .container {
