@@ -515,58 +515,47 @@ function summaryByDayReport(weekSchedule, targetsData, actualsData) {
 }
 
 function summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHoursData){
+
     var html = [];
 
-    var hoursScheduled = 0;
-    var managerHoursScheduled = 0;
+    if (typeof opHoursData != 'undefined') {
 
-    if (typeof weekSchedule.summary.empHoursByEmp !== "undefined") {
-        var empSumm = weekSchedule.summary.empHoursByEmp;
+        var hoursScheduled = 0;
+        var managerHoursScheduled = 0;
 
-        for (emp=0; emp<Object.keys(empSumm).length; emp++) {
-            var thisEmp = Object.keys(empSumm)[emp];
-            if (getEmpIsManager(thisEmp, empMasterDatabase)) {
-                managerHoursScheduled = managerHoursScheduled + empSumm[thisEmp].total;
-            } else {
-                hoursScheduled = hoursScheduled + empSumm[thisEmp].total;
+        if (typeof weekSchedule.summary.empHoursByEmp !== "undefined") {
+            var empSumm = weekSchedule.summary.empHoursByEmp;
+
+            for (emp=0; emp<Object.keys(empSumm).length; emp++) {
+                var thisEmp = Object.keys(empSumm)[emp];
+                if (getEmpIsManager(thisEmp, empMasterDatabase)) {
+                    managerHoursScheduled = managerHoursScheduled + empSumm[thisEmp].total;
+                } else {
+                    hoursScheduled = hoursScheduled + empSumm[thisEmp].total;
+                }
             }
         }
-    }
 
-    /*
-    var scheduled = 0;
+        var availClass = '';
 
-    if (weekSchedule.summary.hoursByDayNum.length) {
+        var diff = opHoursData.TotWk_BudPayHrs - hoursScheduled;
 
-        for (day=0; day<weekSchedule.summary.hoursByDayNum.length; day++) {
-            scheduled = scheduled + weekSchedule.summary.hoursByDayNum[day];
+        if (diff < 0) {
+            availClass = 'text-danger bold';
         }
+
+        html.push("<tr><td>Hours Budget:</td><td>" + parseNum(opHoursData.TotWk_BudPayHrs).parsed + "</td></tr>");
+        html.push("<tr><td>Hours Scheduled:</td><td>" + parseNum(hoursScheduled).parsed + "</td></tr>");
+        html.push("<tr><td><strong>Available Hours:</strong></td><td><span class='"+availClass+"'>" + parseNum(diff).parsed + "</span></td></tr>");
+        html.push("<tr><td>Manager Hours Scheduled:</td><td>" + parseNum(managerHoursScheduled).parsed + "</td></tr>");
+        html.push("<tr><td>Week Budget:</td><td>" + parseCurrency(opHoursData.TotWk_BdAmt).parsed + "</td></tr>");
+        html.push("<tr><td>Overridden Days:</td><td>" + parseInt(opHoursData.DaysOvrd) + "</td></tr>");
+    } else {
+        html.push("<tr><td><em>Overview not available.</em></td></tr>");
     }
-    */
-
-    var availClass = '';
-
-    var diff = opHoursData.TotWk_BudPayHrs - hoursScheduled;
-
-    if (diff < 0) {
-        availClass = 'text-danger bold';
-    }
-
-    html.push("<tr><td>Hours Budget:</td><td>" + parseNum(opHoursData.TotWk_BudPayHrs).parsed + "</td></tr>");
-    // html.push("<tr><td>Hours Scheduled:</td><td>" + parseNum(scheduled).parsed + "</td></tr>");
-    html.push("<tr><td>Hours Scheduled:</td><td>" + parseNum(hoursScheduled).parsed + "</td></tr>");
-    html.push("<tr><td><strong>Available Hours:</strong></td><td><span class='"+availClass+"'>" + parseNum(diff).parsed + "</span></td></tr>");
-    html.push("<tr><td>Manager Hours Scheduled:</td><td>" + parseNum(managerHoursScheduled).parsed + "</td></tr>");
-    html.push("<tr><td>Week Budget:</td><td>" + parseCurrency(opHoursData.TotWk_BdAmt).parsed + "</td></tr>");
-    html.push("<tr><td>Overridden Days:</td><td>" + parseInt(opHoursData.DaysOvrd) + "</td></tr>");
 
     $("#opoverview").empty().html(html.join(""));
 
-    //Hours Budget:           234.15 Hrs  
-    //Hours Scheduled:      200.00 Hrs
-    //Available Hours:          34.00hrs   (Budget - Scheduled)
-    //Week Budget:          $2345.87    (TotWk_BdAmt)
-    //Days Override:                3 Days
 }
 
 function loadSchedule(strDate) {
