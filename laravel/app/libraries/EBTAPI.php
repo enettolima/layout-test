@@ -49,7 +49,8 @@ class EBTAPI
 			array(
 				'username' => $_ENV['ebt_api_username'], 
 				'password' => $_ENV['ebt_api_password']
-			)
+            ),
+            array('verify' => false)
 		); 
 
 		if ($tokenRequest->success && $token = json_decode($tokenRequest->body)->token) {
@@ -82,7 +83,7 @@ class EBTAPI
 		// Clog::log(__METHOD__);
 		$returnval = false;
 
-		$response = Requests::get($_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource, array('X-Auth-Token' => $this->token));
+		$response = Requests::get($_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource, array('X-Auth-Token' => $this->token), array('verify' => false));
 
 		if ($response->success) {
 			// Clog::log(__METHOD__ . ' success');
@@ -110,7 +111,7 @@ class EBTAPI
 		// Clog::log($vals);
 
 
-		$response = Requests::post($url, $headers, $vals);
+		$response = Requests::post($url, $headers, $vals, array('verify' => false));
 
 		// Clog::log($response);
 
