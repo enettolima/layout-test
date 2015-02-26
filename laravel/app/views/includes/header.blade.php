@@ -35,7 +35,7 @@
 										$storeName = StoresLookup::where('code', Session::get('storeContext'))->first()->store_name;
 									}
                                     //$sl = StoresLookup::where('code', Session::get('storeContext'))->first();
-                                echo '<strong class="text-primary">Current Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$storeName.'</span></strong>';
+                                echo '<strong class="text-primary">Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$storeName.'</span></strong>';
                                 } else {
                                     echo "<em>Please Choose Store</em>";
                                 }
