@@ -1,6 +1,7 @@
 var empMasterDatabase = employeesFromService; // from employees.js
 var currentEmployees  = Array;
 var currentStore      = parseInt($("#current-store").html());
+var opHours = null;
 
 $(document).bind("ajaxSend", function(){
     $("#page-cover").css("opacity",0.15).fadeIn(100);
@@ -544,12 +545,12 @@ function summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHours
             availClass = 'text-danger bold';
         }
 
-        html.push("<tr><td>Hours Budget:</td><td>" + parseNum(opHoursData.TotWk_BudPayHrs).parsed + "</td></tr>");
-        html.push("<tr><td>Hours Scheduled:</td><td>" + parseNum(hoursScheduled).parsed + "</td></tr>");
-        html.push("<tr><td><strong>Available Hours:</strong></td><td><span class='"+availClass+"'>" + parseNum(diff).parsed + "</span></td></tr>");
-        html.push("<tr><td>Manager Hours Scheduled:</td><td>" + parseNum(managerHoursScheduled).parsed + "</td></tr>");
-        html.push("<tr><td>Week Budget:</td><td>" + parseCurrency(opHoursData.TotWk_BdAmt).parsed + "</td></tr>");
-        html.push("<tr><td>Overridden Days:</td><td>" + parseInt(opHoursData.DaysOvrd) + "</td></tr>");
+        html.push("<tr><td>Hours Budget:</td><td class='text-right'>" + parseNum(opHoursData.TotWk_BudPayHrs).parsed + "</td></tr>");
+        html.push("<tr><td>Hours Scheduled:</td><td class='text-right'>" + parseNum(hoursScheduled).parsed + "</td></tr>");
+        html.push("<tr><td><strong>Available Hours:</strong></td><td class='text-right'><span class='"+availClass+"'>" + parseNum(diff).parsed + "</span></td></tr>");
+        html.push("<tr><td>Manager Hours Scheduled:</td><td class='text-right'>" + parseNum(managerHoursScheduled).parsed + "</td></tr>");
+        html.push("<tr><td>Week Budget:</td><td class='text-right'>" + parseCurrency(opHoursData.TotWk_BdAmt).parsed + "</td></tr>");
+        html.push("<tr><td>Overridden Days:</td><td class='text-right'>" + parseInt(opHoursData.DaysOvrd) + "</td></tr>");
     } else {
         html.push("<tr><td><em>Overview not available.</em></td></tr>");
     }
@@ -680,6 +681,8 @@ function loadSchedule(strDate) {
                     if ((typeof operationalHours !== "undefined") && (typeof operationalHours.data !== "undefined")) {
 
                         var opHoursData = operationalHours.data[0];
+
+                        opHours = opHoursData.TotWk_OpeHrs;
 
                         summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHoursData);
                     }
@@ -927,4 +930,30 @@ $(document).on("click", "#staff-remove-modal-confirm", function(){
         // We reload
         loadSchedule(weekOf);
     });
+});
+
+$(document).on("click", "#calc", function(){
+
+    var totsHours = '';
+
+    if (opHours) {
+
+        var sales = parseInt($("#calc-amount").val());
+
+        if (sales > 500) {
+
+            totsHours = parseNum((sales / 190) + opHours).parsed + " Hours Needed";
+
+        } else {
+
+            totsHours = "Unable to calculate. Please check Amount.";
+        }
+
+    } else {
+
+        totsHours = "Unable to calculate. Forecast data not available.";
+    }
+
+    $("#calc-results").hide().html(totsHours).fadeIn();
+
 });

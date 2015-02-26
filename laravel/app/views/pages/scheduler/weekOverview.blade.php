@@ -295,9 +295,29 @@
     </div>
     <!-- /Main Scheduling Grid Section -->
 
-    <div class="row">
-        <div class="col-xs-5" style="padding-top:10px;">
-            <table class="table table-striped" id="opoverview"></table>
+    <div class="row" style="padding-top:10px">
+        <div class="col-xs-4">
+            <table class="table table-striped table-condensed" id="opoverview"></table>
+        </div>
+        <div class="col-xs-6 col-xs-offset-2">
+            <div class="panel panel-default panel-body">
+                <h5>Hours by Sales Volume Calculator</h5>
+
+                <p>To estimate how many hours to schedule based on
+                predicted sales and your store hours, enter sales volume 
+                dollar amount below. <em>This is just a utility for your convenience and doesn't affect the Scheduler.</em></p>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">$</div>
+                            <input type="text" class="form-control" id="calc-amount" placeholder="Enter Amount">
+                            <div class="input-group-addon">.00</div>
+                        </div>
+                    </div>
+                    <button id="calc" class="btn btn-default">Show Hours</button>
+                    &nbsp;&nbsp;<span id="calc-results"></span>
+            </div>
         </div>
     </div>
 
