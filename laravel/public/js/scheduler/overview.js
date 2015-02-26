@@ -943,7 +943,7 @@ $(document).on("click", "#calc", function(){
 
         var sales = parseInt($("#calc-amount").val());
 
-        if (sales > 500) {
+        if (sales > 200) {
 
             totsHours = parseNum((sales / 190) + opHours).parsed + " Hours Needed";
 
