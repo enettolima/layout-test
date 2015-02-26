@@ -682,7 +682,10 @@ function loadSchedule(strDate) {
 
                         var opHoursData = operationalHours.data[0];
 
-                        opHours = opHoursData.TotWk_OpeHrs;
+                        if (parseInt(opHoursData.TotWk_OpeHrs) > 0) {
+
+                            opHours = parseInt(opHoursData.TotWk_OpeHrs);
+                        }
 
                         summaryOpOverviewReport(weekSchedule, targetsData, actualsData, opHoursData);
                     }
