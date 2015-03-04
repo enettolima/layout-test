@@ -78,15 +78,18 @@
                     <div>
                         <br />
                         <input class='form-control' type='text' id="share-quickview-link">
-                        <span id="share-quickview-link-help" class="help-block" style="display:none;">Link Created! Anyone with the above link will now be able to view the Quickview for this date.</span>
+                        <span id="share-quickview-link-help" class="help-block" style="display:none;"><strong>Link Created!</strong> Anyone with the above link will now be able to view this specific Scheduler Quickview.</span>
                     </div>
-                    <div id="share-quickview-email" class="row" style="display:none;">
+                    <div id="share-quickview-email" class="row well" style="display:none;">
                         <div class="col-md-8">
                             <h4>Would you like to email the link now?</h4>
                             <p>To send an email with this link in it please specify recipients below.</p>
-                            <p><button class="btn btn-xs btn-default share-quickview-email-add">+ click here to add an email address</button></p>
+                            <p><button class="btn btn-xs btn-default share-quickview-email-add">+ click here to add a recipient</button></p>
                             <ul id="share-quickview-emails"></ul>
-                            <button id="share-quickview-send-email" class="btn btn-large btn-primary">Send Email With Link</button>
+                            <h4>(Optional) Include a note with the link?</h4>
+                            <p>If you'd like to add a note to the email enter it below.</p>
+                            <p><textarea id="share-quickview-note" class="form-control"></textarea></p>
+                            <button id="share-quickview-send-email" class="btn btn-large btn-primary">Send Email With This Link</button>
                         </div>
                     </div>
                 </div>

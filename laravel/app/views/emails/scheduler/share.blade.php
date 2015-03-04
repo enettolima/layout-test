@@ -1,5 +1,9 @@
-<p>Hello,</p>
-<p>Someone has shared the schedule for Earthbound Store #{{ $currentStore }} for the week of {{ $weekOf }} with you.</p>
-<p>Use the following link to view it:</p>
+<p>{{ Auth::user()->full_name }} has shared the schedule for Earthbound Store #{{ $currentStore }}, week of {{ $weekOf }} with you.</p>
+
+@if (isset($note) && $note != '')
+    <strong>Note from sender:</strong> {{ $note }}
+@endif
+
+<p>Link to view schedule:</p>
+
 <p><a href="{{ $link }}">{{ $link }}</a></p>
-<p>Thanks!</p>

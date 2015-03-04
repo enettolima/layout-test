@@ -809,6 +809,7 @@ $(document).ready(function(){
 $('#share-quickview-modal').on('show.bs.modal', function (e) {
     $("#share-quickview-link").val(null);
     $("#share-quickview-email").hide();
+    $("#share-quickview-note").hide().val(null);
 });
 
 $(document).on("click", "#share-quickview-send-email", function(e){
@@ -828,12 +829,14 @@ $(document).on("click", "#share-quickview-send-email", function(e){
             'recipients':recipients,
             'weekOf':weekOf,
             'currentStore':currentStore,
-            'link':$("#share-quickview-link").val()
+            'link':$("#share-quickview-link").val(),
+            'note':$("#share-quickview-note").val()
         }
     });
 
     emailReq.done(function(){
         alert("Your Email has been sent!");
+        $("#share-quickview-modal").modal('hide');
     });
 
 });
@@ -874,6 +877,7 @@ $(document).on("click", "#share-quickview-generate", function(e){
             $("#share-quickview-link").val(sharelink);
             $("#share-quickview-link").attr('disabled', false);
             $("#share-quickview-link-help").fadeIn();
+            $("#share-quickview-note").fadeIn();
 
             var employeeRequest = $.ajax({
                 url: "/lsvc/scheduler-employee-info/"+currentStore+"/"+weekOf,
