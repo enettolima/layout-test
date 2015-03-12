@@ -82,7 +82,8 @@ class CronRPMagentoInventorySync extends Command {
                 $rpProducts = array();
 
                 foreach ($rpProductsReq->data as $rpProduct) {
-                    $rpProducts[$rpProduct->item_sid] = (int) $rpProduct->qty;
+                    $rpProducts[$rpProduct->item_sid]['qty'] = (int) $rpProduct->qty;
+                    $rpProducts[$rpProduct->item_sid]['bin'] = $rpProduct->bin;
                 }
                 $this->info('Getting all inventory from RP complete.');// 
                 $summary['rpProducts'] = count($rpProducts);
@@ -97,7 +98,7 @@ class CronRPMagentoInventorySync extends Command {
 
             foreach ($mageProducts as $mageProductSid => $mageProductMeta) {
                 if (array_key_exists($mageProductSid, $rpProducts)) {
-                    $matchResults['matches'][] = array('sid' => $mageProductSid, 'qty' => $rpProducts[$mageProductSid], 'sku' => $mageProductMeta->sku, 'name' => $mageProductMeta->name);
+                    $matchResults['matches'][] = array('sid' => $mageProductSid, 'qty' => $rpProducts[$mageProductSid]['qty'], 'bin' => $rpProducts[$mageProductSid]['bin'], 'sku' => $mageProductMeta->sku, 'name' => $mageProductMeta->name);
                 } else {
                     $matchResults['non-matches'][] = array('sid' => $mageProductSid, 'qty' => null, 'sku' => $mageProductMeta->sku, 'name' => $mageProductMeta->name);
                 }
@@ -142,7 +143,7 @@ class CronRPMagentoInventorySync extends Command {
 
                 if (isset($results->matches->updated)) {
                     foreach ($results->matches->updated as $rez) {
-                        $inventoryLog->addInfo("UPDATED Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock);
+                        $inventoryLog->addInfo("UPDATED Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock . ' BINCHANGED:' . $rez->isNewBin . ' BIN:' . $rez->bin);
                     }
                     $summary['mageUpdated'] = count($results->matches->updated);
                 } else {
@@ -151,7 +152,7 @@ class CronRPMagentoInventorySync extends Command {
 
                 if (isset($results->matches->notchanged)) {
                     foreach ($results->matches->notchanged as $rez) {
-                        $inventoryLog->addInfo("NOCHANGE Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock);
+                        $inventoryLog->addInfo("NOCHANGE Date:" . $rez->procTime . ' SID:' . $rez->sid . ' SKU:' . $rez->sku . ' MAGEINV:' . $rez->mageInv . ' MAGEPROC:' . $rez->mageProc . ' RPINV:' . $rez->rpInv . ' NEWQTY:' . $rez->newQty . ' MAGEINSTOCK:' . $rez->mageInStock . ' BIN:' . $rez->bin);
                     }
                     $summary['mageNoChange'] = count($results->matches->notchanged);
                 } else {
