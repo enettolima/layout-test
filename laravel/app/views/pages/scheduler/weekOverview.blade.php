@@ -18,7 +18,7 @@
                             // Get the Sunday for this week
                             $lastSunday = strtotime('last sunday');
 
-                            $start = $lastSunday - ($pastWeekCount * 7 * 24 * 60 * 60);
+                            $start = strtotime("-$pastWeekCount weeks", $lastSunday);
 
                             for ($i=0; $i<$pastWeekCount+$futureWeekCount; $i++) {
                                 $ranges[] = array('start' => $start, 'end' => strtotime('+6days', $start));
