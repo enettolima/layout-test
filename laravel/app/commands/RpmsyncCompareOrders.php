@@ -184,7 +184,7 @@ class RpmsyncCompareOrders extends Command {
                         $rpQty = (int) $rpReceipt->data->qtysold;
 
                         $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
-                        if (($mageTotal === $rpTotal) || abs($mageTotal - $rpTotal) <= .01) {
+                        if (($mageTotal === $rpTotal) || abs($mageTotal - $rpTotal) <= .02) {
                             $matchResults['pass'][] = $testInfo;
                         } else {
                             $testInfo['mage'] = number_format($testInfo['mage'], 2);
