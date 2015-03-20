@@ -15,5 +15,5 @@ if (getenv("HTTP_HOST") != 'cdev.ebtpassport.com') {
   ga('send', 'pageview');
 
 </script>
-<?
+<?php
 }
