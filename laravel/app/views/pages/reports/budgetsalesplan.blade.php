@@ -5,12 +5,9 @@
 <div class="row">
     <div class="col-xs-2">
         Select Month: <select id="monthSelector" class="form-control">
-            <option value="2014-10">Oct 2014</option>
-            <option value="2014-11">Nov 2014</option>
-            <option selected value="2014-12">Dec 2014</option>
-            <option value="2015-01">Jan 2015</option>
-            <option value="2015-02">Feb 2015</option>
-            <option value="2015-03">Mar 2015</option>
+        @foreach($monthOptions as $monthOption)
+            <option value="{{ $monthOption['opt'] }}" {{ $monthOption['selected'] ? 'selected' : '' }} >{{ $monthOption['label'] }}</option>
+        @endforeach
         </select>
     </div>
 </div>
