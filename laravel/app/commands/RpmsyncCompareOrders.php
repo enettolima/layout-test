@@ -209,7 +209,7 @@ class RpmsyncCompareOrders extends Command {
     }
 
     protected function report($i, $c, $results) {
-        $showPass = false;
+        $showPass = true;
 
         if (count($results['fail']) > 0) {
             $failString = '';

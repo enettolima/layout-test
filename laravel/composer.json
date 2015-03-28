@@ -5,9 +5,9 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"zizaco/entrust": "dev-master",
-        "ccampbell/chromephp": "dev-master",
-        "rmccue/requests": ">=1.0"
+		"zizaco/entrust": "1.0.0",
+		"ccampbell/chromephp": "dev-master",
+		"rmccue/requests": ">=1.0"
 	},
 	"autoload": {
 		"classmap": [
