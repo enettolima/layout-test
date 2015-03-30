@@ -147,6 +147,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 "<th class='text-right'><strong>ADS</strong></th>",
 
+                "<th class='text-right'><strong>UPT</strong></th>",
+
                 "<th class='text-right'><strong>Hours</strong></th>",
 
                 // These are always the same. Maybe they should be displayed outside of table?
@@ -157,7 +159,6 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 "<th class='text-right' nowrap><strong>W/O Hours</strong></th>",
 
-                "<th class='text-right'><strong>UPT</strong></th>",
             "</tr>",
             "</thead>"
         );
