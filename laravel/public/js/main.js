@@ -46,6 +46,7 @@ function parseCurrency(x) {
 
 function parsePct(x)
 {
+    console.log(x);
 		var retval = {};
 		retval.input = x;
 		retval.isNegative = false;
@@ -58,6 +59,12 @@ function parsePct(x)
 				retval.isNotAvailable = true;
 				return retval;
 		}
+
+        // Deal with Infinity the same as isNaN
+        if (x == Number.POSITIVE_INFINITY || x == Number.NEGATIVE_INFINITY) {
+				retval.isNotAvailable = true;
+				return retval;
+        }
 
 		if (x < 0) {
 				retval.isNegative = true;

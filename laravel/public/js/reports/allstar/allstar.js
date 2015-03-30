@@ -143,6 +143,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 "<th class='text-right'><strong>Diff</strong></th>",
 
+                "<th class='text-right'><strong>PCT%</strong></th>",
+
                 "<th class='text-right'><strong>ADS</strong></th>",
 
                 "<th class='text-right'><strong>Hours</strong></th>",
@@ -153,7 +155,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
                 // "<td class='text-right'><strong>Store_Code</strong></td>",
 
-                "<th class='text-right' nowrap><strong>Sales W/O Hours</strong></th>",
+                "<th class='text-right' nowrap><strong>W/O Hours</strong></th>",
 
                 "<th class='text-right'><strong>UPT</strong></th>",
             "</tr>",
@@ -183,6 +185,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
             }
 
             tr.pDiffBud = parseCurrency(tr.DiffBud);
+            tr.pDiffPct = parsePct((tr.Sales - tr.EmpTarget) / tr.EmpTarget);
             tr.pADS = parseCurrency(tr.ADS);
             tr.pEmpTarget = parseCurrency(tr.EmpTarget);
             tr.pHours = parseNum(tr.Hours);
@@ -203,6 +206,9 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                     // "<td class='text-right'>"+tr.DiffBud+"</td>",
                     "<td class='text-right "+ ((tr.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffBud.parsed+"</td>",
+
+                    // "<td class='text-right'>"+tr.DiffBud+"</td>",
+                    "<td class='text-right "+ ((tr.pDiffPct.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffPct.parsed+"</td>",
 
                     // "<td class='text-right'>"+tr.ADS+"</td>",
                     "<td class='text-right "+ ((tr.pADS.isNegative) ? "text-danger" : "")+"'>"+tr.pADS.parsed+"</td>",
@@ -251,6 +257,9 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 // "<td class='text-right'>"+tr.DiffBud+"</td>",
                 "<td class='text-right "+ ((tots.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tots.pDiffBud.parsed+"</td>",
+
+                // "<td class='text-right'>"+tr.ADS+"</td>",
+                "<td class='text-right'></td>",
 
                 // "<td class='text-right'>"+tr.ADS+"</td>",
                 "<td class='text-right "+ ((tots.pADS.isNegative) ? "text-danger" : "")+"'>"+tots.pADS.parsed+"</td>",
