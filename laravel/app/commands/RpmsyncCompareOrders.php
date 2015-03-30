@@ -56,29 +56,29 @@ class RpmsyncCompareOrders extends Command {
                                     }
                              */
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'rpmsync:compare-orders';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'rpmsync:compare-orders';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Compare completed orders in Magento vs Receipts in Retail Pro.';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Compare completed orders in Magento vs Receipts in Retail Pro.';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     protected function valiDate($date, $date_format='Y-m-d')
     {
@@ -92,29 +92,34 @@ class RpmsyncCompareOrders extends Command {
     public function fire()
     {
 
-        $noisy = false;
-
         try {
 
-            if (! $noisy){
-                $this->info('Retrieving orders from Magento...');
-            }
+            $this->info('Retrieving orders from Magento...');
 
-	if ($this->argument('fromDate') && $this->argument('toDate')) {
+            if ($this->option('from') || $this->option('to')) {
 
-            $from = trim($this->argument('fromDate'));
-            if (! $this->valiDate($from)) {
-                throw new Exception("invalid from date '$from'");
-            }
+                if (! ($this->option('from') && $this->option('to'))) {
+                    throw new Exception("Invalid execution: if specifying either 'from' or 'to', both must be specified.");
+                }
 
-            $to = trim($this->argument('toDate'));
-            if (! $this->valiDate($to)) {
-                throw new Exception("invalid to date '$from'");
+                $from = trim($this->option('from'));
+                if (! $this->valiDate($from)) {
+                    throw new Exception("invalid from date '$from'");
+                }
+
+                $to = trim($this->option('to'));
+                if (! $this->valiDate($to)) {
+                    throw new Exception("invalid to date '$from'");
+                }
+
+                if (strtotime($to) < strtotime($from)) {
+                    throw new Exception("Invalid execution: 'to' date is earlier than 'from' date and you aren't Marty McFly.");
+                }
+
+            }else{
+                $from = date("Y-m-d", strtotime("7 days ago"));
+                $to = date("Y-m-d");
             }
-	}else{
-		$from = date("Y-m-d", strtotime("7 days ago"));
-		$to = date("Y-m-d");
-	}
 
             $daysDiff = (strtotime($to) - strtotime($from)) / 86400;
 
@@ -132,26 +137,13 @@ class RpmsyncCompareOrders extends Command {
                 $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
                 $mageURL = 'https://shop.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
 
-                if ($noisy) {
-                    $this->info($mageURL);
-                }
-
                 $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
                     $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
 
                     if (count($chunkOrders) > 0) {
-
-                        if ($noisy) {
-                            $this->info('Got ' . count($chunkOrders) . ' orders');
-                        }
-
                         $allMageOrders = array_merge($allMageOrders, $chunkOrders);
-                    } else {
-                        if ($noisy) {
-                            $this->info('Got ' . count($chunkOrders) . ' orders!!!!');
-                        }
-                    }
+                    } 
                 }
 
                 $this->info("$chunkFrom to $chunkTo: Got " . count($chunkOrders) . " orders.");
@@ -170,6 +162,11 @@ class RpmsyncCompareOrders extends Command {
 
                     $rpReceipt = $api->get('/rproorders/order/' . $mageOrder->increment_id);
 
+                    $metaArray = array();
+                    $metaArray['OWT'] = $mageOrder->order_was_taxed ? "Y" : "N";
+                    $metaArray['SWC'] = $mageOrder->shipping_was_charged ? "Y" : "N";
+                    $metaArray['SWT'] = $mageOrder->shipping_was_taxed ? "Y" : "N";
+
                     if (isset($rpReceipt->data)) {
 
                         $matchResults['pass'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'yes');
@@ -177,13 +174,14 @@ class RpmsyncCompareOrders extends Command {
                         $mageTotal = (float) $mageOrder->total;
                         $rpTotal = (float) $rpReceipt->data->totalreceipt;
 
-                        $mageTax = (float) $mageOrder->tax;
+                        $mageTax = (float) $mageOrder->order_tax_amount;
                         $rpTax = (float) $rpReceipt->data->ext_tax;
 
                         $mageQty = (int) $mageOrder->qtysold;
                         $rpQty = (int) $rpReceipt->data->qtysold;
 
                         $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
+
                         if (($mageTotal === $rpTotal) || abs($mageTotal - $rpTotal) <= .02) {
                             $matchResults['pass'][] = $testInfo;
                         } else {
@@ -198,7 +196,7 @@ class RpmsyncCompareOrders extends Command {
 
                     //report($mageOrder->increment_id, $matchMatches, $matchErrors);
                     $dateString = date("Y-m-d H:i:s", strtotime($mageOrder->created_at));
-                    $this->report($mageOrder->increment_id, $dateString, $matchResults);
+                    $this->report($mageOrder->increment_id, $dateString, $matchResults, $metaArray);
                 }
             }
 
@@ -208,47 +206,48 @@ class RpmsyncCompareOrders extends Command {
         }
     }
 
-    protected function report($i, $c, $results) {
-        $showPass = true;
+    protected function report($i, $c, $results, $metaArray) {
+        $metaString = "(OWT:{$metaArray['OWT']} SWC:{$metaArray['SWC']} SWT:{$metaArray['SWT']})";
 
         if (count($results['fail']) > 0) {
             $failString = '';
 
             foreach ($results['fail'] as $fail) {
-                $failString .= "[{$fail['datapoint']} mage={$fail['mage']} rp={$fail['rp']}] ";
+                $failString .= "[{$fail['datapoint']} mage={$fail['mage']} rp={$fail['rp']}]";
             }
 
-            $this->info("FAIL $i on $c => $failString");
+            $this->info("FAIL $i on $c $metaString => $failString");
         } else {
-            if ($showPass) {
-                $this->info("PASS $i");
+            if ($this->option('showpass')) {
+                $this->info("PASS $i on $c $metaString");
             }
         }
     }
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return array(
-			array('fromDate', InputArgument::OPTIONAL, 'From Date'),
-			array('toDate', InputArgument::OPTIONAL, 'From Date'),
-		);
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return array(
+        );
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-			// array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
-		);
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array(
+            // array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+            array('from', null, InputOption::VALUE_OPTIONAL, 'From Date'),
+            array('to', null, InputOption::VALUE_OPTIONAL, 'To Date'),
+            array('showpass', null, InputOption::VALUE_NONE, 'Show Passing Orders'),
+        );
+    }
 
 }
