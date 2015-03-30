@@ -213,6 +213,9 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                     // "<td class='text-right'>"+tr.ADS+"</td>",
                     "<td class='text-right "+ ((tr.pADS.isNegative) ? "text-danger" : "")+"'>"+tr.pADS.parsed+"</td>",
 
+                    //"<td class='text-right'>"+tr.UPT+"</td>",
+                    "<td class='text-right'>"+tr.pUPT.parsed+"</td>",
+
                     // "<td class='text-right'>"+tr.Hours+"</td>",
                     "<td class='text-right'>"+tr.pHours.parsed+"</td>",
 
@@ -221,13 +224,10 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                     // "<td class='text-right'>"+tr.MonthSales+"</td>",
                     // "<td class='text-right'>"+tr.StrAboveMonthGoal+"</td>",
 
-
                     // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
                     "<td class='text-right "+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
                     // "<td class='text-right'>"+tr.Store_Code+"</td>",
 
-                    //"<td class='text-right'>"+tr.UPT+"</td>",
-                    "<td class='text-right'>"+tr.pUPT.parsed+"</td>",
                 "</tr>"
             );
         }
@@ -264,6 +264,9 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 // "<td class='text-right'>"+tr.ADS+"</td>",
                 "<td class='text-right "+ ((tots.pADS.isNegative) ? "text-danger" : "")+"'>"+tots.pADS.parsed+"</td>",
 
+                // "<td class='text-right'>"+tr.Store_Code+"</td>",
+                "<td class='text-right'>"+tots.pUPT.parsed+"</td>",
+
                 // "<td class='text-right'>"+tr.Hours+"</td>",
                 "<td class='text-right'>"+tots.pHours.parsed+"</td>",
 
@@ -275,8 +278,6 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
                 "<td class='text-right "+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
-                // "<td class='text-right'>"+tr.Store_Code+"</td>",
-                "<td class='text-right'>"+tots.pUPT.parsed+"</td>",
             "</tr>"
         );
 
