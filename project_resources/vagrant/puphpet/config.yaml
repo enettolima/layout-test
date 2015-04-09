@@ -74,7 +74,7 @@ cron:
     install: '1'
     jobs: {  }
 firewall:
-    install: '1'
+    install: '0'
     rules: {  }
 apache:
     install: '1'
@@ -178,6 +178,7 @@ php:
             - cli
             - intl
             - mcrypt
+            - sybase
         pear: {  }
         pecl:
             - pecl_http
@@ -230,7 +231,9 @@ mysql:
     settings:
         version: '5.6'
         root_password: '123'
-        override_options: {  }
+        override_options: 
+            mysqld: 
+                bind-address: '0.0.0.0'
     adminer: 0
     users:
         4uQqKj51BIwB:
