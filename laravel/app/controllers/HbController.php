@@ -34,11 +34,22 @@ class HbController extends BaseController
 
         // TEST FOR SETTINGS THAT SHOULDN'T BE
         $results['set'] = array();
+
+        // Mock RPA Allows users to log in with a valid RP User + any password for troubleshooting
+        // purposes.
         if (array_key_exists('mock_rpro_auth', $_ENV) && $_ENV['mock_rpro_auth'] === TRUE) {
             $errors = TRUE;
             $results['set'][] = array('string' => 'mockrpa', 'ok' => FALSE);
         } else {
             $results['set'][] = array('string' => 'mockrpa', 'ok' => TRUE);
+        }
+
+        // Make sure Debug mode isn't on, which will spit out all of our settings with any error
+        if (Config::get('app.debug')) {
+            $errors = TRUE;
+            $results['set'][] = array('string' => 'debug', 'ok' => FALSE);
+        } else {
+            $results['set'][] = array('string' => 'debug', 'ok' => TRUE);
         }
 
         if ($errors) {
