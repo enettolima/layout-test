@@ -678,7 +678,7 @@ function loadSchedule(strDate) {
 
                 operationalHours.done(function(operationalHours){
 
-                    if ((typeof operationalHours !== "undefined") && (typeof operationalHours.data !== "undefined")) {
+                    if ((typeof operationalHours !== "undefined") && (typeof operationalHours.data !== "undefined") && (operationalHours.data.length != 0)) {
 
                         var opHoursData = operationalHours.data[0];
 
