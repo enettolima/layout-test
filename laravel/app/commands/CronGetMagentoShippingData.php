@@ -112,7 +112,10 @@ class CronGetMagentoShippingData extends Command {
                     $outO->Address1 = $mageOrder->shipaddress_address[0];
                     if (isset($mageOrder->shipaddress_address[1])) {
                         $outO->Address2 = $mageOrder->shipaddress_address[1];
+                    } else {
+                        $outO->Address2 = '';
                     }
+                        
                     $outO->City = $mageOrder->shipaddress_city;
                     $outO->State = $mageOrder->shipaddress_state;
                     $outO->Zip = $mageOrder->shipaddress_zip;
