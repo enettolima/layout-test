@@ -20,3 +20,5 @@ Artisan::add(new CronWeatherGetAlerts);
 Artisan::add(new RpmsyncCompareOrders);
 
 Artisan::add(new CronRPMagentoInventorySync);
+
+Artisan::add(new CronGetMagentoShippingData);
