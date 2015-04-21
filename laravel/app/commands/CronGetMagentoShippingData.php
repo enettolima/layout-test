@@ -42,6 +42,9 @@ class CronGetMagentoShippingData extends Command {
     {
         try {
 
+            // Try to open file first; might not be able to
+            $fp = fopen($_ENV['magento_shipping_csv_directory'] . '/mageship.csv', 'w');
+
             $this->info('Retrieving orders from Magento...');
 
             if ($this->option('from') || $this->option('to')) {
@@ -124,7 +127,6 @@ class CronGetMagentoShippingData extends Command {
                 }
 
 
-                $fp = fopen($_ENV['magento_shipping_csv_directory'] . '/mageship.csv', 'w');
 
                 fputcsv($fp, array_keys((array) $orderData[0]));
 
