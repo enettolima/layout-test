@@ -123,6 +123,11 @@ class CronGetMagentoShippingData extends Command {
                     $outO->State = $mageOrder->shipaddress_state;
                     $outO->Zip = $mageOrder->shipaddress_zip;
                     $outO->Phone = $mageOrder->shipaddress_phone;
+                    $outO->Email = $mageOrder->shipaddress_email;
+                    $outO->ebt_shipper = 'V8780W';
+                    $outO->ebt_web_ref1 = 'WEB_ECOM';
+                    $outO->ebt_web_ref2 = 'WEB' . $mageOrder->increment_id;
+                    $outO->ebt_ups_service = 'Ground';
                     $orderData[] = $outO;
                 }
 
