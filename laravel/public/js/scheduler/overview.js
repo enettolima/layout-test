@@ -3,11 +3,13 @@ var currentEmployees  = Array;
 var currentStore      = parseInt($("#current-store").html());
 var opHours = null;
 
+/*
 $(document).bind("ajaxSend", function(){
     $("#page-cover").css("opacity",0.15).fadeIn(100);
 }).bind("ajaxComplete", function(){
     $("#page-cover").hide();
 });
+*/
 
 function populateEmployeeSelector(empMasterDatabase, currentEmployees) {
 

@@ -8,11 +8,13 @@ var dayOffset = null;
 var inOuts = [];
 var goals = [];
 
+/*
 $(document).bind("ajaxSend", function(){
     $("#page-cover").css("opacity",0.15).fadeIn(100);
 }).bind("ajaxComplete", function(){
     $("#page-cover").hide();
 });
+*/
 
 $(document).ready(function() {
 

@@ -107,7 +107,7 @@
     <script type="text/javascript" charset="utf-8">var userCanManage = true;</script>  
     @endif
 
-    <script src="/js/jquery-git.js"></script>
+    <script src="/js/jquery.js"></script>
 
     <script src="/js/jquery-ui-1.10.3.custom.js"></script>
 
