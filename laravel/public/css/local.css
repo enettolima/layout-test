@@ -270,3 +270,10 @@ table.tablesorter th.tablesorter-header {
     cursor: pointer;
     padding-right:16px;
 }
+/*
+ * Document search css
+ */
+.file-path{
+	font-size: 90%;
+	font-weight: 500;
+}

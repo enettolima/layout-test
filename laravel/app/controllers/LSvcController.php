@@ -149,24 +149,114 @@ class LSvcController extends BaseController
 
     public function deleteHoursOverride()
     {
-        // DELETE http://domain.com/lsvc/hours-override 
+        // DELETE http://domain.com/lsvc/hours-override
         $storeNumber = Request::segment(3);
     }
 
 
     public function postDocsSearch()
     {
-        $json = Input::getContent();
+			//Get data sent by the docs.js
+			$data = Input::getContent();
+			$vars = json_decode($data);
+			$params2 = array();
+			$params2['hosts'] = array($_ENV['ebt_elasticsearch_host']);
+			//Start the elasticsearch client plugin
+			$client = new Elasticsearch\Client($params2);
+			$selected_path 	= $vars->folder;
+			$keywords 			= $vars->keyword;
+			if($selected_path == '#' || $selected_path=="0"){
+				$selected_path='';
+			}
+			if($keywords == ''){
+				$keywords='*';
+			}
 
-        $req = Requests::post(
-            'http://ebtpassport.com:9200/mydocs/doc/_search',
-            array(),
-            $json
-        );
+			//build the query for elasticsearch
+			$query = '{
+				"query": {
+					"bool": {
+						"must": [
+							{
+								"regexp": {
+									"path.virtual": "'.$selected_path.'.*"
+								}
+							},
+							{
+								"query_string": {
+									"fields" : ["content","file.filename"],
+									"default_operator": "or",
+									"query": "'.$keywords.'",
+									"fuzziness": 2,
+									"use_dis_max" : true
+								}
+							}
+						]
+					}
+				}
+			}';
 
-        return $req->body;
-
+			//Set index and type for elasticsearch -- using dir previously set as alias for the eb_documents index
+			$params['index']                 = 'dir';
+			$params['type']                  = 'doc';
+			$params['body']                  = $query = trim(preg_replace('/\s+/', ' ', $query));
+			$results                         = $client->search($params);
+			$res=[];
+			foreach($results['hits']['hits'] as $key => $hit){
+				$res[$key]=$hit['_source']['file'];
+			}
+			$result['data']                  =$res;
+			$result['total']                 =$results['hits']['total'];
+			//Return json to the docs.js to append the results on the screen
+			return Response::json($results);
     }
+
+		public function getFolderSearch()
+		{
+			//Get data sent by the docs.js
+			$selected_path =  $_GET['id'];
+			if($selected_path == '#'){
+				$selected_path='';
+			}
+			//build the query for elasticsearch
+			$query = '{
+				"_source": [
+					"virtual",
+					"name"
+				],
+				"query": {
+					"bool": {
+						"must": [
+							{
+								"regexp": {
+									"virtual": "'.$selected_path.'/[^/]*"
+								}
+							}
+						]
+					}
+				}
+			}';
+
+			$params2                           = array();
+			$params2['hosts']                  = array($_ENV['ebt_elasticsearch_host']);
+			$client                            = new Elasticsearch\Client($params2);
+			//Set index and type for elasticsearch -- using dir previously set as alias for the eb_documents index
+			$params['index']                   = 'dir';
+			$params['type']                    = 'folder';
+			$params['body']                    = $query = trim(preg_replace('/\s+/', ' ', $query));
+			$results                           = $client->search($params);
+			$result['data']                    = $results['hits']['hits'];
+			$res=[];
+			if(count($results['hits']['hits'])>0){
+				foreach($results['hits']['hits'] as $key => $hit){
+					$res[$key]['id']=$hit['_source']['virtual'];
+					$res[$key]['text']=$hit['_source']['name'];
+					$res[$key]['children']=true;
+				}
+			}
+			//Return json to the docs.js to append the results on jstree
+			return Response::json($res);
+		}
 
     public function postSchedulerEmailQuickview()
     {
@@ -216,12 +306,12 @@ class LSvcController extends BaseController
                 if ($userObj = User::where('username', $user)->first()){
                     $returnval[$user]['email'] = $userObj->preferred_email;
                     $returnval[$user]['full_name'] = $userObj->full_name;
-                } 
+                }
             }
         }
 
         return Response::json(array(
-            'storeNumber' => $storeNumber, 
+            'storeNumber' => $storeNumber,
             'weekOf' => $weekOf,
             'users' => $returnval
         ));
@@ -389,7 +479,7 @@ class LSvcController extends BaseController
             $newData = json_encode($metaArray);
             $updateSQL = "UPDATE schedule_day_meta set data = '$newData' where id = {$RES[0]->{'id'}}";
             $updateRES = DB::connection('mysql')->update($updateSQL);
-             
+
             if ($updateRES) {
 
                 $nextSunday = date("Y-m-d", strtotime('next sunday', strtotime($weekOf)));
@@ -445,7 +535,7 @@ class LSvcController extends BaseController
                 $newData = json_encode($metaArray);
                 $addData['type'] = 'update';
                 $addData['SQL'] = "UPDATE schedule_day_meta set data = '$newData' where id = {$RES[0]->{'id'}}";
-            } 
+            }
         } else {
             $metaArray = array();
             $metaArray['sequence'][] = $userId;
@@ -487,7 +577,7 @@ class LSvcController extends BaseController
             // Clear it just in case there's any metadata hanging around
             // Todo: this is probably pretty reckless. I'm not protecting any input.
 
-            // Is the destination schedule really empty? We are having problems with copies blowing away 
+            // Is the destination schedule really empty? We are having problems with copies blowing away
             // existing schedules
             $copyToRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
 
@@ -496,7 +586,7 @@ class LSvcController extends BaseController
                 if (count($data->sequence) !== 0) {
                     throw new Exception("Destination schedule $schedDateTo for $storeNumber not really empty");
                 }
-            } 
+            }
 
             DB::connection('mysql')->delete("delete from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
 
@@ -523,7 +613,7 @@ class LSvcController extends BaseController
             $ioRES = DB::connection('mysql')->select($ioSQL);
 
             // Step 3: clear existing in/outs just in case
-            
+
             // Before: Probably DST Problem
             // $toWeekBoundary = date('Y-m-d', strtotime($schedDateTo) + (86400 * 7));
             // After:
@@ -543,7 +633,7 @@ class LSvcController extends BaseController
             // Before: Probably DST Problem
             //$dayDiff = (strtotime($schedDateTo) - strtotime($schedDateFrom)) / 86400;
 
-            // After: 
+            // After:
             $dtSchedDateTo = new DateTime($schedDateTo);
             $dtSchedDateFrom = new DateTime($schedDateFrom);
             $dayDiff = $dtSchedDateTo->diff($dtSchedDateFrom)->format("%a");
@@ -624,14 +714,14 @@ class LSvcController extends BaseController
 
             $SQL = "
                 INSERT INTO scheduled_inout (
-                    associate_id, 
-                    store_id, 
-                    date_in, 
+                    associate_id,
+                    store_id,
+                    date_in,
                     date_out
                 ) VALUES (
-                    '$userId', 
-                    $storeNumber, 
-                    '$in', 
+                    '$userId',
+                    $storeNumber,
+                    '$in',
                     '$out'
                 )
             ";
@@ -645,7 +735,7 @@ class LSvcController extends BaseController
 
                 return Response::json(array(
                     'status' => 1,
-                    'id' => $id, 
+                    'id' => $id,
                     'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
                     'schedule' => $this->getDaySchedule($storeNumber, $date)
                 ));
@@ -668,11 +758,11 @@ class LSvcController extends BaseController
             SELECT
                 s.`id`,
                 s.`associate_id`,
-                s.`store_id`, 
-                s.`date_in`, 
-                s.`date_out` 
-            FROM 
-                scheduled_inout s 
+                s.`store_id`,
+                s.`date_in`,
+                s.`date_out`
+            FROM
+                scheduled_inout s
             WHERE
                 s.`store_id` = $storeNumber AND
                 DATE(date_in) = '$date';
@@ -714,7 +804,7 @@ class LSvcController extends BaseController
         if (! isset($metaRES[0])) {
             $metaRES[0] = (object) '';
             $metaRES[0]->{'data'} = null;
-        } 
+        }
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
 
@@ -753,7 +843,7 @@ class LSvcController extends BaseController
         if (! isset($metaRES[0])) {
             $metaRES[0] = (object) '';
             $metaRES[0]->{'data'} = null;
-        } 
+        }
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
 
@@ -774,20 +864,20 @@ class LSvcController extends BaseController
 
             /*
              * Following is a copy from /storeDaySchedule below, which
-             * is not the proper way to do this, but Slim's scope is messing with 
+             * is not the proper way to do this, but Slim's scope is messing with
              * me. TODO: Refactor this to avoid obvious DRY breakage
-             */ 
+             */
 
             // $querySchedule = "
             $scheduleSQL = "
                 SELECT
                     s.`id`,
                     s.`associate_id`,
-                    s.`store_id`, 
-                    s.`date_in`, 
-                    s.`date_out` 
-                FROM 
-                    scheduled_inout s 
+                    s.`store_id`,
+                    s.`date_in`,
+                    s.`date_out`
+                FROM
+                    scheduled_inout s
                 WHERE
                     s.`store_id` = $storeNumber AND
                     DATE(date_in) = '$onDate'
@@ -817,7 +907,7 @@ class LSvcController extends BaseController
 
             $summary['hoursByDate'][$day] = 0;
 
-            $summary['hoursByDayNum'][$dayNum] = 0; 
+            $summary['hoursByDayNum'][$dayNum] = 0;
 
 
             foreach ($val['schedule'] as $inoutVal) {
@@ -845,7 +935,7 @@ class LSvcController extends BaseController
 
             // Ill-advised sorting method START
             // TODO: This probably has the potential to break a lot of things
-            // The point of this is to re-sort the employees in the schedule based on their 
+            // The point of this is to re-sort the employees in the schedule based on their
             // sequence in the meta array
             if (isset($metaArray) && array_key_exists('sequence', $metaArray)) {
                 $sorted = array();
@@ -895,8 +985,8 @@ class LSvcController extends BaseController
                 DailyBudget,
                 BDWeekday,
                 HR_PROFILE,
-                PROF_HOUR_NEW, 
-                PROF_PER, 
+                PROF_HOUR_NEW,
+                PROF_PER,
                 HR_BUDGET,
                 Date,
                 HR_OPEN_MIL,
@@ -942,7 +1032,7 @@ class LSvcController extends BaseController
 
         // Before: Probably DST Problem
         // $to = date("m/d/Y", strtotime($weekOf) + (86400 * 6));
-        // After: 
+        // After:
         $to = date("m/d/Y", strtotime('+6days', strtotime($weekOf)));
 
         $targetsSQL = "
@@ -969,7 +1059,7 @@ class LSvcController extends BaseController
                 'byEmp' => array()
             ),
             'total' => 0.00,
-            'minPollTimestamp' => null 
+            'minPollTimestamp' => null
         );
 
         foreach ($targetsRES as $result) {
@@ -1053,9 +1143,9 @@ class LSvcController extends BaseController
         $returnval = array();
 
         if (! Entrust::hasRole('Store' . $storeNumber)) {
-            $returnval['status'] = false; 
+            $returnval['status'] = false;
         } else {
-            $returnval['status'] = true; 
+            $returnval['status'] = true;
             Session::set('storeContext', $storeNumber);
         }
 

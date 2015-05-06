@@ -1,6 +1,6 @@
 <?php
 
-class DocumentsController extends BaseController 
+class DocumentsController extends BaseController
 {
     /* Require Auth on Everything Here */
     public function __construct()
@@ -11,7 +11,15 @@ class DocumentsController extends BaseController
     public function getIndex()
     {
         return View::make('pages.documents.index', array(
-            'extraJS' => array ('/js/elasticsearch.jquery.min.js')
+					'extraJS' => array (
+						'//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js',
+						'/js/elasticsearch.jquery.min.js',
+						'/js/jstree.min.js',
+						'/js/docs.js'
+					),
+					'extraCSS' => array (
+						'/css/jstree.css'
+					)
         ));
     }
 
