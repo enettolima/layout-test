@@ -2,143 +2,54 @@
 
 @section('content')
 
-<script type="text/javascript" charset="utf-8">
-
-function doSearch(searchstring) {
-        $("#spinny").show();
-
-        $("#resultsHeader").hide();
-
-        event.preventDefault();
-
-        $("#results").empty();
-
-        var data = {
-            query: {
-                match: {
-                    _all: searchstring
-                }
-            },
-            fields : ["filename", "url", "path.virtual", "lastdate", "date"],
-            size : 1000,
-            highlight : {
-                "fields" : {
-                    "content" : {}
-                }
-            }
-        }; 
-
-        $.ajax({
-            url: '/lsvc/docs-search',
-            type: 'POST',
-            contentType: 'application/json; charset=UTF-8',
-            crossDomain: true,
-            dataType: 'json',
-            data: JSON.stringify(data),
-            success: function(response) {
-
-                $("#spinny").hide();
-
-                var data = response.hits.hits;
-                var doc_ids = [];
-                var source = null;
-                var content = '';
-
-                if (data.length > 0) {
-                    $("#resultsHeader").html(data.length + " Results").show();
-                    for (var i = 0; i < data.length; i++) {
-
-                        source = data[i].fields;
-
-                        var url = source["file.url"][0];
-
-                        var dateString = undefined;
-
-                        if (typeof source["meta.date"] !== "undefined") {
-
-                            var formattedDate = new Date(source["meta.date"][0]);
-
-                            var d = formattedDate.getDate();
-                            var m =  formattedDate.getMonth();
-                            m += 1;  // JavaScript months are 0-11
-                            var y = formattedDate.getFullYear();
-
-                            dateString = m + "/" + d + "/" + y;
-                        }
-
-                        var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
-
-                        if (url) {
-
-                            var highlight = "Summary Not Available";
-
-                            if (data[i].highlight) {
-
-                                highlight = data[i].highlight.content[0];
-
-                             }
-
-                            var fixed = url.match(re)[1];
-
-                            var filename = source["file.filename"][0];
-
-                            var full = "/docs" + source["path.virtual"][0] + encodeURIComponent(filename);
-
-                            var row = "";
-
-                            row += "<li>";
-                            row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
-                            row += "<ul>";
-                            if (typeof dateString !== "undefined") {
-                                row += "<li><strong>File Date:</strong> "+dateString+"</li>";
-                            }
-                            row += "<li>"+highlight+"</li>";
-                            row += "</ul>";
-                            row += "</li>";
-
-                            $("#results").append(row); 
-                        }
-
-                    }
-
-                } else {
-                    $("#resultsHeader").html("No Results").show();
-                }
-
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                var jso = jQuery.parseJSON(jqXHR.responseText);
-                error_note('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
-            }
-        });
-}
-
-$(document).ready(function(){
-
-    if ($('.searchfield').val()) {
-        doSearch($('.searchfield').val());
-    }
-
-    $("form").on("submit", function(event){
-        doSearch($('.searchfield').val());
-    });
-});
-
-</script>
-
 <div class="doc-search">
 
-<h3>Earthbound Documents</h3>
+	<h3>Earthbound Documents</h3>
 
-<form role="form" method="GET">
-  <div class="form-group">
-      <input value="<?php echo Input::get('search'); ?>" type="text" class="form-control searchfield" name="search" name="search" placeholder="Search Documents" autofocus>
-  </div>
-  <input val="Search" type="submit" class="btn btn-default">&nbsp;<span style="display:none;" id="spinny"><img src="/images/ajax-loader-arrows.gif"></span>
-</form>
+	<form role="form" method="GET">
+		<!--<div class="form-group">-->
+		<div class="input-group">
+			<input value="<?php echo Input::get('search'); ?>" type="text" class="form-control searchfield"
+				name="search" id="search" placeholder="Search Documents" autofocus>
+			<span class="input-group-addon">
+					<i class="fa fa-search" id="textbox-icon"></i>
+			</span>
+		</div><!-- End of input-group -->
+		<input val="Search" type="submit" class="btn btn-default hidden">&nbsp;
+		<span style="display:none;" id="spinny">
+		<img src="/images/ajax-loader-arrows.gif"></span>
+	</form>
 
-<ul id="results"></ul>
+	<ul class = "breadcrumb" >
+		<li >
+			<a >/Root</a >
+		</li >
+	</ul >
 
-</div>
+		<div id="error-container">
+		</div>
 
+		<div class = "row clearfix" >
+			<div class = "col-md-8 column" >
+					<div class = "col-md-10" >
+							<div class = "row-fluid" >
+									<div class = "results span11" >
+											<input type="submit" class="btn btn-default submit-filter hidden" >
+											<input type="hidden" id="folder_selected" name="folder_selected" >
+									</div >
+									<ul id="results">
+									</ul>
+							</div >
+					</div >
+			</div >
+			<div class = "col-md-4 column well" >
+					<input class="btn btn-default" type="button" value="Reset" id="reset-tree">
+					<div id="jstree">
+					</div >
+					<div id = "lazy" class = "demo" ></div >
+			</div >
+			<div class = "col-md-12 column" >
+			</div >
+	</div >
+</div><!-- End of doc-search -->
 @stop
