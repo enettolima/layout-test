@@ -62,8 +62,8 @@ body {
 }
 
 #schedule-graphic-graph {
-    background:#efefef; 
-    width:912px; 
+    background:#efefef;
+    width:912px;
     height:544px
 }
 
@@ -276,4 +276,19 @@ table.tablesorter th.tablesorter-header {
 .file-path{
 	font-size: 90%;
 	font-weight: 500;
+}
+
+.tree-container{
+	margin-right: -2px;
+}
+
+.breadcrumb-container{
+	height: 38px;
+	margin-bottom: 18px;
+}
+#spinny{
+	width: 100%;
+  float: left;
+  text-align: center;
+  margin-top: 36px;
 }

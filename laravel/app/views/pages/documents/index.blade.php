@@ -16,40 +16,43 @@
 			</span>
 		</div><!-- End of input-group -->
 		<input val="Search" type="submit" class="btn btn-default hidden">&nbsp;
-		<span style="display:none;" id="spinny">
-		<img src="/images/ajax-loader-arrows.gif"></span>
 	</form>
 
-	<ul class = "breadcrumb" >
-		<li >
-			<a >/Root</a >
-		</li >
-	</ul >
+	<div class="breadcrumb-container">
+		<ul class = "breadcrumb" >
+			<li>
+				<a>/Root</a>
+			</li>
+		</ul>
+	</div>
 
-		<div id="error-container">
-		</div>
 
-		<div class = "row clearfix" >
-			<div class = "col-md-8 column" >
-					<div class = "col-md-10" >
-							<div class = "row-fluid" >
-									<div class = "results span11" >
-											<input type="submit" class="btn btn-default submit-filter hidden" >
-											<input type="hidden" id="folder_selected" name="folder_selected" >
-									</div >
-									<ul id="results">
-									</ul>
-							</div >
-					</div >
-			</div >
-			<div class = "col-md-4 column well" >
-					<input class="btn btn-default" type="button" value="Reset" id="reset-tree">
-					<div id="jstree">
-					</div >
-					<div id = "lazy" class = "demo" ></div >
-			</div >
-			<div class = "col-md-12 column" >
-			</div >
+
+	<div class = "row clearfix tree-container" >
+		<div class = "col-md-8 column" >
+				<div id="error-container">
+				</div>
+				<div class = "col-md-10" >
+						<div class = "row-fluid" >
+								<div class = "results span11" >
+										<input type="submit" class="btn btn-default submit-filter hidden" >
+										<input type="hidden" id="folder_selected" name="folder_selected" >
+								</div >
+								<span style="display:none;" id="spinny">
+									<img height="62" width="62" src="/images/spinner.gif">
+								</span>
+								<ul id="results">
+								</ul>
+						</div >
+				</div >
+		</div >
+		<div class = "col-md-4 column well" >
+				<input class="btn btn-default" type="button" value="Reset" id="reset-tree">
+				<div id="jstree">
+				</div >
+		</div >
+		<div class = "col-md-12 column" >
+		</div >
 	</div >
 </div><!-- End of doc-search -->
 @stop

@@ -78,7 +78,7 @@ function doSearch(searchstring) {
 				}
 			} else {
 				//$("#resultsHeader").html("No Results").show();
-				showErrorMessage("#error-container", "<strong>Ooops!</strong> No results found! Please try again.","alert-danger", true, 3000);
+				showErrorMessage("#error-container", "Document not found! Please try again.","alert-danger", true, 2000);
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -95,7 +95,7 @@ function showErrorMessage(container, message, type, auto_hide, hide_timeout){
 	$(container).slideDown("fast", function() {});
 
 	if(auto_hide){
-		$(container).delay(hide_timeout).fadeOut('slow');
+		$(container).delay(hide_timeout).slideUp();
 	}
 }
 
@@ -145,8 +145,9 @@ $(function () {
 	$("#reset-tree").on('click', function (e) {
 		$('#jstree').jstree('close_all');
 		updateSelectedFolder("0");
+		$('#jstree').jstree("deselect_all");
 		doSearch($('.searchfield').val());
-		$('.breadcrumb').hide();
+		$('.breadcrumb').slideUp();
 	});
 
 	//To hide the breadcrumb on the first load
@@ -167,7 +168,6 @@ $(function () {
 				$('#path').val(data.instance.get_node(data.selected[0]).id);
 				updateSelectedFolder(data.instance.get_node(data.selected[0]).id);
 				$('.breadcrumb li a').text(data.instance.get_node(data.selected[0]).id);
-				$('.breadcrumb').show();
 				$('.breadcrumb').slideDown();
 				//$('#search-form').submit();
 				doSearch($('.searchfield').val());
