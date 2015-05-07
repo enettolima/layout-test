@@ -17,14 +17,10 @@
 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-<!-- Fuel UX CSS -->
-<!--<link href="/css/fuelux.css" rel="stylesheet">-->
-
 <!-- jQuery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
 <script src="/js/jquery-git.js"></script>
 <script src="/js/jquery.cookie.js"></script>
-
 <script src="/js/main.js" type="text/javascript" charset="utf-8"></script>
 
 <?php 
