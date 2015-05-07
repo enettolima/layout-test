@@ -88,6 +88,9 @@ function doSearch(searchstring) {
 	});
 }
 
+/*
+ * Function to show and hide the error container
+ */
 function showErrorMessage(container, message, type, auto_hide, hide_timeout){
 	var error_box = '<div class="alert '+type+' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+message+'</div>';
 	$(container).html(error_box);
@@ -155,24 +158,45 @@ $(function () {
 
 	//Start jstree on the body load
 	$('#jstree').jstree({
-			'core': {
-				'data': {
-					"url": "/lsvc/folder-search",
-					'data' : function (node) {
-						return { 'id' : node.id };
-					}
+		'core': {
+			'data': {
+				"url": "/lsvc/folder-search",
+				'data' : function (node) {
+					return { 'id' : node.id };
 				}
 			}
-		}).on("changed.jstree", function (e, data) {
-			if (data.selected.length) {
-				$('#path').val(data.instance.get_node(data.selected[0]).id);
-				updateSelectedFolder(data.instance.get_node(data.selected[0]).id);
-				$('.breadcrumb li a').text(data.instance.get_node(data.selected[0]).id);
-				$('.breadcrumb').slideDown();
-				//$('#search-form').submit();
-				doSearch($('.searchfield').val());
+		},
+		"types" : {
+			"root" : {
+				"icon" : "glyphicon glyphicon-flash",
+				"valid_children" : ["default"]
+			},
+			"default" : {
+				"icon" : "glyphicon glyphicon-folder-close",
+				"valid_children" : ["default","file"]
+			},
+			"file" : {
+				"icon" : "glyphicon glyphicon-file",
+				"valid_children" : []
 			}
+		},
+		"plugins" : [
+			"contextmenu", "sort", "types", "wholerow"
+		]
+	}).on("changed.jstree", function (e, data) {
+		if (data.selected.length) {
+			$('#path').val(data.instance.get_node(data.selected[0]).id);
+			updateSelectedFolder(data.instance.get_node(data.selected[0]).id);
+			$('.breadcrumb li a').text(data.instance.get_node(data.selected[0]).id);
+			$('.breadcrumb').slideDown();
+			//$('#search-form').submit();
+			doSearch($('.searchfield').val());
+		}
 	});
+
+	//Change the folders on jstree to a different icon if open or closed
+	$('#jstree').on('open_node.jstree', function (e, data) { data.instance.set_icon(data.node, "glyphicon glyphicon-folder-open"); });
+	$('#jstree').on('close_node.jstree', function (e, data) { data.instance.set_icon(data.node, "glyphicon glyphicon-folder-close"); });
 
 	//execute document search when the form is submitted
 	$('#search-form').submit(function (e) {

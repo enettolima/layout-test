@@ -17,7 +17,7 @@
 		</div><!-- End of input-group -->
 		<input val="Search" type="submit" class="btn btn-default hidden">&nbsp;
 	</form>
-
+	<!--Breadcrumb container-->
 	<div class="breadcrumb-container">
 		<ul class = "breadcrumb" >
 			<li>
@@ -25,9 +25,7 @@
 			</li>
 		</ul>
 	</div>
-
-
-
+	<!--Container for the tree view and results-->
 	<div class = "row clearfix tree-container" >
 		<div class = "col-md-8 column" >
 				<div id="error-container">
@@ -39,7 +37,7 @@
 										<input type="hidden" id="folder_selected" name="folder_selected" >
 								</div >
 								<span style="display:none;" id="spinny">
-									<img height="62" width="62" src="/images/spinner.gif">
+									<img height="52" width="52" src="/images/spinner.gif">
 								</span>
 								<ul id="results">
 								</ul>
@@ -53,6 +51,6 @@
 		</div >
 		<div class = "col-md-12 column" >
 		</div >
-	</div >
+	</div ><!-- End of row clearfix container -->
 </div><!-- End of doc-search -->
 @stop
