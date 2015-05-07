@@ -12,7 +12,6 @@ class DocumentsController extends BaseController
     {
         return View::make('pages.documents.index', array(
 					'extraJS' => array (
-						'//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js',
 						'/js/elasticsearch.jquery.min.js',
 						'/js/jstree.min.js',
 						'/js/docs.js'
