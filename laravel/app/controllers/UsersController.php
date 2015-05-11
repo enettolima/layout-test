@@ -118,13 +118,17 @@ class UsersController extends BaseController
                         $rpResults = $api->post('/rprousers/auth', $data);
                     }
 
+
                     if ($rpResults) {
 
                         if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
 
                             $goodLogin = true;
 
-                            $u = User::firstOrCreate(array('rpro_id' => $rpResults->userData->empl_id));
+                            $u = User::firstOrCreate(array(
+                                'rpro_id' => $rpResults->userData->empl_id,
+                                'username' => $rpResults->userData->empl_name,
+                            ));
 
                             // Repopulate these every time in case there are changes
                             $u->rpro_user  = true;
