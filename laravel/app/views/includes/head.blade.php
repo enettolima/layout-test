@@ -9,11 +9,11 @@
 <!-- CSS -->
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/local.css">
-
 <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 
 <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="/css/local.css">
 
 <!-- jQuery -->
 <script src="/js/jquery-git.js"></script>

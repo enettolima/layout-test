@@ -3,10 +3,36 @@ body {
     padding-top:70px;
 }
 
+/* Following are the ways I'm ruining Bootstrap */
+.container {
+    max-width:none !important;
+    min-width:none !important;
+    width:1000px;
+}
+
+.navbar-collapse.collapse {
+display: block!important;
+}
+
+.navbar-nav>li, .navbar-nav {
+float: left !important;
+}
+
+.navbar-nav.navbar-right:last-child {
+margin-right: -15px !important;
+}
+
+.navbar-right {
+float: right!important;
+}
+
+/* End Bootstrap Ruiniation */ 
+
 .top-buffer {
     margin-top:20px;
 }
 
+/* Ten colors which possess the most contrast from each other */
 .c01 { /* Blue */      background-color: rgba(42, 75, 215, 1); }
 .c02 { /* Lt. Green */ background-color: rgba(129, 197, 122, 1); }
 .c03 { /* Red */       background-color: rgba(173, 35, 35, 1); }
@@ -144,11 +170,6 @@ a.schedule-graphic-header:hover{
     padding-left:20px;
 }
 
-.container {
-    max-width:none !important;
-    min-width:none !important;
-    width:1000px;
-}
 
 .users-table tr {
     cursor: pointer;
