@@ -13,6 +13,20 @@ class ReportsController extends BaseController
         return View::make('pages.reports.index');
     }
 
+    public function getSalesPlanVsSales()
+    {
+        $extraHead = '
+            <script src="/js/reports/salesplanvssales/salesplanvssales.js" type="text/javascript" charset="utf-8"></script>
+        ';
+
+        return View::make(
+            'pages.reports.salesplanvssales',
+            array (
+                'extraHead' => $extraHead
+            )
+        );
+    }
+
     public function getBudgetSalesPlan()
     {
 
