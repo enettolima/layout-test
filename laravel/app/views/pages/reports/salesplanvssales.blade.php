@@ -12,11 +12,22 @@
 
 <div class="row">
     <div class="col-xs-9">
-        <table class="table table-striped" id="report-data">
-        </table>
+        <h4>Overview</h4>
+        <table class="table table-striped report-table" id="summary-report-data"></table>
     </div>
-    <div class="col-xs-3">
-        <table class="table" id="report-secondary"></table>
+</div>
+
+<div class="row">
+    <div class="col-xs-9">
+        <h4>RM Sales</h4>
+        <table class="table table-striped report-table" id="rm-report-data"></table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-9">
+        <h4>DM Sales</h4>
+        <table class="table table-striped report-table" id="dm-report-data"></table>
     </div>
 </div>
 
