@@ -46,12 +46,14 @@ function parseCurrency(x) {
 
 function parsePct(x)
 {
-    console.log(x);
 		var retval = {};
 		retval.input = x;
 		retval.isNegative = false;
 		retval.isNotAvailable = false;
 		retval.parsed = 'n/a';
+
+		retval.parsedDec = 'n/a';
+		var xDec = parseFloat(x * 100).toFixed(2);
 
 		x = parseFloat(x * 100).toFixed();
 
@@ -71,6 +73,7 @@ function parsePct(x)
 		} 
 
 		retval.parsed = x + "%";
+		retval.parsedDec = xDec + "%";
 
 		return retval;
 }
