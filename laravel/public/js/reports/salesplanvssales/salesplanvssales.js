@@ -19,6 +19,8 @@ function loadReport(storeNumber)
 
     reportRequest.done(function(response){
 
+        console.log(response);
+
 		$("#report-store-number").html(storeNumber);
 
         var summaryHTML = [];
@@ -33,6 +35,8 @@ function loadReport(storeNumber)
                 "<td class='text-right'><strong>Budget</strong></td>",
                 "<td class='text-right'><strong>LY&nbsp;Sales&nbsp;MTD</strong></td>",
                 "<td class='text-right'><strong>Total&nbsp;Budget</strong></td>",
+                "<td class='text-right'><strong>Difference</strong></td>",
+                "<td class='text-right'><strong>%&nbsp;to&nbsp;Budget</strong></td>",
             "</tr>"
         );
 
@@ -66,6 +70,8 @@ function loadReport(storeNumber)
             tr.pLY_SALES_MTD = parseCurrency(tr.LY_SALES_MTD);
             tr.pBUDGET       = parseCurrency(tr.BUDGET);
             tr.pTOTAL_BUDGET = parseCurrency(tr.TOTAL_BUDGET);
+            tr.pSTR_AMT_Diff = parseCurrency(tr.STR_AMT_Diff);
+            tr.pSTR_PER_TO_BUDGET = parsePct(tr.STR_PER_TO_BUDGET);
 
             tr.pREGION_BUDGET_MTD    = parseCurrency(tr.REGION_BUDGET_MTD);
             tr.pREGION_SALES         = parseCurrency(tr.REGION_SALES);
@@ -84,6 +90,8 @@ function loadReport(storeNumber)
                     "<td class='text-right'>"+tr.pLY_SALES_MTD.parsed+"</td>",
                     "<td class='text-right'>"+tr.pBUDGET.parsed+"</td>",
                     "<td class='text-right'>"+tr.pTOTAL_BUDGET.parsed+"</td>",
+                    "<td class='text-right "+ ((tr.pSTR_AMT_Diff.isNegative) ? "text-danger" : "text-success") +"'>"+tr.pSTR_AMT_Diff.parsed+"</td>",
+                    "<td class='text-right "+ ((tr.pSTR_PER_TO_BUDGET.isNegative) ? "text-danger" : "text-success") +"'>"+tr.pSTR_PER_TO_BUDGET.parsedDec+"</td>",
                 "</tr>"
             );
 
