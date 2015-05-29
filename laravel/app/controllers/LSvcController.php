@@ -18,6 +18,14 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function getToolsEmployeeLookup()
+    {
+        $empNum = Request::segment(3);
+        $api = new EBTAPI;
+        $res = $api->get('/rproemployees/lookup-by-emp-num/' . $empNum);
+        return Response::json($res);
+    }
+
     public function getSchedulerOperationalHours()
     {
         $storeNumber = Request::segment(3);

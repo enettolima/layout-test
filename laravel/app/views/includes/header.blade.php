@@ -10,11 +10,18 @@
                         <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Docs</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
                         <li class="<?php echo Request::is('reports*') ? 'active' : '' ?>"><a href="/reports">Reports</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>
+                            <ul class="dropdown-menu">
+                                <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
+                            </ul>
+                        </li>
+
                         <li><a target="_blank" href="http://ebt.bz/newpassporthelp">Help</a></li>
 
                         @if(Auth::user()->hasRole('Developer'))
                             <!--<li class="<?php echo Request::is('dev*') ? 'active' : '' ?>"><a href="/dev">Dev</a></li>-->
-                            <li class="<?php echo Request::is('forms*') ?  'active' : '' ?>"><a href="/forms">Forms</a></li>
                         @endif
 
                         @if(Auth::user()->hasRole('Administrator'))
