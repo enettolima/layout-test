@@ -21,6 +21,7 @@ function doCheck(){
 
         request.done(function(response){
 
+            console.log(response);
 
             if (typeof response.errors !== "undefined") {
                 if (typeof response.errors[0].title !== "undefined") {
@@ -31,7 +32,7 @@ function doCheck(){
 
             } else if (typeof response.data !== "undefined") {
 
-                if (response.data.active) {
+                if (response.data.active === "1") {
                     responseDetails.success = true;
                     responseDetails.activeText = 'ACTIVE';
                 } else {
