@@ -47,8 +47,6 @@ function doCheck(){
 
                 responseDetails.html += "</ul>"; 
 
-                console.log(response.data);
-                console.log(responseDetails);
             }
 
             showResults(responseDetails);
