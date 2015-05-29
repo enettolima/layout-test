@@ -13,15 +13,19 @@ Route::controller('/hb', 'HbController');
 
 Route::controller('/home', 'HomeController');
 
-Route::controller('/forms', 'FormsController'); 
+Route::controller('/forms', 'FormsController');
 
-Route::controller('/admin', 'AdminController'); 
+Route::controller('/admin', 'AdminController');
 
 Route::controller('/dev', 'DevController');
 
 Route::controller('/lsvc', 'LSvcController');
 
 Route::controller('/users', 'UsersController');
+
+Route::controller('/leases', 'LeasesController');
+
+Route::controller('/uploader', 'UploaderController');
 
 Route::controller('/scheduler', 'SchedulerController');
 

@@ -3,6 +3,7 @@
 class EBTAPI
 {
 	protected $token = null;
+	public $status_code = 0;
 
 	public function __construct($allowTokenFromSession = TRUE)
 	{
@@ -44,14 +45,14 @@ class EBTAPI
 		$tokenRequestURL = $_ENV['ebt_api_host'] . '/auth';
 
 		$tokenRequest = Requests::post(
-			$tokenRequestURL, 
-			array(), 
+			$tokenRequestURL,
+			array(),
 			array(
-				'username' => $_ENV['ebt_api_username'], 
+				'username' => $_ENV['ebt_api_username'],
 				'password' => $_ENV['ebt_api_password']
             ),
             array('verify' => false)
-		); 
+		);
 
 		if ($tokenRequest->success && $token = json_decode($tokenRequest->body)->token) {
 
@@ -93,7 +94,7 @@ class EBTAPI
 			$this->resetToken();
 			$returnval = $this->get($resource);
 		}
-
+		$this->status_code = $response->status_code;
 		return $returnval;
 	}
 
@@ -123,7 +124,7 @@ class EBTAPI
 			$this->resetToken();
 			$returnval = $this->post($resource, $vals);
 		}
-
+		$this->status_code = $response->status_code;
 		return $returnval;
 	}
 }

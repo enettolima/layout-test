@@ -16,6 +16,7 @@
                             <ul class="dropdown-menu">
                                 <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
                                 <li class="<?php echo Request::is('tools/music-request*') ?  'active' : '' ?>"><a href="/tools/music-request">Music Request</a></li>
+                                <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
                             </ul>
                         </li>
 
@@ -54,7 +55,7 @@
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Switch Store To:</li>
                                 <?php
-                                    $sr = StoresResolver::getInstance();  
+                                    $sr = StoresResolver::getInstance();
 
                                     $stores = Auth::user()->getStores();
 

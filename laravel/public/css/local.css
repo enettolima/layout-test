@@ -313,3 +313,32 @@ table.tablesorter th.tablesorter-header {
   text-align: center;
   margin-top: 36px;
 }
+
+/*
+ * Css for the leasing management
+ */
+table thead a, table a .fa {
+  color: #333333;
+}
+
+.disabled{
+  color: #C0C0C0;
+}
+
+.disabled .fa {
+  color: #C0C0C0;
+}
+.disabled a {
+	cursor: default;
+}
+
+.fa{
+  color: #333333;
+}
+
+.well .fa{
+	float: right;
+	margin-top: 2px;
+	margin-right: -6px;
+}
+
