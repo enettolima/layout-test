@@ -189,6 +189,7 @@ class LSvcController extends BaseController
 
 			//build the query for elasticsearch
 			$query = '{
+				"size": 999,
 				"query": {
 					"bool": {
 						"must": [
