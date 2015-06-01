@@ -14,7 +14,7 @@
         </dl>
         <dl>
             <dt><a href="reports/all-star">All Star</a></dt>
-            <dd>Employee Performance. Sales, Hours, Budget by each employee with Statistics ADS, UPT. Includes the Month Budget Summary vs Sales Summary and a quick check whether store made the goal or not.</dd>
+            <dd>Employee Performance. Sales, Hours, Budget by each employee with Statistics ADS, UPT.</dd>
         </dl>
         <dl>
             <dt><a href="reports/sales-plan-vs-sales">Sales Plan vs. Sales</a></dt>
