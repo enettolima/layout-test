@@ -29,9 +29,7 @@ class LSvcController extends BaseController
     public function getReportsSalesPlanVsSales()
     {
         $storeNumber = Request::segment(3);
-
         $res = DB::connection('sqlsrv_ebtgoogle')->select("WEB_GET_SALES_PLAN_VS_SALES '$storeNumber'");
-
         return Response::json(array('data' => $res));
     }
 
