@@ -24,4 +24,51 @@ class ToolsController extends BaseController
             )
         );
     }
+
+	public function getMusicRequest()
+	{
+		return View::make(
+			'pages.tools.musicrequest.index'
+		);
+	}
+
+	public function postMusicRequest()
+	{
+		$rules = array(
+			'request' => 'required'
+		);
+
+		$messages = array(
+			'request.required' => "You didn't provide a request!",
+		);
+
+		$validator = Validator::make(Input::all(), $rules, $messages);
+
+		if ($validator->fails()) {
+			return Redirect::to('/tools/music-request')->withErrors($validator)->withInput();
+		} else {
+
+			$mr = new Musicrequest;
+			$mr->empid = Auth::user()->username;
+			$mr->empname = Auth::user()->full_name;
+			$mr->request = Input::get('request');
+			$mr->save();
+
+			Session::set('lastMusicRequest', $mr->toArray());
+
+			Mail::send('emails.tools.musicrequest', array('request' => $mr->toArray()), function($message)
+			{
+				$message->to('chad@earthboundtrading.com', 'Chad Davis')->subject('Music Request Form');
+			});
+
+			return Redirect::to('/tools/music-request-success');
+		}
+	}
+
+	public function getMusicRequestSuccess()
+	{
+		return View::make(
+			'pages.tools.musicrequest.success'
+		);
+	}
 }
