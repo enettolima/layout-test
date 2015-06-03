@@ -157,8 +157,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
                 // "<td class='text-right'><strong>Store_Code</strong></td>",
 
-                "<th class='text-right' ><strong>Sales W/O Hours</strong></th>",
-                "<th class='text-right' nowrap><strong>Returns W/O Hours</strong></th>",
+                "<th class='text-right' ><strong>Sales W/O Hrs</strong></th>",
+                "<th class='text-right' nowrap><strong>Returns W/O Hrs</strong></th>",
 
             "</tr>",
             "</thead>"
