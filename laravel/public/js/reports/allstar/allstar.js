@@ -157,7 +157,8 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
                 // "<td class='text-right'><strong>Store_Code</strong></td>",
 
-                "<th class='text-right' nowrap><strong>W/O Hours</strong></th>",
+                "<th class='text-right' ><strong>Sales W/O Hours</strong></th>",
+                "<th class='text-right' nowrap><strong>Returns W/O Hours</strong></th>",
 
             "</tr>",
             "</thead>"
@@ -182,6 +183,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                 secondaryHtml.push("<tr><td><strong>Diff:</strong></td><td class='text-right'> " + tr.pDiff.parsed + "</td></tr>");
                 secondaryHtml.push("<tr><td><strong>Diff PCT:</strong></td><td class='text-right'> " + tr.pPct.parsed + "</td></tr>");
                 secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td class='text-right'> " + tr.StrAboveMonthGoal + "</td></tr>");
+                secondaryHtml.push("<tr><td><strong>Returns:</strong></td><td class='text-right'> " + tr.ReturnWoHours + "</td></tr>");
                 secondaryHtml.push("</tbody>");
             }
 
@@ -193,6 +195,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
             tr.pSales = parseCurrency(tr.Sales);
             tr.pSalesWoHours = parseCurrency(tr.SalesWoHours);
+            tr.pReturnWoHours = parseCurrency(tr.ReturnWoHours);
             tr.pUPT = parseNum(tr.UPT);
 
             html.push(
@@ -228,6 +231,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
                     // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
                     "<td class='text-right "+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
                     // "<td class='text-right'>"+tr.Store_Code+"</td>",
+                    "<td class='text-right "+ ((tr.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pReturnWoHours.parsed+"</td>",
 
                 "</tr>"
             );
@@ -244,6 +248,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
         tots.pSales = parseCurrency(tots.Sales);
         tots.pSalesWoHours = parseCurrency(tots.SalesWoHours);
+        tots.pReturnWoHours = parseCurrency(tots.ReturnWoHours);
         tots.pUPT = parseNum(tots.UPT);
 
         html.push(
@@ -279,6 +284,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
                 // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
                 "<td class='text-right "+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
+								"<td class='text-right "+ ((tots.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pReturnWoHours.parsed+"</td>",
             "</tr>"
         );
 

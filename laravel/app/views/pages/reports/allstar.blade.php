@@ -53,13 +53,15 @@
 <input type='hidden' id='storeNumber' value='{{ Session::get('storeContext') }}'>
 
 <div class="row">
-    <div class="col-xs-9">
+    <div class="col-xs-12">
         <table class="table table-striped" id="report-data">
         </table>
     </div>
-    <div class="col-xs-3">
-        <table class="table" id="report-secondary"></table>
-    </div>
+</div>
+<div class="row">
+	<div class="col-xs-6">
+			<table class="table" id="report-secondary"></table>
+	</div>
 </div>
 
 @stop
