@@ -118,17 +118,31 @@ class UsersController extends BaseController
                         $rpResults = $api->post('/rprousers/auth', $data);
                     }
 
-
                     if ($rpResults) {
 
                         if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
 
                             $goodLogin = true;
 
-                            $u = User::firstOrCreate(array(
-                                'rpro_id' => $rpResults->userData->empl_id,
-                                'username' => $rpResults->userData->empl_name,
-                            ));
+                            // First, see if anything comes back for rpro_id + username in my user
+                            // If it *does*, use that user like normal
+                            //
+                            // If it *does not* before creating the new user, make sure there's not
+                            // someone in the user table already with that username (empl_name)
+
+                            $u = User::where('rpro_id', $rpResults->userData->empl_id)->where('username', $rpResults->userData->empl_name)->first();
+
+                            if (! $u) {
+                                // Before Creating user, check to see if there's an existing user in the table with this username.
+                                if ($oldUser = User::where('username', $rpResults->userData->empl_name)->first()){
+                                    $oldUser->roles()->sync(array());
+                                    $oldUser->delete();
+                                }
+
+                                $u = new User;
+                                $u->rpro_id = $rpResults->userData->empl_id;
+                                $u->username = $rpResults->userData->empl_name;
+                            }
 
                             // Repopulate these every time in case there are changes
                             $u->rpro_user  = true;
