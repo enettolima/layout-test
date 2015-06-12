@@ -32,7 +32,7 @@ function doCheck(){
 
             } else if (typeof response.data !== "undefined") {
 
-                if (response.data.active === "1") {
+                if (parseInt(response.data.active) > 0) {
                     responseDetails.success = true;
                     responseDetails.activeText = 'ACTIVE';
                 } else {
