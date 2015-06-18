@@ -120,6 +120,7 @@ class UsersController extends BaseController
 
                     if ($rpResults) {
 
+
                         if (($rpResults->userAuthSuccess && $rpResults->userRetrieved) && $userLevel = $this->getUserLevel($rpResults)) {
 
                             $goodLogin = true;
@@ -278,6 +279,35 @@ class UsersController extends BaseController
                                 // Sync (assign) the roles to the user
                                 $u->roles()->sync($userRoles);
                             }
+
+
+                            /*
+                             * HANDLE SYNCING OF "EBTPERM" ROLES.
+                             *
+                             * There are groups in RetailPro named "EBTPERM_???????"
+                             *
+                             * For each one of those returned in the user's groups listing, we want
+                             * to create (if neccessary) the role and assign to the user.
+                             */
+
+                            $userRoles = array();
+
+                            foreach ($u->roles()->get() as $role) {
+                                $userRoles[] = $role->id;
+                            }
+
+                            foreach ($rpResults->userData->groups as $group) {
+                                if(preg_match('/^EBTPERM_(\S+)$/', $group->user_grp_name)) {
+                                    if (! $permRole = Role::where('name', '=', $group->user_grp_name)->first()) {
+                                        $permRole = new Role;
+                                        $permRole->name = $group->user_grp_name;
+                                        $permRole->save();
+                                    }
+                                    $userRoles[] = $permRole->id;
+                                }
+                            }
+
+                            $u->roles()->sync($userRoles);
 
                             UserLog::logSuccess($u->username);
                             // Destroy any previous session first...
