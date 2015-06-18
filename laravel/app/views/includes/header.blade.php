@@ -16,7 +16,9 @@
                             <ul class="dropdown-menu">
                                 <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
                                 <li class="<?php echo Request::is('tools/music-request*') ?  'active' : '' ?>"><a href="/tools/music-request">Music Request</a></li>
-                                <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
+                                @if (Auth::user()->hasRole('EBTPERM_LEASING'))
+                                    <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
+                                @endif
                             </ul>
                         </li>
 
