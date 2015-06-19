@@ -33,9 +33,10 @@ App::after(function($request, $response)
 |
 */
 
-Entrust::routeNeedsRole('dev', array('Administrator'), View::make('pages.permissionDenied'));
-Entrust::routeNeedsRole('admin', array('Administrator'), View::make('pages.permissionDenied'));
-Entrust::routeNeedsRole('leases', array('EBTPERM_LEASING'), View::make('pages.permissionDenied'));
+Entrust::routeNeedsRole('dev/*', array('Administrator'), View::make('pages.permissionDenied'));
+Entrust::routeNeedsRole('admin/*', array('Administrator'), View::make('pages.permissionDenied'));
+Entrust::routeNeedsRole('leases/*', array('EBTPERM_LEASING'), View::make('pages.permissionDenied'));
+Entrust::routeNeedsRole('pims/*', array('EBTPERM_PIMSEDIT'), View::make('pages.permissionDenied'));
 
 Route::filter('auth', function()
 {

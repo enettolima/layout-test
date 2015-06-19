@@ -18,6 +18,23 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+    public function postProductInfo()
+    {
+        $pcn = Request::segment(3);
+        $api = new EBTAPI;
+        $res = $api->post("/pims/product-info/$pcn", array('field1' => Input::get('field1')));
+        return Response::json($res);
+    }
+
+    public function getProductInfo()
+    {
+        $pcn = Request::segment(3);
+        $api = new EBTAPI;
+        $res = $api->get("/rproproducts/product-info/$pcn?pi=1");
+
+        return Response::json($res);
+    }
+
     public function getToolsEmployeeLookup()
     {
         $empNum = Request::segment(3);

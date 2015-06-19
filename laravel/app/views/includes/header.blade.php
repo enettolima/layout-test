@@ -19,6 +19,9 @@
                                 @if (Auth::user()->hasRole('EBTPERM_LEASING'))
                                     <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
                                 @endif
+                                @if (Auth::user()->hasRole('EBTPERM_PIMSEDIT'))
+                                    <li class="<?php echo Request::is('pims*') ? 'active' : '' ?>"><a href="/pims">Product Info Management</a></li>
+                                @endif
                             </ul>
                         </li>
 
