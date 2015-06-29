@@ -76,4 +76,9 @@ require $framework.'/Illuminate/Foundation/start.php';
 |
 */
 
+
+if (extension_loaded('newrelic') && (isset($_ENV['envtype']) && $_ENV['envtype'] === 'live')) {
+    newrelic_set_appname('EB Passport');
+}
+
 return $app;
