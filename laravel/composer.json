@@ -4,11 +4,11 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
-		"zizaco/entrust": "1.0.0",
-		"ccampbell/chromephp": "dev-master",
-		"rmccue/requests": ">=1.0",
-		"elasticsearch/elasticsearch": "~1.0",
+		"laravel/framework": "4.2.*",
+		"patchwork/utf8": "@stable",
+		"zizaco/entrust": "@stable",
+		"rmccue/requests": "@stable",
+		"elasticsearch/elasticsearch": "@stable",
         "psy/psysh":"@stable"
 	},
 	"autoload": {
