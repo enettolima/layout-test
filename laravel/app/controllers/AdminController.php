@@ -4,7 +4,8 @@ class AdminController extends BaseController
 {
     /* Require Auth on Everything Here */
     public function __construct()
-    {
+	{
+    
         $this->beforeFilter('auth', array());
     }
 
@@ -12,6 +13,81 @@ class AdminController extends BaseController
     {
         return View::make('pages.admin.index');
     }
+
+	public function getMusicRequests()
+	{
+		$openRequests = Musicrequest::whereNull('closed_at')->orderBy('created_at', 'desc')->get();
+
+		$closedRequests = Musicrequest::whereNotNull('closed_at')->orderBy('closed_at', 'desc')->get();
+
+		return View::make(
+			'pages.admin.music-requests.index',
+			array(
+				'openRequests' => $openRequests,
+				'closedRequests' => $closedRequests
+			)
+		);
+	}
+
+	public function getMusicRequest()
+	{
+
+		$req = Musicrequest::find(Request::segment(3));
+
+		// Abusing the "comments" concept in the case of Musicrequests
+		// and just utilzing the first Comment as a temporary shortcut
+
+		if (count($req->comments) > 0) {
+			$comment = $req->comments()->first()->comment;
+		} else {
+			$comment = null;
+		}
+
+		return View::make(
+			'pages.admin.music-requests.manage-request',
+			array(
+				'req' => $req,
+				'comment' => $comment
+			)
+		);
+	}
+
+	public function postMusicRequest()
+	{
+		$req = Musicrequest::find(Input::get('request-id'));
+
+		if (count($req->comments) > 0) {
+			$comment = $req->comments()->first();
+		} else {
+			$comment = new Comment;
+			$comment->commentable_id = $req->id;
+			$comment->commentable_type = 'Musicrequest';
+		}
+
+		$comment->commenter_ebt_id = Auth::user()->username;
+		$comment->commenter_full_name = Auth::user()->full_name;
+
+		$comment->comment = Input::get('comment');
+		$comment->save();
+
+		if ($closeRequest = Input::get('close_request')) {
+			// Close Request is checked
+			if (! $req->closed_at) {
+				// Request wasn't already closed
+				$req->closed_at = Carbon::now();
+				$req->save();
+			}
+		} else {
+			// Close Request not checked
+			if ($req->closed_at) {
+				// Request has been "un-closed"
+				$req->closed_at = NULL;
+				$req->save();
+			}
+		}
+
+		return Redirect::to('/admin/music-requests')->withMessage('Updated!');
+	}
 
     public function getUserList()
     {
