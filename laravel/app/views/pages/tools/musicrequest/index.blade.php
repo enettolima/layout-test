@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-xs-8">
+    <div class="col-xs-6">
         <h3>Music Request Form</h3>
 
 		@if ($errors->has())
@@ -48,6 +48,18 @@
         <span id="searching" class="hidden"><em>Searching </em><img src="/images/ajax-loader-arrows.gif"></span>
         <blockquote id="results" class="hidden"></blockquote>
     </div>
+    <div class="col-xs-5 col-xs-offset-1">
+        <h4>Your Requests</h4>
+        <ul>
+            @foreach ($userRequests as $request)
+                <li>
+                    <a href="/tools/music-request-feedback/{{ $request->id }}">{{ date("m/d/y g:ia", strtotime($request->created_at)) }}</a>
+					{{ $request->comments()->count() > 0 ? ' - <strong>' . $request->comments()->count() . ' Response(s)</strong>' : '' }}
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
 </div>
 
 @stop

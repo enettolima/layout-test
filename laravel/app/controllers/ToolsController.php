@@ -25,10 +25,30 @@ class ToolsController extends BaseController
         );
     }
 
+    public function getMusicRequestFeedback()
+    {
+
+        $requestId = Request::segment(3);
+
+        $request = Musicrequest::find($requestId);
+
+        if (Auth::user()->username !== '000CD' && $request->empid !== Auth::user()->username) {
+            return Response::view('pages.permissionDenied');
+        }
+
+		return View::make(
+            'pages.tools.musicrequest.feedback',
+            array('request' => $request)
+		);
+    }
+
 	public function getMusicRequest()
 	{
+        $userRequests = Musicrequest::where('empid', Auth::user()->username)->get();
+
 		return View::make(
-			'pages.tools.musicrequest.index'
+            'pages.tools.musicrequest.index',
+            array('userRequests' => $userRequests)
 		);
 	}
 

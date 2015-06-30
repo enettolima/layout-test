@@ -162,4 +162,9 @@ $(document).ready(function(){
 
         // console.log($(this).attr('data-foo'));
     });
+
+	$("table.music-request-admin > tbody > tr").on("click", function(){
+		window.location = "/admin/music-request/" + $(this).attr("data-request-id");
+	});
+
 });
