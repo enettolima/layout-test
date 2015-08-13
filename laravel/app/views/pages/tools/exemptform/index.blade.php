@@ -16,7 +16,8 @@
 
 		<h5>To Finalize a Tax Exempt Sale:</h5>
 		<ol>
-			<li>Scan and save the customer's Exemption Form</li>
+			<li>Scan and save the RetailPro receipt.</li>
+            <li>Scan and save the customer's Exemption Form <strong class="text-danger">(see examples of valid exemption forms in Instructions under Accounting Docs)</strong></li>
 			<li>Scan and save the customer's ID. (Driver's license, state-issued id)</li>
 			<li>Complete the form below, uploading the scanned images.</li>
 		</ol>
