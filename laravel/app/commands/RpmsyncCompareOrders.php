@@ -135,7 +135,7 @@ class RpmsyncCompareOrders extends Command {
             for ($day=0; $day<$daysDiff; $day++) {
                 $chunkFrom = date('Y-m-d', strtotime($from) + ($day * 86400));
                 $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
-                $mageURL = 'https://shop.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
+                $mageURL = 'http://shopmaster01.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
 
                 $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
