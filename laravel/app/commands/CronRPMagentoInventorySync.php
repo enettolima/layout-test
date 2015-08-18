@@ -40,7 +40,7 @@ class CronRPMagentoInventorySync extends Command {
             $inventoryLog->pushHandler(new StreamHandler(storage_path() . '/logs/invsync.' . date('YmdHis') . '.log', Logger::INFO));
 
             if ($this->option('do_live_inventory') && filter_var($this->option('do_live_inventory'), FILTER_VALIDATE_BOOLEAN)) {
-                $mageURL = 'http://shop.earthboundtrading.com';
+                $mageURL = 'http://shopmaster01.earthboundtrading.com';
                 $this->info('##SYNCING LIVE INVENTORY!');
             } else {
                 $this->info('##Syncing TEST inventory.');
