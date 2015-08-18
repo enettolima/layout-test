@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#svc="ebtpassport.com:9200"
-svc="192.168.2.155:9200"
+svc="ebtpassport.com:9200"
+#svc="192.168.2.155:9200"
 
 printf "Deleting previous indexes\n"
 curl -XDELETE ${svc}/mydocs
@@ -134,7 +134,7 @@ curl -XPUT ${svc}/_river/eb_documents/_meta -d '
     "fs" : {
         "url" : "/media/web/downloads",
         "update_rate":120000,
-        "includes":"*.pdf,*.doc,*.txt"
+        "includes":"*.pdf,*.doc,*.txt,*.PDF,*.DOC,*.TXT"
     }
 }
 '
