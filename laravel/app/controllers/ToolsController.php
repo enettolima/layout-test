@@ -37,6 +37,8 @@ class ToolsController extends BaseController
     {
         $historyDays = 30;
 
+extract(\Psy\Shell::debug(get_defined_vars())); 
+
         return View::make(
             'pages.tools.exemptform.index',
             array (
@@ -91,10 +93,16 @@ class ToolsController extends BaseController
 
             $filesUploaded = array();
 
+            $storeNumber = 'NoStore';
+
+            if (Session::has('storeContext')) {
+                $storeNumber = Session::get('storeContext');
+            }
+
             foreach ($this->exemptFormFilesDef as $fileKey=>$fileSettings) {
                 if (Input::hasFile($fileKey)) {
                     $fileObject = Input::file($fileKey);
-                    $fileNewName = $receiptNum . '-' . $fileSettings['name'] . '.' . $fileObject->getClientOriginalExtension();
+                    $fileNewName = $storeNumber .'-'. $receiptNum .'-'. $fileSettings['name'] . '.' . $fileObject->getClientOriginalExtension();
                     $fileObject->move($exemptDocumentationPath, $fileNewName);
                     $filesUploaded[] = array($fileSettings['label'] => $fileNewName);
                 }

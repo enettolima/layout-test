@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>Error 404: Not Found</h1>
+<h1>Error: 404 Not Found</h1>
 <h2>The Hermit Crabs took your page!</h2>
 <img src="/images/hermy404.jpg">
 <h3>Dang Hermit Crabs.</h3>
