@@ -127,6 +127,19 @@ curl -XPUT ${svc}/eb_documents/ -d '{
   }
 }
 '
+# Previous River, specifying includes
+#printf "\n\nCreating eb_documents river\n"
+#curl -XPUT ${svc}/_river/eb_documents/_meta -d '
+#{
+    #"type" : "fs",
+    #"fs" : {
+        #"url" : "/media/web/downloads",
+        #"update_rate":120000,
+        #"includes":"*.pdf,*.doc,*.txt,*.PDF,*.DOC,*.TXT"
+    #}
+#}
+#'
+
 printf "\n\nCreating eb_documents river\n"
 curl -XPUT ${svc}/_river/eb_documents/_meta -d '
 {
@@ -134,10 +147,19 @@ curl -XPUT ${svc}/_river/eb_documents/_meta -d '
     "fs" : {
         "url" : "/media/web/downloads",
         "update_rate":120000,
-        "includes":"*.pdf,*.doc,*.txt,*.PDF,*.DOC,*.TXT"
+	"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls,*.XLS,*.txt,*.TXT"
     }
 }
 '
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls,*.XLS,*.txt,*.TXT"
+#"includes":"*.pdf,*.PDF,*.doc" - 977, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC" - 977, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx" - 980, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX" - 980, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls" - 980, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls" - 980, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls,*.XLS" - 980, Dir Works
+#"includes":"*.pdf,*.PDF,*.doc,*.DOC,*.xlsx,*.XLSX,*.xls,*.XLS,*.txt" - 980, Dir Works
 
 printf "\n\nCreating eb_documents alias --> dir\n"
 curl -XPOST  ${svc}/_aliases -d '
