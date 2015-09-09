@@ -56,7 +56,8 @@ class ToolsController extends BaseController
 
     public function postExemptForm()
     {
-        $exemptDocumentationPath = storage_path() . '/exempt-documentation';
+        //$exemptDocumentationPath = storage_path() . '/exempt-documentation';
+        $exemptDocumentationPath = "/media/exempt";
 
 		$rules = array(
 			'receiptNum' => 'required'
