@@ -37,8 +37,6 @@ class ToolsController extends BaseController
     {
         $historyDays = 30;
 
-extract(\Psy\Shell::debug(get_defined_vars())); 
-
         return View::make(
             'pages.tools.exemptform.index',
             array (
