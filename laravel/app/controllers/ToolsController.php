@@ -60,11 +60,12 @@ class ToolsController extends BaseController
         $exemptDocumentationPath = "/media/exempt";
 
 		$rules = array(
-			'receiptNum' => 'required'
+			'receiptNum' => 'required|numeric'
 		);
 
 		$messages = array(
 			'receiptNum.required' => "You didn't provide a Receipt #!",
+            'receiptNum.numeric' => "Receipt # can only be numeric. No letters, spaces, or special characters.",
 		);
 
 		$validator = Validator::make(Input::all(), $rules, $messages);

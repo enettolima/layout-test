@@ -3,3 +3,5 @@ laravel/.env.*.php
 log.txt
 laravel/public/docs
 project_resources/vagrant/.vagrant
+.idea
+laravel/app/storage/exempt-documentation
