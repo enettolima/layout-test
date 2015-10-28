@@ -303,7 +303,7 @@ class SchedulerController extends BaseController
 
         $weekOf = Request::input('weekOf');
         $dayOffset = Request::input('dayOffset');
-        $targetDay = date('Y-m-d', strtotime($weekOf) + ($dayOffset * 86400));
+        $targetDay = date('Y-m-d', strtotime('+' . $dayOffset. 'days', strtotime($weekOf)));
         $selectorDateFormat = 'D, M jS, Y';
 
         return View::make(
