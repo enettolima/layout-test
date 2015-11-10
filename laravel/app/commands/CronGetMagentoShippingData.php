@@ -85,9 +85,11 @@ class CronGetMagentoShippingData extends Command {
 
             for ($day=0; $day<=$daysDiff; $day++) {
 
-                $chunkFrom = date('Y-m-d', strtotime($from) + ($day * 86400));
-                $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
+                $chunkFrom = date('Y-m-d', strtotime($from . "+$day days"));
+                $chunkTo = date('Y-m-d', strtotime($chunkFrom . "+1 days"));
+
                 $mageURL = 'http://shopmaster01.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=processing';
+		$this->info($mageURL);
 
                 $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
