@@ -91,7 +91,7 @@ class CronGetMagentoShippingData extends Command {
                 $mageURL = 'http://shopmaster01.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=processing';
 		$this->info($mageURL);
 
-                $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
+                $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>300, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
                     $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
 

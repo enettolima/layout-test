@@ -140,7 +140,7 @@ class RpmsyncOrderComparisonExport extends Command {
                 $chunkTo = date('Y-m-d', strtotime($from) + (($day+1) * 86400));
                 $mageURL = 'http://shopmaster01.earthboundtrading.com/ebtutil/orders/getsummary.php?from='.$chunkFrom.'&to='.$chunkTo.'&statuses=complete';
 
-                $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>60, 'verify'=>false));
+                $magentoOrderRequest = Requests::get($mageURL, array(), array('timeout'=>300, 'verify'=>false));
                 if ($magentoOrderRequest->success) {
                     $chunkOrders = json_decode($magentoOrderRequest->body)->data->orders;
 

@@ -51,7 +51,7 @@ class CronRPMagentoInventorySync extends Command {
              * STEP 1: Get list of products from Magento we plan on syncing inventory for
              */
             $headers = array();
-            $options = array('timeout' => 240);
+            $options = array('timeout' => 300);
 
             $this->info("Getting products from Magento...");
             $request = Requests::get(
