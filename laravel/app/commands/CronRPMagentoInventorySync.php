@@ -51,7 +51,7 @@ class CronRPMagentoInventorySync extends Command {
              * STEP 1: Get list of products from Magento we plan on syncing inventory for
              */
             $headers = array();
-            $options = array('timeout' => 300);
+            $options = array('timeout' => 600);
 
             $this->info("Getting products from Magento...");
             $request = Requests::get(
@@ -134,7 +134,7 @@ class CronRPMagentoInventorySync extends Command {
                 $mageURL . '/ebtutil/inventory/syncinventory.php',
                 array(),
                 array('data' => json_encode($matchResults['matches'])),
-                array('timeout' => 240)
+                array('timeout' => 600)
             );
 
             if ($postResultsReq->success) {
