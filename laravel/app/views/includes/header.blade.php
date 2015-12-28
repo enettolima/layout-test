@@ -10,7 +10,6 @@
                         <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Docs</a></li>
                         <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
                         <li class="<?php echo Request::is('reports*') ? 'active' : '' ?>"><a href="/reports">Reports</a></li>
-
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>
                             <ul class="dropdown-menu">
@@ -26,6 +25,7 @@
                             </ul>
                         </li>
 
+                        <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
                         <li><a target="_blank" href="http://ebt.bz/newpassporthelp">Help</a></li>
 
                         @if(Auth::user()->hasRole('Developer'))
@@ -48,6 +48,7 @@
 										$storeName = 'Corporate';
 									} else {
 										$storeName = StoresLookup::where('code', Session::get('storeContext'))->first()->store_name;
+                    $storeName = strlen($storeName) > 10 ? substr($storeName,0,10)."..." : $storeName;
 									}
                                     //$sl = StoresLookup::where('code', Session::get('storeContext'))->first();
                                 echo '<strong class="text-primary">Store: <span id="current-store">' . Session::get('storeContext') . '</span><span id="current-store-name"> - '.$storeName.'</span></strong>';
