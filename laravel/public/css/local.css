@@ -26,7 +26,7 @@ margin-right: -15px !important;
 float: right!important;
 }
 
-/* End Bootstrap Ruiniation */ 
+/* End Bootstrap Ruiniation */
 
 .top-buffer {
     margin-top:20px;
@@ -344,4 +344,9 @@ table thead a, table a .fa {
 
 table.music-request-admin > tbody > tr:hover {
 	cursor:pointer;
+}
+
+.ui-datepicker {
+  margin-left: 100px;
+  z-index: 1000;
 }

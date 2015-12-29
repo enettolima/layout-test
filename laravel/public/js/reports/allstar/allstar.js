@@ -1,8 +1,16 @@
 var monthsPast = 12;
 var monthsFuture = 1;
 
-function makeWeekLabel(moment) {
-    return moment.format('WW-YYYY') + " (Ends " + moment.format('ddd M/D/YY') + ")";
+function makeWeekLabel(label) {
+  if(label.format('WW')>52){
+    var currentYear = new moment().year();
+    //var weekVal = momentPast.format('WW-'+currentYear);
+    return label.format('WW-'+currentYear) + " (Ends " + label.format('ddd M/D/YY') + ")";
+  }else{
+    //var weekVal = momentPast.format('WW-YYYY');
+    return label.format('WW-YYYY') + " (Ends " + label.format('ddd M/D/YY') + ")";
+  }
+    //return moment.format('WW-YYYY') + " (Ends " + moment.format('ddd M/D/YY') + ")";
 }
 
 function populateAllDropdowns()
@@ -13,7 +21,7 @@ function populateAllDropdowns()
 }
 
 /*
- * This does not work correctly at the year boundaries, but moving 
+ * This does not work correctly at the year boundaries, but moving
  * past it at this point because it's becoming a waste of time.
  *
  * TODO: Reasses the entire logic of reporting on WW-YYYY when there's some down time
@@ -24,18 +32,48 @@ function populateWeekDropdown()
 
     var momentPast = new moment().subtract(1, 'years').endOf('week');
 
-    momentPast.subtract(1, 'week'); // This is for convenience and readability of the following loop: 
+    momentPast.subtract(1, 'week'); // This is for convenience and readability of the following loop:
+
+    var currentYear = new moment().year();
+
+    console.log("Moment now "+momentNow.format('WW-YYYY')
+    +" -- Moment past "+momentPast.format('WW-YYYY')
+    +" subtract "+momentPast.subtract(1, 'week').format('WW-YYYY')
+    +" current year "+currentYear);
 
     while (momentPast.format('WW-YYYY') !== momentNow.format('WW-YYYY')) {
 
         momentPast.add(1, 'week');
 
-        var weekVal = momentPast.format('WW-YYYY');
+
+        /*if(momentPast.year() > currentYear){
+            var weekVal = momentPast.format('WW-'+currentYear);
+        }else{
+
+        }*/
+
+
+        if(momentPast.format('WW')>52){
+          var weekVal = momentPast.format('WW-'+currentYear);
+        }else{
+          var weekVal = momentPast.format('WW-YYYY');
+        }
+        console.log("Moment past week is "+momentPast.week()+" Week val "+weekVal+ " week val "+momentPast.format('WW'));
         //var weekLabel = momentPast.format('WW-YYYY') + " (Ending " + momentPast.format('ddd MMM Do YYYY') + ")";
         var weekLabel = makeWeekLabel(momentPast);
 
         $("#allstar-week").append($("<option />").attr('value', weekVal).text(weekLabel));
 
+    }
+
+    console.log("Moment past last week is "+momentPast.format('WW'));
+    if(momentPast.format('WW')>52){
+      momentPast.add(1, 'week');
+      var weekVal = momentPast.format('WW-YYYY');
+      var weekLabel = makeWeekLabel(momentPast);
+
+      $("#allstar-week").append($("<option />").attr('value', weekVal).text(weekLabel));
+      console.log("Inside if");
     }
 }
 
@@ -55,7 +93,7 @@ function populateMonthDropdown()
     }
 }
 
-function loadReport(storeNumber, asRangeType, asRangeVal){
+function loadReport(storeNumber, asRangeType, asDateFrom, asDateTo){
 
     $("#allstar-options-run").hide();
 
@@ -166,7 +204,7 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
         html.push("<tbody>");
 
-        for (var row=0; row<data.details.length; row++) 
+        for (var row=0; row<data.details.length; row++)
         {
 
             var tr = data.details[row];
@@ -299,8 +337,79 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
 
     });
 }
-
 $(document).ready(function(){
+    var asRangeType = 'range';
+    var storeNumber = $("#storeNumber").val();
+    var mNow = new moment();
+
+    //loadReport(storeNumber, asRangeType, asRangeVal);
+
+    $("#date-from").datepicker({
+        beforeShow: function(input, inst)
+        {
+          // Handle calendar position before showing it.
+          // It's not supported by Datepicker itself (for now) so we need to use its internal variables.
+          var calendar = inst.dpDiv;
+
+          // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+          setTimeout(function() {
+              calendar.position({
+                  my: 'right top',
+                  at: 'right bottom',
+                  collision: 'none',
+                  of: input
+              });
+          }, 1);
+        }
+    });
+    $("#date-to").datepicker({
+        beforeShow: function(input, inst)
+        {
+            //inst.dpDiv.css({marginTop: -input.offsetHeight + 'px', marginLeft: input.offsetWidth + 'px'});
+          // Handle calendar position before showing it.
+          // It's not supported by Datepicker itself (for now) so we need to use its internal variables.
+          var calendar = inst.dpDiv;
+
+          // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+          setTimeout(function() {
+              calendar.position({
+                  my: 'right top',
+                  at: 'right bottom',
+                  collision: 'none',
+                  of: input
+              });
+          }, 1);
+        }
+    });
+
+    //Pre populate fields with current week
+    var lastSunday = mNow.day("Sunday");
+    $("#date-from").val(lastSunday.format("MM/DD/YYYY"));
+
+    var nextSaturday = mNow.day("Saturday");
+    $("#date-to").val(nextSaturday.format("MM/DD/YYYY"));
+
+    //Load report at first load
+    loadReport(storeNumber, asRangeType, lastSunday, nextSaturday);
+
+    // Run the report
+    $("#allstar-options-run").on('click', function(){
+
+        asRangeType = $("#allstar-report-range").val();
+
+        switch (asRangeType) {
+            case 'month':
+                asRangeVal = $("#allstar-month").val();
+            break;
+            case 'week':
+                asRangeVal = $("#allstar-week").val();
+            break;
+        }
+        loadReport(storeNumber, asRangeType, asRangeVal);
+    });
+});
+
+/*$(document).ready(function(){
 
     populateAllDropdowns();
 
@@ -335,6 +444,11 @@ $(document).ready(function(){
 
     loadReport(storeNumber, asRangeType, asRangeVal);
 
+    $("#date-from").datepicker();
+    $("#date-to").datepicker();
+
+    var lastSunday = mNow.day("Sunday");
+    $("#date-from").val(mNow.format("MM/DD/YYYY"));
 
     $("#allstar-report-range").change(function(){
 
@@ -390,4 +504,4 @@ $(document).ready(function(){
 
         loadReport(storeNumber, asRangeType, asRangeVal);
     });
-});
+});*/
