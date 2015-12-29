@@ -63,37 +63,6 @@ class LSvcController extends BaseController
         return Response::json(array('data' => $res));
     }
 
-    /*public function getReportsAllStar()
-    {
-        $storeNumber = Request::segment(3);
-        $asRangeType = Request::segment(4);
-        $asRangeVal = Request::segment(5);
-
-        switch ($asRangeType) {
-            case 'month':
-
-                list($year, $month) = explode("-", $asRangeVal); //clog::log('asdf');
-                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'M', '$month', '$year'";
-                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'M', '$month', '$year'";
-                break;
-
-            case 'week':
-                list($week, $year) = explode("-", $asRangeVal);
-                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'W', '$week', '$year'";
-                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'W', '$week', '$year'";
-                break;
-            case 'day':
-                break;
-            default:
-                exit(1);
-        }
-
-        $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
-        $totalsRes = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
-
-        return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes));
-
-    }*/
     public function getReportsAllStar()
     {
         $storeNumber= Request::segment(3);
@@ -111,7 +80,7 @@ class LSvcController extends BaseController
 
         //Checking if end date is higher than start date
         if($fromMil > $toMil){
-          return Response::json(array('msg' => 'Invalid date selected! Please try again!'), 400);
+          return Response::json(array('msg' => 'Invalid date range! Please try again!'), 400);
         }
 
         //Converting dates to a format so we can calculate the amount of days

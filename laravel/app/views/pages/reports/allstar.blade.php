@@ -16,13 +16,6 @@
 </style>
 
 <div class="row form-inline report-option">
-    <!--<div class="col-xs-2 ">
-        Choose Range:
-        <select id="allstar-report-range" class="form-control">
-            <option value="month">Month</option>
-            <option value="week">Week</option>
-        </select>
-    </div>-->
     <div class="form-group">
       <label for="exampleInputName2">Choose Range -- </label>
     </div>
@@ -35,25 +28,6 @@
       <input type="text" class="form-control" id="date-to">
     </div>
     <button class="btn btn-primary" id="allstar-run">Run</button>
-
-    <!--<div id="allstar-options-week" class="allstar-options" style="display:none;">
-        <div class="col-xs-4 report-option">
-            Choose Week:
-            <select id="allstar-week" class="form-control"></select>
-        </div>
-    </div>
-    <div id="allstar-options-month" class="allstar-options" style="display:none;">
-        <div class="col-xs-2 report-option">
-            Choose Month:
-            <select id="allstar-month" class="form-control"></select>
-        </div>
-    </div>
-    <div id="allstar-options-run" class="allstar-options" style="display:none;">
-        <div class="col-xs-1 report-option">
-            <br />
-            <button class="btn btn-primary">Run</button>
-        </div>
-    </div>-->
 </div>
 
 <div class="row">
