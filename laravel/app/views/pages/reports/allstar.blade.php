@@ -34,7 +34,7 @@
       <label for="date-to">To:</label>
       <input type="text" class="form-control" id="date-to">
     </div>
-    <button class="btn btn-primary">Run</button>
+    <button class="btn btn-primary" id="allstar-run">Run</button>
 
     <!--<div id="allstar-options-week" class="allstar-options" style="display:none;">
         <div class="col-xs-4 report-option">
