@@ -65,34 +65,40 @@ class LSvcController extends BaseController
 
     public function getReportsAllStar()
     {
-        $storeNumber = Request::segment(3);
-        $asRangeType = Request::segment(4);
-        $asRangeVal = Request::segment(5);
+        $storeNumber= Request::segment(3);
+        //Range type will always come as range from now on
+        $asRangeType= Request::segment(4);
+        //Getting date as unix format
+        $asDateFrom = Request::segment(5);
+        $asDateTo   = Request::segment(6);
+        //Transforming to miliseconds
+        $fromMil    = $asDateFrom / 1000;
+        $toMil      = $asDateTo / 1000;
+        //Parsing in m/d/Y format
+        $from       = date("m/d/Y", $fromMil);
+        $to         = date("m/d/Y", $toMil);
 
-        switch ($asRangeType) {
-            case 'month':
-
-                list($year, $month) = explode("-", $asRangeVal); //clog::log('asdf');
-                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'M', '$month', '$year'";
-                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'M', '$month', '$year'";
-                break;
-
-            case 'week':
-                list($week, $year) = explode("-", $asRangeVal);
-                $detailsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'D', 'W', '$week', '$year'";
-                $totalsSQL = "WEB_GET_ALLSTAR '$storeNumber', 'T', 'W', '$week', '$year'";
-                break;
-            case 'day':
-                break;
-            default:
-                exit(1);
+        //Checking if end date is higher than start date
+        if($fromMil > $toMil){
+          return Response::json(array('msg' => 'Invalid date range! Please try again!'), 400);
         }
 
+        //Converting dates to a format so we can calculate the amount of days
+        $start      = strtotime(date("Y-m-d", $fromMil));
+        $end        = strtotime(date("Y-m-d", $toMil));
+        $days_between = ceil(abs($end - $start) / 86400);
+        if($days_between > 31){
+          return Response::json(array('msg' => 'Invalid date range! Maximum amount of days allowed is 31!'), 400);
+        }
+
+        //Building store procedure call
+        $detailsSQL = "WEB_GET_ALLSTAR_NEW '$storeNumber','D','$from','$to'";
+        $totalsSQL  = "WEB_GET_ALLSTAR_NEW '$storeNumber','T','$from','$to'";
+
+        //Executing store procedure call
         $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
-        $totalsRes = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
-
-        return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes));
-
+        $totalsRes  = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
+        return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes, 'from' => $from, 'to' => $to));
     }
 
     public function getReportsBudgetSalesPlan()

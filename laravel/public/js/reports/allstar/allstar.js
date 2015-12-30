@@ -1,8 +1,16 @@
 var monthsPast = 12;
 var monthsFuture = 1;
 
-function makeWeekLabel(moment) {
-    return moment.format('WW-YYYY') + " (Ends " + moment.format('ddd M/D/YY') + ")";
+function makeWeekLabel(label) {
+  if(label.format('WW')>52){
+    var currentYear = new moment().year();
+    //var weekVal = momentPast.format('WW-'+currentYear);
+    return label.format('WW-'+currentYear) + " (Ends " + label.format('ddd M/D/YY') + ")";
+  }else{
+    //var weekVal = momentPast.format('WW-YYYY');
+    return label.format('WW-YYYY') + " (Ends " + label.format('ddd M/D/YY') + ")";
+  }
+    //return moment.format('WW-YYYY') + " (Ends " + moment.format('ddd M/D/YY') + ")";
 }
 
 function populateAllDropdowns()
@@ -13,7 +21,7 @@ function populateAllDropdowns()
 }
 
 /*
- * This does not work correctly at the year boundaries, but moving 
+ * This does not work correctly at the year boundaries, but moving
  * past it at this point because it's becoming a waste of time.
  *
  * TODO: Reasses the entire logic of reporting on WW-YYYY when there's some down time
@@ -24,18 +32,48 @@ function populateWeekDropdown()
 
     var momentPast = new moment().subtract(1, 'years').endOf('week');
 
-    momentPast.subtract(1, 'week'); // This is for convenience and readability of the following loop: 
+    momentPast.subtract(1, 'week'); // This is for convenience and readability of the following loop:
+
+    var currentYear = new moment().year();
+
+    console.log("Moment now "+momentNow.format('WW-YYYY')
+    +" -- Moment past "+momentPast.format('WW-YYYY')
+    +" subtract "+momentPast.subtract(1, 'week').format('WW-YYYY')
+    +" current year "+currentYear);
 
     while (momentPast.format('WW-YYYY') !== momentNow.format('WW-YYYY')) {
 
         momentPast.add(1, 'week');
 
-        var weekVal = momentPast.format('WW-YYYY');
+
+        /*if(momentPast.year() > currentYear){
+            var weekVal = momentPast.format('WW-'+currentYear);
+        }else{
+
+        }*/
+
+
+        if(momentPast.format('WW')>52){
+          var weekVal = momentPast.format('WW-'+currentYear);
+        }else{
+          var weekVal = momentPast.format('WW-YYYY');
+        }
+        console.log("Moment past week is "+momentPast.week()+" Week val "+weekVal+ " week val "+momentPast.format('WW'));
         //var weekLabel = momentPast.format('WW-YYYY') + " (Ending " + momentPast.format('ddd MMM Do YYYY') + ")";
         var weekLabel = makeWeekLabel(momentPast);
 
         $("#allstar-week").append($("<option />").attr('value', weekVal).text(weekLabel));
 
+    }
+
+    console.log("Moment past last week is "+momentPast.format('WW'));
+    if(momentPast.format('WW')>52){
+      momentPast.add(1, 'week');
+      var weekVal = momentPast.format('WW-YYYY');
+      var weekLabel = makeWeekLabel(momentPast);
+
+      $("#allstar-week").append($("<option />").attr('value', weekVal).text(weekLabel));
+      console.log("Inside if");
     }
 }
 
@@ -55,9 +93,72 @@ function populateMonthDropdown()
     }
 }
 
-function loadReport(storeNumber, asRangeType, asRangeVal){
 
-    $("#allstar-options-run").hide();
+$(document).ready(function(){
+    var asRangeType = 'range';
+    var storeNumber = $("#storeNumber").val();
+    $("#date-from").datepicker({
+        beforeShow: function(input, inst)
+        {
+          // Handle calendar position before showing it.
+          // It's not supported by Datepicker itself (for now) so we need to use its internal variables.
+          var calendar = inst.dpDiv;
+
+          // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+          setTimeout(function() {
+              calendar.position({
+                  my: 'right top',
+                  at: 'right bottom',
+                  collision: 'none',
+                  of: input
+              });
+          }, 1);
+        }
+    });
+    $("#date-to").datepicker({
+        beforeShow: function(input, inst)
+        {
+          // Handle calendar position before showing it.
+          // It's not supported by Datepicker itself (for now) so we need to use its internal variables.
+          var calendar = inst.dpDiv;
+
+          // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+          setTimeout(function() {
+              calendar.position({
+                  my: 'right top',
+                  at: 'right bottom',
+                  collision: 'none',
+                  of: input
+              });
+          }, 1);
+        }
+    });
+
+    //Pre populate fields with current week
+    var mNow = new moment();
+    var lastSunday = mNow.day("Sunday");
+    $("#date-from").val(lastSunday.format("MM/DD/YYYY"));
+
+    var mNow = new moment();
+    var nextSaturday = mNow.day("Saturday");
+    $("#date-to").val(nextSaturday.format("MM/DD/YYYY"));
+
+    //Load report at first load
+    loadReport(storeNumber, asRangeType, lastSunday, nextSaturday);
+
+    // Run the report
+    $("#allstar-run").on('click', function(){
+      var fromVal   = $("#date-from").val();
+      var toVal     = $("#date-to").val();
+      var fromDate  = moment(fromVal, "MM-DD-YYYY");
+      var toDate    = moment(toVal, "MM-DD-YYYY");
+
+      loadReport(storeNumber, asRangeType, fromDate, toDate);
+    });
+});
+
+function loadReport(storeNumber, asRangeType, asDateFrom, asDateTo){
+    $("#allstar-run").hide();
 
     if (storeNumber === '000') {
         $("#report-header").html("Invalid Store");
@@ -65,329 +166,201 @@ function loadReport(storeNumber, asRangeType, asRangeVal){
         return;
     }
 
-    // $("#report-header").html("Loady Reporty");
     $("#report-data").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
     $("#report-secondary").html("");
 
-    var reportRangeControl = $("#allstar-report-range");
-    reportRangeControl.val(asRangeType);
-
-    var cookieMoment = new moment().add(1, 'day');
-
-    $.cookie('asRangeType', asRangeType, {expires: cookieMoment.toDate()});
-
-    $.cookie('asRangeVal', asRangeVal, {expires: cookieMoment.toDate()});
-
-    switch(asRangeType) {
-
-        case 'month':
-
-            // This might be already set as so, but just in case...
-            $("#allstar-month").val(asRangeVal);
-            $("#allstar-options-month").show();
-
-            var monthMoment = new moment(asRangeVal, "YYYY-MM");
-
-            $("#report-header").html("All Star | Store "+storeNumber+" | " + monthMoment.format("MMM") + " " + monthMoment.format("YYYY"));
-
-            break;
-
-        case 'week':
-            $("#allstar-week").val(asRangeVal);
-            $("#allstar-options-week").show();
-            var weekMoment = new moment(asRangeVal, "WW-YYYY").endOf('week');
-            var weekLabel = makeWeekLabel(weekMoment);
-            $("#report-header").html("All Star | Store "+storeNumber+" | Week " + weekLabel);
-            break;
-
-        case 'date':
-            console.log('hey it is a date');
-            break;
-
-        default:
-            console.log('FDFFFFFF');
-            break;
-
-    }
-
+    var fromTitle = new moment(asDateFrom);
+    var toTitle = new moment(asDateTo);
+    $("#report-header").html("All Star | Store "+storeNumber+" | From " + fromTitle.format("MM/DD/YYYY") +" to "+toTitle.format("MM/DD/YYYY"));
     // console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
+    var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+asDateFrom+"/"+asDateTo;
 
-    var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+asRangeVal;
-
-    var reportRequest = $.ajax({
-        url: url,
-        type: "GET"
-    });
-
-    reportRequest.done(function(data){
-
-        var html = [];
-
-        var secondaryHtml = [];
-        secondaryHtml.push("<thead><tr><th colspan='2'>Month Summary</th></tr></thead>");
-
-        if (data.details.length === 0 || data.totals.length === 0) {
-            html.push("<tr><td><em>No data available for this time period.</em></td></tr>");
-            $("#report-data").html(html.join(''));
-            return;
-        }
-
-        html.push(
-            "<thead>",
-            "<tr>",
-                "<th class='text-right'><strong>Employee</strong></th>",
-
-                "<th class='text-right'><strong>Sales</strong></th>",
-
-                "<th class='text-right'><strong>Target</strong></th>",
-
-                "<th class='text-right'><strong>Diff</strong></th>",
-
-                "<th class='text-right'><strong>PCT%</strong></th>",
-
-                "<th class='text-right'><strong>ADS</strong></th>",
-
-                "<th class='text-right'><strong>UPT</strong></th>",
-
-                "<th class='text-right'><strong>Hours</strong></th>",
-
-                // These are always the same. Maybe they should be displayed outside of table?
-                // "<td class='text-right'><strong>MonthBudgetAmt</strong></td>",
-                // "<td class='text-right'><strong>MonthSales</strong></td>",
-                // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
-                // "<td class='text-right'><strong>Store_Code</strong></td>",
-
-                "<th class='text-right' ><strong>Sales W/O Hrs</strong></th>",
-                "<th class='text-right' nowrap><strong>Returns W/O Hrs</strong></th>",
-
-            "</tr>",
-            "</thead>"
-        );
-
-        html.push("<tbody>");
-
-        for (var row=0; row<data.details.length; row++) 
-        {
-
-            var tr = data.details[row];
-
-            if (row === 0) {
-                tr.pMonthBudgetAmt = parseCurrency(tr.MonthBudgetAmt);
-                tr.pMonthSales = parseCurrency(tr.MonthSales);
-                tr.pPct = parsePct((tr.MonthSales - tr.MonthBudgetAmt) / tr.MonthBudgetAmt);
-                tr.pDiff = parseCurrency(tr.MonthSales - tr.MonthBudgetAmt);
-
-                secondaryHtml.push("<tbody>");
-                secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td class='text-right'> " + tr.pMonthBudgetAmt.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td class='text-right'> " + tr.pMonthSales.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Diff:</strong></td><td class='text-right'> " + tr.pDiff.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Diff PCT:</strong></td><td class='text-right'> " + tr.pPct.parsed + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td class='text-right'> " + tr.StrAboveMonthGoal + "</td></tr>");
-                secondaryHtml.push("<tr><td><strong>Returns:</strong></td><td class='text-right'> " + tr.ReturnWoHours + "</td></tr>");
-                secondaryHtml.push("</tbody>");
-            }
-
-            tr.pDiffBud = parseCurrency(tr.DiffBud);
-            tr.pDiffPct = parsePct((tr.Sales - tr.EmpTarget) / tr.EmpTarget);
-            tr.pADS = parseCurrency(tr.ADS);
-            tr.pEmpTarget = parseCurrency(tr.EmpTarget);
-            tr.pHours = parseNum(tr.Hours);
-
-            tr.pSales = parseCurrency(tr.Sales);
-            tr.pSalesWoHours = parseCurrency(tr.SalesWoHours);
-            tr.pReturnWoHours = parseCurrency(tr.ReturnWoHours);
-            tr.pUPT = parseNum(tr.UPT);
-
-            html.push(
-                "<tr>",
-                    "<td nowrap class='text-right'>"+tr.RPRO_FULL_NAME+"</td>",
-
-                    // "<td class='text-right'>"+tr.Sales+"</td>",
-                    "<td class='text-right "+ ((tr.pSales.isNegative) ? "text-danger" : "")+"'>"+tr.pSales.parsed+"</td>",
-
-                    // "<td class='text-right'>"+tr.EmpTarget+"</td>",
-                    "<td class='text-right'>"+tr.pEmpTarget.parsed+"</td>",
-
-                    // "<td class='text-right'>"+tr.DiffBud+"</td>",
-                    "<td class='text-right "+ ((tr.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffBud.parsed+"</td>",
-
-                    // "<td class='text-right'>"+tr.DiffBud+"</td>",
-                    "<td class='text-right "+ ((tr.pDiffPct.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffPct.parsed+"</td>",
-
-                    // "<td class='text-right'>"+tr.ADS+"</td>",
-                    "<td class='text-right "+ ((tr.pADS.isNegative) ? "text-danger" : "")+"'>"+tr.pADS.parsed+"</td>",
-
-                    //"<td class='text-right'>"+tr.UPT+"</td>",
-                    "<td class='text-right'>"+tr.pUPT.parsed+"</td>",
-
-                    // "<td class='text-right'>"+tr.Hours+"</td>",
-                    "<td class='text-right'>"+tr.pHours.parsed+"</td>",
-
-                    // These are always the same. Maybe they should be displayed outside of table?
-                    // "<td class='text-right'>"+tr.MonthBudgetAmt+"</td>",
-                    // "<td class='text-right'>"+tr.MonthSales+"</td>",
-                    // "<td class='text-right'>"+tr.StrAboveMonthGoal+"</td>",
-
-                    // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
-                    "<td class='text-right "+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
-                    // "<td class='text-right'>"+tr.Store_Code+"</td>",
-                    "<td class='text-right "+ ((tr.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pReturnWoHours.parsed+"</td>",
-
-                "</tr>"
-            );
-        }
-
-        html.push("</tbody><tfoot>");
-
-        var tots = data.totals[0];
-
-        tots.pDiffBud = parseCurrency(tots.DiffBud);
-        tots.pADS = parseCurrency(tots.ADS);
-        tots.pEmpTarget = parseCurrency(tots.EmpTarget);
-        tots.pHours = parseNum(tots.Hours);
-
-        tots.pSales = parseCurrency(tots.Sales);
-        tots.pSalesWoHours = parseCurrency(tots.SalesWoHours);
-        tots.pReturnWoHours = parseCurrency(tots.ReturnWoHours);
-        tots.pUPT = parseNum(tots.UPT);
-
-        html.push(
-            "<tr>",
-                "<td nowrap class='text-right'><strong>TOTALS:</strong></td>",
-
-                // "<td class='text-right'>"+tr.Sales+"</td>",
-                "<td class='text-right "+ ((tots.pSales.isNegative) ? "text-danger" : "")+"'>"+tots.pSales.parsed+"</td>",
-
-                // "<td class='text-right'>"+tr.EmpTarget+"</td>",
-                "<td class='text-right'>"+tots.pEmpTarget.parsed+"</td>",
-
-                // "<td class='text-right'>"+tr.DiffBud+"</td>",
-                "<td class='text-right "+ ((tots.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tots.pDiffBud.parsed+"</td>",
-
-                // "<td class='text-right'>"+tr.ADS+"</td>",
-                "<td class='text-right'></td>",
-
-                // "<td class='text-right'>"+tr.ADS+"</td>",
-                "<td class='text-right "+ ((tots.pADS.isNegative) ? "text-danger" : "")+"'>"+tots.pADS.parsed+"</td>",
-
-                // "<td class='text-right'>"+tr.Store_Code+"</td>",
-                "<td class='text-right'>"+tots.pUPT.parsed+"</td>",
-
-                // "<td class='text-right'>"+tr.Hours+"</td>",
-                "<td class='text-right'>"+tots.pHours.parsed+"</td>",
-
-                // These are always the same. Maybe they should be displayed outside of table?
-                // "<td class='text-right'>"+tr.MonthBudgetAmt+"</td>",
-                // "<td class='text-right'>"+tr.MonthSales+"</td>",
-                // "<td class='text-right'>"+tr.StrAboveMonthGoal+"</td>",
-
-
-                // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
-                "<td class='text-right "+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
-								"<td class='text-right "+ ((tots.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pReturnWoHours.parsed+"</td>",
-            "</tr>"
-        );
-
-        html.push("</tfoot>");
-
-        $("#report-data").html(html.join(''));
-        $("#report-data").tablesorter({
-            sortList : [[0,0]],
-        });
-
-        $("#report-secondary").html(secondaryHtml.join(''));
-
+    var jqxhr = $.get( url, function(data) {
+      showReport(data);
+    })
+    .fail(function(jqXHR) {
+      $("#report-header").html("Invalid Request");
+      $("#report-data").html("<tr><td><em>"+jqXHR.responseJSON.msg+".</em></td></tr>");
+    })
+    .always(function() {
+      $("#allstar-run").show();
     });
 }
 
-$(document).ready(function(){
+function showReport(data){
+  var html = [];
 
-    populateAllDropdowns();
+  var secondaryHtml = [];
+  secondaryHtml.push("<thead><tr><th colspan='2'>Month Summary</th></tr></thead>");
 
-    var asRangeType = null;
-    var asRangeVal = null;
+  if (data.details.length === 0 || data.totals.length === 0) {
+      html.push("<tr><td><em>No data available for this time period.</em></td></tr>");
+      $("#report-data").html(html.join(''));
+      return;
+  }
 
-    var storeNumber = $("#storeNumber").val();
+  html.push(
+      "<thead>",
+      "<tr>",
+          "<th class='text-right'><strong>Employee</strong></th>",
 
-    if ($.cookie('asRangeType')) {
-        asRangeType = $.cookie('asRangeType');
-    } else {
-        asRangeType = 'month';
-    }
+          "<th class='text-right'><strong>Sales</strong></th>",
 
-    var mNow = new moment();
+          "<th class='text-right'><strong>Target</strong></th>",
 
-    if (asRangeType === 'month') {
-        if ($.cookie('asRangeVal')) {
-            asRangeVal = $.cookie('asRangeVal');
-        } else {
-            asRangeVal = mNow.format("YYYY-MM");
-        }
-    } else if (asRangeType === 'week') {
-        if ($.cookie('asRangeVal')) {
-            asRangeVal = $.cookie('asRangeVal');
-        } else {
-            asRangeVal = mNow.format("WW-YYYY");
-        }
-    } else if (asRangeType === 'date') {
-        asRangeType = $.cookie('reportDate');
-    }
+          "<th class='text-right'><strong>Diff</strong></th>",
 
-    loadReport(storeNumber, asRangeType, asRangeVal);
+          "<th class='text-right'><strong>PCT%</strong></th>",
+
+          "<th class='text-right'><strong>ADS</strong></th>",
+
+          "<th class='text-right'><strong>UPT</strong></th>",
+
+          "<th class='text-right'><strong>Hours</strong></th>",
+
+          // These are always the same. Maybe they should be displayed outside of table?
+          // "<td class='text-right'><strong>MonthBudgetAmt</strong></td>",
+          // "<td class='text-right'><strong>MonthSales</strong></td>",
+          // "<td class='text-right'><strong>StrAboveMonthGoal</strong></td>",
+          // "<td class='text-right'><strong>Store_Code</strong></td>",
+
+          "<th class='text-right' ><strong>Sales W/O Hrs</strong></th>",
+          "<th class='text-right' nowrap><strong>Returns W/O Hrs</strong></th>",
+
+      "</tr>",
+      "</thead>"
+  );
+
+  html.push("<tbody>");
+
+  for (var row=0; row<data.details.length; row++)
+  {
+
+      var tr = data.details[row];
+
+      if (row === 0) {
+          tr.pMonthBudgetAmt = parseCurrency(tr.MonthBudgetAmt);
+          tr.pMonthSales = parseCurrency(tr.MonthSales);
+          tr.pPct = parsePct((tr.MonthSales - tr.MonthBudgetAmt) / tr.MonthBudgetAmt);
+          tr.pDiff = parseCurrency(tr.MonthSales - tr.MonthBudgetAmt);
+
+          secondaryHtml.push("<tbody>");
+          secondaryHtml.push("<tr><td><strong>Budget:</strong></td><td class='text-right'> " + tr.pMonthBudgetAmt.parsed + "</td></tr>");
+          secondaryHtml.push("<tr><td><strong>Sales:</strong></td><td class='text-right'> " + tr.pMonthSales.parsed + "</td></tr>");
+          secondaryHtml.push("<tr><td><strong>Diff:</strong></td><td class='text-right'> " + tr.pDiff.parsed + "</td></tr>");
+          secondaryHtml.push("<tr><td><strong>Diff PCT:</strong></td><td class='text-right'> " + tr.pPct.parsed + "</td></tr>");
+          secondaryHtml.push("<tr><td><strong>Above Goal?:</strong></td><td class='text-right'> " + tr.StrAboveMonthGoal + "</td></tr>");
+          secondaryHtml.push("<tr><td><strong>Returns:</strong></td><td class='text-right'> " + tr.ReturnWoHours + "</td></tr>");
+          secondaryHtml.push("</tbody>");
+      }
+
+      tr.pDiffBud = parseCurrency(tr.DiffBud);
+      tr.pDiffPct = parsePct((tr.Sales - tr.EmpTarget) / tr.EmpTarget);
+      tr.pADS = parseCurrency(tr.ADS);
+      tr.pEmpTarget = parseCurrency(tr.EmpTarget);
+      tr.pHours = parseNum(tr.Hours);
+
+      tr.pSales = parseCurrency(tr.Sales);
+      tr.pSalesWoHours = parseCurrency(tr.SalesWoHours);
+      tr.pReturnWoHours = parseCurrency(tr.ReturnWoHours);
+      tr.pUPT = parseNum(tr.UPT);
+
+      html.push(
+          "<tr>",
+              "<td nowrap class='text-right'>"+tr.RPRO_FULL_NAME+"</td>",
+
+              // "<td class='text-right'>"+tr.Sales+"</td>",
+              "<td class='text-right "+ ((tr.pSales.isNegative) ? "text-danger" : "")+"'>"+tr.pSales.parsed+"</td>",
+
+              // "<td class='text-right'>"+tr.EmpTarget+"</td>",
+              "<td class='text-right'>"+tr.pEmpTarget.parsed+"</td>",
+
+              // "<td class='text-right'>"+tr.DiffBud+"</td>",
+              "<td class='text-right "+ ((tr.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffBud.parsed+"</td>",
+
+              // "<td class='text-right'>"+tr.DiffBud+"</td>",
+              "<td class='text-right "+ ((tr.pDiffPct.isNegative) ? "text-danger" : "")+"'>"+tr.pDiffPct.parsed+"</td>",
+
+              // "<td class='text-right'>"+tr.ADS+"</td>",
+              "<td class='text-right "+ ((tr.pADS.isNegative) ? "text-danger" : "")+"'>"+tr.pADS.parsed+"</td>",
+
+              //"<td class='text-right'>"+tr.UPT+"</td>",
+              "<td class='text-right'>"+tr.pUPT.parsed+"</td>",
+
+              // "<td class='text-right'>"+tr.Hours+"</td>",
+              "<td class='text-right'>"+tr.pHours.parsed+"</td>",
+
+              // These are always the same. Maybe they should be displayed outside of table?
+              // "<td class='text-right'>"+tr.MonthBudgetAmt+"</td>",
+              // "<td class='text-right'>"+tr.MonthSales+"</td>",
+              // "<td class='text-right'>"+tr.StrAboveMonthGoal+"</td>",
+
+              // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
+              "<td class='text-right "+ ((tr.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pSalesWoHours.parsed+"</td>",
+              // "<td class='text-right'>"+tr.Store_Code+"</td>",
+              "<td class='text-right "+ ((tr.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tr.pReturnWoHours.parsed+"</td>",
+
+          "</tr>"
+      );
+  }
+
+  html.push("</tbody><tfoot>");
+
+  var tots = data.totals[0];
+
+  tots.pDiffBud = parseCurrency(tots.DiffBud);
+  tots.pADS = parseCurrency(tots.ADS);
+  tots.pEmpTarget = parseCurrency(tots.EmpTarget);
+  tots.pHours = parseNum(tots.Hours);
+
+  tots.pSales = parseCurrency(tots.Sales);
+  tots.pSalesWoHours = parseCurrency(tots.SalesWoHours);
+  tots.pReturnWoHours = parseCurrency(tots.ReturnWoHours);
+  tots.pUPT = parseNum(tots.UPT);
+
+  html.push(
+      "<tr>",
+          "<td nowrap class='text-right'><strong>TOTALS:</strong></td>",
+
+          // "<td class='text-right'>"+tr.Sales+"</td>",
+          "<td class='text-right "+ ((tots.pSales.isNegative) ? "text-danger" : "")+"'>"+tots.pSales.parsed+"</td>",
+
+          // "<td class='text-right'>"+tr.EmpTarget+"</td>",
+          "<td class='text-right'>"+tots.pEmpTarget.parsed+"</td>",
+
+          // "<td class='text-right'>"+tr.DiffBud+"</td>",
+          "<td class='text-right "+ ((tots.pDiffBud.isNegative) ? "text-danger" : "")+"'>"+tots.pDiffBud.parsed+"</td>",
+
+          // "<td class='text-right'>"+tr.ADS+"</td>",
+          "<td class='text-right'></td>",
+
+          // "<td class='text-right'>"+tr.ADS+"</td>",
+          "<td class='text-right "+ ((tots.pADS.isNegative) ? "text-danger" : "")+"'>"+tots.pADS.parsed+"</td>",
+
+          // "<td class='text-right'>"+tr.Store_Code+"</td>",
+          "<td class='text-right'>"+tots.pUPT.parsed+"</td>",
+
+          // "<td class='text-right'>"+tr.Hours+"</td>",
+          "<td class='text-right'>"+tots.pHours.parsed+"</td>",
+
+          // These are always the same. Maybe they should be displayed outside of table?
+          // "<td class='text-right'>"+tr.MonthBudgetAmt+"</td>",
+          // "<td class='text-right'>"+tr.MonthSales+"</td>",
+          // "<td class='text-right'>"+tr.StrAboveMonthGoal+"</td>",
 
 
-    $("#allstar-report-range").change(function(){
+          // "<td class='text-right'>"+tr.SalesWoHours+"</td>",
+          "<td class='text-right "+ ((tots.pSalesWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pSalesWoHours.parsed+"</td>",
+          "<td class='text-right "+ ((tots.pReturnWoHours.isNegative) ? "text-danger" : "")+"'>"+tots.pReturnWoHours.parsed+"</td>",
+      "</tr>"
+  );
 
-        $(".allstar-options").hide();
+  html.push("</tfoot>");
 
-        var reportRange = $("#allstar-report-range").val();
+  $("#report-data").html(html.join(''));
+  $("#report-data").tablesorter({
+      sortList : [[0,0]],
+  });
 
-        if (reportRange == 'month') {
-
-            if (asRangeType === 'month') {
-                $("#allstar-month").val(asRangeVal);
-            } else {
-                $("#allstar-month").val(mNow.format("YYYY-MM"));
-            }
-
-            $("#allstar-options-month").show();
-            $("#allstar-options-run").show();
-
-        } else if(reportRange == 'week') {
-
-            if (asRangeType === 'week') {
-                $("#allstar-week").val(asRangeVal);
-            } else {
-                $("#allstar-week").val(mNow.format("WW-YYYY"));
-            }
-
-            $("#allstar-options-week").show();
-            $("#allstar-options-run").show();
-        }
-    });
-
-    $("#allstar-month").change(function(){
-        $("#allstar-options-run").show();
-    });
-
-    $("#allstar-week").change(function(){
-        $("#allstar-options-run").show();
-    });
-
-    // Run the report
-    $("#allstar-options-run").on('click', function(){
-
-        asRangeType = $("#allstar-report-range").val();
-
-        switch (asRangeType) {
-            case 'month':
-                asRangeVal = $("#allstar-month").val();
-            break;
-            case 'week':
-                asRangeVal = $("#allstar-week").val();
-            break;
-        }
-
-        loadReport(storeNumber, asRangeType, asRangeVal);
-    });
-});
+  $("#report-secondary").html(secondaryHtml.join(''));
+}
