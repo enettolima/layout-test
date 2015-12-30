@@ -16,16 +16,12 @@
                                 <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
                                 <li class="<?php echo Request::is('tools/exempt-form*') ?  'active' : '' ?>"><a href="/tools/exempt-form">Tax Exempt Form</a></li>
                                 <li class="<?php echo Request::is('tools/music-request*') ?  'active' : '' ?>"><a href="/tools/music-request">Music Request</a></li>
-                                @if (Auth::user()->hasRole('EBTPERM_LEASING'))
-                                    <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
-                                @endif
                                 @if (Auth::user()->hasRole('EBTPERM_PIMSEDIT'))
                                     <li class="<?php echo Request::is('pims*') ? 'active' : '' ?>"><a href="/pims">Product Info Management</a></li>
                                 @endif
                             </ul>
                         </li>
 
-                        <li class="<?php echo Request::is('leases*') ? 'active' : '' ?>"><a href="/leases">Leasing</a></li>
                         <li><a target="_blank" href="http://ebt.bz/newpassporthelp">Help</a></li>
 
                         @if(Auth::user()->hasRole('Developer'))
