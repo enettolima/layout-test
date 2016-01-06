@@ -169,11 +169,19 @@ function loadReport(storeNumber, asRangeType, asDateFrom, asDateTo){
     $("#report-data").html("<tr><td><em>Loading</em> <img src='/images/ajax-loader-arrows.gif'></td></tr>");
     $("#report-secondary").html("");
 
-    var fromTitle = new moment(asDateFrom);
-    var toTitle = new moment(asDateTo);
-    $("#report-header").html("All Star | Store "+storeNumber+" | From " + fromTitle.format("MM/DD/YYYY") +" to "+toTitle.format("MM/DD/YYYY"));
+    var fromTitle = new moment(asDateFrom).format("MM/DD/YYYY");
+    var toTitle = new moment(asDateTo).format("MM/DD/YYYY");
+    $("#report-header").html("All Star | Store "+storeNumber+" | From " + fromTitle +" to "+toTitle);
     // console.log("Load " + asRangeType + " report for " + asRangeVal + " for store " + storeNumber);
-    var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+asDateFrom+"/"+asDateTo;
+
+    //Removing / from the date so we can send on the URL on the ajax Request
+    //***** VERY IMPORTANT *****
+    //We can not use the moment format here cause it will calculate the time based on the
+    //client's browser. Replace was necessary to prevent what was selected by the User
+    var fromEncoded = fromTitle.replace( /\//g, "-");
+    var toEncoded = toTitle.replace( /\//g, "-");
+    //console.log("From title "+fromTitle+" from passed "+asDateFrom+" - From encoded "+fromEncoded);
+    var url  = "/lsvc/reports-all-star/"+storeNumber+"/"+asRangeType+"/"+fromEncoded+"/"+toEncoded;
 
     var jqxhr = $.get( url, function(data) {
       showReport(data);
