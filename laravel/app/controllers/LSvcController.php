@@ -71,26 +71,22 @@ class LSvcController extends BaseController
         //Getting date as unix format
         $asDateFrom = Request::segment(5);
         $asDateTo   = Request::segment(6);
-        //Transforming to miliseconds
-        $fromMil    = $asDateFrom / 1000;
-        $toMil      = $asDateTo / 1000;
         //Parsing in m/d/Y format
-        $from       = date("m/d/Y", $fromMil);
-        $to         = date("m/d/Y", $toMil);
-
-        //Checking if end date is higher than start date
-        if($fromMil > $toMil){
-          return Response::json(array('msg' => 'Invalid date range! Please try again!'), 400);
-        }
+        $from       = str_replace("-","/",$asDateFrom);
+        $to         = str_replace("-","/",$asDateTo);
 
         //Converting dates to a format so we can calculate the amount of days
-        $start      = strtotime(date("Y-m-d", $fromMil));
-        $end        = strtotime(date("Y-m-d", $toMil));
+        $start      = strtotime($from);
+        $end        = strtotime($to);
         $days_between = ceil(abs($end - $start) / 86400);
         if($days_between > 31){
           return Response::json(array('msg' => 'Invalid date range! Maximum amount of days allowed is 31!'), 400);
         }
 
+        //Checking if end date is higher than start date
+        if($start > $end){
+          return Response::json(array('msg' => 'Invalid date range! Please try again!'), 400);
+        }
         //Building store procedure call
         $detailsSQL = "WEB_GET_ALLSTAR_NEW '$storeNumber','D','$from','$to'";
         $totalsSQL  = "WEB_GET_ALLSTAR_NEW '$storeNumber','T','$from','$to'";
@@ -98,6 +94,8 @@ class LSvcController extends BaseController
         //Executing store procedure call
         $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
         $totalsRes  = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
+
+        //Log::info('Check date from date is '.$from.' to is '.$to, $array_debug);
         return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes, 'from' => $from, 'to' => $to));
     }
 
