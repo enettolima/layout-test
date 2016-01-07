@@ -23,6 +23,8 @@ Route::controller('/dev', 'DevController');
 
 Route::controller('/lsvc', 'LSvcController');
 
+Route::controller('/sa', 'SaController');
+
 Route::controller('/users', 'UsersController');
 
 Route::controller('/leases', 'LeasesController');
