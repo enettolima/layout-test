@@ -14,7 +14,14 @@ class SaController extends BaseController
 
                 $user = User::where('username', $u)->firstOrFail();
 
-                $stores = $user->getStores();
+                $stores = array();
+
+                $sr = StoresResolver::getInstance();
+
+                foreach ($user->getStores() as $store) {
+
+                    $stores[$store] = $sr->getStore($store)->store_name;
+                }
 
                 $response['data'] = $stores;
             } else {
