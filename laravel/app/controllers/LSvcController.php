@@ -117,8 +117,8 @@ class LSvcController extends BaseController
         $start      = strtotime($from);
         $end        = strtotime($to);
         $days_between = ceil(abs($end - $start) / 86400);
-        if($days_between > 31){
-          return Response::json(array('msg' => 'Invalid date range! Maximum amount of days allowed is 31!'), 400);
+        if($days_between > 366){
+          return Response::json(array('msg' => 'Invalid date range! Maximum amount of days allowed is 366!'), 400);
         }
 
         //Checking if end date is higher than start date
