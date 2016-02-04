@@ -83,4 +83,20 @@ class ReportsController extends BaseController
             )
         );
     }
+
+    public function getAllStarByMonth()
+    {
+        $extraHead = '
+            <script src="/js/reports/allstar/allstarbymonth.js" type="text/javascript" charset="utf-8"></script>
+            <script src="/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
+            <script src="/js/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
+        ';
+
+        return View::make(
+            'pages.reports.allstarbymonth',
+            array (
+                'extraHead' => $extraHead
+            )
+        );
+    }
 }
