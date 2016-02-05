@@ -22,3 +22,5 @@ Artisan::add(new RpmsyncCompareOrders);
 Artisan::add(new CronRPMagentoInventorySync);
 
 Artisan::add(new CronGetMagentoShippingData);
+
+Artisan::add(new StoreDirectorySync);
