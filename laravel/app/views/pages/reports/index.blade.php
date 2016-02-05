@@ -17,6 +17,10 @@
             <dd>Employee Performance. Sales, Hours, Budget by each employee with Statistics ADS, UPT.</dd>
         </dl>
         <dl>
+            <dt><a href="reports/all-star-by-month">All Star by Month</a></dt>
+            <dd>Employee Performance grouped by month.</dd>
+        </dl>
+        <dl>
             <dt><a href="reports/sales-plan-vs-sales">Sales Plan vs. Sales</a></dt>
             <dd>Sales and Budget summary from the beginning of the year performed by your store. It will also provide a overall picture of the District and Region for easy comparison.</dd>
         </dl>
