@@ -85,8 +85,8 @@ class StoreDirectorySync extends Command {
                 $ohClose = date("H:i:s", mktime($hour->{'HR_CLOSE_MIL'}, 0, 0, 0, 0, 0));
 
                 if (isset($directory[$ohStoreNumber])) {
-                    $directory[$ohStoreNumber]->{'Hours'}[$ohWeekDay]['open'] = $ohOpen;
-                    $directory[$ohStoreNumber]->{'Hours'}[$ohWeekDay]['close'] = $ohClose;
+                    $directory[$ohStoreNumber]->{'hours'}[$ohWeekDay]['open'] = $ohOpen;
+                    $directory[$ohStoreNumber]->{'hours'}[$ohWeekDay]['close'] = $ohClose;
                 }
             }
 
