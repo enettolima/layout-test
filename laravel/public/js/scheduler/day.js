@@ -7,6 +7,10 @@ var dayOffset = null;
 
 var inOuts = [];
 var goals = [];
+var gview;
+var gevent;
+var eventBackgroundDefault = '#3a87ad';
+var eventBackgroundSellable = '#6d7578';
 
 /*
 $(document).bind("ajaxSend", function(){
@@ -17,234 +21,300 @@ $(document).bind("ajaxSend", function(){
 */
 
 $(document).ready(function() {
-
-    targetDate = $('#targetDate').val();
-
-    currentStore = parseInt($("#current-store").html());
-
-    weekOf = $('#weekOf').val();
-
-    dayOffset = parseInt($('#dayOffset').val());
-
-    var url  = "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate;
-
-    var loadFromDB = $.ajax({
-        url:  url,
-        type: "GET",
-        global: false
-    });
-
-    var onEvent = 0;
-
-    var empDateMap = {};
- 
-    loadFromDB.done(function(msg) {
-
-        if (msg.schedule) {
-            inOuts = msg.schedule;
-        }
-
-        var getTargets = $.ajax({
-            url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
-            type: 'GET',
-            global: false
-        });
-
-        getTargets.done(function(data){
-
-            // TODO: Can I remove this from the global scope?
-            dayTargetData = data[dayOffset+1];
-
-            if (typeof dayTargetData !== "undefined") {
-                for (var key in data[dayOffset+1].hours) {
-                    goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
-                }
-            }
-
-            updateSummaries();
-
-        });
-
-        var view = $('#calendar').fullCalendar('getView');
-
-        if (msg.meta && msg.meta.sequence.length) {
-            for (var i=0; i<msg.meta.sequence.length; i++) {
-
-                var normalizedDate = new Date (view.start.getFullYear(), view.start.getMonth(), view.start.getDate() + i); 
-                var month = normalizedDate.getMonth() + 1;
-                var date = ('0' + normalizedDate.getDate()).slice(-2);
-
-                empDateMap[msg.meta.sequence[i]] = { "calDateIndex" : normalizedDate.getFullYear() + "-" + month + "-" + date};
-
-                // Turn on the column
-                $(".fc-col" + i).removeClass("fc-state-off");
-
-                // Label the column
-                $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i], empMasterDatabase) );
-            }
-
-        }
-
-        if (msg.schedule.length) {
-
-            for (var b=0; b<msg.schedule.length; b++) {
-
-                var schedObj = msg.schedule[b];
-
-                var column = empDateMap[schedObj.associate_id].calDateIndex;
-
-                 $('#calendar').fullCalendar('renderEvent', {
-                     id: schedObj.id, 
-                     allDay: false, 
-                     start: column + " " + schedObj.date_in.split(" ")[1], 
-                     end: column + " " + schedObj.date_out.split(" ")[1]
-                 }, true);
-            }
-        }
-
-    });
-
-
-    var editAccess = false;
-
-    if (typeof userCanManage !== 'undefined' && userCanManage) {
-        editAccess = true;
-    }
-
-    var calendar = $('#calendar').fullCalendar({
-        // We don't really care what time 
-        // the calendar thinks it is because in the context 
-        // of our app we're working with one day.
-        //
-        // However we need to map blocks to the columns
-        // created by the fullCalendar library we are
-        // exploiting and use those dates as an "index"
-        //
-        // So to help debug, let's set the date here to 1/1/2000
-        // so that we're always working with the same "days"
-        //
-        // This also conveniently circumvents highlighting today's date
-        // unless this code is transported back in time.
-
-        month:1, 
-        date:1,
-        year:2000,
-
-        defaultView: 'agendaWeek',
-        header: {
-            left: '',
-            center: '',
-            right: ''
-        },
-        selectable: editAccess,
-        selectHelper: editAccess,
-        select: function(start, end, allDay, jsEvent, view) {
-
-            /* Ugly day-border issue hack #1: set "midnight" to 11:59:59 */
-            if ((end.getHours() === 0) && (end.getMinutes() === 0) && (end.getSeconds() === 0)) {
-                end.setSeconds(end.getSeconds() - 1);
-            }
-
-            var normalizedDate = new Date (start.getFullYear(), start.getMonth(), start.getDate()); 
-            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-            var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
-            var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
-
-            var request = $.ajax({
-                url: "/lsvc/scheduler-in-out/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
-                type: "POST"
-            });
-
-            request.done(function(msg) {
-                if (msg.id) {
-                    calendar.fullCalendar(
-                        'renderEvent', 
-                        {
-                            //title: 'foo',
-                            id: msg.id,
-                            start: start,
-                            end: end,
-                            allDay: allDay
-                        },
-                        true
-                    );
-
-                    inOuts = msg.schedule;
-                    updateSummaries();
-
-                } else {
-                    calendar.fullCalendar('unselect');
-                }
-            });
-
-            onEvent++;
-        },
-        eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-
-            /* Ugly day-border issue hack #2: subtract 1 min from delta on a "midnight" end  */
-            if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
-                minuteDelta = minuteDelta - 1;
-            }
-
-
-            var normalizedDate = new Date (event.start.getFullYear(), event.start.getMonth(), event.start.getDate()); 
-            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-            var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
-            var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
-
-
-            var request = $.ajax({
-                url: "/lsvc/scheduler-in-out-move/"+associateId+"/"+event.id+"/"+minuteDelta+"/"+targetDate+"/"+currentStore,
-                type: "PUT"
-            });
-
-            request.done(function(msg) {
-                inOuts = msg.schedule;
-                updateSummaries();
-            
-            });
-        },
-
-        eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-
-            /* Ugly day-border issue hack #3: subtract 1 min from delta on a "midnight" end  */
-            /* This is extra-janky because the UI lets you select past 12:00 */
-            if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
-                minuteDelta = minuteDelta - 1;
-            }
-
-            var request = $.ajax({
-                url: "/lsvc/scheduler-in-out-resize/"+event.id+"/"+minuteDelta+"/"+currentStore+"/"+targetDate,
-                type: "PUT"
-            });
-
-            request.done(function(msg) {
-                inOuts = msg.schedule;
-                updateSummaries();
-            });
-        },
-
-        eventClick: function(event, jsEvent, view) {
-
-            if (typeof userCanManage !== 'undefined' && userCanManage) {
-
-                $("#block-remove-modal-content").html("<p>To delete this block, click <strong>Confirm Deletion</strong>.</p>"); 
-                $("#block-remove-modal-confirm").attr("data-event-id", event.id);
-                $("#block-remove-modal").modal('show');
-            }
-        },
-
-        editable: editAccess
-    });
-
-    // Disable all the columns on initial load; we will then enable them
-    // As we populate them
-    $(".sched-col").addClass("fc-state-off");
-    //$(".sched-header").html("<a class=\"adder\" href=\"#\">+ Add</a>");
-    // $(".sched-header").html("<button class=\"adder\">Add User</button>");
-
-
+  loadCalendar();
 });
+
+function loadCalendar(){
+  targetDate = $('#targetDate').val();
+
+  currentStore = parseInt($("#current-store").html());
+
+  weekOf = $('#weekOf').val();
+
+  dayOffset = parseInt($('#dayOffset').val());
+
+  var url  = "/lsvc/scheduler-store-day-schedule/"+currentStore+"/"+targetDate;
+
+  var loadFromDB = $.ajax({
+      url:  url,
+      type: "GET",
+      global: false
+  });
+
+  var onEvent = 0;
+
+  var empDateMap = {};
+
+  loadFromDB.done(function(msg) {
+
+      if (msg.schedule) {
+          inOuts = msg.schedule;
+      }
+
+      var getTargets = $.ajax({
+          url: '/lsvc/scheduler-targets/'+currentStore+'/'+weekOf,
+          type: 'GET',
+          global: false
+      });
+
+      getTargets.done(function(data){
+
+          // TODO: Can I remove this from the global scope?
+          dayTargetData = data[dayOffset+1];
+
+          if (typeof dayTargetData !== "undefined") {
+              for (var key in data[dayOffset+1].hours) {
+                  goals.push({"hour" : key, "goal" : data[dayOffset+1].hours[key].budget});
+              }
+          }
+
+          updateSummaries();
+
+      });
+
+      var view = $('#calendar').fullCalendar('getView');
+
+      if (msg.meta && msg.meta.sequence.length) {
+          for (var i=0; i<msg.meta.sequence.length; i++) {
+
+              var normalizedDate = new Date (view.start.getFullYear(), view.start.getMonth(), view.start.getDate() + i);
+              var month = normalizedDate.getMonth() + 1;
+              var date = ('0' + normalizedDate.getDate()).slice(-2);
+
+              empDateMap[msg.meta.sequence[i]] = { "calDateIndex" : normalizedDate.getFullYear() + "-" + month + "-" + date};
+
+              // Turn on the column
+              $(".fc-col" + i).removeClass("fc-state-off");
+
+              // Label the column
+              $(".sched-header").eq(i).attr("data-emp-id", msg.meta.sequence[i]).html(msg.meta.sequence[i] + "<br />" + getEmpNameFromCode(msg.meta.sequence[i], empMasterDatabase) );
+          }
+
+      }
+
+      if (msg.schedule.length) {
+
+          for (var b=0; b<msg.schedule.length; b++) {
+
+              var schedObj = msg.schedule[b];
+
+              var sellable = schedObj.sellable;
+
+              var bg = eventBackgroundDefault;
+              if(schedObj.sellable==0){
+                bg = eventBackgroundSellable;
+              }
+              var column = empDateMap[schedObj.associate_id].calDateIndex;
+
+               $('#calendar').fullCalendar('renderEvent', {
+                   id: schedObj.id,
+                   allDay: false,
+                   backgroundColor: bg,
+                   borderColor: bg,
+                   start: column + " " + schedObj.date_in.split(" ")[1],
+                   end: column + " " + schedObj.date_out.split(" ")[1]
+               }, true);
+          }
+      }
+
+  });
+
+
+  var editAccess = false;
+
+  if (typeof userCanManage !== 'undefined' && userCanManage) {
+      editAccess = true;
+  }
+
+  var calendar = $('#calendar').fullCalendar({
+      // We don't really care what time
+      // the calendar thinks it is because in the context
+      // of our app we're working with one day.
+      //
+      // However we need to map blocks to the columns
+      // created by the fullCalendar library we are
+      // exploiting and use those dates as an "index"
+      //
+      // So to help debug, let's set the date here to 1/1/2000
+      // so that we're always working with the same "days"
+      //
+      // This also conveniently circumvents highlighting today's date
+      // unless this code is transported back in time.
+
+      month:1,
+      date:1,
+      year:2000,
+
+      defaultView: 'agendaWeek',
+      header: {
+          left: '',
+          center: '',
+          right: ''
+      },
+      selectable: editAccess,
+      selectHelper: editAccess,
+      select: function(start, end, allDay, jsEvent, view) {
+
+          /* Ugly day-border issue hack #1: set "midnight" to 11:59:59 */
+          if ((end.getHours() === 0) && (end.getMinutes() === 0) && (end.getSeconds() === 0)) {
+              end.setSeconds(end.getSeconds() - 1);
+          }
+
+          var normalizedDate = new Date (start.getFullYear(), start.getMonth(), start.getDate());
+          var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+          var column = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
+          var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
+
+          var request = $.ajax({
+              url: "/lsvc/scheduler-in-out/"+currentStore+"/"+associateId+"/"+targetDate+"+"+start.getHours()+"%3A"+start.getMinutes()+"%3A00/"+targetDate+"+"+end.getHours()+"%3A"+end.getMinutes()+"%3A00"+"/"+targetDate,
+              type: "POST"
+          });
+
+          request.done(function(msg) {
+              if (msg.id) {
+                  calendar.fullCalendar(
+                      'renderEvent',
+                      {
+                          //title: 'foo',
+                          id: msg.id,
+                          start: start,
+                          end: end,
+                          allDay: allDay
+                      },
+                      true
+                  );
+
+                  inOuts = msg.schedule;
+                  updateSummaries();
+
+                  if(msg.status==0){
+                    console.log("Inside 0");
+                    showalert("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger");
+                  }
+
+              } else {
+                  //showErrorMessage("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger", true, 2000);
+                  console.log("Inside else");
+                  showalert("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger");
+                  calendar.fullCalendar('unselect');
+              }
+          });
+
+          onEvent++;
+      },
+      eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+          /* Ugly day-border issue hack #2: subtract 1 min from delta on a "midnight" end  */
+          if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+              minuteDelta = minuteDelta - 1;
+          }
+
+          console.log("Date would be "+targetDate+" ===== "+
+          event.start.getTime()+
+          " === End Time:"+event.end.getHours()+":"+event.end.getMinutes()+":"+event.end.getSeconds()+
+          " === Start Time:"+event.start.getHours()+":"+event.start.getMinutes()+":"+event.start.getSeconds());
+
+          //Building the date and time to pass to php
+          var startTime   = targetDate+" "+event.start.getHours()+":"+event.start.getMinutes()+":"+event.start.getSeconds();
+          var endTime     = targetDate+" "+event.end.getHours()+":"+event.end.getMinutes()+":"+event.end.getSeconds();
+
+          /* Ugly day-border issue hack #2: subtract 1 min from delta on a "midnight" end  */
+          if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+              minuteDelta = minuteDelta - 1;
+              var endTime     = targetDate+" 23:59:59";
+          }
+          var normalizedDate = new Date (event.start.getFullYear(), event.start.getMonth(), event.start.getDate());
+          var oneDay      = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+          var column      = Math.round(Math.abs((normalizedDate.getTime() - view.start.getTime())/(oneDay)));
+          var associateId = $(".sched-header[data-col-id="+column+"]").attr('data-emp-id');
+
+          var request = $.ajax({
+              url: "/lsvc/scheduler-in-out-move/"+associateId+"/"+event.id+"/"+currentStore+"/"+startTime+"/"+endTime,
+              //url: "/lsvc/scheduler-in-out-move/"+associateId+"/"+event.id+"/"+currentStore+"/"+targetDate+"/"+startTime,
+              type: "POST"
+          });
+
+          request.done(function(msg) {
+            if(msg.status==0){
+              showalert("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger");
+            }else{
+              inOuts = msg.schedule;
+              updateSummaries();
+            }
+          });
+      },
+
+      eventResize: function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+
+          /* Ugly day-border issue hack #3: subtract 1 min from delta on a "midnight" end  */
+          /* This is extra-janky because the UI lets you select past 12:00 */
+          if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+              minuteDelta = minuteDelta - 1;
+          }
+
+          //Building the date and time to pass to php
+          var startTime   = targetDate+" "+event.start.getHours()+":"+event.start.getMinutes()+":"+event.start.getSeconds();
+          var endTime     = targetDate+" "+event.end.getHours()+":"+event.end.getMinutes()+":"+event.end.getSeconds();
+
+          /* Ugly day-border issue hack #2: subtract 1 min from delta on a "midnight" end  */
+          if ((event.end.getHours() === 0) && (event.end.getMinutes() === 0) && (event.end.getSeconds() === 0)) {
+              minuteDelta = minuteDelta - 1;
+              var endTime     = targetDate+" 23:59:59";
+          }
+
+          var request = $.ajax({
+              url: "/lsvc/scheduler-in-out-resize/"+event.id+"/"+currentStore+"/"+startTime+"/"+endTime,
+              type: "PUT"
+          });
+
+          request.done(function(msg) {
+              inOuts = msg.schedule;
+              updateSummaries();
+          });
+      },
+
+      eventClick: function(event, jsEvent, view) {
+        if (typeof userCanManage !== 'undefined' && userCanManage) {
+          //Get if this block is set as sellable to show a different message on the button
+          var getSellable = $.ajax({
+              url: '/lsvc/sellable-status/'+event.id,
+              type: 'GET',
+              global: false
+          });
+
+          getSellable.done(function(data){
+              if(data.sellable==1){
+                $("#block-set-sellable-confirm").html('Set Non-Sellable');
+              }else{
+                $("#block-set-sellable-confirm").html('Set Sellable');
+              }
+              gevent = event;
+              //event.backgroundColor = 'red';
+              //$('#calendar').fullCalendar( 'rerenderEvents' );
+              $("#block-remove-modal-content").html("<p>Please select the option below to change/remove your schedule block.</p><br><p><font color='red'>Non-sellable hours is currently in beta test and it will not change your current targets.</font></p>");
+              $("#block-remove-modal-confirm").attr("data-event-id", event.id);
+              $("#block-set-sellable-confirm").attr("sellable-event-id", event.id);
+
+              //
+              $("#block-remove-modal").modal('show');
+          });
+
+        }
+      },
+      editable: editAccess
+  });
+
+  // Disable all the columns on initial load; we will then enable them
+  // As we populate them
+  $(".sched-col").addClass("fc-state-off");
+  //$(".sched-header").html("<a class=\"adder\" href=\"#\">+ Add</a>");
+  // $(".sched-header").html("<button class=\"adder\">Add User</button>");
+}
+
+function showalert(container, message,alerttype) {
+  $("#message-modal-content").html("<p>"+message+"</p>");
+  $("#message-modal-title").html("Invalid Schedule");
+  $('#message-modal').modal('show');
+}
 
 function milToStandard(hour)
 {
@@ -265,8 +335,8 @@ function milToStandard(hour)
 
 function updateSummariesNotReady()
 {
-    $("#day-target").html("<em>Target data not available yet.</em>"); 
-    $("#day-hours").html("<em>Target data not available yet.</em>"); 
+    $("#day-target").html("<em>Target data not available yet.</em>");
+    $("#day-hours").html("<em>Target data not available yet.</em>");
     $("#new-day-hours-detail tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
     $("#emp-hours-summary tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
 }
@@ -275,7 +345,7 @@ function updateSummaries()
 {
     //if (true) {
     if (typeof dayTargetData !== "undefined") {
-        $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2)); 
+        $("#day-target").html("$" + parseFloat(dayTargetData.target).toFixed(2));
 
         $("#day-hours").html(milToStandard(dayTargetData.open) + " - " + milToStandard(dayTargetData.close));
 
@@ -288,7 +358,7 @@ function updateSummaries()
         var row = null;
 
         for (var b=0; b<budgetByHour.length; b++) {
-            
+
             var extraClasses = '';
 
             var budgetOutput = '';
@@ -329,8 +399,8 @@ function updateSummaries()
             $("#emp-hours-summary tbody").append(row);
         }
     }else{
-        $("#day-target").html("<em>Target data not available yet.</em>"); 
-        $("#day-hours").html("<em>Target data not available yet.</em>"); 
+        $("#day-target").html("<em>Target data not available yet.</em>");
+        $("#day-hours").html("<em>Target data not available yet.</em>");
         $("#new-day-hours-detail tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
         $("#emp-hours-summary tbody").append("<tr><td colspan='99'><em>Target data not available yet.</em></td></tr>");
     }
@@ -380,6 +450,7 @@ function getEmpNameFromCode(strCode){
 }
 */
 
+//When user deletes the scheduler block
 $(document).on("click", "#block-remove-modal-confirm", function(){
 
     var eventId = $(this).attr('data-event-id');
@@ -398,5 +469,42 @@ $(document).on("click", "#block-remove-modal-confirm", function(){
         inOuts = msg.schedule;
 
         updateSummaries();
+    });
+});
+
+//When user set the block as non-sellable
+$(document).on("click", "#block-set-sellable-confirm", function(){
+    var eventId = $(this).attr('sellable-event-id');
+    $("#block-remove-modal").modal('hide');
+    var request = $.ajax({
+        url: "/lsvc/scheduler-sellable/" + eventId,
+        type: "PUT"
+    });
+
+
+    request.done(function(msg) {
+      if(msg.status==0){
+        showalert("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger");
+      }else{
+        //inOuts = msg.schedule;
+        //updateSummaries();
+        if(msg.sellable==1){
+          gevent.backgroundColor = '#3a87ad';
+          gevent.borderColor = '#3a87ad';
+          $('#calendar').fullCalendar('updateEvent', eventId);
+        }else{
+          gevent.backgroundColor = '#6d7578';
+          gevent.borderColor = '#6d7578';
+          $('#calendar').fullCalendar('updateEvent', eventId);
+        }
+
+
+        //loadCalendar();
+        //
+        //$(gview.getElement).append( "<p>Test</p>" );
+
+        //$(gview).css('background-color', 'red');
+        //$('#calendar').fullCalendar('option', 'eventColor', '#FF0000');
+      }
     });
 });

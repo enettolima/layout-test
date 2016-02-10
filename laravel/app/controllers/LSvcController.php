@@ -313,6 +313,7 @@ class LSvcController extends BaseController
 				}
 			}';
 
+      Log::info('Query', array('query'=> $query));
 			$params2                           = array();
 			$params2['hosts']                  = array($_ENV['ebt_elasticsearch_host']);
 			$client                            = new Elasticsearch\Client($params2);
@@ -330,6 +331,8 @@ class LSvcController extends BaseController
 					$res[$key]['children']=true;
 				}
 			}
+
+      Log::info('results', $results);
 			//Return json to the docs.js to append the results on jstree
 			return Response::json($res);
 		}
@@ -420,11 +423,26 @@ class LSvcController extends BaseController
     // Todo: protect against unauthorized call
     public function deleteSchedulerInOut()
     {
+      $inOutId     = Request::segment(3);
+      $storeNumber = Request::segment(4);
+      $date        = Request::segment(5);
 
-        $inOutId     = Request::segment(3);
-        $storeNumber = Request::segment(4);
-        $date        = Request::segment(5);
+      try{
+        $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+        $sel = DB::connection('mysql')->select($sql);
 
+        //if sql_id>0 it means that we can save that into mysql
+        $sqlId = $sel[0]->sql_id;
+
+        if($sqlId>0){
+          //removing on sql Server
+          $update_sql = $this->deleteSqlScheduler($sqlId);
+          if($update_sql!="0"){
+            //At this point the php could not save the record on sql meaning that we should not update mySql
+            return Response::json(array( 'status' => 0));
+            exit();
+          }
+        }
         $deleteSQL = "
             DELETE FROM
                 scheduled_inout
@@ -446,60 +464,121 @@ class LSvcController extends BaseController
         } else {
             return Response::json(array('status' => 0));
         }
-
+      } catch (Exception $e) {
+        return Response::json(array( 'status' => 0));
+      }
     }
 
-    public function putSchedulerInOutMove()
+    public function postSchedulerInOutMove()
     {
-        $userId = Request::segment(3);
-        $inOutId = Request::segment(4);
-        $delta = Request::segment(5);
-        $date = Request::segment(6);
-        $storeNumber = Request::segment(7);
+      $userId     = Request::segment(3);
+      $inOutId    = Request::segment(4);
+      $storeNumber= Request::segment(5);
+      $start      = urldecode(Request::segment(6));
+      $end        = urldecode(Request::segment(7));
 
+      //Converting to time so we can make the correct format
+      $startStamp = strtotime($start);
+      $endStamp = strtotime($end);
+
+      //Converting from time to yyyy-mm-dd hh:mm:ss
+      $startDate = date("Y-m-d H:i:s",$startStamp);
+      $endDate = date("Y-m-d H:i:s",$endStamp);
+
+      //Extracting date from the string
+      $date       = date("Y-m-d",$startStamp);
+      try{
+        //Selecting the record from MySql to get the sql_id
+        $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+        $sel = DB::connection('mysql')->select($sql);
+
+        //if sql_id>0 it means that we can save that into mysql
+        $sqlId = $sel[0]->sql_id;
+        $sellable = $sel[0]->sellable;
+
+        if($sqlId>0){
+          //Making update on sql Server
+          $update_sql = $this->updateSqlScheduler($startDate, $endDate, $sellable, $userId, $sqlId);
+
+          if($update_sql!="0"){
+            //At this point the php could not save the record on sql meaning that we should not update mySql
+            return Response::json(array( 'status' => 0));
+            exit();
+          }
+        }
         $SQL = "
             UPDATE scheduled_inout
             SET
                 associate_id = '$userId',
-                date_in = DATE_ADD(date_in, INTERVAL $delta MINUTE),
-                date_out = DATE_ADD(date_out, INTERVAL $delta MINUTE)
+                date_in = '$startDate',
+                date_out = '$endDate'
             WHERE
                 id = $inOutId
         ";
 
         if (DB::connection('mysql')->update($SQL)) {
-
-            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
-            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
-
-            return Response::json(array(
-                'status' => 1,
-                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
-                'schedule' => $this->getDaySchedule($storeNumber, $date)
-            ));
+          $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+          $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+          return Response::json(array(
+              'status' => 1,
+              'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+              'schedule' => $this->getDaySchedule($storeNumber, $date)
+          ));
         } else {
-            return Response::json(array( 'status' => 0));
+          return Response::json(array( 'status' => 0));
         }
+      } catch (Exception $e) {
+        return Response::json(array( 'status' => 0));
+      }
     }
-
 
     public function putSchedulerInOutResize()
     {
         $inOutId     = Request::segment(3);
-        $delta       = Request::segment(4);
-        $storeNumber = Request::segment(5);
-        $date        = Request::segment(6);
+        $storeNumber = Request::segment(4);
+        $start      = urldecode(Request::segment(5));
+        $end        = urldecode(Request::segment(6));
 
-        $SQL = "
-            UPDATE scheduled_inout
-            SET
-                date_out = DATE_ADD(date_out, INTERVAL $delta MINUTE)
-            WHERE
-                id = $inOutId
-        ";
+        //Converting to time so we can make the correct format
+        $startStamp = strtotime($start);
+        $endStamp = strtotime($end);
 
-        if (DB::connection('mysql')->update($SQL)) {
+        //Converting from time to yyyy-mm-dd hh:mm:ss
+        $startDate = date("Y-m-d H:i:s",$startStamp);
+        $endDate = date("Y-m-d H:i:s",$endStamp);
 
+        //Extracting date from the string
+        $date       = date("Y-m-d",$startStamp);
+
+        try{
+          //Selecting the record from MySql to get the sql_id
+          $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+          $sel = DB::connection('mysql')->select($sql);
+
+          //if sql_id>0 it means that we can save that into mysql
+          $sqlId = $sel[0]->sql_id;
+          $sellable = $sel[0]->sellable;
+          $userId = $sel[0]->associate_id;
+
+          if($sqlId>0){
+            //Making update on sql Server
+            $update_sql = $this->updateSqlScheduler($startDate, $endDate, $sellable, $userId, $sqlId);
+            if($update_sql!="0"){
+              //At this point the php could not save the record on sql meaning that we should not update mySql
+              return Response::json(array( 'status' => 0));
+              exit();
+            }
+          }
+
+          $SQL = "
+              UPDATE scheduled_inout
+              SET
+                  date_out = '$endDate'
+              WHERE
+                  id = $inOutId
+          ";
+
+          if (DB::connection('mysql')->update($SQL)) {
             $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
             $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -508,9 +587,11 @@ class LSvcController extends BaseController
                 'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
                 'schedule' => $this->getDaySchedule($storeNumber, $date)
             ));
-
-        } else {
-            return Response::json(array('status' => 0));
+          } else {
+            return Response::json(array( 'status' => 0));
+          }
+        } catch (Exception $e) {
+          return Response::json(array( 'status' => 0));
         }
     }
 
@@ -553,11 +634,21 @@ class LSvcController extends BaseController
         if ($performUpdate) {
             $metaArray['sequence'] = array_values($currentSequence);
             $newData = json_encode($metaArray);
+
+
+
             $updateSQL = "UPDATE schedule_day_meta set data = '$newData' where id = {$RES[0]->{'id'}}";
             $updateRES = DB::connection('mysql')->update($updateSQL);
 
             if ($updateRES) {
 
+                $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+                $sel = DB::connection('mysql')->select($sql);
+
+                //if sql_id>0 it means that we can save that into mysql
+                $sqlId = $sel[0]->sql_id;
+                //removing on sql Server
+                $update_sql = $this->deleteSqlScheduler($sqlId);
                 $nextSunday = date("Y-m-d", strtotime('next sunday', strtotime($weekOf)));
 
                 $deleteScheduleSQL = "
@@ -640,7 +731,6 @@ class LSvcController extends BaseController
 
     public function postSchedulerCopySchedule()
     {
-
         $storeNumber   = Request::segment(3);
         $schedDateFrom = Request::segment(4);
         $schedDateTo   = Request::segment(5);
@@ -649,14 +739,11 @@ class LSvcController extends BaseController
         $metaRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateFrom'");
 
         if (count($metaRes) === 1) {
-
             // Clear it just in case there's any metadata hanging around
             // Todo: this is probably pretty reckless. I'm not protecting any input.
-
             // Is the destination schedule really empty? We are having problems with copies blowing away
             // existing schedules
             $copyToRes = DB::connection('mysql')->select("select * from schedule_day_meta where store_id = $storeNumber and date = '$schedDateTo'");
-
             if (count($copyToRes) !== 0) {
                 $data = json_decode($copyToRes[0]->data);
                 if (count($data->sequence) !== 0) {
@@ -668,8 +755,10 @@ class LSvcController extends BaseController
 
             DB::connection('mysql')->insert('insert into schedule_day_meta (store_id, date, data) values (?, ?, ?)', array($storeNumber, $schedDateTo, $metaRes[0]->{'data'}));
 
+            //This will only delete records from this day to 7+ days after
+            $this->copSqlScheduler($schedDateTo, $storeNumber);
+                   
             // Step 2: Get all the in/outs
-
             // Before: Probably DST Problem
             // $fromWeekBoundary = date('Y-m-d', strtotime($schedDateFrom) + (86400 * 7));
             // After:
@@ -714,32 +803,42 @@ class LSvcController extends BaseController
             $dtSchedDateFrom = new DateTime($schedDateFrom);
             $dayDiff = $dtSchedDateTo->diff($dtSchedDateFrom)->format("%a");
 
+            /*
+             * Make sure to call a store procedure to make the whole operation
+             * instead on insert one by one
+             */
             foreach ($ioRES as $io) {
+              $startDate = date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_in'})));
+              $endDate = date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_out'})));
 
+              $create_sql = $this->createSqlScheduler($startDate, $endDate, 1, $io->{'associate_id'}, $io->{'store_id'});
+              if($create_sql['status']=="0"){//Making sure we can save this into sql server 0=ok, 1=error
+                $sqlId = $create_sql['sql_id'];
                 $result = DB::connection('mysql')->insert(
-                    "insert into scheduled_inout (associate_id, store_id, date_in, date_out) values (?, ?, ?, ?)",
-                    array(
-                        $io->{'associate_id'},
-                        $io->{'store_id'},
-
-                        // Before: Probably DST Problem
-                        // date("Y-m-d H:i:s", strtotime($io->{'date_in'}) + (86400 * $dayDiff)),
-
-                        // After:
-                        date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_in'}))),
-                        date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_out'}))),
-                    )
+                  "insert into scheduled_inout (associate_id, store_id, date_in, date_out, sql_id, sellable) values (?, ?, ?, ?, ?, ?)",
+                  array(
+                    $io->{'associate_id'},
+                    $io->{'store_id'},
+                    // Before: Probably DST Problem
+                    // date("Y-m-d H:i:s", strtotime($io->{'date_in'}) + (86400 * $dayDiff)),
+                    // After:
+                    date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_in'}))),
+                    date( "Y-m-d H:i:s", strtotime( '+'.$dayDiff.'days', strtotime($io->{'date_out'}))),
+                    $sqlId,
+                    1
+                  )
                 );
-
-            }
-
+              }
+          }
         } else {
             throw new Exception();
         }
 
     }
 
-    public function putSchedulerInOut()
+    /*
+     * Function not in use at this time
+     *public function putSchedulerInOut()
     {
         $storeNumber = Request::segment(3);
         $inOutId     = Request::segment(4);
@@ -773,7 +872,7 @@ class LSvcController extends BaseController
         } else {
             return Response::json(array('status' => 0));
         }
-    }
+    }*/
 
     public function postSchedulerInOut()
     {
@@ -787,23 +886,35 @@ class LSvcController extends BaseController
         $out = date('Y-m-d H:i:s', strtotime(urldecode($outString)));
 
         if ($userId != "undefined") {
+          try {
 
-            $SQL = "
-                INSERT INTO scheduled_inout (
-                    associate_id,
-                    store_id,
-                    date_in,
-                    date_out
-                ) VALUES (
-                    '$userId',
-                    $storeNumber,
-                    '$in',
-                    '$out'
-                )
-            ";
+            //$sql = "exec dbo.operInOut 'A', NULL, '".$in."', '".$out."',1, '".$userId."', '".$storeNumber."'";
+            //$sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+            //Saving this record on sql server(check the ond of this file)
+            $create_sql = $this->createSqlScheduler($in, $out, 1, $userId, $storeNumber);
+            if($create_sql['status']=="0"){//Making sure we can save this into sql server 0=ok, 1=error
+              //Only save on MySql if save on Sql server was successfull
+              //Sql is validating if the time is overlapping
+              $sql_id = $create_sql['sql_id'];
+              $SQL = "
+                  INSERT INTO scheduled_inout (
+                      associate_id,
+                      store_id,
+                      date_in,
+                      date_out,
+                      sql_id,
+                      sellable
+                  ) VALUES (
+                      '$userId',
+                      $storeNumber,
+                      '$in',
+                      '$out',
+                      '$sql_id',
+                      '1'
+                  )
+              ";
 
-            if (DB::connection('mysql')->insert($SQL)) {
-
+              if (DB::connection('mysql')->insert($SQL)) {
                 $id = DB::connection('mysql')->getPdo()->lastInsertId();
 
                 $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
@@ -815,13 +926,24 @@ class LSvcController extends BaseController
                     'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
                     'schedule' => $this->getDaySchedule($storeNumber, $date)
                 ));
-
-            } else {
-                return Response::json(array('id' => null));
+              }
+            }else{
+              return Response::json(array(
+                  'status' => 0,
+                  'id' => 0,
+                  'scheduleHourLookup' => 0,
+                  'schedule' => $this->getDaySchedule($storeNumber, $date)
+              ));
             }
-        } else {
-            return Response::json(array('id' => null));
-        }
+          } catch (Exception $e) {
+            return Response::json(array(
+                'status' => 0,
+                'id' => 0,
+                'scheduleHourLookup' => 0,
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
+            ));
+          }
+      }
     }
 
     protected function getDaySchedule($storeNumber, $targetDate)
@@ -836,7 +958,9 @@ class LSvcController extends BaseController
                 s.`associate_id`,
                 s.`store_id`,
                 s.`date_in`,
-                s.`date_out`
+                s.`date_out`,
+                s.`sql_id`,
+                s.`sellable`
             FROM
                 scheduled_inout s
             WHERE
@@ -951,7 +1075,9 @@ class LSvcController extends BaseController
                     s.`associate_id`,
                     s.`store_id`,
                     s.`date_in`,
-                    s.`date_out`
+                    s.`date_out`,
+                    s.`sql_id`,
+                    s.`sellable`
                 FROM
                     scheduled_inout s
                 WHERE
@@ -1179,6 +1305,118 @@ class LSvcController extends BaseController
     }
 
     /*
+     * Functions to update the sql side with the scheduler
+     */
+    public function createSqlScheduler($start, $end, $sellable = 1, $employee_id, $store_number){
+      $sql = "exec dbo.operInOut 'A', NULL, '".$start."', '".$end."',".$sellable.", '".$employee_id."', '".$store_number."'";
+      $sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+
+      $response['status'] = $sqlinsert[0]->STATUS;
+      $response['sql_id'] = $sqlinsert[0]->ID;
+      $response['error']  = $sqlinsert[0]->ReasonCode;
+      return $response;
+    }
+
+    public function updateSqlScheduler($start, $end, $sellable, $employee_id, $sql_id){
+      $sql = "exec dbo.operInOut 'U', ".$sql_id.", '".$start."', '".$end."',".$sellable.", '".$employee_id."'";
+      $sqlupdate = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+      return $sqlupdate[0]->STATUS;
+    }
+
+    public function deleteSqlScheduler($sql_id){
+      $sql = "exec dbo.operInOut 'D', ".$sql_id."";
+      $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+      return $sqldelete[0]->STATUS;
+    }
+
+    /*
+     * Sql server will get the start date and calculate 7 days ahead of
+     * that to create the rage tha need to be deleted.
+     * In the future this function will delete base on the range and will create the
+     * new schedule as well
+     */
+    public function copSqlScheduler($start, $store_number){
+      $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."'";
+      $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+      return $sqldelete[0]->STATUS;
+    }
+    /////////////////// End of Sql Functions
+
+    /*
+     * Function to get is schedule block is sellable or not
+     */
+    public function getSellableStatus(){
+      $inOutId     = Request::segment(3);
+      $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+      $sel = DB::connection('mysql')->select($sql);
+
+      $sellable = $sel[0]->sellable;
+
+      return Response::json(array('sellable' => $sellable));
+    }
+
+    /*
+     * Function to update the schedule block to sellable or not
+     */
+    public function putSchedulerSellable(){
+      $inOutId     = Request::segment(3);
+
+      try{
+        //Selecting the record from MySql to get the sql_id
+        $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+        $sel = DB::connection('mysql')->select($sql);
+
+        //if sql_id>0 it means that we can save that into mysql
+        $sqlId      = $sel[0]->sql_id;
+        $userId     = $sel[0]->associate_id;
+        $startDate  = $sel[0]->date_in;
+        $endDate    = $sel[0]->date_out;
+        $storeNumber= $sel[0]->store_id;
+
+        //Extracting date from the string
+        $date       = date("Y-m-d",strtotime($startDate));
+
+        if($sel[0]->sellable==0){
+          $sellable = 1;
+        }else{
+          $sellable = 0;
+        }
+
+        if($sqlId>0){
+          //Making update on sql Server
+          $update_sql = $this->updateSqlScheduler($startDate, $endDate, $sellable, $userId, $sqlId);
+          if($update_sql!="0"){
+            //At this point the php could not save the record on sql meaning that we should not update mySql
+            return Response::json(array( 'status' => 0));
+            exit();
+          }
+        }
+        $SQL = "
+            UPDATE scheduled_inout
+            SET
+                sellable = '$sellable'
+            WHERE
+                id = $inOutId
+        ";
+
+        if (DB::connection('mysql')->update($SQL)){
+          //return Response::json(array('sellable' => $sellable));
+          //$scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+          //$scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+          return Response::json(array(
+              'status' => 1,
+              'sellable' => $sellable
+              //'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+              //'schedule' => $this->getDaySchedule($storeNumber, $date)
+          ));
+        }
+      } catch (Exception $e) {
+        return Response::json(array( 'status' => 0));
+      }
+    }
+
+    /*
      * Currently a "stub" function which will probably be hooked into Oracle
      */
     public function getEmployees()
@@ -1189,10 +1427,8 @@ class LSvcController extends BaseController
 
     public function getSchedulerSetCurrentWeekOf($string)
     {
-
         if (preg_match('/^\d\d\d\d-\d\d-\d\d$/', Request::segment(3))) {
             Session::set('schedulerCurrentWeekOf', Request::segment(3));
-
         }
     }
 
