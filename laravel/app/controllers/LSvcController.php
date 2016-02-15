@@ -642,13 +642,16 @@ class LSvcController extends BaseController
 
             if ($updateRES) {
 
-                $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
-                $sel = DB::connection('mysql')->select($sql);
+                //$sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+                //$sel = DB::connection('mysql')->select($sql);
 
                 //if sql_id>0 it means that we can save that into mysql
-                $sqlId = $sel[0]->sql_id;
+                //$sqlId = $sel[0]->sql_id;
                 //removing on sql Server
-                $update_sql = $this->deleteSqlScheduler($sqlId);
+                //$update_sql = $this->deleteSqlScheduler($sqlId);
+
+                //This will only delete records from this day to 7+ days after
+                $this->copSqlScheduler($weekOf, $storeNumber, $userId);
                 $nextSunday = date("Y-m-d", strtotime('next sunday', strtotime($weekOf)));
 
                 $deleteScheduleSQL = "
@@ -757,7 +760,7 @@ class LSvcController extends BaseController
 
             //This will only delete records from this day to 7+ days after
             $this->copSqlScheduler($schedDateTo, $storeNumber);
-                   
+
             // Step 2: Get all the in/outs
             // Before: Probably DST Problem
             // $fromWeekBoundary = date('Y-m-d', strtotime($schedDateFrom) + (86400 * 7));
@@ -1318,8 +1321,13 @@ class LSvcController extends BaseController
     }
 
     public function updateSqlScheduler($start, $end, $sellable, $employee_id, $sql_id){
+      Log::info('Received', array("start"=>$start,
+      "SqlID"=>$sql_id,
+      "Emp ID"=>$employee_id
+      ));
       $sql = "exec dbo.operInOut 'U', ".$sql_id.", '".$start."', '".$end."',".$sellable.", '".$employee_id."'";
       $sqlupdate = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+      Log::info('SqlDetele', $sqlupdate);
       return $sqlupdate[0]->STATUS;
     }
 
@@ -1335,10 +1343,20 @@ class LSvcController extends BaseController
      * In the future this function will delete base on the range and will create the
      * new schedule as well
      */
-    public function copSqlScheduler($start, $store_number){
-      $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."'";
+    public function copSqlScheduler($start, $store_number, $employee_id=0){
+      Log::info('Received', array("start"=>$start,
+      "Store"=>$store_number,
+      "Emp ID"=>$employee_id
+      ));
+      if($employee_id>0){
+        $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."', NULL, '".$employee_id."'";
+      }else{
+        $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."'";
+      }
       $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      return $sqldelete[0]->STATUS;
+      Log::info('SqlDetele', $sqldelete);
+      //return $sqldelete[0]->STATUS;
+      return true;
     }
     /////////////////// End of Sql Functions
 
