@@ -840,8 +840,9 @@ class LSvcController extends BaseController
     }
 
     /*
-     * Function not in use at this time
-     *public function putSchedulerInOut()
+     * Function used when they update the time manually
+     */
+    public function putSchedulerInOut()
     {
         $storeNumber = Request::segment(3);
         $inOutId     = Request::segment(4);
@@ -852,7 +853,61 @@ class LSvcController extends BaseController
         $in  = date('Y-m-d H:i:s', strtotime(urldecode($inString)));
         $out = date('Y-m-d H:i:s', strtotime(urldecode($outString)));
 
-        $SQL = "
+        try{
+
+          $outDate = date('Y-m-d', strtotime(urldecode($outString)));
+          $outTime = date('H:i:s', strtotime(urldecode($outString)));
+
+          if($outTime=="00:00:00"){
+            $outTime = "23:59:59";
+
+            $out = $outDate." ".$outTime;
+          }
+          //Selecting the record from MySql to get the sql_id
+          $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+          $sel = DB::connection('mysql')->select($sql);
+
+          //if sql_id>0 it means that we can save that into mysql
+          $sqlId = $sel[0]->sql_id;
+          $sellable = $sel[0]->sellable;
+          $userId = $sel[0]->associate_id;
+
+          if($sqlId>0){
+            //Making update on sql Server
+            $update_sql = $this->updateSqlScheduler($in, $out, $sellable, $userId, $sqlId);
+            if($update_sql!="0"){
+              //At this point the php could not save the record on sql meaning that we should not update mySql
+              return Response::json(array( 'status' => 0));
+              exit();
+            }
+          }
+
+          $SQL = "
+              UPDATE scheduled_inout
+              SET
+                date_in = '$in',
+                date_out = '$out'
+              WHERE
+                  id = $inOutId
+          ";
+
+          if (DB::connection('mysql')->update($SQL)) {
+            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
+            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
+
+            return Response::json(array(
+                'status' => 1,
+                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
+                'schedule' => $this->getDaySchedule($storeNumber, $date)
+            ));
+          } else {
+            return Response::json(array( 'status' => 0));
+          }
+        } catch (Exception $e) {
+          return Response::json(array( 'status' => 0));
+        }
+
+        /*$SQL = "
             UPDATE scheduled_inout
             SET
                 date_in = '$in',
@@ -871,11 +926,10 @@ class LSvcController extends BaseController
                 'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
                 'schedule' => $this->getDaySchedule($storeNumber, $date)
             ));
-
         } else {
             return Response::json(array('status' => 0));
-        }
-    }*/
+        }*/
+    }
 
     public function postSchedulerInOut()
     {
@@ -888,9 +942,20 @@ class LSvcController extends BaseController
         $in  = date('Y-m-d H:i:s', strtotime(urldecode($inString)));
         $out = date('Y-m-d H:i:s', strtotime(urldecode($outString)));
 
+        $outDate = date('Y-m-d', strtotime(urldecode($outString)));
+        $outTime = date('H:i:s', strtotime(urldecode($outString)));
+
+        Log::info('Checking Time', array("time"=>$outTime, "OutDate"=>$outDate));
+
+        if($outTime=="00:00:00"){
+          $outTime = "23:59:59";
+
+          $out = $outDate." ".$outTime;
+        }
         if ($userId != "undefined") {
           try {
 
+            Log::info('Inside Try', array("start"=>$inString));
             //$sql = "exec dbo.operInOut 'A', NULL, '".$in."', '".$out."',1, '".$userId."', '".$storeNumber."'";
             //$sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
             //Saving this record on sql server(check the ond of this file)
@@ -898,6 +963,7 @@ class LSvcController extends BaseController
             if($create_sql['status']=="0"){//Making sure we can save this into sql server 0=ok, 1=error
               //Only save on MySql if save on Sql server was successfull
               //Sql is validating if the time is overlapping
+              Log::info('Inside $create_sql', array("status"=>$create_sql['status']));
               $sql_id = $create_sql['sql_id'];
               $SQL = "
                   INSERT INTO scheduled_inout (
@@ -917,9 +983,11 @@ class LSvcController extends BaseController
                   )
               ";
 
+              Log::info('Show Query', array("query"=>$SQL));
               if (DB::connection('mysql')->insert($SQL)) {
-                $id = DB::connection('mysql')->getPdo()->lastInsertId();
 
+                $id = DB::connection('mysql')->getPdo()->lastInsertId();
+                Log::info('Inside Mysql Insert', array("id"=>$id));
                 $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
                 $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -931,6 +999,7 @@ class LSvcController extends BaseController
                 ));
               }
             }else{
+              Log::info('Inside else', array("id"=>0));
               return Response::json(array(
                   'status' => 0,
                   'id' => 0,
@@ -939,6 +1008,7 @@ class LSvcController extends BaseController
               ));
             }
           } catch (Exception $e) {
+            Log::info('Inside catch', array("id"=>0));
             return Response::json(array(
                 'status' => 0,
                 'id' => 0,
@@ -1311,8 +1381,16 @@ class LSvcController extends BaseController
      * Functions to update the sql side with the scheduler
      */
     public function createSqlScheduler($start, $end, $sellable = 1, $employee_id, $store_number){
+      Log::info('createSqlScheduler', array("start"=>$start,
+      "end"=>$end,
+      "Emp ID"=>$employee_id
+      ));
       $sql = "exec dbo.operInOut 'A', NULL, '".$start."', '".$end."',".$sellable.", '".$employee_id."', '".$store_number."'";
+
+      Log::info('createSqlScheduler', array("op"=>$sql));
       $sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
+
+      Log::info('SqlDetele', $sqlinsert);
 
       $response['status'] = $sqlinsert[0]->STATUS;
       $response['sql_id'] = $sqlinsert[0]->ID;
@@ -1321,13 +1399,13 @@ class LSvcController extends BaseController
     }
 
     public function updateSqlScheduler($start, $end, $sellable, $employee_id, $sql_id){
-      Log::info('Received', array("start"=>$start,
-      "SqlID"=>$sql_id,
+      Log::info('updateSqlScheduler', array("start"=>$start,
+      "end"=>$end,
       "Emp ID"=>$employee_id
       ));
       $sql = "exec dbo.operInOut 'U', ".$sql_id.", '".$start."', '".$end."',".$sellable.", '".$employee_id."'";
       $sqlupdate = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      Log::info('SqlDetele', $sqlupdate);
+      Log::info('updateSqlScheduler', $sqlupdate);
       return $sqlupdate[0]->STATUS;
     }
 
