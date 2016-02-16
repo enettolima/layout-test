@@ -99,7 +99,7 @@
     <!-- /Copy Schedule Modal -->
 
     <!-- Staff Selector Modal -->
-    <div class="modal " id="staff-picker-modal" tabindex="-1" role="dialog" aria-labelledby="staff-picker-modal-label" aria-hidden="true"> 
+    <div class="modal " id="staff-picker-modal" tabindex="-1" role="dialog" aria-labelledby="staff-picker-modal-label" aria-hidden="true">
         <div class="modal-dialog" style="width:420px;"> <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -193,7 +193,7 @@
                 <div id="staff-remove-modal-content" class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="staff-remove-modal-confirm" type="button" class="btn btn-danger">Confirm Deletion</button> 
+                    <button id="staff-remove-modal-confirm" type="button" class="btn btn-danger">Confirm Deletion</button>
                 </div>
             </div>
         </div>
@@ -307,7 +307,7 @@
                 <h5>Hours by Sales Volume Calculator</h5>
 
                 <p>To estimate how many hours to schedule based on
-                predicted sales and your store hours, enter sales volume 
+                predicted sales and your store hours, enter sales volume
                 dollar amount below. <em>This is just a utility for your convenience and doesn't affect the Scheduler.</em></p>
 
                     <div class="form-group">
@@ -346,7 +346,7 @@
 
     {{-- TODO: Hack: this is a terrible way to let Javascript know what rights the user has --}}
     @if ($userCanManage)
-    <script type="text/javascript" charset="utf-8">var userCanManage = true;</script>  
+    <script type="text/javascript" charset="utf-8">var userCanManage = true;</script>
     @endif
 
     <script src="/js/jquery.js"></script>

@@ -34,19 +34,19 @@ class SchedulerController extends BaseController
     }
 
     public function __destruct()
-    { 
+    {
         if ($this->isTokenAccess) {
             // This won't work because it will happen before our lsvc calls
-            // which need authentication. Maybe I should even be making those calls 
+            // which need authentication. Maybe I should even be making those calls
             // with tokens, similar to the way I'm calling the actual API?
-            // Regardless TODO: Security Risk -> currently I'm using javascript to call the 
+            // Regardless TODO: Security Risk -> currently I'm using javascript to call the
             // api to log out after the page is written on token access
             // Auth::logout();
         }
     }
 
     /*
-     * Todo: refactor this so that 1) it makes sense and 2) we get better 
+     * Todo: refactor this so that 1) it makes sense and 2) we get better
      * "no access" feedback
      */
     protected function initAccess()
@@ -62,7 +62,7 @@ class SchedulerController extends BaseController
                 $this->userHasAccess = true;
                 $this->userCanManage = false;
             }
-        } 
+        }
     }
 
     public function getOverrideHours()
@@ -105,7 +105,7 @@ class SchedulerController extends BaseController
     {
         $storeNumber = Session::get('storeContext');
         $inStamp =  strtotime(Input::get('date') . ' ' . Input::get('openTime'));
-        $outStamp = strtotime(Input::get('date') . ' ' . Input::get('closeTime')); 
+        $outStamp = strtotime(Input::get('date') . ' ' . Input::get('closeTime'));
         $dateFormat = "Y-m-d H:i:s";
 
         if (! ($outStamp > $inStamp)) {
@@ -225,7 +225,7 @@ class SchedulerController extends BaseController
         $satDate = strtotime('+6days', strtotime($weekOf));
         $satFormatted = date($dateHeaderFormat, $satDate);
 
-        $scheduleHeader = "EBT $storeNumber Schedule &mdash; $sunFormatted - $satFormatted"; 
+        $scheduleHeader = "EBT $storeNumber Schedule &mdash; $sunFormatted - $satFormatted";
 
         $data = array(
             'isTokenAccess'  => $this->isTokenAccess,
@@ -263,17 +263,17 @@ class SchedulerController extends BaseController
         // This data should probably be the product of an API call
         if ($currentStore = Session::get('storeContext')) {
             $prevSchedules = DB::connection('mysql')->select("
-                SELECT 
-                    * 
-                FROM 
-                    schedule_day_meta 
-                WHERE 
+                SELECT
+                    *
+                FROM
+                    schedule_day_meta
+                WHERE
                     store_id = $currentStore
                 ORDER BY
                     date DESC
                 LIMIT
                     15
-            "); 
+            ");
         }
 
         return View::make(
