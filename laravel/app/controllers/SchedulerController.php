@@ -255,25 +255,13 @@ class SchedulerController extends BaseController
         }
 
         $extraHead = '<script src="/js/bonsai-0.4.1.min.js" type="text/javascript" charset="utf-8"></script>';
-
-
         $prevSchedules = array();
 
         // TODO: Find a more appropriate way of going about this.
         // This data should probably be the product of an API call
         if ($currentStore = Session::get('storeContext')) {
-            $prevSchedules = DB::connection('mysql')->select("
-                SELECT
-                    *
-                FROM
-                    schedule_day_meta
-                WHERE
-                    store_id = $currentStore
-                ORDER BY
-                    date DESC
-                LIMIT
-                    15
-            ");
+          $query = "SELECT * FROM schedule_day_meta WHERE store_id = $currentStore ORDER BY date DESC LIMIT 15";
+          $prevSchedules = DB::connection('mysql')->select($query);
         }
 
         return View::make(

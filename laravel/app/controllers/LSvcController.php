@@ -133,8 +133,6 @@ class LSvcController extends BaseController
         $detailsRes = DB::connection('sqlsrv_ebtgoogle')->select($detailsSQL);
         $totalsRes  = DB::connection('sqlsrv_ebtgoogle')->select($totalsSQL);
 
-        Log::info('Check date from date is '.$from.' to is '.$to, $detailsRes);
-        Log::info('Procedure is '.$detailsSQL);
         return Response::json(array('details' => $detailsRes, 'totals' => $totalsRes, 'from' => $from, 'to' => $to));
     }
 
@@ -945,8 +943,6 @@ class LSvcController extends BaseController
         $outDate = date('Y-m-d', strtotime(urldecode($outString)));
         $outTime = date('H:i:s', strtotime(urldecode($outString)));
 
-        Log::info('Checking Time', array("time"=>$outTime, "OutDate"=>$outDate));
-
         if($outTime=="00:00:00"){
           $outTime = "23:59:59";
 
@@ -954,8 +950,6 @@ class LSvcController extends BaseController
         }
         if ($userId != "undefined") {
           try {
-
-            Log::info('Inside Try', array("start"=>$inString));
             //$sql = "exec dbo.operInOut 'A', NULL, '".$in."', '".$out."',1, '".$userId."', '".$storeNumber."'";
             //$sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
             //Saving this record on sql server(check the ond of this file)
@@ -963,7 +957,6 @@ class LSvcController extends BaseController
             if($create_sql['status']=="0"){//Making sure we can save this into sql server 0=ok, 1=error
               //Only save on MySql if save on Sql server was successfull
               //Sql is validating if the time is overlapping
-              Log::info('Inside $create_sql', array("status"=>$create_sql['status']));
               $sql_id = $create_sql['sql_id'];
               $SQL = "
                   INSERT INTO scheduled_inout (
@@ -983,11 +976,9 @@ class LSvcController extends BaseController
                   )
               ";
 
-              Log::info('Show Query', array("query"=>$SQL));
               if (DB::connection('mysql')->insert($SQL)) {
 
                 $id = DB::connection('mysql')->getPdo()->lastInsertId();
-                Log::info('Inside Mysql Insert', array("id"=>$id));
                 $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
                 $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -999,7 +990,6 @@ class LSvcController extends BaseController
                 ));
               }
             }else{
-              Log::info('Inside else', array("id"=>0));
               return Response::json(array(
                   'status' => 0,
                   'id' => 0,
@@ -1008,7 +998,6 @@ class LSvcController extends BaseController
               ));
             }
           } catch (Exception $e) {
-            Log::info('Inside catch', array("id"=>0));
             return Response::json(array(
                 'status' => 0,
                 'id' => 0,
@@ -1062,15 +1051,7 @@ class LSvcController extends BaseController
         $sundayTimestamp = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
         $targetDate = date('Y-m-d', $sundayTimestamp);
 
-        $metaSQL = "
-            SELECT
-                data
-            FROM
-                schedule_day_meta
-            WHERE
-                store_id = $storeNumber AND
-                date = '$targetDate'
-        ";
+        $metaSQL = "SELECT data FROM schedule_day_meta WHERE store_id = $storeNumber AND date = '$targetDate'";
 
         $metaRES = DB::connection('mysql')->select($metaSQL);
 
@@ -1080,6 +1061,7 @@ class LSvcController extends BaseController
         }
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
+
 
         $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
         $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
@@ -1101,15 +1083,7 @@ class LSvcController extends BaseController
 
         $returnval = array();
 
-        $metaSQL = "
-            SELECT
-                data
-            FROM
-                schedule_day_meta
-            WHERE
-                store_id = $storeNumber AND
-                date = '$sundayDate'
-        ";
+        $metaSQL = "SELECT data FROM schedule_day_meta WHERE store_id = $storeNumber AND date = '$sundayDate'";
 
         $metaRES = DB::connection('mysql')->select($metaSQL);
 
@@ -1254,29 +1228,7 @@ class LSvcController extends BaseController
         // After:
         $to = date("m/d/Y", strtotime('+6days', strtotime($weekOf)));
 
-        $targetsSQL = "
-            SELECT
-                Store,
-                DailyBudget,
-                BDWeekday,
-                HR_PROFILE,
-                PROF_HOUR_NEW,
-                PROF_PER,
-                HR_BUDGET,
-                Date,
-                HR_OPEN_MIL,
-                HR_CLOSE_MIL
-              FROM
-                SCHED_BUDGET_PER_HOURS_FINAL_TABLE
-              WHERE
-                Store = '$store' and
-                Date >= convert(datetime, '$from', 101) and
-                Date <= convert(datetime, '$to', 101)
-              ORDER BY
-                Store,
-                Date,
-                PROF_HOUR_NEW
-        ";
+        $targetsSQL = "SELECT Store,DailyBudget,BDWeekday,HR_PROFILE,PROF_HOUR_NEW,PROF_PER,HR_BUDGET,Date,HR_OPEN_MIL,HR_CLOSE_MIL FROM SCHED_BUDGET_PER_HOURS_FINAL_TABLE WHERE Store = '$store' and Date >= convert(datetime, '$from', 101) and Date <= convert(datetime, '$to', 101) ORDER BY Store, Date, PROF_HOUR_NEW";
 
         $targetsRES = DB::connection('sqlsrv_ebtgoogle')->select($targetsSQL);
 
@@ -1310,21 +1262,7 @@ class LSvcController extends BaseController
         // After:
         $to = date("m/d/Y", strtotime('+6days', strtotime($weekOf)));
 
-        $targetsSQL = "
-            SELECT
-                CODE,
-                DATE,
-                DayWk,
-                EMPL_NAME,
-                EXT_PRICE,
-                LastPollTime
-            FROM
-                SCHED_SALES_BY_EMPLOYEE
-            WHERE
-                CODE = $store AND
-                DATE >= convert(datetime, '$from', 101) AND
-                DATE <= convert(datetime, '$to', 101)
-        ";
+        $targetsSQL = "SELECT CODE,DATE,DayWk,EMPL_NAME,EXT_PRICE,LastPollTime FROM SCHED_SALES_BY_EMPLOYEE WHERE CODE = $store AND DATE >= convert(datetime, '$from', 101) AND DATE <= convert(datetime, '$to', 101)";
 
         $targetsRES = DB::connection('sqlsrv_ebtgoogle')->select($targetsSQL);
 
