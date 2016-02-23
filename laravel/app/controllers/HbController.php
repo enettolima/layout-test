@@ -10,7 +10,9 @@ class HbController extends BaseController
 
         $results['db'] = array();
 
-        // TEST DB CONNECTIONS
+        /** 
+         * TEST: Can we connect to the necessary DATABASES?
+         */
         foreach (Config::get('database')['connections'] as $cname=>$cspec) {
             try {
                 DB::connection($cname)->getDatabaseName();
@@ -21,7 +23,9 @@ class HbController extends BaseController
             }
         }
 
-        // TEST API
+        /**
+         * TEST: Can we connect to / instantiate the API?
+         */
         $results['api'] = array();
 
         try {
@@ -32,11 +36,13 @@ class HbController extends BaseController
             $results['api'][] = array('string' => 'primary', 'ok' => FALSE);
         }
 
-        // TEST FOR SETTINGS THAT SHOULDN'T BE
+        /**
+         * TEST: Check SETTINGS on PRODUCTION.
+         */
         $results['set'] = array();
 
         // Mock RPA Allows users to log in with a valid RP User + any password for troubleshooting
-        // purposes.
+        // purposes. WE DON'T WANT THAT IN PRODUCTION!
         if (array_key_exists('mock_rpro_auth', $_ENV) && $_ENV['mock_rpro_auth'] === TRUE) {
             $errors = TRUE;
             $results['set'][] = array('string' => 'mockrpa', 'ok' => FALSE);
@@ -50,6 +56,21 @@ class HbController extends BaseController
             $results['set'][] = array('string' => 'debug', 'ok' => FALSE);
         } else {
             $results['set'][] = array('string' => 'debug', 'ok' => TRUE);
+        }
+
+        /**
+         * TEST: We want more than 2GB of FREE DISKSPACE
+         */
+        $results['sys'] = array();
+        $bytes = disk_free_space("/");
+        $minGB = 2;
+        $minBytes = (float) 1024000000 * $minGB;
+        echo $bytes;
+        if ($bytes > $minBytes) {
+            $results['sys'][] = array('string' => 'dfree', 'ok' => TRUE);
+        } else {
+            $errors = TRUE;
+            $results['sys'][] = array('string' => 'dfree', 'ok' => FALSE);
         }
 
         if ($errors) {
@@ -69,6 +90,5 @@ class HbController extends BaseController
         }
 
         echo "</ul>";
-
     }
 }
