@@ -5,3 +5,5 @@ laravel/public/docs
 project_resources/vagrant/.vagrant
 .idea
 laravel/app/storage/exempt-documentation
+#Documents for ElasticSearch Index
+/es_docs/*
