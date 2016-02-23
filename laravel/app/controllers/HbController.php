@@ -65,7 +65,6 @@ class HbController extends BaseController
         $bytes = disk_free_space("/");
         $minGB = 2;
         $minBytes = (float) 1024000000 * $minGB;
-        echo $bytes;
         if ($bytes > $minBytes) {
             $results['sys'][] = array('string' => 'dfree', 'ok' => TRUE);
         } else {
