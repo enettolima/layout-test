@@ -230,7 +230,7 @@ class LSvcController extends BaseController
     public function postDocsSearch()
     {
 			//Get data sent by the docs.js
-			$data = Input::getContent();
+			/*$data = Input::getContent();
 			$vars = json_decode($data);
 			$params2 = array();
 			$params2['hosts'] = array($_ENV['ebt_elasticsearch_host']);
@@ -282,13 +282,83 @@ class LSvcController extends BaseController
 			$result['data']                  =$res;
 			$result['total']                 =$results['hits']['total'];
 			//Return json to the docs.js to append the results on the screen
-			return Response::json($results);
+			return Response::json($results);*/
     }
 
 		public function getFolderSearch()
 		{
-			//Get data sent by the docs.js
+      $data             = Input::all();
+      $api = new EBTAPI;
+      $results = $api->get('/esdocs/folder-search?id='.$data['id']);
+      $result['data']                    = $results->hits->hits;
+      $res=[];
+      if(count($results->hits->hits)>0){
+        foreach($results->hits->hits as $key => $hit){
+          $res[$key]['id']=$hit->_source->full_path;
+          $res[$key]['text']=$hit->_source->name;
+          $res[$key]['children']=$hit->_source->children;
+        }
+      }
+
+      //Log::info('results', $results); 
+      //Return json to the docs.js to append the results on jstree
+      return Response::json($res);
+      /*
+      //Get data sent from passport
+      //get input
+
+      //$selected_path =  $_GET['id'];
+      if($data['id'] == '' || $data['id'] == '#'){
+        $selected_path  = $_ENV['ebt_file_storage'];
+      }else{
+        $selected_path  = $data['id'].'/';
+      }
+
+      $params = [
+        'index' => 'docsearch',
+        'type' => 'folders',
+        'body' => [
+          'query' => [
+            'match' => [
+              'parent' => $selected_path
+            ]
+          ]
+        ]
+      ];
+
+      Log::info('Params are ',$params);
+      $hosts = [$_ENV['ebt_elasticsearch_host']];// IP + Port
+      //$hosts = ['dev.elasticsearch.com:9200'];
+      // Instantiate a new ClientBuilder
+      $client = \Elasticsearch\ClientBuilder::create()
+        ->setHosts($hosts)      // Set the hosts
+        ->build();
+
+      $results = $client->search($params);
+      //return Response::json($response);
+
+      $result['data']                    = $results['hits']['hits'];
+      $res=[];
+      if(count($results['hits']['hits'])>0){
+        foreach($results['hits']['hits'] as $key => $hit){
+          $res[$key]['id']=$hit['_source']['full_path'];
+          $res[$key]['text']=$hit['_source']['name'];
+          $res[$key]['children']=$hit['_source']['children'];
+        }
+      }
+
+      Log::info('results', $results);
+      //Return json to the docs.js to append the results on jstree
+      return Response::json($res);
+      */
+      /*
+      //Get data sent by the docs.js
 			$selected_path =  $_GET['id'];
+      //$data = array('id' => $selected_path);
+      $response = Requests::get($_ENV['ebt_api_host'].'/api/v1/esdocs/folder-search?id='.$selected_path);
+      var_dump($response->body);*/
+			//Get data sent by the docs.js
+			/*$selected_path =  $_GET['id'];
 			if($selected_path == '#'){
 				$selected_path='';
 			}
@@ -332,7 +402,7 @@ class LSvcController extends BaseController
 
       Log::info('results', $results);
 			//Return json to the docs.js to append the results on jstree
-			return Response::json($res);
+			return Response::json($res);*/
 		}
 
     public function postSchedulerEmailQuickview()
