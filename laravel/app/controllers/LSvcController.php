@@ -229,6 +229,40 @@ class LSvcController extends BaseController
 
     public function postDocsSearch()
     {
+      $data             = Input::getContent();
+      $vars = json_decode($data);
+
+      $selected_path 	= $vars->folder;
+			$keywords 			= $vars->keyword;
+			if($selected_path == '#' || $selected_path=="0"){
+				$selected_path='';
+			}
+			if($keywords == ''){
+				$keywords='*';
+			}
+
+      $api            = new EBTAPI;
+      $results        = $api->get('/esdocs/doc-search?path='.$selected_path);
+      $result['data'] = $results->hits->hits;
+      $res            = [];
+
+      Log::info('results: ',$result);
+      foreach($results->hits->hits as $key => $hit){
+				$res[$key]=$hit->_source;
+			}
+			$result['data']  = $res;
+			$result['total'] = $results->hits->total;
+
+
+      //Return json to the docs.js to append the results on jstree
+
+
+      return Response::json($results);
+
+
+
+
+
 			//Get data sent by the docs.js
 			/*$data = Input::getContent();
 			$vars = json_decode($data);
@@ -300,7 +334,7 @@ class LSvcController extends BaseController
         }
       }
 
-      //Log::info('results', $results); 
+      Log::info('results', $result);
       //Return json to the docs.js to append the results on jstree
       return Response::json($res);
       /*

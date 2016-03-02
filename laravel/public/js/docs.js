@@ -38,29 +38,30 @@ function doSearch(searchstring) {
 			if (data.length > 0) {
 				$("#resultsHeader").html(data.length + " Results").show();
 				for (var i = 0; i < data.length; i++) {
-					source = data[i]._source.file;
-					var url = source.url;
+					source = data[i]._source;
+					var url = source.full_path;
 					//console.log("id is "+data[i]._id+" and url is "+url);
 					var dateString = undefined;
 
-					if (typeof data[i]._source.meta.date !== "undefined") {
+					/*if (typeof data[i]._source.meta.date !== "undefined") {
 						var formattedDate = new Date(data[i]._source.meta.date);
 						var d = formattedDate.getDate();
 						var m =  formattedDate.getMonth();
 						m += 1;  // JavaScript months are 0-11
 						var y = formattedDate.getFullYear();
 						dateString = m + "/" + d + "/" + y;
-					}
+					}*/
 					var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
 					if (url) {
 						var highlight = "";
 						if (data[i].highlight) {
+							alert("url had been found!");
 							highlight = data[i].highlight.content[0];
 					 	}
 
-						var fixed = url.match(re)[1];
-						var filename 	= source.filename;
-						var virtual 	= data[i]._source.path.virtual;
+						//var fixed = url.match(re)[1];
+						var filename 	= source.name;
+						var virtual 	= data[i]._source.parent;
 						var full = "/docs" + virtual + encodeURIComponent(filename);
 						var row = "";
 						row += "<li>";
