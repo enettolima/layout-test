@@ -1166,13 +1166,37 @@ class LSvcController extends BaseController
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
 
+        Log::info("meta array",$metaArray);
+        Log::info("schedule array",$scheduleRES);
+        //Checking if the employee still works at the store,
+        //if not remove him/her from the array
+        foreach($scheduleRES as $k => $v){
+          $check = in_array($scheduleRES[$k]->associate_id, $metaArray['sequence']);
+          Log::info("Is employee ".$scheduleRES[$k]->associate_id." exist on sequence->".$check);
+          if(!$check){
+            unset($scheduleRES[$k]);
+          }
+        }
 
+        //Time to re-organize the array to return in the order we are going to show on the calendar
+        $idarray = array();
+        $schedules = array();
+        foreach($metaArray['sequence'] as $key => $val){
+          foreach($scheduleRES as $ak => $av){
+            //Check if the emp id is on the meta array and if its not assinged to the final id yet
+            //Just checking the ID on the array to avoid repeating the object
+            if($scheduleRES[$ak]->associate_id == $val && !in_array($scheduleRES[$ak]->id, $idarray)){
+              $schedules[] = $scheduleRES[$ak];
+              $idarray[] = $scheduleRES[$ak]->id;
+            }
+          }
+        }
         $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
         $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
         return Response::json(array(
             'meta' => $metaArray,
-            'schedule' => $scheduleRES,
+            'schedule' => $schedules,//$scheduleRES
             'scheduleHourLookup' => $scheduleHalfHourLookupRES[0]
         ));
     }
