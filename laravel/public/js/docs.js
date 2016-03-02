@@ -41,8 +41,10 @@ function doSearch(searchstring) {
 					source = data[i]._source;
 					var url = source.full_path;
 					//console.log("id is "+data[i]._id+" and url is "+url);
-					var dateString = undefined;
+					var date = source.updated_at;
 
+					var arr = date.split(/-|\s|:/);// split string and create array.
+					var dateString = new Date(arr[0], arr[1] -1, arr[2], arr[3], arr[4], arr[5]);
 					/*if (typeof data[i]._source.meta.date !== "undefined") {
 						var formattedDate = new Date(data[i]._source.meta.date);
 						var d = formattedDate.getDate();
@@ -55,7 +57,6 @@ function doSearch(searchstring) {
 					if (url) {
 						var highlight = "";
 						if (data[i].highlight) {
-							alert("url had been found!");
 							highlight = data[i].highlight.content[0];
 					 	}
 
@@ -70,8 +71,8 @@ function doSearch(searchstring) {
 						if (typeof dateString !== "undefined") {
 							row += "<li><strong>File Date:</strong> "+dateString+"</li>";
 						}
-						row += "<li>"+highlight+"</li>";
 						row += "<li class='file-path'><i class='fa fa-paper-plane-o'></i> Path: "+virtual+"</li>";
+						row += "<li>..."+highlight+"...</li>";
 						row += "</ul>";
 						row += "</li>";
 						$("#results").append(row);
@@ -88,7 +89,6 @@ function doSearch(searchstring) {
 		}
 	});
 }
-
 /*
  * Function to show and hide the error container
  */
