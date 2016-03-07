@@ -56,8 +56,13 @@ function doSearch(searchstring) {
 					var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
 					if (url) {
 						var highlight = "";
+						var highlight_row = "";
 						if (data[i].highlight) {
-							highlight = data[i].highlight.content[0];
+							//If we want to enable all the rows for the highlight
+							//for(var x = 0; x<data[i].highlight.content.length; x++){
+							for(var x = 0; x<1; x++){
+								highlight_row += "<li>..."+data[i].highlight.content[x]+"...</li>";
+							}
 					 	}
 
 						//var fixed = url.match(re)[1];
@@ -72,7 +77,8 @@ function doSearch(searchstring) {
 							row += "<li><strong>File Date:</strong> "+dateString+"</li>";
 						}
 						row += "<li class='file-path'><i class='fa fa-paper-plane-o'></i> Path: "+virtual+"</li>";
-						row += "<li>..."+highlight+"...</li>";
+						//row += "<li>"+highlight+"</li>";
+						row += highlight_row;
 						row += "</ul>";
 						row += "</li>";
 						$("#results").append(row);

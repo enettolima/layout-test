@@ -238,15 +238,15 @@ class LSvcController extends BaseController
 				$selected_path='';
 			}
 			if($keywords == ''){
-				$keywords='*';
+				$keywords='';
 			}
 
       $api            = new EBTAPI;
-      $results        = $api->get('/esdocs/doc-search?path='.$selected_path);
+      $results        = $api->get('/esdocs/doc-search?path='.$selected_path.'&keywords='.$keywords);
       $result['data'] = $results->hits->hits;
       $res            = [];
 
-      Log::info('results: ',$result);
+      //Log::info('postDocsSearch results: ',$result);
       foreach($results->hits->hits as $key => $hit){
 				$res[$key]=$hit->_source;
 			}
@@ -334,7 +334,7 @@ class LSvcController extends BaseController
         }
       }
 
-      Log::info('results', $result);
+      Log::info('getFolderSearch results', $result);
       //Return json to the docs.js to append the results on jstree
       return Response::json($res);
       /*
