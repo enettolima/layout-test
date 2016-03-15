@@ -1,9 +1,0 @@
-<?php 
-$direction = ($this->sort->field == $this->field && $this->sort->direction == 'down' ? 'up' : 'down') 
-?>
-<a href="<?php echo $this->url ?>&sort=<?php echo $this->field ?>&direction=<?php echo $direction ?>">
-<?php if ($this->sort->field == $this->field) : ?>
-<img class="icon" src="/images/icons/<?php echo $this->sort->direction ?>_16.png" />
-<?php endif; ?>
-<?php echo $this->title ?>
-</a>
