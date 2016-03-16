@@ -18,6 +18,42 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
+    public function getDevRestockSearch()
+    {
+
+        $results = array();
+
+        $rnum = rand(1,5);
+
+        switch($rnum)
+        {
+            case 1:
+                $results['errors'][] = array('title' => "0 Results", 'details' => "No results were found for your query");
+                break;
+
+            default:
+                $results['data'][] = array('id' => 1, 'name' => 'Salt Lamp 1', 'text' => 'Lorem ipsum dolor sit amet, rebum scaevola partiendo te mel. Te his exerci inimicus, sed ea platonem vituperata.');
+                $results['data'][] = array('id' => 2, 'name' => 'Salt Lamp 2', 'text' => 'Eripuit appareat referrentur ne has, aliquip singulis iudicabit cu nec. Eum in tibique perfecto, at mel doming doctus epicuri. Phaedrum scripserit duo ea. Meliore expetenda vim no.');
+                $results['data'][] = array('id' => 3, 'name' => 'Salt Lamp 3', 'text' => 'His ex affert copiosae qualisque, odio dolore cu cum, ad sit agam simul urbanitas.');
+                $results['data'][] = array('id' => 4, 'name' => 'Salt Lamp 4', 'text' => 'An pri nulla graecis nominati, congue sanctus imperdiet pri ex. In vix tantas scriptorem, fierent oportere theophrastus ius ne, simul vivendo an sed. Id mei primis noster veritus, id ius possim suscipiantur. Quas altera copiosae ut sea. Ne mundi reprehendunt sit, electram constituam in mei, alia vocibus disputando at vel.');
+                break;
+        }
+
+        return Response::json($results);
+    }
+
+    public function postDevRestockAddToCart()
+    {
+
+        $results = array();
+
+        $results['data'] = "It was added or something";
+
+        return Response::json($results);
+
+    }
+
     public function postProductInfo()
     {
         $pcn = Request::segment(3);

@@ -360,3 +360,16 @@ table.music-request-admin > tbody > tr:hover {
   display: block;
   padding: 15px 10px 15px 10px;
 }
+
+#content-restock {
+}
+
+#content-restock #item-search {
+    margin:.5em 0 1em 0;
+}
+
+#content-restock #restock-message {
+    padding:.4em;
+    border-radius: .4em;
+    margin-bottom:.4em;
+}

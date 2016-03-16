@@ -36,3 +36,5 @@ Route::controller('/scheduler', 'SchedulerController');
 Route::controller('/preferences', 'PreferencesController');
 
 Route::controller('/documents', 'DocumentsController');
+
+Route::controller('/restock', 'RestockController');
