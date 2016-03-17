@@ -13,6 +13,7 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
     public function postIndex()
     {
         // Log::info('asdf', array('username', Auth::check()));
@@ -528,7 +529,6 @@ class LSvcController extends BaseController
       $inOutId     = Request::segment(3);
       $storeNumber = Request::segment(4);
       $date        = Request::segment(5);
-
       try{
         $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
         $sel = DB::connection('mysql')->select($sql);
@@ -539,11 +539,11 @@ class LSvcController extends BaseController
         if($sqlId>0){
           //removing on sql Server
           $update_sql = $this->deleteSqlScheduler($sqlId);
-          if($update_sql!="0"){
+          /*if($update_sql!="0"){
             //At this point the php could not save the record on sql meaning that we should not update mySql
             return Response::json(array( 'status' => 0));
             exit();
-          }
+          }*/
         }
         $deleteSQL = "
             DELETE FROM
@@ -553,7 +553,6 @@ class LSvcController extends BaseController
         ";
 
         if (DB::connection('mysql')->delete($deleteSQL)) {
-
             $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
             $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -564,7 +563,7 @@ class LSvcController extends BaseController
             ));
 
         } else {
-            return Response::json(array('status' => 0));
+          return Response::json(array('status' => 0));
         }
       } catch (Exception $e) {
         return Response::json(array( 'status' => 0));
@@ -589,11 +588,14 @@ class LSvcController extends BaseController
 
       //Extracting date from the string
       $date       = date("Y-m-d",$startStamp);
+
       try{
+        Log::info('Inside try');
         //Selecting the record from MySql to get the sql_id
         $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
+        Log::info('query is '.$sql);
         $sel = DB::connection('mysql')->select($sql);
-
+        Log::info('Query result is ',$sel);
         //if sql_id>0 it means that we can save that into mysql
         $sqlId = $sel[0]->sql_id;
         $sellable = $sel[0]->sellable;
@@ -601,8 +603,9 @@ class LSvcController extends BaseController
         if($sqlId>0){
           //Making update on sql Server
           $update_sql = $this->updateSqlScheduler($startDate, $endDate, $sellable, $userId, $sqlId);
-
+          Log::info('inside if with sql id '.$sqlId);
           if($update_sql!="0"){
+            Log::info('inside $update_sql '.$update_sql);
             //At this point the php could not save the record on sql meaning that we should not update mySql
             return Response::json(array( 'status' => 0));
             exit();
@@ -619,6 +622,7 @@ class LSvcController extends BaseController
         ";
 
         if (DB::connection('mysql')->update($SQL)) {
+          Log::info('inside db connection '.$SQL);
           $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
           $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
           return Response::json(array(
@@ -627,9 +631,11 @@ class LSvcController extends BaseController
               'schedule' => $this->getDaySchedule($storeNumber, $date)
           ));
         } else {
+          Log::info('inside else');
           return Response::json(array( 'status' => 0));
         }
       } catch (Exception $e) {
+        Log::info('inside catch');
         return Response::json(array( 'status' => 0));
       }
     }
@@ -1453,10 +1459,10 @@ class LSvcController extends BaseController
       ));
       $sql = "exec dbo.operInOut 'A', NULL, '".$start."', '".$end."',".$sellable.", '".$employee_id."', '".$store_number."'";
 
-      Log::info('createSqlScheduler', array("op"=>$sql));
+      //Log::info('createSqlScheduler', array("op"=>$sql));
       $sqlinsert = DB::connection('sqlsrv_ebtgoogle')->select($sql);
 
-      Log::info('SqlDetele', $sqlinsert);
+      //Log::info('SqlDetele', $sqlinsert);
 
       $response['status'] = $sqlinsert[0]->STATUS;
       $response['sql_id'] = $sqlinsert[0]->ID;
@@ -1471,14 +1477,16 @@ class LSvcController extends BaseController
       ));
       $sql = "exec dbo.operInOut 'U', ".$sql_id.", '".$start."', '".$end."',".$sellable.", '".$employee_id."'";
       $sqlupdate = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      Log::info('updateSqlScheduler', $sqlupdate);
-      return $sqlupdate[0]->STATUS;
+      //Log::info('updateSqlScheduler query '.$sql);
+      //Log::info('updateSqlScheduler', $sqlupdate);
+      return $sqlupdate[0]->STATUS;//Status 1 = error, look for ReasonCode on the payload
+      //Ex. ["[object] (stdClass: {\"STATUS\":\"1\",\"ID\":null,\"ReasonCode\":\"Does not Exist\"})"]
     }
 
     public function deleteSqlScheduler($sql_id){
       $sql = "exec dbo.operInOut 'D', ".$sql_id."";
       $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      return $sqldelete[0]->STATUS;
+      return true;
     }
 
     /*
@@ -1625,4 +1633,66 @@ class LSvcController extends BaseController
 
         return Response::json($returnval);
     }
+
+
+    protected function fetchWeborderItems($week_of, $store)
+    {
+
+        return Weborder::where('week_of', $week_of)->where('store', $store)->get()->toArray();
+
+    }
+
+    public function postWeborderSave()
+    {
+
+        $returnval = array();
+
+        $week_of = Input::get('week_of');
+        $store = Session::get('storeContext');
+        $items = Input::get('items');
+
+
+        Weborder::where('week_of', $week_of)->where('store', $store)->delete();
+
+        foreach ($items as $item) {
+
+            if (! isset($item['item_id']) || $item['item_id'] == ""){
+                continue;
+            }
+
+            if (! isset($item['item_qty']) || $item['item_qty'] == ""){
+                continue;
+            }
+
+            $wo = new Weborder;
+            $wo->week_of = $week_of;
+            $wo->store = $store;
+            $wo->item_id = $item['item_id'];
+            $wo->item_qty = $item['item_qty'];
+
+            $wo->save();
+
+        }
+
+        $returnval['data']['items'] = $this->fetchWeborderItems($week_of, $store);
+        $returnval['data']['request'] = Input::all();
+
+        return Response::json($returnval);
+    }
+
+    public function getWeborderItems()
+    {
+
+        $returnval = array();
+
+        $week_of = Input::get('week_of');
+        $store = Session::get('storeContext');
+
+        $returnval['data']['items'] = $this->fetchWeborderItems($week_of, $store);
+        $returnval['data']['request'] = Input::all();
+
+        return Response::json($returnval);
+    }
+
+
 }

@@ -1,2 +1,0 @@
-RewriteEngine on
-RewriteRule \.jpg$ fetch_images.php
