@@ -13,6 +13,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>
                             <ul class="dropdown-menu">
+                                <li class="<?php echo Request::is('tools/web-order*') ?  'active' : '' ?>"><a href="/tools/web-order">Web Order (Temporary)</a></li>
                                 <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
                                 <li class="<?php echo Request::is('tools/exempt-form*') ?  'active' : '' ?>"><a href="/tools/exempt-form">Tax Exempt Form</a></li>
                                 <li class="<?php echo Request::is('tools/music-request*') ?  'active' : '' ?>"><a href="/tools/music-request">Music Request</a></li>

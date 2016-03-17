@@ -360,3 +360,8 @@ table.music-request-admin > tbody > tr:hover {
   display: block;
   padding: 15px 10px 15px 10px;
 }
+
+
+.web-order-row {
+    padding-bottom:.4em;
+}
