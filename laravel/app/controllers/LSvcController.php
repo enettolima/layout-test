@@ -424,17 +424,14 @@ class LSvcController extends BaseController
       $inOutId     = Request::segment(3);
       $storeNumber = Request::segment(4);
       $date        = Request::segment(5);
-      Log::info('deleteSchedulerInOut in out id '.$inOutId);
       try{
         $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
         $sel = DB::connection('mysql')->select($sql);
 
-        Log::info('deleteSchedulerInOut', $sel);
         //if sql_id>0 it means that we can save that into mysql
         $sqlId = $sel[0]->sql_id;
 
         if($sqlId>0){
-          Log::info('inside if with sql id '.$sqlId);
           //removing on sql Server
           $update_sql = $this->deleteSqlScheduler($sqlId);
           /*if($update_sql!="0"){
@@ -451,7 +448,6 @@ class LSvcController extends BaseController
         ";
 
         if (DB::connection('mysql')->delete($deleteSQL)) {
-            Log::info('inside db connection');
             $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
             $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -462,11 +458,9 @@ class LSvcController extends BaseController
             ));
 
         } else {
-          Log::info('inside else 1');
-            return Response::json(array('status' => 0));
+          return Response::json(array('status' => 0));
         }
       } catch (Exception $e) {
-        Log::info('inside exception');
         return Response::json(array( 'status' => 0));
       }
     }
@@ -1379,8 +1373,8 @@ class LSvcController extends BaseController
       $sql = "exec dbo.operInOut 'D', ".$sql_id."";
       $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
 
-      Log::info('deleteSqlScheduler SQL -> '.$sql);
-      Log::info('deleteSqlScheduler', $sqldelete);
+      //Log::info('deleteSqlScheduler SQL -> '.$sql);
+      //Log::info('deleteSqlScheduler', $sqldelete);
       //return $sqldelete[0]->STATUS;
       return true;
     }
