@@ -204,4 +204,19 @@ class ToolsController extends BaseController
 			'pages.tools.musicrequest.success'
 		);
 	}
+
+
+    public function getWebOrder()
+    {
+        return View::make(
+            'pages.tools.weborder.index',
+            array (
+                'extraJS' => array(
+                    '/js/tools/weborder/weborder.js',
+                ),
+                'extraCSS' => array(
+                ),
+            )
+        );
+    }
 }

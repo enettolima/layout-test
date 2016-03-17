@@ -13,6 +13,7 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
     public function postIndex()
     {
         // Log::info('asdf', array('username', Auth::check()));
@@ -1523,4 +1524,66 @@ class LSvcController extends BaseController
 
         return Response::json($returnval);
     }
+
+
+    protected function fetchWeborderItems($week_of, $store)
+    {
+
+        return Weborder::where('week_of', $week_of)->where('store', $store)->get()->toArray();
+
+    }
+
+    public function postWeborderSave()
+    {
+
+        $returnval = array();
+
+        $week_of = Input::get('week_of');
+        $store = Session::get('storeContext');
+        $items = Input::get('items');
+
+
+        Weborder::where('week_of', $week_of)->where('store', $store)->delete();
+
+        foreach ($items as $item) {
+
+            if (! isset($item['item_id']) || $item['item_id'] == ""){
+                continue;
+            }
+
+            if (! isset($item['item_qty']) || $item['item_qty'] == ""){
+                continue;
+            }
+
+            $wo = new Weborder;
+            $wo->week_of = $week_of;
+            $wo->store = $store;
+            $wo->item_id = $item['item_id'];
+            $wo->item_qty = $item['item_qty'];
+
+            $wo->save();
+
+        }
+
+        $returnval['data']['items'] = $this->fetchWeborderItems($week_of, $store);
+        $returnval['data']['request'] = Input::all();
+
+        return Response::json($returnval);
+    }
+
+    public function getWeborderItems()
+    {
+
+        $returnval = array();
+
+        $week_of = Input::get('week_of');
+        $store = Session::get('storeContext');
+
+        $returnval['data']['items'] = $this->fetchWeborderItems($week_of, $store);
+        $returnval['data']['request'] = Input::all();
+
+        return Response::json($returnval);
+    }
+
+
 }
