@@ -112,15 +112,14 @@ $(document).ready(function () {
         resetMessaging();
 
         $(this).attr("disabled", "disabled");
-
         var qty = $(this).closest("div").find(".add-qty").val();
 
-        if (parseInt(qty) < 1){
 
+        if (parseInt(qty) < 1){
             alert("Please specify QTY to add to cart.");
 
-        } else {
 
+        } else {
             var request = $.ajax({
                 method : 'POST',
                 url: '/lsvc/dev-restock-add-to-cart',
@@ -132,7 +131,12 @@ $(document).ready(function () {
             request.done(function(data){
                 showMessage("Item was added to cart.", 'success');
             });
+
         }
+
+        $(this).attr("disabled", false);
+
+
     });
 
 });
