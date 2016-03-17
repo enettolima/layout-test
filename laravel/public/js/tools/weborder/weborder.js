@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     fetchItems(currentWeekOf);
 
-    $("#weborder-save").on('click', function(event){
+    $(document.body).on('click', '.weborder-save', function(event){
         save();
     });
 
@@ -21,6 +21,7 @@ $(document).ready(function(){
 
         if (confirm("Are you sure you want to delete this item?")){
             $(this).parent("div").remove();
+            save();
         }
     });
 
@@ -129,15 +130,18 @@ function addRow(rowNum, item_id, item_qty, saved_at) {
 
     if (locked){
 
-        html.push("<button type='button' class='weborder-edit btn btn-default'>");
+        //html.push("<button type='button' class='weborder-edit btn btn-default'>");
+        //html.push("<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Edit");
+        //html.push("</button>&nbsp;");
 
-        html.push("<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Edit");
-        html.push("</button>&nbsp;");
         html.push("<button type='button' class='weborder-delete btn btn-default'>");
-
         html.push("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span> Delete");
         html.push("</button>");
-        html.push("&nbsp;<small><em>Saved "+saved_at+"</em></small>");
+
+    }else{
+        html.push("<button type='button' class='weborder-save btn btn-default btn-primary'>");
+        html.push("<span class='glyphicon glyphicon-floppy-disk' aria-hidden='true'></span> Save");
+        html.push("</button>&nbsp;");
 
     }
 
@@ -145,4 +149,12 @@ function addRow(rowNum, item_id, item_qty, saved_at) {
 
     $("#web-order-items").append(html.join(""));
 
+    updateSaved(saved_at);
+
+}
+
+function updateSaved(saved_at){
+    if (typeof saved_at !== "undefined") {
+        $(".web-order-saved-at").html("<small><em>Saved at " + saved_at + "</em></small>");
+    }
 }
