@@ -424,7 +424,6 @@ class LSvcController extends BaseController
       $inOutId     = Request::segment(3);
       $storeNumber = Request::segment(4);
       $date        = Request::segment(5);
-
       try{
         $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
         $sel = DB::connection('mysql')->select($sql);
@@ -435,11 +434,11 @@ class LSvcController extends BaseController
         if($sqlId>0){
           //removing on sql Server
           $update_sql = $this->deleteSqlScheduler($sqlId);
-          if($update_sql!="0"){
+          /*if($update_sql!="0"){
             //At this point the php could not save the record on sql meaning that we should not update mySql
             return Response::json(array( 'status' => 0));
             exit();
-          }
+          }*/
         }
         $deleteSQL = "
             DELETE FROM
@@ -449,7 +448,6 @@ class LSvcController extends BaseController
         ";
 
         if (DB::connection('mysql')->delete($deleteSQL)) {
-
             $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
             $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
 
@@ -460,7 +458,7 @@ class LSvcController extends BaseController
             ));
 
         } else {
-            return Response::json(array('status' => 0));
+          return Response::json(array('status' => 0));
         }
       } catch (Exception $e) {
         return Response::json(array( 'status' => 0));
@@ -1374,7 +1372,11 @@ class LSvcController extends BaseController
     public function deleteSqlScheduler($sql_id){
       $sql = "exec dbo.operInOut 'D', ".$sql_id."";
       $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      return $sqldelete[0]->STATUS;
+
+      //Log::info('deleteSqlScheduler SQL -> '.$sql);
+      //Log::info('deleteSqlScheduler', $sqldelete);
+      //return $sqldelete[0]->STATUS;
+      return true;
     }
 
     /*
