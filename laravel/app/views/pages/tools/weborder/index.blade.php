@@ -2,6 +2,16 @@
 
 @section('content')
 
+
+    @if(true)
+    <div class="row">
+        <div class="col-xs-8">
+            <h3>Corporate Users Download CSV Here:</h3>
+            <p><a href="/lsvc/weborder-file">CLICK HERE TO DOWNLOAD SUBMITTED DATA</a></p>
+        </div>
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-xs-8">
             <h3>Web Order Form (Temporary)</h3>

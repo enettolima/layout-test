@@ -1585,5 +1585,28 @@ class LSvcController extends BaseController
         return Response::json($returnval);
     }
 
+    public function getWeborderFile()
+    {
+
+        $table = Weborder::all();
+        $filename = "weborder.csv";
+        $handle = fopen($filename, 'w+');
+
+        fputcsv($handle, array('week_of', 'store', 'item_id', 'item_qty', 'updated_at'));
+
+        foreach($table as $row) {
+            fputcsv($handle, array($row['week_of'], $row['store'], $row['item_id'], $row['item_qty'], $row['updated_at']));
+        }
+
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+
+        return Response::download($filename, 'weborder.csv', $headers);
+
+    }
+
 
 }
