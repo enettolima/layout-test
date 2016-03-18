@@ -372,4 +372,8 @@ table.music-request-admin > tbody > tr:hover {
     padding:.4em;
     border-radius: .4em;
     margin-bottom:.4em;
+  }
+
+.web-order-row {
+    padding-bottom:.4em;
 }
