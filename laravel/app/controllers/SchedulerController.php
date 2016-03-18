@@ -5,10 +5,17 @@ class SchedulerController extends BaseController
     protected $userHasAccess = FALSE;
     protected $userCanManage = FALSE;
     protected $isTokenAccess = FALSE;
+    protected $isMaintenanceMode = FALSE;
 
     /* Require Auth on Everything Here */
     public function __construct()
     {
+        try {
+          $this->isMaintenanceMode = $_ENV['scheduler_maintenance'];
+        } catch (Exception $e) {
+          $this->isMaintenanceMode = FALSE;
+        }
+
         if ((Auth::check() === FALSE) && ($token = Request::get('token'))) {
 
             // Get that token...
@@ -31,6 +38,7 @@ class SchedulerController extends BaseController
         }
 
         $this->beforeFilter('auth', array());
+
     }
 
     public function __destruct()
@@ -52,7 +60,6 @@ class SchedulerController extends BaseController
     protected function initAccess()
     {
         $user = Auth::user();
-
         if ($user->hasRole('Store' . Session::get('storeContext'))) {
             if ($user->hasRole('District Manager') || $user->hasRole('Manager') || $user->hasRole('Assistant Manager'))
             {
@@ -67,7 +74,9 @@ class SchedulerController extends BaseController
 
     public function getOverrideHours()
     {
-
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
         if (! $store = Session::get('storeContext')) {
             die("couldn't get store context");
         }
@@ -103,6 +112,10 @@ class SchedulerController extends BaseController
 
     public function postOverrideHours()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
+
         $storeNumber = Session::get('storeContext');
         $inStamp =  strtotime(Input::get('date') . ' ' . Input::get('openTime'));
         $outStamp = strtotime(Input::get('date') . ' ' . Input::get('closeTime'));
@@ -153,6 +166,10 @@ class SchedulerController extends BaseController
 
     public function getOverrideHoursDelete()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
+
         $overrideId = Request::segment(3);
 
         $userHasAccess = false;
@@ -200,11 +217,21 @@ class SchedulerController extends BaseController
 
     public function getIndex()
     {
+      if($this->isMaintenanceMode){
+        return View::make('pages.scheduler.maintenance');
+      }else{
         return Redirect::to('/scheduler/week-overview');
+      }
+      //$this->checkMaintenance();
+
+
     }
 
     public function getQuickview()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
         $storeNumber = Request::segment(3);
         $weekOf      = Request::segment(4);
 
@@ -240,6 +267,9 @@ class SchedulerController extends BaseController
 
     public function getWeekOverview()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
         $this->initAccess();
 
         if (! $this->userHasAccess) {
@@ -276,6 +306,9 @@ class SchedulerController extends BaseController
 
     public function getNewDayPlanner()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
         $this->initAccess();
 
         if (! $this->userHasAccess) {
@@ -308,6 +341,9 @@ class SchedulerController extends BaseController
 
     public function getDayPlanner()
     {
+        if($this->isMaintenanceMode){
+          return View::make('pages.scheduler.maintenance');
+        }
         $this->initAccess();
 
         if (! $this->userHasAccess) {

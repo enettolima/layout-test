@@ -236,6 +236,8 @@ function loadCalendar(){
           request.done(function(msg) {
             if(msg.status==0){
               showalert("#error-container", "Failed to save schedule! Please make sure the time you select does not overlap with a previous saved schedule.","alert-danger");
+              //event.dragRevertDuration();
+              revertFunc();
             }else{
               inOuts = msg.schedule;
               updateSummaries();
