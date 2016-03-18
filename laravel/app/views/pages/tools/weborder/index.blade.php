@@ -3,7 +3,7 @@
 @section('content')
 
 
-    @if(true)
+    @if(Session::get('storeContext') === '000')
     <div class="row">
         <div class="col-xs-8">
             <h3>Corporate Users Download CSV Here:</h3>
