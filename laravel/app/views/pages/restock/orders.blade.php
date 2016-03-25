@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>Restock</h3>
+@include('pages.restock.restockheader')
 
 @include('pages.restock.restocknav')
 

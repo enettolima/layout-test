@@ -361,19 +361,37 @@ table.music-request-admin > tbody > tr:hover {
   padding: 15px 10px 15px 10px;
 }
 
+/*
+ * CSS for the restock
+ */
 #content-restock {
 }
 
 #content-restock #item-search {
-    margin:.5em 0 1em 0;
+  margin:.5em 0 1em 0;
 }
 
 #content-restock #restock-message {
-    padding:.4em;
-    border-radius: .4em;
-    margin-bottom:.4em;
-  }
+  padding:.4em;
+  border-radius: .4em;
+  margin-bottom:.4em;
+}
 
 .web-order-row {
-    padding-bottom:.4em;
+  padding-bottom:.4em;
 }
+
+.prod-description{
+  width: 100%;
+}
+.img-restock {
+    margin-top: 16px;
+}
+.update-quantity{
+  margin-bottom: 12px;
+}
+.panel-restock{
+  clear: both;
+  padding: 0px;
+}
+/* End of restock*/
