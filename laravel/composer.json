@@ -8,8 +8,8 @@
 		"patchwork/utf8": "@stable",
 		"zizaco/entrust": "@stable",
 		"rmccue/requests": "@stable",
-		"elasticsearch/elasticsearch": "@stable",
-        "psy/psysh":"@stable"
+		"elasticsearch/elasticsearch": "~2.0",
+    "psy/psysh":"@stable"
 	},
 	"autoload": {
 		"classmap": [
