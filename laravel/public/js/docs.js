@@ -38,30 +38,37 @@ function doSearch(searchstring) {
 			if (data.length > 0) {
 				$("#resultsHeader").html(data.length + " Results").show();
 				for (var i = 0; i < data.length; i++) {
-					source = data[i]._source.file;
-					var url = source.url;
+					source = data[i]._source;
+					var url = source.full_path;
 					//console.log("id is "+data[i]._id+" and url is "+url);
-					var dateString = undefined;
+					var date = source.updated_at;
 
-					if (typeof data[i]._source.meta.date !== "undefined") {
+					var arr = date.split(/-|\s|:/);// split string and create array.
+					var dateString = new Date(arr[0], arr[1] -1, arr[2], arr[3], arr[4], arr[5]);
+					/*if (typeof data[i]._source.meta.date !== "undefined") {
 						var formattedDate = new Date(data[i]._source.meta.date);
 						var d = formattedDate.getDate();
 						var m =  formattedDate.getMonth();
 						m += 1;  // JavaScript months are 0-11
 						var y = formattedDate.getFullYear();
 						dateString = m + "/" + d + "/" + y;
-					}
+					}*/
 					var re = /^file:\/\/\/media\/web\/downloads\/(.*)$/;
 					if (url) {
 						var highlight = "";
+						var highlight_row = "";
 						if (data[i].highlight) {
-							highlight = data[i].highlight.content[0];
+							//If we want to enable all the rows for the highlight
+							//for(var x = 0; x<data[i].highlight.content.length; x++){
+							for(var x = 0; x<1; x++){
+								highlight_row += "<li>..."+data[i].highlight.content[x]+"...</li>";
+							}
 					 	}
 
-						var fixed = url.match(re)[1];
-						var filename 	= source.filename;
-						var virtual 	= data[i]._source.path.virtual;
-						var full = "/docs" + virtual + encodeURIComponent(filename);
+						//var fixed = url.match(re)[1];
+						var filename 	= source.name;
+						var virtual 	= data[i]._source.full_path;//.replace("/media","");
+						var full = "http://es.earthboundtrading.com/docs" + virtual.replace("/media","");
 						var row = "";
 						row += "<li>";
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
@@ -69,8 +76,9 @@ function doSearch(searchstring) {
 						if (typeof dateString !== "undefined") {
 							row += "<li><strong>File Date:</strong> "+dateString+"</li>";
 						}
-						row += "<li>"+highlight+"</li>";
 						row += "<li class='file-path'><i class='fa fa-paper-plane-o'></i> Path: "+virtual+"</li>";
+						//row += "<li>"+highlight+"</li>";
+						row += highlight_row;
 						row += "</ul>";
 						row += "</li>";
 						$("#results").append(row);
@@ -87,7 +95,6 @@ function doSearch(searchstring) {
 		}
 	});
 }
-
 /*
  * Function to show and hide the error container
  */
