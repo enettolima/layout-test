@@ -233,8 +233,8 @@ class LSvcController extends BaseController
       $data             = Input::getContent();
       $vars = json_decode($data);
 
-      $selected_path 	= $vars->folder;
-			$keywords 			= $vars->keyword;
+      $selected_path 	= urlencode($vars->folder);
+			$keywords 			= urlencode($vars->keyword);
 			if($selected_path == '#' || $selected_path=="0"){
 				$selected_path='';
 			}
