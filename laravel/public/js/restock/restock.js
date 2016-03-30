@@ -170,35 +170,32 @@ $(document).ready(function () {
 });
 
 function updateCartQuantity(){
-
-
-  console.log( $( "#products-list" ).serialize());
-
+  //console.log( $( "#products-list" ).serialize());
   var myObj = {};
   var rootObj = {};
   var prodObj = {};
 
   $('form input, form select').each(
     function(index){
-        var input = $(this);
-        if(input.attr('name')=="store-id"){
-          var store_id = input.val();
-          //rootObj["store_id"] = store_id;
-          myObj["store_id"] = store_id;
-        }else{
-          prodObj[input.attr('name')] = input.val();
-        }
-        console.log('Type: ' + input.attr('type') + ' Name: ' + input.attr('name') + 'Value: ' + input.val());
-        //var nm = input.attr('name');
-        //var arr = data.split('[');
-
-
+      var input = $(this);
+      if(input.attr('name')=="store-id"){
+        var store_id = input.val();
+        //rootObj["store_id"] = store_id;
+        myObj["store_id"] = store_id;
+      }else{
+        prodObj[input.attr('name')] = input.val();
+      }
+      console.log('Type: ' + input.attr('type') + ' Name: ' + input.attr('name') + 'Value: ' + input.val());
+      //var nm = input.attr('name');
+      //var arr = data.split('[');
     }
   );
+
   myObj["products"] = prodObj;
   var json = JSON.stringify(myObj);
-  alert(json);
+  //alert(json);
 
+  console.log("products are "+json);
   var request = $.ajax({
       method : 'POST',
       url: '/lsvc/restock-update-cart',

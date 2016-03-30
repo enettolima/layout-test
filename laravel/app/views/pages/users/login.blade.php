@@ -30,13 +30,13 @@
         </div>
     </div>
 
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-12 top-buffer">
             <center>
                 <a href="http://weborder.ebtpassport.com" class="btn btn-sm btn-default">Click Here for Old Passport / WebOrder</a>
             </center>
         </div>
-    </div>
+    </div>-->
 
     <script src="/js/jquery.js"></script>
 

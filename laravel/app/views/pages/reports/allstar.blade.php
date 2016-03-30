@@ -37,6 +37,9 @@
 </div>
 
 <input type='hidden' id='storeNumber' value='{{ Session::get('storeContext') }}'>
+<input type='hidden' id='allStarLastFrom' value='{{ Session::get('allStarLastFrom') }}'>
+<input type='hidden' id='allStarLastTo' value='{{ Session::get('allStarLastTo') }}'>
+
 
 <div class="row">
     <div class="col-xs-12">

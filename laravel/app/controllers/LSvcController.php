@@ -53,6 +53,12 @@ class LSvcController extends BaseController
       $data             = Input::all();
       $real_data = json_decode($data['data'], true);
       Log::info('Update Cart received ',$real_data);
+
+      $api  = new EBTAPI;
+			$json	= $api->put('/restock/cart/'.$real_data['store_id'], $real_data);
+      Log::info('json received ',array('json'=>$json));
+
+
     }
 
     public function postProductInfo()
@@ -111,6 +117,9 @@ class LSvcController extends BaseController
         //Parsing in m/d/Y format
         $from       = str_replace("-","/",$asDateFrom);
         $to         = str_replace("-","/",$asDateTo);
+
+        Session::set('allStarLastFrom', $from);
+        Session::set('allStarLastTo', $to);
 
         //Converting dates to a format so we can calculate the amount of days
         $start      = strtotime($from);

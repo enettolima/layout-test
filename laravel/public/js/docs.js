@@ -68,7 +68,7 @@ function doSearch(searchstring) {
 						//var fixed = url.match(re)[1];
 						var filename 	= source.name;
 						var virtual 	= data[i]._source.full_path;//.replace("/media","");
-						var full = "http://es.earthboundtrading.com/docs" + virtual.replace("/media","");
+						var full = "https://ebtpassport.com/docs" + virtual.replace("/media/web","");
 						var row = "";
 						row += "<li>";
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
