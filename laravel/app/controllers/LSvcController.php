@@ -76,6 +76,9 @@ class LSvcController extends BaseController
         $from       = str_replace("-","/",$asDateFrom);
         $to         = str_replace("-","/",$asDateTo);
 
+        Session::set('allStarLastFrom', $from);
+        Session::set('allStarLastTo', $to);
+
         //Converting dates to a format so we can calculate the amount of days
         $start      = strtotime($from);
         $end        = strtotime($to);

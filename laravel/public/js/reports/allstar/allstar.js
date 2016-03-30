@@ -134,17 +134,24 @@ $(document).ready(function(){
         }
     });
 
-    //Pre populate fields with current week
+    // Pre populate fields with current week...
     var mNow = new moment();
-    var lastSunday = mNow.day("Sunday");
-    $("#date-from").val(lastSunday.format("MM/DD/YYYY"));
+    var momentFrom = mNow.day("Sunday");
 
     var mNow = new moment();
-    var nextSaturday = mNow.day("Saturday");
-    $("#date-to").val(nextSaturday.format("MM/DD/YYYY"));
+    var momentTo = mNow.day("Saturday");
+
+    // But set that using previous settings if they exist
+    if ($("#allStarLastFrom").val() && $("#allStarLastTo").val()){
+        momentFrom = moment($("#allStarLastFrom").val(), "MM/DD/YYYY");
+        momentTo = moment($("#allStarLastTo").val(), "MM/DD/YYYY");
+    }
+
+    $("#date-from").val(momentFrom.format("MM/DD/YYYY"));
+    $("#date-to").val(momentTo.format("MM/DD/YYYY"));
 
     //Load report at first load
-    loadReport(storeNumber, asRangeType, lastSunday, nextSaturday);
+    loadReport(storeNumber, asRangeType, momentFrom, momentTo);
 
     // Run the report
     $("#allstar-run").on('click', function(){
