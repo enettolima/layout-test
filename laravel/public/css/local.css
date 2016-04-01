@@ -389,6 +389,7 @@ table.music-request-admin > tbody > tr:hover {
 }
 .update-quantity{
   margin-bottom: 12px;
+  width: 100%;
 }
 .panel-restock{
   clear: both;

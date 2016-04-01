@@ -1,8 +1,5 @@
 
 function doItemSearch(searchString){
-
-    resetMessaging();
-
     var store_id = $("#store-id").val();
     var keyword = $("#search-string").val();
     $("#item-search>input").attr("disabled", true);
@@ -73,41 +70,11 @@ function doItemSearch(searchString){
     });
 }
 
-function showMessage(msgText, msgType){
 
-    var msgClass;
-
-    switch (msgType) {
-        case 'success':
-            msgClass = 'bg-success';
-            break;
-
-        case 'error':
-            msgClass = 'bg-danger';
-            break;
-
-        case 'info':
-        default:
-            msgClass = 'bg-info';
-            break;
-    }
-
-    $("#restock-message").removeClass(function (index, css) {
-        return (css.match (/(^|\s)bg-\S+/g) || []).join(' ');
-    });
-
-    $("#restock-message").addClass(msgClass).html(msgText).show();
-}
-
-function resetMessaging() {
-    $("#restock-message").html("").hide();
-}
 
 $(document).ready(function () {
 
     $("#item-search>input").on('keydown', function(event){
-
-        resetMessaging();
 
         if (event.keyCode == 13){
 
@@ -129,20 +96,24 @@ $(document).ready(function () {
 
     $(".update-quantity").on('click', function(event){
       //alert( "Handler for click called." );
-      updateCartQuantity()
+      updateCartQuantity();
+    });
+
+    $(".remove-item").on('click', function(event){
+      //alert( "Handler for click called." );
+      console.log("Before fuction -> "+this.className);
+      deleteCartProduct(this);
     });
 
     $(document.body).on('click', '.add-to-cart', function(event){
-
-        resetMessaging();
-
         $(this).attr("disabled", "disabled");
         var qty = $(this).closest("div").find(".add-qty").val();
         var item = $(this).closest("div").find("#item_no").val();
         var store_id = $("#store-id").val();
 
         if (parseInt(qty) < 1){
-            alert("Please specify QTY to add to cart.");
+            //alert("Please specify QTY to add to cart.");
+            showMessage('Quantity is required to add a product to the cart! Please try again.', 'error');
         } else {
             var request = $.ajax({
                 method : 'POST',
@@ -160,7 +131,7 @@ $(document).ready(function () {
                 showMessage(response.errors[0], 'error');
               }else{
                 console.log("Data received total was "+response.data.total);
-                showMessage("Item was added to cart.", 'success');
+                showMessage("Item added to cart successfully.", 'success');
                 $("#cart-badge-count").html(response.data.total);
               }
             });
@@ -193,7 +164,6 @@ function updateCartQuantity(){
 
   myObj["products"] = prodObj;
   var json = JSON.stringify(myObj);
-  //alert(json);
 
   console.log("products are "+json);
   var request = $.ajax({
@@ -204,14 +174,62 @@ function updateCartQuantity(){
       }
   });
 
-  //request.done(function(response){
-    /*if (response.errors.length>0) {
+  request.done(function(response){
+    if (response.errors.length>0) {
+      $("#item-search>input").attr("disabled", false).focus();
+      showMessage(response.errors[0], 'error');
+    }else{
+      showMessage("Quantity has been updated.", 'success');
+    }
+  });
+}
+
+function deleteCartProduct(element){
+  console.log("Clicked button class -> "+element.className);
+  //console.log("Closest element -> "+$(element).prev('input').attr('id'));
+  console.log("Closest element -> "+$(element).attr('data-item-id'));
+
+  var myObj = {};
+  var raw = $(element).attr('data-item-id');
+  var arr = raw.split('-');
+  myObj["store_id"] = arr[0];
+  myObj["item_id"] = arr[1];
+  var json = JSON.stringify(myObj);
+
+  var request = $.ajax({
+      method : 'DELETE',
+      url: '/lsvc/restock-product',
+      data: {
+          'data' : json
+      }
+  });
+
+  request.done(function(response){
+    if (response.errors.length>0) {
       $("#item-search>input").attr("disabled", false).focus();
       showMessage(response.errors[0], 'error');
     }else{
       console.log("Data received total was "+response.data.total);
-      showMessage("Item was added to cart.", 'success');
-      //$("#cart-badge-count").html(response.data.total);
-    }*/
-  //});
+      showMessage("Item removed successfully.", 'information');
+      $("#cart-badge-count").html(response.data.total);
+
+      $(element).closest('tr').fadeOut();
+    }
+  });
+}
+
+function showMessage(msgText, msgType){
+    var n = noty({
+      text: msgText,
+      timeout: 2000,
+      maxVisible: 2,
+      layout: 'topRight',
+      type: msgType,
+      animation: {
+        open: {height: 'toggle'}, // jQuery animate function property object
+        close: {height: 'toggle'}, // jQuery animate function property object
+        easing: 'swing', // easing
+        speed: 500 // opening & closing animation speed
+      }
+    });
 }

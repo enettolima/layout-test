@@ -157,4 +157,34 @@ class EBTAPI
 		$this->status_code = $response->status_code;
 		return $returnval;
 	}
+
+	public function delete($resource)
+	{
+		// Clog::log(__METHOD__);
+
+		$returnval = false;
+
+		$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		$headers = array('X-Auth-Token' => $this->token);
+
+		// Clog::log($url);
+		// Clog::log($headers);
+		// Clog::log($vals);
+
+
+		$response = Requests::delete($url, $headers, array('verify' => false));
+
+		// Clog::log($response);
+
+		if ($response->success) {
+			// Clog::log(1);
+			$returnval = json_decode($response->body);
+		} elseif($response->status_code === 401) {
+			// Clog::log(2);
+			$this->resetToken();
+			$returnval = $this->post($resource, $vals);
+		}
+		$this->status_code = $response->status_code;
+		return $returnval;
+	}
 }

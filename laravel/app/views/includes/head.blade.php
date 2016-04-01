@@ -19,6 +19,7 @@
 <script src="/js/jquery-git.js"></script>
 <script src="/js/jquery-ui-1.10.3.custom.js"></script>
 <script src="/js/jquery.cookie.js"></script>
+<script src="/js/jquery.noty.packaged.min.js"></script>
 <script src="/js/main.js" type="text/javascript" charset="utf-8"></script>
 
 <?php

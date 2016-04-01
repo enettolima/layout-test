@@ -9,7 +9,7 @@
                     @if(Auth::check())
                             <li class="<?php echo Request::is('documents*') ?  'active' : '' ?>"><a href="/documents">Docs</a></li>
                             <li class="<?php echo Request::is('scheduler*') ? 'active' : '' ?>"><a href="/scheduler">Scheduler</a></li>
-                            <li class="<?php echo Request::is('restock*') ?  'active' : '' ?>"><a href="/restock">Restock</a></li>
+                            <li class="<?php echo Request::is('restock*') ?  'active' : '' ?>"><a href="/restock">Reorder</a></li>
                             <li class="<?php echo Request::is('reports*') ? 'active' : '' ?>"><a href="/reports">Reports</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>

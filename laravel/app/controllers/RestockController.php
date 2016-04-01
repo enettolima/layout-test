@@ -67,18 +67,48 @@ class RestockController extends BaseController
     {
       $response = array();
       try{
+        //Getting all the products from a store's cart
         $api = new EBTAPI;
         $res = $api->get("/restock/cart/".$this->store_id."/product");
-        Log::info("getCarts API Call",array('response' => $res));
-        /*if($res->error_code>0 && $res->error_code==404){
-          $this->items_count = 0;
-          //$this->error = true;
-          //$this->error_msg = "No active orders were found at this moment!";
-        }else{
-          //$this->order_id = $res->data->order_id;
-          $this->items_count = $res->data->total;
+
+        //For test purposes just to add products on other types
+        /*for ($i=0; $i < count($res->data); $i++) {
+          if($i<6){
+            $res->data[$i]->type = 0;
+          }
+          if($i>5 && $i<9){
+            $res->data[$i]->type = 1;
+          }
+          if($i>8){
+            $res->data[$i]->type = 2;
+          }
         }*/
-        //$response = json_decode($res->data, true);
+        ////////End test
+        //Getting all the order stages
+        $api = new EBTAPI;
+        $types = $api->get("/restock/order-type");
+
+        //Looping to all the types and building the array for blade to use
+        $order_type = array();
+        for ($i=0; $i < count($types->data); $i++) {
+          $prods = array();
+          $count = 0;
+          for ($j=0; $j < count($res->data); $j++) {
+            if($res->data[$j]->type==$types->data[$i]->order_type){
+              foreach ($res->data[$j] as $key => $value) {
+                $prods[$j][$key] = $value;
+
+              }
+              $count++;
+            }
+          }
+          $order_type[$i]['type'] = $types->data[$i]->order_type;
+          $order_type[$i]['name'] = $types->data[$i]->type_name;
+          $order_type[$i]['count'] = $count;
+          $order_type[$i]['data'] = $prods;
+        }
+
+        $this->items_count = count($res->data);
         $response = $res->data;
       } catch (Exception $e) {
         //Cart not found
@@ -86,23 +116,15 @@ class RestockController extends BaseController
         $this->error_msg = "Cart is currently unavailable.";
       }
 
-
-      /*foreach ($response as $prod) {
-        echo $prod->description."<br>";
-      }*/
-
-      /*
-
-      <!---->*/
+      Log::info("Order Type array",$order_type);
       return View::make('pages.restock.carts',
         array(
           'error' => $this->error,
           'error_msg' => $this->error_msg,
-          'cart_id' => $this->order_id,
-          'items_count' => $this->items_count,
           'store_id' => $this->store_id,
-          'response' => $response,
-          'count_data' => count($response),
+          'items_count' => $this->items_count,
+          'cart_info' => $order_type,
+          'total_count' => count($order_type),
           'extraJS' => array(
             '/js/restock/restock.js'
           )
@@ -112,6 +134,24 @@ class RestockController extends BaseController
 
     public function getOrders()
     {
+      try{
+        $api = new EBTAPI;
+        $res = $api->get("/restock/order/".$this->store_id);
+        Log::info("Status API Call",array('response' => $res));
+        /*if($res->error_code>0 && $res->error_code==404){
+          $this->items_count = 0;
+          //$this->error = true;
+          //$this->error_msg = "No active orders were found at this moment!";
+        }else{
+          //$this->order_id = $res->data->order_id;
+          $this->items_count = $res->data->total;
+        }*/
+      } catch (Exception $e) {
+        //Cart not found
+        $this->error = true;
+        $this->error_msg = "Order not found.";
+      }
+
       return View::make('pages.restock.orders',
       array(
           'error' => $this->error,

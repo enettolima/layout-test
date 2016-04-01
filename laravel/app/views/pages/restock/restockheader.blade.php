@@ -1,1 +1,1 @@
-<h3>Restock</h3>
+<h3>Reorder</h3>

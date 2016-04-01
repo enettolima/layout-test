@@ -57,8 +57,18 @@ class LSvcController extends BaseController
       $api  = new EBTAPI;
 			$json	= $api->put('/restock/cart/'.$real_data['store_id'], $real_data);
       Log::info('json received ',array('json'=>$json));
+      return Response::json($json);
+    }
 
+    public function deleteRestockProduct(){
+      $data             = Input::all();
+      $real_data = json_decode($data['data'], true);
+      Log::info('Delete product ',$data);
 
+      $api  = new EBTAPI;
+			$json	= $api->delete('/restock/cart/'.$real_data['store_id'].'/product/'.$real_data['item_id']);
+      Log::info('Delete prod response from api ',array('json'=>$json));
+      return Response::json($json);
     }
 
     public function postProductInfo()
