@@ -135,17 +135,47 @@ class RestockController extends BaseController
     public function getOrders()
     {
       try{
+        ////////End test
+        //Getting all the order stages
+        $api = new EBTAPI;
+        $types = $api->get("/restock/order-stages");
+        /* Stages are
+        0 = Store Order
+        1 = System Restock
+        2 = Planning Review
+        3 = Ship/Handling
+        4 = Archived
+        */
+        //Getting all the orders from this store
         $api = new EBTAPI;
         $res = $api->get("/restock/order/".$this->store_id);
-        Log::info("Status API Call",array('response' => $res));
-        /*if($res->error_code>0 && $res->error_code==404){
+
+        for ($j=0; $j < count($types->data); $j++) {
+          $stage[$types->data[$j]->order_stage]['name'] = $types->data[$j]->stage_name;
+          $stage[$types->data[$j]->order_stage]['stage'] = $types->data[$j]->order_stage;
+          $ct = 0;
+          for ($i=0; $i < count($res->data); $i++) {
+            if($res->data[$i]->max_stage==$types->data[$j]->order_stage){
+              foreach ($res->data[$i] as $key => $value) {
+                $stage[$types->data[$j]->order_stage]['data'][$ct][$key] = $value;
+              }
+              $ct++;
+            }
+          }
+          if($ct==0){
+            $stage[$types->data[$j]->order_stage]['data'] = array();
+          }
+        }
+
+        Log::info("Orders",$stage);
+        if($res->error_code>0 && $res->error_code==404){
           $this->items_count = 0;
           //$this->error = true;
           //$this->error_msg = "No active orders were found at this moment!";
         }else{
           //$this->order_id = $res->data->order_id;
           $this->items_count = $res->data->total;
-        }*/
+        }
       } catch (Exception $e) {
         //Cart not found
         $this->error = true;
@@ -157,7 +187,8 @@ class RestockController extends BaseController
           'error' => $this->error,
           'error_msg' => $this->error_msg,
           'cart_id' => $this->order_id,
-          'items_count' => $this->items_count,
+          'orders' => $stage,
+          'items_count' => 5,
           'store_id' => $this->store_id,
           'extraJS' => array(
               '/js/restock/restock.js'
