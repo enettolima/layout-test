@@ -41,7 +41,7 @@ class StoreDirectorySync extends Command {
 
             $directory = array();
 
-            $stores = DB::connection('sqlsrv_ebt')->select('select * from "Store Directory" where "ONLINE" = \'True\'');
+            $stores = DB::connection('sqlsrv_ebt')->select('select * from "Store Directory" where "ONLINE" = \'True\' and "E-ACTIVE" = \'True\'');
 
             $this->info("Got " . count($stores) . " stores");
 
