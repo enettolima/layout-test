@@ -105,6 +105,15 @@ $(document).ready(function () {
       deleteCartProduct(this);
     });
 
+    $(".load-products").on('click', function(event){
+      //alert( "Handler for click called." );
+      //console.log("Before fuction -> "+this.value);
+      //console.log("Before fuction -> "+$(this).next().attr('value'));
+      var field_val = $(this).next().attr('value');
+      var splt = field_val.split("-");
+      getProductsList(splt[0],splt[1]);
+    });
+
     $(document.body).on('click', '.add-to-cart', function(event){
         $(this).attr("disabled", "disabled");
         var qty = $(this).closest("div").find(".add-qty").val();
@@ -232,4 +241,52 @@ function showMessage(msgText, msgType){
         speed: 500 // opening & closing animation speed
       }
     });
+}
+
+function getProductsList(orderId, stage){
+
+  $("#order-products").html("Loading products...");
+  var request = $.ajax({
+      method : 'GET',
+      url: '/lsvc/restock-order-products',
+      data: {
+          'order_id' : orderId,
+          'stage' : stage
+      }
+  });
+
+  $("#gridSystemModalLabel").html("Order ID: "+orderId);
+  request.done(function(response){
+    if (response.errors.length>0) {
+      $("#item-search>input").attr("disabled", false).focus();
+      showMessage(response.errors[0], 'error');
+    }else{
+      //console.log("Data received total was "+response.data.total);
+      //showMessage("Item removed successfully.", 'information');
+      //$("#cart-badge-count").html(response.data.total);
+
+      //$(element).closest('tr').fadeOut();
+      if(response.data.length>0){
+        $("#order-products").html("Loading products...");
+        var resultsHTML = [];
+
+        for(r=0; r<response.data.length; r++){
+          var result = response.data[r];
+          console.log("Item ID is "+result.item_no);
+          resultsHTML.push("<tr>");
+            resultsHTML.push("<td>");
+              resultsHTML.push("<img height='50' width='50' class='img-circle img-restock' src='https://ebapi.earthboundtrading.com/pimg/image/"+result.item_no+"'>");
+            resultsHTML.push("</td>");
+            resultsHTML.push("<td class='prod-description'>");
+              resultsHTML.push("<h4>"+result.description+"</h4>");
+              resultsHTML.push("<strong>Item #:</strong> "+result.item_no+"<br>");
+              resultsHTML.push("<strong>Boxes:</strong> "+result.item_qty);
+            resultsHTML.push("</td>");
+          resultsHTML.push("</tr>");
+        }
+        $("#order-products").html(resultsHTML.join(""));
+        //$("#order-products").html(row);
+      }
+    }
+  });
 }

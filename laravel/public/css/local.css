@@ -395,4 +395,13 @@ table.music-request-admin > tbody > tr:hover {
   clear: both;
   padding: 0px;
 }
+.order-stages{
+  clear: both;
+  height: 120px;
+  font-size:12px;
+}
+
+.order-stages .fa-list{
+  cursor: pointer;
+}
 /* End of restock*/

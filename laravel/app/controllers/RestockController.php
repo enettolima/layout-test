@@ -14,13 +14,13 @@ class RestockController extends BaseController
     {
         $this->beforeFilter('auth', array());
         $this->store_id = Session::get('storeContext');
-        Log::info("Store ID on construct ".$this->store_id);
+        //Log::info("Store ID on construct ".$this->store_id);
         $this->getCartStatus();
     }
 
     public function getIndex()
     {
-      Log::info("Store ID on index ".$this->store_id);
+      //Log::info("Store ID on index ".$this->store_id);
       return Redirect::to('/restock/browse');
     }
 
@@ -45,7 +45,7 @@ class RestockController extends BaseController
       try{
         $api = new EBTAPI;
         $res = $api->get("/restock/cart/".$this->store_id."/status");
-        Log::info("Status API Call",array('response' => $res));
+        //Log::info("Status API Call",array('response' => $res));
         if($res->error_code>0 && $res->error_code==404){
           $this->items_count = 0;
           //$this->error = true;
@@ -116,7 +116,7 @@ class RestockController extends BaseController
         $this->error_msg = "Cart is currently unavailable.";
       }
 
-      Log::info("Order Type array",$order_type);
+      //Log::info("Order Type array",$order_type);
       return View::make('pages.restock.carts',
         array(
           'error' => $this->error,
@@ -150,6 +150,9 @@ class RestockController extends BaseController
         $api = new EBTAPI;
         $res = $api->get("/restock/order/".$this->store_id);
 
+        $pending = 0;
+        $orders = array();
+        //Log::info("Orders",$res);
         for ($j=0; $j < count($types->data); $j++) {
           $stage[$types->data[$j]->order_stage]['name'] = $types->data[$j]->stage_name;
           $stage[$types->data[$j]->order_stage]['stage'] = $types->data[$j]->order_stage;
@@ -158,8 +161,18 @@ class RestockController extends BaseController
             if($res->data[$i]->max_stage==$types->data[$j]->order_stage){
               foreach ($res->data[$i] as $key => $value) {
                 $stage[$types->data[$j]->order_stage]['data'][$ct][$key] = $value;
+
+                if($res->data[$i]->max_stage!=0 && $res->data[$i]->max_stage!=4){
+                  $orders[$pending][$key] = $value;
+                }
               }
+
               $ct++;
+
+              if($res->data[$i]->max_stage!=0 && $res->data[$i]->max_stage!=4){
+                $orders[$pending]['stage'] = $value;
+                $pending++;
+              }
             }
           }
           if($ct==0){
@@ -167,7 +180,7 @@ class RestockController extends BaseController
           }
         }
 
-        Log::info("Orders",$stage);
+        //Log::info("Orders",$stage);
         if($res->error_code>0 && $res->error_code==404){
           $this->items_count = 0;
           //$this->error = true;
@@ -182,13 +195,32 @@ class RestockController extends BaseController
         $this->error_msg = "Order not found.";
       }
 
-      return View::make('pages.restock.orders',
-      array(
+
+      /*Log::info("Array to view",array(
           'error' => $this->error,
           'error_msg' => $this->error_msg,
           'cart_id' => $this->order_id,
           'orders' => $stage,
           'items_count' => 5,
+          'order_stage_count' => count($types->data),
+          'order_count' => count($types->data),
+          'store_id' => $this->store_id,
+          'extraJS' => array(
+              '/js/restock/restock.js'
+          )
+      ));
+      */
+      Log::info("Orders ",$orders);
+      return View::make('pages.restock.orders',
+      array(
+          'error' => $this->error,
+          'error_msg' => $this->error_msg,
+          'cart_id' => $this->order_id,
+          'stages' => $stage,
+          'orders' => $orders,
+          'items_count' => $this->items_count,
+          'order_stage_count' => count($types->data),
+          'order_count' => $pending,
           'store_id' => $this->store_id,
           'extraJS' => array(
               '/js/restock/restock.js'

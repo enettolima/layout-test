@@ -25,7 +25,6 @@ class LSvcController extends BaseController
       //Get data sent by the restock.js
       //get input
 			$data             = Input::all();
-      Log::info('data received keyword '.$data['keyword'].' and store id '.$data['store_id']);
       $api = new EBTAPI;
       $res = $api->get("/restock/product/search/".$data['store_id']."/".urlencode($data['keyword']));
       return Response::json($res);
@@ -36,39 +35,32 @@ class LSvcController extends BaseController
       //Get data sent by the restock.js
       //get input
 			$data             = Input::all();
-      Log::info('data received item '.$data['product_id'].' and store id '.$data['store_id'].' and quantity '.$data['quantity']);
-      //$results = array();
-      //$results['data'] = "It was added or something";
-
-      //$api = new EBTAPI;
-      //$res = $api->get("/restock/product/search/".$data['store_id']."/".urlencode($data['keyword']));
-
       $api  = new EBTAPI;
 			$json	= $api->post('/restock/cart', $data);
-      Log::info('json received ',array('json'=>$json));
       return Response::json($json);
     }
 
     public function postRestockUpdateCart(){
       $data             = Input::all();
       $real_data = json_decode($data['data'], true);
-      Log::info('Update Cart received ',$real_data);
-
       $api  = new EBTAPI;
 			$json	= $api->put('/restock/cart/'.$real_data['store_id'], $real_data);
-      Log::info('json received ',array('json'=>$json));
       return Response::json($json);
     }
 
     public function deleteRestockProduct(){
       $data             = Input::all();
       $real_data = json_decode($data['data'], true);
-      Log::info('Delete product ',$data);
-
       $api  = new EBTAPI;
 			$json	= $api->delete('/restock/cart/'.$real_data['store_id'].'/product/'.$real_data['item_id']);
-      Log::info('Delete prod response from api ',array('json'=>$json));
       return Response::json($json);
+    }
+
+    public function getRestockOrderProducts(){
+      $data             = Input::all();
+      $api  = new EBTAPI;
+      $res = $api->get("/restock/product-by-order/".$data['order_id']."/".$data['stage']);
+      return Response::json($res);
     }
 
     public function postProductInfo()
