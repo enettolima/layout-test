@@ -19,6 +19,50 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
+
+    public function getDevRestockSearch()
+    {
+      //Get data sent by the restock.js
+      //get input
+			$data             = Input::all();
+      $api = new EBTAPI;
+      $res = $api->get("/restock/product/search/".$data['store_id']."/".urlencode($data['keyword']));
+      return Response::json($res);
+    }
+
+    public function postDevRestockAddToCart()
+    {
+      //Get data sent by the restock.js
+      //get input
+			$data             = Input::all();
+      $api  = new EBTAPI;
+			$json	= $api->post('/restock/cart', $data);
+      return Response::json($json);
+    }
+
+    public function postRestockUpdateCart(){
+      $data             = Input::all();
+      $real_data = json_decode($data['data'], true);
+      $api  = new EBTAPI;
+			$json	= $api->put('/restock/cart/'.$real_data['store_id'], $real_data);
+      return Response::json($json);
+    }
+
+    public function deleteRestockProduct(){
+      $data             = Input::all();
+      $real_data = json_decode($data['data'], true);
+      $api  = new EBTAPI;
+			$json	= $api->delete('/restock/cart/'.$real_data['store_id'].'/product/'.$real_data['item_id']);
+      return Response::json($json);
+    }
+
+    public function getRestockOrderProducts(){
+      $data             = Input::all();
+      $api  = new EBTAPI;
+      $res = $api->get("/restock/product-by-order/".$data['order_id']."/".$data['stage']);
+      return Response::json($res);
+    }
+
     public function postProductInfo()
     {
         $pcn = Request::segment(3);
