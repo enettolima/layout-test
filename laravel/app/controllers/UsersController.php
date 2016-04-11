@@ -46,7 +46,7 @@ class UsersController extends BaseController
                 $rpGroups[] = $group->user_grp_name;
             }
 
-            // The following defines the Valid groups from Retail Pro, in the order of most privileged to 
+            // The following defines the Valid groups from Retail Pro, in the order of most privileged to
             // least. If the user is a member of one of these groups in Retail Pro, they will be processed
             // according to the first one that matches.
             $rpGroupPermOrder = array ('EBTPASSPORT_DM', 'EBTPASSPORT_AMAN', 'EBTPASSPORT_ASSOCIATE', 'EBTPASSPORT_GUEST');
@@ -87,7 +87,7 @@ class UsersController extends BaseController
 		if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')))) {
 			$goodLogin = true;
 		} else {
-            // Try authenticating against Retail Pro. We only accept RPro users with the form NNNwhatever 
+            // Try authenticating against Retail Pro. We only accept RPro users with the form NNNwhatever
 
             if (preg_match('/^(\d\d\d).*$/', Input::get('username'), $matches)) {
 
@@ -110,7 +110,7 @@ class UsersController extends BaseController
 
                     $api = new EBTAPI;
 
-                    // Todo: Set this up in some sort of key-based fashion? 
+                    // Todo: Set this up in some sort of key-based fashion?
                     // Reckless.
                     if (isset($_ENV['mock_rpro_auth']) && ($_ENV['mock_rpro_auth'] === TRUE) && ($_SERVER['HTTP_HOST'] !== 'ebtpassport.com')) {
                         $rpResults = $api->post('/rprousers/mockauth', $data);
@@ -231,7 +231,7 @@ class UsersController extends BaseController
 
                             /*
                              * HANDLE ASSIGNATION OF STORE ROLES TO DMs and RMs
-                             * 
+                             *
                              * We also need to assign all the stores managed by any DMs or RMs
                              *
                              * Currently in Retail Pro we are only assigning the group
@@ -261,7 +261,7 @@ class UsersController extends BaseController
 
                                     $targetStore = 'Store'.$result->store;
 
-                                    // Load up actual Role object for store or create one if it doesn't 
+                                    // Load up actual Role object for store or create one if it doesn't
                                     // already exist
                                     if (! $storeRole = Role::where('name', '=', $targetStore)->first()) {
                                         $storeRole = new Role;
