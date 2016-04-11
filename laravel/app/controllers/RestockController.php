@@ -2,6 +2,7 @@
 
 class RestockController extends BaseController
 {
+    private $maintenance = false;
     private $store_id = 0;
     private $error    = false;
     private $error_msg= "";
@@ -21,7 +22,12 @@ class RestockController extends BaseController
     public function getIndex()
     {
       //Log::info("Store ID on index ".$this->store_id);
-      return Redirect::to('/restock/browse');
+      //return Redirect::to('/restock/browse');
+      if($this->maintenance){
+        return View::make('pages.restock.maintenance');
+      }else{
+        return Redirect::to('/restock/browse');
+      }
     }
 
     public function getBrowse()

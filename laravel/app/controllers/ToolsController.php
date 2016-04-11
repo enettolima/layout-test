@@ -4,7 +4,7 @@ class ToolsController extends BaseController
 {
 
     // Define the file specifics for the exempt form tool
-    // The top-level key matches up with the html id 
+    // The top-level key matches up with the html id
     // in the form.
     protected $exemptFormFilesDef = array(
         'receiptScan' => array(
