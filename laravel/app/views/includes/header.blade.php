@@ -15,6 +15,7 @@
                             <ul class="dropdown-menu">
                                 <!--<li class="<?php echo Request::is('tools/web-order*') ?  'active' : '' ?>"><a href="/tools/web-order">Reorder</a></li>-->
                                 <li class="<?php echo Request::is('restock*') ?  'active' : '' ?>"><a href="/restock">Reorder</a></li>
+                                <li><a target="_blank" href="http://blog.earthboundtrading.com/images/nf/signorderform/">Sign / Graphics Orders</a></li>
                                 <li class="<?php echo Request::is('tools/employee-lookup*') ?  'active' : '' ?>"><a href="/tools/employee-lookup">Employee Lookup</a></li>
                                 <li class="<?php echo Request::is('tools/exempt-form*') ?  'active' : '' ?>"><a href="/tools/exempt-form">Tax Exempt Form</a></li>
                                 <li class="<?php echo Request::is('tools/music-request*') ?  'active' : '' ?>"><a href="/tools/music-request">Music Request</a></li>
