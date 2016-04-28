@@ -22,10 +22,29 @@ class DocumentsController extends BaseController
         ));
     }
 
+
     public function getTemplate()
     {
         return View::make('pages.documents.template', array(
             // 'extraJS' => array ('/js/elasticsearch.jquery.min.js')
         ));
+    }
+
+    public function getLoadFile()
+    {
+        //get request
+        $data             = Input::all();
+        $path = public_path();
+
+        //$data             = Input::all();
+        //$real_data = json_decode($data['data'], true);
+        $api  = new EBTAPI;
+  			$json	= $api->put('/esdocs/update-clicks', $data);
+        //return Response::json($json);
+
+        Log::info('Data ',$data);
+        //Log::info('Location should be '.$path.$_ENV['ebt_link_storage'].$data['path'].' -- ES ID: '.$data['id']);
+        header("Location: ".$_ENV['ebt_link_storage'].str_replace("/media/web","",$data['path']), true);
+        exit();
     }
 }

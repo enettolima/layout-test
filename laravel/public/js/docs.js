@@ -68,7 +68,9 @@ function doSearch(searchstring) {
 						//var fixed = url.match(re)[1];
 						var filename 	= source.name;
 						var virtual 	= data[i]._source.full_path;//.replace("/media","");
-						var full = "https://ebtpassport.com/docs" + virtual.replace("/media/web","");
+						var id 	= data[i]._id;//.replace("/media","");
+						//var full = "https://ebtpassport.com/docs" + virtual.replace("/media/web","");
+						var full = "http://cdev.ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
 						var row = "";
 						row += "<li>";
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
