@@ -43,11 +43,11 @@ class StoreDirectorySync extends Command {
 
             $stores = DB::connection('sqlsrv_ebt')->select('select * from "Store Directory" where "ONLINE" = \'True\' and "E-ACTIVE" = \'True\'');
 
-            $this->info("Got " . count($stores) . " stores");
+            $this->info("Got " . count($stores) . " stores from 'Store Directory' on sqlsrv_ebt.");
 
             $opHours = DB::connection('sqlsrv_ebt')->select('select * from SCHED_WEEKLY_OP_HOURS');
 
-            $this->info("Got " . count($opHours) . " hours");
+            $this->info("Got " . count($opHours) . " hours from SCHED_WEEKLY_OP_HOURS on sqlsrv_ebt.");
 
             foreach ($stores as $store_key => $store){
 
@@ -90,32 +90,36 @@ class StoreDirectorySync extends Command {
                 }
             }
 
-            $this->info("Algolia JSON Follows:");
-            $this->info($this->toAlgolia($directory));
+            $directory = $this->toAlgoliaFormat($directory);
+            $this->info("Indexing " . count($directory) . " records to Algolia...");
+            $this->pushToAlgolia($directory);
 
 		}catch (Exception $e){
 
             $this->info("BORKED: " . $e->getMessage());
-
 		}
 	}
 
     /**
-     * Transform our directory data for Algolia in the following ways:
-     * - Break out of store # index
-     * - Create a _geoloc array containing lat & lng
-     * - Strip out stores w/o lat & lng
-     * - Return as JSON
+     * @param $data Array of objects containing location information from database
+     *
+     * @return Algolia-specific Array of objects
+     *
+     * Changes for Algolia:
+     * - Algolia needs its geo location data in a specific structure.
+     * - We want to strip out locations with no lat & lng
      */
-    protected function toAlgolia($data)
+    protected function toAlgoliaFormat($data)
     {
+
+        $this->info("Preparing data for Algolia...");
 
         $returnval = array();
 
         foreach ($data as $key => $val) {
 
-
             if ($data[$key]->{'lat'} == "" || $data[$key]->{'lng'} == "") {
+                $this->info("Skipping #" . $val->{'number'} . " - " . $val->{'name'} . " -- No Lat & Lng");
                 continue;
             }
 
@@ -125,7 +129,27 @@ class StoreDirectorySync extends Command {
             $returnval[] = $val;
         }
 
-        return json_encode($returnval);
+        return $returnval;
+    }
+
+    protected function pushToAlgolia($data)
+    {
+
+        AlgoliaLocation::clearIndices();
+
+        foreach ($data as $key => $val) {
+
+            $aRecord = new AlgoliaLocation();
+            $aRecord->{'objectID'} = $val->{'number'};
+
+            // Import all properties in $val to $aRecord
+
+            foreach (get_object_vars($val) as $k=>$v){
+                $aRecord->$k = $v;
+            }
+
+            $aRecord->pushToIndex();
+        }
     }
 
 	/**
