@@ -117,7 +117,6 @@ class UsersController extends BaseController
                     } else {
                         $rpResults = $api->post('/rprousers/auth', $data);
                     }
-
                     if ($rpResults) {
 
 

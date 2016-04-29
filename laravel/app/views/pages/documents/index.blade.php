@@ -17,6 +17,8 @@
 		</div><!-- End of input-group -->
 		<input val="Search" type="submit" class="btn btn-default hidden">&nbsp;
 	</form>
+	<div id="results-found">
+	</div>
 	<!--Breadcrumb container-->
 	<div class="breadcrumb-container">
 		<ul class = "breadcrumb" >
@@ -30,7 +32,7 @@
 		<div class = "col-md-8 column" >
 				<div id="error-container">
 				</div>
-				<div class = "col-md-10" >
+				<div class = "col-md-14" >
 						<div class = "row-fluid" >
 								<div class = "results span11" >
 										<input type="submit" class="btn btn-default submit-filter hidden" >
@@ -45,6 +47,7 @@
 				</div >
 		</div >
 		<div class = "col-md-4 column well" >
+			<h5 class="filterTitle">Filter</h5>
 				<input class="btn btn-default" type="button" value="Reset" id="reset-tree">
 				<div id="jstree">
 				</div >
