@@ -31,12 +31,14 @@ function doSearch(searchstring) {
 			$("#spinny").hide();
 
 			var data = response.hits.hits;
+			var hits = response.hits;
 			var doc_ids = [];
 			var source = null;
 			var content = '';
 
 			if (data.length > 0) {
-				$("#resultsHeader").html(data.length + " Results").show();
+				//$("#resultsHeader").html(data.length + " Results").show();
+				$("#results-found").html("Showing "+data.length+" of "+hits.total+" ("+response.took/1000+" seconds)");
 				for (var i = 0; i < data.length; i++) {
 					source = data[i]._source;
 					var url = source.full_path;
@@ -68,6 +70,7 @@ function doSearch(searchstring) {
 						//var fixed = url.match(re)[1];
 						var filename 	= source.name;
 						var virtual 	= data[i]._source.full_path;//.replace("/media","");
+						var clicks		= data[i]._source.clicks;
 						var id 	= data[i]._id;//.replace("/media","");
 						//var full = "https://ebtpassport.com/docs" + virtual.replace("/media/web","");
 						var full = "http://cdev.ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
@@ -76,9 +79,10 @@ function doSearch(searchstring) {
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";
 						row += "<ul>";
 						if (typeof dateString !== "undefined") {
-							row += "<li><strong>File Date:</strong> "+dateString+"</li>";
+							row += "<li class='file-path'><strong>File Date:</strong> "+dateString+"</li>";
 						}
-						row += "<li class='file-path'><i class='fa fa-paper-plane-o'></i> Path: "+virtual+"</li>";
+						row += "<li class='file-path'> Path: "+virtual+"</li>";
+						//row += "<li class='file-path'> Clicks: "+clicks+"</li>";
 						//row += "<li>"+highlight+"</li>";
 						row += highlight_row;
 						row += "</ul>";
@@ -146,6 +150,53 @@ $(function () {
 		}
 		doSearch($('.searchfield').val());
 	});
+
+	function split( val ) {
+		return val.split( /,\s*/ );
+	}
+	function extractLast( term ) {
+		return split( term ).pop();
+	}
+
+	$( ".searchfield" )
+		// don't navigate away from the field on tab when selecting an item
+		.bind( "keydown", function( event ) {
+			if ( event.keyCode === $.ui.keyCode.TAB &&
+					$( this ).autocomplete( "instance" ).menu.active ) {
+				event.preventDefault();
+			}
+		})
+		.autocomplete({
+			source: function( request, response ) {
+				$.getJSON( '/lsvc/auto-complete', {
+					term: extractLast( request.term )
+				}, response );
+			},
+			search: function() {
+				// custom minLength
+				var term = extractLast( this.value );
+				if ( term.length < 2 ) {
+					return false;
+				}
+			},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			select: function( event, ui ) {
+				var terms = split( this.value );
+				// remove the current input
+				terms.pop();
+				// add the selected item
+				terms.push( ui.item.value );
+				// add placeholder to get the comma-and-space at the end
+				terms.push( "" );
+				//this.value = terms.join( ", " );
+				this.value = terms.join( " " );
+				doSearch(this.value);
+				return false;
+			}
+		});
 
 	//Execute the search when the documents page is ready
 	doSearch($('.searchfield').val());

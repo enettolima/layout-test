@@ -6,10 +6,15 @@ class DocumentsController extends BaseController
     public function __construct()
     {
         $this->beforeFilter('auth', array());
+        $this->maintenance = false;
     }
 
     public function getIndex()
     {
+      if($this->maintenance){
+        return View::make('pages.documents.maintenance', array(
+        ));
+      }else{
         return View::make('pages.documents.index', array(
 					'extraJS' => array (
 						'/js/elasticsearch.jquery.min.js',
@@ -20,6 +25,7 @@ class DocumentsController extends BaseController
 						'/css/jstree.css'
 					)
         ));
+      }
     }
 
 

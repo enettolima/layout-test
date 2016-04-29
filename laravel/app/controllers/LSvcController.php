@@ -274,7 +274,10 @@ class LSvcController extends BaseController
         $storeNumber = Request::segment(3);
     }
 
-
+    ////////////////////////////////
+    /*
+    * Block for Document Search
+    */
     public function postDocsSearch()
     {
       $data             = Input::getContent();
@@ -323,6 +326,21 @@ class LSvcController extends BaseController
       //Return json to the docs.js to append the results on jstree
       return Response::json($res);
 		}
+
+    public function getAutoComplete()
+    {
+      $data     = Input::all();
+      $api      = new EBTAPI;
+      $results  = $api->get('/esdocs/auto-complete?keyword='.$data['term']);
+      //$result['data']                    = $results->hits->hits;
+      if(count($results->hits->hits)>0){
+        foreach($results->hits->hits as $key => $hit){
+          $desc[] = $hit->fields->name[0];
+        }
+      }
+      return Response::json($desc);
+    }
+    /////////////////////////////End of document search
 
     public function postSchedulerEmailQuickview()
     {

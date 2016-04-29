@@ -297,6 +297,7 @@ table.tablesorter th.tablesorter-header {
 .file-path{
 	font-size: 90%;
 	font-weight: 500;
+  color: #777;
 }
 
 .tree-container{
@@ -312,6 +313,19 @@ table.tablesorter th.tablesorter-header {
   float: left;
   text-align: center;
   margin-top: 36px;
+}
+
+.filterTitle{
+  width: 100%;
+  height: 25px;
+  text-align: center;
+  margin-top: -2px;
+  color: #428bca;
+}
+#results-found{
+  color: #777;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-align: right;
 }
 
 /*
