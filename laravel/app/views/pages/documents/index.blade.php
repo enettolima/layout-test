@@ -55,5 +55,11 @@
 		<div class = "col-md-12 column" >
 		</div >
 	</div ><!-- End of row clearfix container -->
+	<nav>
+		<input type="hidden" id="current_page" value="1">
+		<input type="hidden" id="total_pages" value="1">
+	  <ul class="pagination">
+	  </ul>
+	</nav>
 </div><!-- End of doc-search -->
 @stop

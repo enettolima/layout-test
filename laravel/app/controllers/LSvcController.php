@@ -285,6 +285,7 @@ class LSvcController extends BaseController
 
       $selected_path 	= urlencode($vars->folder);
 			$keywords 			= urlencode($vars->keyword);
+      $page 			    = urlencode($vars->page);
 			if($selected_path == '#' || $selected_path=="0"){
 				$selected_path='';
 			}
@@ -293,7 +294,7 @@ class LSvcController extends BaseController
 			}
 
       $api            = new EBTAPI;
-      $results        = $api->get('/esdocs/doc-search?path='.$selected_path.'&keywords='.$keywords);
+      $results        = $api->get('/esdocs/doc-search?page='.$page.'&path='.$selected_path.'&keywords='.$keywords);
       $result['data'] = $results->hits->hits;
       $res            = [];
 
