@@ -12,10 +12,12 @@ function doSearch(searchstring) {
 	$("#results").empty();
 
 	var folder_selected =  $("#folder_selected").val();
+	var current_page = $("#current_page").val();
 
 	var data = {
 		folder: folder_selected,
-		keyword: searchstring
+		keyword: searchstring,
+		page: current_page
 	};
 
 	$.ajax({
@@ -37,6 +39,8 @@ function doSearch(searchstring) {
 			var content = '';
 
 			if (data.length > 0) {
+
+				var page_numbers = buildPagination(hits.total);
 				//$("#resultsHeader").html(data.length + " Results").show();
 				$("#results-found").html("Showing "+data.length+" of "+hits.total+" ("+response.took/1000+" seconds)");
 				for (var i = 0; i < data.length; i++) {
@@ -88,6 +92,7 @@ function doSearch(searchstring) {
 						row += "</ul>";
 						row += "</li>";
 						$("#results").append(row);
+						$(".pagination").html(page_numbers);
 					}
 				}
 			} else {
@@ -100,6 +105,38 @@ function doSearch(searchstring) {
 			error_note('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
 		}
 	});
+}
+
+function buildPagination(totalRecords){
+
+	var current_page = $("#current_page").val();
+	var pages = Math.floor(totalRecords/20);
+	$("#total_pages").val(pages);
+	//alert("number of pages are "+pages);
+	var form = '';
+	if(pages>1){
+		var next;
+		var prev;
+
+		if(current_page==1){
+			prev = 'class="disabled"';
+		}
+		form = '<li '+prev+' ><a href="#" onclick="return false;" class="page_previous"><span aria-hidden="true">&laquo;</span></a></li>';
+		for (var i = 0; i < pages; i++) {
+			//array[i]
+			var pg = i + 1;
+			var sel = ""
+			if(pg==current_page){
+				sel = 'class="active"';
+			}
+			form += '<li '+sel+' id="pg-'+pg+'"><a href="'+pg+'" onclick="return false;" class="page_number">'+ pg +'</a></li>';
+		}
+		if(current_page==pages){
+			next = 'class="disabled"';
+		}
+		form += '<li '+next+' ><a href="#" onclick="return false;" class="page_next"><span aria-hidden="true">&raquo;</span></a></li>';
+	}
+	return form;
 }
 /*
  * Function to show and hide the error container
@@ -121,6 +158,17 @@ function hideErrorMessage(container){
 	//$(container).hide();
 }
 
+function resetPagination(){
+	removeActiveFromCurrent()
+	var current_page = $("#current_page").val();
+	$("#current_page").val(1);
+	$('#pg-'+current_page).toggleClass( "active" );
+}
+
+function removeActiveFromCurrent(){
+	var current_page = $("#current_page").val();
+	$('#pg-'+current_page).removeClass( "active" );
+}
 /*
  * Function toggles between the search results and the folders structure
  */
@@ -139,6 +187,45 @@ $(function () {
 	//Change the icon of the text box as the user types
 	$( ".searchfield" ).keyup(function() {
 		toggleSearchButton();
+	});
+
+	//Execute click when user click on page number on bottom of the page
+	$(document).delegate('.page_number', 'click', function(e){
+		removeActiveFromCurrent();
+		var target = ""+e.target;
+		var p_arr = target.split("/");
+		var page = p_arr[3];
+		$('html, body').animate({scrollTop: '0px'}, 0);
+		$( this ).parent().toggleClass( "active" );
+		$("#current_page").val(page);
+		doSearch($('.searchfield').val());
+	});
+
+	//Click on previous button on pagination
+	$(document).delegate('.page_previous', 'click', function(e){
+		removeActiveFromCurrent();
+		var current_page = $("#current_page").val();
+		if(current_page>1){
+			$('html, body').animate({scrollTop: '0px'}, 0);
+			var prev = current_page - 1;
+			$('#pg-'+prev).toggleClass( "active" );
+			$("#current_page").val(prev);
+			doSearch($('.searchfield').val());
+		}
+	});
+
+	//Click on next button on pagination
+	$(document).delegate('.page_next', 'click', function(e){
+		removeActiveFromCurrent();
+		var current_page = $("#current_page").val();
+		var total_pages = $("#total_pages").val();
+		if(parseInt(current_page)<total_pages){
+			$('html, body').animate({scrollTop: '0px'}, 0);
+			var next = parseInt(current_page) + 1;
+			$('#pg-'+next).toggleClass( "active" );
+			$("#current_page").val(next);
+			doSearch($('.searchfield').val());
+		}
 	});
 
 	//If button is clicked when there is text in it,
@@ -173,6 +260,7 @@ $(function () {
 				}, response );
 			},
 			search: function() {
+				resetPagination();
 				// custom minLength
 				var term = extractLast( this.value );
 				if ( term.length < 2 ) {
@@ -184,6 +272,7 @@ $(function () {
 				return false;
 			},
 			select: function( event, ui ) {
+				resetPagination();
 				var terms = split( this.value );
 				// remove the current input
 				terms.pop();
@@ -250,6 +339,7 @@ $(function () {
 			$('.breadcrumb li a').text(data.instance.get_node(data.selected[0]).id);
 			$('.breadcrumb').slideDown();
 			//$('#search-form').submit();
+			resetPagination();
 			doSearch($('.searchfield').val());
 		}
 	});
@@ -261,11 +351,13 @@ $(function () {
 	//execute document search when the form is submitted
 	$('#search-form').submit(function (e) {
 		e.preventDefault();
+		resetPagination();
 		$('.submit-filter').click();
 	});
 
 	$( "#folders" ).change(function() {
 		var fs =  $("#folders").val();
+		resetPagination();
 		updateSelectedFolder(fs);
 		doSearch($('.searchfield').val());
 	});
