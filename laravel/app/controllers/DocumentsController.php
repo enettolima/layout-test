@@ -12,7 +12,10 @@ class DocumentsController extends BaseController
     public function getIndex()
     {
       if($this->maintenance){
-        return View::make('pages.documents.maintenance', array(
+        return View::make('pages.maintenance',
+          array(
+            "title" => "Document Search is currently down for maintenance.",
+            "message" => "Thank you for your patience and sorry for the inconvenience."
         ));
       }else{
         return View::make('pages.documents.index', array(
@@ -48,8 +51,9 @@ class DocumentsController extends BaseController
   			$json	= $api->put('/esdocs/update-clicks', $data);
         //return Response::json($json);
 
-        Log::info('Data ',$data);
+        //Log::info('Document URL '.$_ENV['ebt_link_storage'].str_replace("/media/web","",$data['path']));
         //Log::info('Location should be '.$path.$_ENV['ebt_link_storage'].$data['path'].' -- ES ID: '.$data['id']);
+        //$clean_url = str_replace("/media/web","",$data['path']);
         header("Location: ".$_ENV['ebt_link_storage'].str_replace("/media/web","",$data['path']), true);
         exit();
     }

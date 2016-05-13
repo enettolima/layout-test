@@ -19,18 +19,26 @@ class LSvcController extends BaseController
         // Log::info('asdf', array('username', Auth::check()));
     }
 
-
-    public function getDevRestockSearch()
+    ////////////////////////////////
+    /*
+    * Block for Reorder
+    */
+    public function getRestockSearch()
     {
       //Get data sent by the restock.js
       //get input
 			$data             = Input::all();
       $api = new EBTAPI;
-      $res = $api->get("/restock/product/search/".$data['store_id']."/".urlencode($data['keyword']));
+      if(strlen($data['keyword'])>0){
+        $search_str = urlencode(trim($data['keyword']));
+      }else{
+        $search_str = '*';
+      }
+      $res = $api->get("/restock/product/search/".$data['store_id']."/".$data['page'].'/'.$search_str.'/'.urlencode($data['dcs']) );
       return Response::json($res);
     }
 
-    public function postDevRestockAddToCart()
+    public function postRestockAddToCart()
     {
       //Get data sent by the restock.js
       //get input
@@ -62,6 +70,39 @@ class LSvcController extends BaseController
       $res = $api->get("/restock/product-by-order/".$data['order_id']."/".$data['stage']);
       return Response::json($res);
     }
+
+    public function getDcsSearch()
+		{
+      $data             = Input::all();
+      $api = new EBTAPI;
+      $results = $api->get("/restock/product/dcs-filter/000/1/".$data['id']);
+      $result['data']                    = $results->data->hits->hits;
+      $res=[];
+      if(count($results->data->hits->hits)>0){
+        foreach($results->data->hits->hits as $key => $hit){
+          $res[$key]['id']=$hit->_source->full_path;
+          $res[$key]['text']=$hit->_source->name;
+          $res[$key]['children']=true;
+        }
+      }
+      //Return json to the docs.js to append the results on jstree
+      return Response::json($res);
+		}
+
+    public function getReorderAutoComplete()
+    {
+      $data     = Input::all();
+      $api      = new EBTAPI;
+      $results  = $api->get("/restock/product/auto-complete/000/1/".$data['term']);
+      //$result['data']                    = $results->hits->hits;
+      if(count($results->data->hits->hits)>0){
+        foreach($results->data->hits->hits as $key => $hit){
+          $desc[] = trim($hit->fields->description[0]);
+        }
+      }
+      return Response::json($desc);
+    }
+    //////////////////////////////// End of Reorder block
 
     public function postProductInfo()
     {
@@ -322,8 +363,6 @@ class LSvcController extends BaseController
           $res[$key]['children']=$hit->_source->children;
         }
       }
-
-      Log::info('getFolderSearch results', $result);
       //Return json to the docs.js to append the results on jstree
       return Response::json($res);
 		}

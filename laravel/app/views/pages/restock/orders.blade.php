@@ -59,6 +59,7 @@
       <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="true" aria-controls="collapseOne">
         Archived
       </a>
+      <input type="hidden" id="store-id" value={{$store_id}}>
     </h4>
   </div>
     <div id="collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">

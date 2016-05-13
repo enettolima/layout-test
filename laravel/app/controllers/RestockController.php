@@ -17,14 +17,17 @@ class RestockController extends BaseController
         $this->store_id = Session::get('storeContext');
         //Log::info("Store ID on construct ".$this->store_id);
         $this->getCartStatus();
+        $this->maintenance = false;
     }
 
     public function getIndex()
     {
-      //Log::info("Store ID on index ".$this->store_id);
-      //return Redirect::to('/restock/browse');
       if($this->maintenance){
-        return View::make('pages.restock.maintenance');
+        return View::make('pages.maintenance',
+          array(
+            "title" => "Reorder is currently down for maintenance.",
+            "message" => "Thank you for your patience and sorry for the inconvenience."
+        ));
       }else{
         return Redirect::to('/restock/browse');
       }
@@ -41,8 +44,12 @@ class RestockController extends BaseController
                 'items_count' => $this->items_count,
                 'store_id' => $this->store_id,
                 'extraJS' => array(
-                    '/js/restock/restock.js'
-                )
+                    '/js/restock/restock.js',
+                    '/js/jstree.min.js',
+                ),
+      					'extraCSS' => array (
+      						'/css/jstree.css'
+      					)
             )
         );
     }
@@ -77,19 +84,6 @@ class RestockController extends BaseController
         $api = new EBTAPI;
         $res = $api->get("/restock/cart/".$this->store_id."/product");
 
-        //For test purposes just to add products on other types
-        /*for ($i=0; $i < count($res->data); $i++) {
-          if($i<6){
-            $res->data[$i]->type = 0;
-          }
-          if($i>5 && $i<9){
-            $res->data[$i]->type = 1;
-          }
-          if($i>8){
-            $res->data[$i]->type = 2;
-          }
-        }*/
-        ////////End test
         //Getting all the order stages
         $api = new EBTAPI;
         $types = $api->get("/restock/order-type");
@@ -201,22 +195,6 @@ class RestockController extends BaseController
         $this->error_msg = "Order not found.";
       }
 
-
-      /*Log::info("Array to view",array(
-          'error' => $this->error,
-          'error_msg' => $this->error_msg,
-          'cart_id' => $this->order_id,
-          'orders' => $stage,
-          'items_count' => 5,
-          'order_stage_count' => count($types->data),
-          'order_count' => count($types->data),
-          'store_id' => $this->store_id,
-          'extraJS' => array(
-              '/js/restock/restock.js'
-          )
-      ));
-      */
-      Log::info("Orders ",$orders);
       return View::make('pages.restock.orders',
       array(
           'error' => $this->error,

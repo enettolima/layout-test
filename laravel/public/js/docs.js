@@ -76,8 +76,10 @@ function doSearch(searchstring) {
 						var virtual 	= data[i]._source.full_path;//.replace("/media","");
 						var clicks		= data[i]._source.clicks;
 						var id 	= data[i]._id;//.replace("/media","");
-						//var full = "https://ebtpassport.com/docs" + virtual.replace("/media/web","");
-						var full = "https://ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
+						//Production
+						//var full = "https://ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
+						//Local Dev
+						var full = "http://cdev.ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
 						var row = "";
 						row += "<li>";
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";

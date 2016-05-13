@@ -418,4 +418,77 @@ table.music-request-admin > tbody > tr:hover {
 .order-stages .fa-list{
   cursor: pointer;
 }
+
+#img-icon{
+  margin-left: -30px;
+}
+.right{
+  float: right;
+  /*width: 93%;*/
+  position: absolute;
+  margin-left: 461px;
+}
+.left{
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+.min-max{
+  float: right;
+  clear: both;
+  /*margin-top: -40px;*/
+}
+.qty-form{
+  clear: both;
+  float: right;
+  margin-top: 10px;
+}
+
+.full-image{
+  display: none;
+}
+
+.disabled{
+  color: #D9D9D9;
+}
+
+.add-from-archived{
+  float: right;
+}
+
+#cart-results{
+  list-style-type: none;
+  font: 200 13px/1.5 Helvetica, Verdana, sans-serif;
+}
+#results{
+  list-style-type: none;
+  font: 200 13px/1.5 Helvetica, Verdana, sans-serif;
+  /*width: 500px;*/
+  margin-left: -40px;
+}
+
+#results h3 {
+  font: bold 15px/1.5 Helvetica, Verdana, sans-serif;
+  margin-top: -3px;
+}
+
+#results li img {
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+#results li p {
+  /*font: 200 12px/1.5 Georgia, Times New Roman, serif;*/
+  margin: 0 0 3px;
+}
+
+#results li {
+  padding: 10px;
+  overflow: auto;
+}
+
+#results li:hover {
+  background: #eee;
+  cursor: pointer;
+}
 /* End of restock*/

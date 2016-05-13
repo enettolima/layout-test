@@ -5,16 +5,18 @@ class SchedulerController extends BaseController
     protected $userHasAccess = FALSE;
     protected $userCanManage = FALSE;
     protected $isTokenAccess = FALSE;
-    protected $isMaintenanceMode = FALSE;
+    protected $maintenance   = FALSE;
 
     /* Require Auth on Everything Here */
     public function __construct()
     {
         try {
-          $this->isMaintenanceMode = $_ENV['scheduler_maintenance'];
+          $this->maintenance = $_ENV['scheduler_maintenance'];
         } catch (Exception $e) {
-          $this->isMaintenanceMode = FALSE;
+          $this->maintenance = TRUE;
         }
+
+        $this->maintenance = FALSE;//To set Scheduler as maintenance just change this to true
 
         if ((Auth::check() === FALSE) && ($token = Request::get('token'))) {
 
@@ -74,8 +76,12 @@ class SchedulerController extends BaseController
 
     public function getOverrideHours()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
+        if($this->maintenance){
+          return View::make('pages.maintenance',
+            array(
+              "title" => "Scheduler is currently down for maintenance.",
+              "message" => "Thank you for your patience and sorry for the inconvenience."
+          ));
         }
         if (! $store = Session::get('storeContext')) {
             die("couldn't get store context");
@@ -112,9 +118,13 @@ class SchedulerController extends BaseController
 
     public function postOverrideHours()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
-        }
+      if($this->maintenance){
+        return View::make('pages.maintenance',
+          array(
+            "title" => "Scheduler is currently down for maintenance.",
+            "message" => "Thank you for your patience and sorry for the inconvenience."
+        ));
+      }
 
         $storeNumber = Session::get('storeContext');
         $inStamp =  strtotime(Input::get('date') . ' ' . Input::get('openTime'));
@@ -166,9 +176,13 @@ class SchedulerController extends BaseController
 
     public function getOverrideHoursDelete()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
-        }
+      if($this->maintenance){
+        return View::make('pages.maintenance',
+          array(
+            "title" => "Scheduler is currently down for maintenance.",
+            "message" => "Thank you for your patience and sorry for the inconvenience."
+        ));
+      }
 
         $overrideId = Request::segment(3);
 
@@ -217,8 +231,12 @@ class SchedulerController extends BaseController
 
     public function getIndex()
     {
-      if($this->isMaintenanceMode){
-        return View::make('pages.scheduler.maintenance');
+      if($this->maintenance){
+        return View::make('pages.maintenance',
+          array(
+            "title" => "Scheduler is currently down for maintenance.",
+            "message" => "Thank you for your patience and sorry for the inconvenience."
+        ));
       }else{
         return Redirect::to('/scheduler/week-overview');
       }
@@ -229,8 +247,12 @@ class SchedulerController extends BaseController
 
     public function getQuickview()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
+        if($this->maintenance){
+          return View::make('pages.maintenance',
+            array(
+              "title" => "Scheduler is currently down for maintenance.",
+              "message" => "Thank you for your patience and sorry for the inconvenience."
+          ));
         }
         $storeNumber = Request::segment(3);
         $weekOf      = Request::segment(4);
@@ -267,8 +289,12 @@ class SchedulerController extends BaseController
 
     public function getWeekOverview()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
+        if($this->maintenance){
+          return View::make('pages.maintenance',
+            array(
+              "title" => "Scheduler is currently down for maintenance.",
+              "message" => "Thank you for your patience and sorry for the inconvenience."
+          ));
         }
         $this->initAccess();
 
@@ -306,8 +332,12 @@ class SchedulerController extends BaseController
 
     public function getNewDayPlanner()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
+        if($this->maintenance){
+          return View::make('pages.maintenance',
+            array(
+              "title" => "Scheduler is currently down for maintenance.",
+              "message" => "Thank you for your patience and sorry for the inconvenience."
+          ));
         }
         $this->initAccess();
 
@@ -341,8 +371,12 @@ class SchedulerController extends BaseController
 
     public function getDayPlanner()
     {
-        if($this->isMaintenanceMode){
-          return View::make('pages.scheduler.maintenance');
+        if($this->maintenance){
+          return View::make('pages.maintenance',
+            array(
+              "title" => "Scheduler is currently down for maintenance.",
+              "message" => "Thank you for your patience and sorry for the inconvenience."
+          ));
         }
         $this->initAccess();
 
