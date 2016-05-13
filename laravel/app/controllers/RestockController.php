@@ -23,7 +23,6 @@ class RestockController extends BaseController
     public function getIndex()
     {
       if($this->maintenance){
-        return View::make('pages.restock.maintenance');
         return View::make('pages.maintenance',
           array(
             "title" => "Reorder is currently down for maintenance.",
