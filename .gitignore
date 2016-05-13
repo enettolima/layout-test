@@ -2,7 +2,7 @@ laravel/.env.*.php
 .DS_Store
 log.txt
 laravel/public/docs
-project_resources/vagrant/.vagrant
+.vagrant
 .idea
 laravel/app/storage/exempt-documentation
 #Documents for ElasticSearch Index
