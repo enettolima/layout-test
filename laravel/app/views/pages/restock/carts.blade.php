@@ -18,8 +18,8 @@
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
           <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$i}}" aria-expanded="true" aria-controls="collapseOne">
-              {{$cart_info[$i]['name']}} <!--({{$cart_info[$i]['count']}})-->
+            <a role="button" id="collapse-title" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$i}}" aria-expanded="true" aria-controls="collapseOne">
+              {{$cart_info[$i]['name']}} - {{$cart_info[$i]['count']}}<!--({{$cart_info[$i]['count']}})-->
             </a>
           </h4>
         </div>
@@ -31,7 +31,7 @@
         @endif
 
           <div class="panel-body panel-restock">
-            <table class="table table-striped" id="results">
+            <table class="table table-striped" id="cart-results">
               <tbody>
                 @foreach ($cart_info[$i]['data'] as $prod)
                   @include('pages.restock.cartProduct')
