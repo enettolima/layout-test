@@ -36,93 +36,97 @@ function doSearch(searchString){
             var hits = response.data.hits;
             var data = response.data.hits.hits;
             var page_numbers = buildPagination(hits.total);
+            if(hits.total>0){
+              for(r=0; r<data.length; r++){
 
-            for(r=0; r<data.length; r++){
+                  var result = data[r]._source;
+                  var disabled = "disabled";
+                  if(result.isavailable==1){
+                    disabled = "";
+                  }
 
-                var result = data[r]._source;
-                var disabled = "disabled";
-                if(result.isavailable==1){
-                  disabled = "";
-                }
+                  if(result.text4==null){
+                    var notes = "";
+                  }else{
+                    var notes = result.text4;
+                  }
 
-                if(result.text4==null){
-                  var notes = "";
-                }else{
-                  var notes = result.text4;
-                }
+                  var realmax = 0;
+                  var min     = 0;
+                  var max     = 0;
+                  var disabled = '';
+                  //Checking exception on the max amounts
+                  switch (result.minmax[store_id].max) {
+                    case "1555":
+                      realmax = 500;
+                      min = "Undefined";
+                      max = "Undefined";
+                      break;
+                    case "999":
+                      min = "Blocked";
+                      max = "Blocked";
+                      var disabled = 'disabled';
+                      realmax = 0;
+                      break;
+                    default:
+                      min = result.minmax[store_id].min;
+                      max = result.minmax[store_id].max;
+                      realmax = result.minmax[store_id].max;
+                      break;
+                  }
 
-                var realmax = 0;
-                var min     = 0;
-                var max     = 0;
-                var disabled = '';
-                //Checking exception on the max amounts
-                switch (result.minmax[store_id].max) {
-                  case "1555":
-                    realmax = 500;
-                    min = "Undefined";
-                    max = "Undefined";
-                    break;
-                  case "999":
-                    min = "Blocked";
-                    max = "Blocked";
-                    var disabled = 'disabled';
-                    realmax = 0;
-                    break;
-                  default:
-                    min = result.minmax[store_id].min;
-                    max = result.minmax[store_id].max;
-                    realmax = result.minmax[store_id].max;
-                    break;
-                }
-
-                resultsHTML.push("<li class='"+disabled+"'>");
-                  resultsHTML.push("<div class='left'>");
-                    resultsHTML.push("<div class='compress'>");
-                      resultsHTML.push("<img height='160' width='160' src='https://ebapi.earthboundtrading.com/pimg/image/"+result.item_no+"'/>");
-                      resultsHTML.push("<i class='fa fa-search-plus' id='img-icon'></i>");
-                    resultsHTML.push("</div>");
-                    resultsHTML.push("<h3>"+result.description+"</h3>");
-                    resultsHTML.push("<p><strong>Item #:</strong> "+result.item_no+" - <strong>Case Quantity:</strong> "+result.case_qty+"<br>");
-                    resultsHTML.push("<strong>Desc:</strong> "+result.description+"<br>");
-                    resultsHTML.push("<strong>DCS:</strong> "+result.dcs_code+"<br>");
-                    resultsHTML.push("<strong>Type:</strong> "+result.type_name+"<br>");
-                    resultsHTML.push("<strong>Notes:</strong> "+notes+"</p>");
-                  resultsHTML.push("</div>");//End of div left
-
-                  resultsHTML.push("<div class='right'>");
-                    resultsHTML.push("<div class='min-max form-inline'>");
-                      resultsHTML.push("<strong>Min:</strong> "+min+"<br><strong>Max:</strong> "+max+"<br>");
-                    resultsHTML.push("</div>");
-                    resultsHTML.push("<div class='qty-form form-inline'>");
-                      resultsHTML.push("<div class='form-group'>");
-                        resultsHTML.push("<input type='hidden' id='realmax' value='"+realmax+"'>");
-                        resultsHTML.push("<label>Cases:&nbsp;</label>");
-                        resultsHTML.push("<input type='hidden' id='item_no' value='"+result.item_no+"'>");
-                        resultsHTML.push("<select class='add-qty form-control' "+disabled+">"+options+"</select>");
+                  resultsHTML.push("<li class='"+disabled+"'>");
+                    resultsHTML.push("<div class='left'>");
+                      resultsHTML.push("<div class='compress'>");
+                        resultsHTML.push("<img height='160' width='160' src='https://ebapi.earthboundtrading.com/pimg/image/"+result.item_no+"'/>");
+                        resultsHTML.push("<i class='fa fa-search-plus' id='img-icon'></i>");
                       resultsHTML.push("</div>");
-                    resultsHTML.push("&nbsp;<button type='button' data-item-id='"+result.item_no+"' class='add-to-cart btn btn-default "+disabled+"' >Add</button>");
-                  resultsHTML.push("</div>");//End of qty-form
-                resultsHTML.push("</div>");//End of div right
-                resultsHTML.push("</li>");
-            }
-            $("#results").html(resultsHTML.join(""));
-            //$("#results").append(row);
-            $(".pagination").html(page_numbers);
-        }
+                      resultsHTML.push("<h3>"+result.description+"</h3>");
+                      resultsHTML.push("<p><strong>Item #:</strong> "+result.item_no+" - <strong>Case Quantity:</strong> "+result.case_qty+"<br>");
+                      resultsHTML.push("<strong>Desc:</strong> "+result.description+"<br>");
+                      resultsHTML.push("<strong>DCS:</strong> "+result.dcs_code+"<br>");
+                      resultsHTML.push("<strong>Type:</strong> "+result.type_name+"<br>");
+                      resultsHTML.push("<strong>Notes:</strong> "+notes+"</p>");
+                    resultsHTML.push("</div>");//End of div left
 
+                    resultsHTML.push("<div class='right'>");
+                      resultsHTML.push("<div class='min-max form-inline'>");
+                        resultsHTML.push("<strong>Min:</strong> "+min+"<br><strong>Max:</strong> "+max+"<br>");
+                      resultsHTML.push("</div>");
+                      resultsHTML.push("<div class='qty-form form-inline'>");
+                        resultsHTML.push("<div class='form-group'>");
+                          resultsHTML.push("<input type='hidden' id='realmax' value='"+realmax+"'>");
+                          resultsHTML.push("<label>Cases:&nbsp;</label>");
+                          resultsHTML.push("<input type='hidden' id='item_no' value='"+result.item_no+"'>");
+                          resultsHTML.push("<select class='add-qty form-control' "+disabled+">"+options+"</select>");
+                        resultsHTML.push("</div>");
+                      resultsHTML.push("&nbsp;<button type='button' data-item-id='"+result.item_no+"' class='add-to-cart btn btn-default "+disabled+"' >Add</button>");
+                    resultsHTML.push("</div>");//End of qty-form
+                  resultsHTML.push("</div>");//End of div right
+                  resultsHTML.push("</li>");
+              }
+              $("#results").html(resultsHTML.join(""));
+              //$("#results").append(row);
+              $(".pagination").html(page_numbers);
+            }else{
+              showMessage('Product not found! Please try again.', 'error');
+            }
+        }
         //$("#item-search>input").attr("disabled", false).focus();
         $("#spinny").hide();
     });
 }
 
 function buildPagination(totalRecords){
-
+  console.log("Pagination called with "+totalRecords+" records");
 	var current_page = $("#current_page").val();
-	var pages = Math.floor(totalRecords/20);
+	var pages = Math.ceil(totalRecords/20);
 	$("#total_pages").val(pages);
+  console.log("pages math is "+pages);
 	//alert("number of pages are "+pages);
 	var form = '';
 	if(pages>1){
+    console.log("pages math is "+pages);
 		var next;
 		var prev;
 
@@ -143,7 +147,9 @@ function buildPagination(totalRecords){
 			next = 'class="disabled"';
 		}
 		form += '<li '+next+' ><a href="#" onclick="return false;" class="page_next"><span aria-hidden="true">&raquo;</span></a></li>';
-	}
+	}else{
+    console.log("inside else");
+  }
 	return form;
 }
 

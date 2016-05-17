@@ -112,7 +112,7 @@ function doSearch(searchstring) {
 function buildPagination(totalRecords){
 
 	var current_page = $("#current_page").val();
-	var pages = Math.floor(totalRecords/20);
+	var pages = Math.ceil(totalRecords/20);
 	$("#total_pages").val(pages);
 	//alert("number of pages are "+pages);
 	var form = '';
