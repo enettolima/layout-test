@@ -33,6 +33,16 @@ class RestockController extends BaseController
       }
     }
 
+    public function getSignOrders()
+    {
+      return View::make('pages.maintenance',
+        array(
+          "title" => "Sign Order Form is now discontinued.",
+          "message" => "Please go to Tools -> Reorder or <a href='/restock'>click here</a> to order signs."
+      ));
+    }
+
+
     public function getBrowse()
     {
         return View::make(
