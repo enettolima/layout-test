@@ -26,3 +26,5 @@ Artisan::add(new CronRPMagentoInventorySync);
 Artisan::add(new CronGetMagentoShippingData);
 
 Artisan::add(new StoreDirectorySync);
+
+Artisan::add(new APITest);
