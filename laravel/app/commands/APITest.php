@@ -89,6 +89,10 @@ class APITest extends Command {
 		$this->rproOrders();
 		//RPro User
 		$this->rproUserMockAuth();
+		$this->rproUserAuth();
+		//RPro Products
+		$this->rproProductsGetInfo();
+		$this->rproProductsUpdateBIN();
 
 		$time_elapsed_secs 	= microtime(true) - $start;
     $end_date 					= Date("y-m-d H:i:s");
@@ -286,10 +290,89 @@ class APITest extends Command {
 		$results = $api->post('/rprousers/mockauth', $data);
 		$this->checkAPIResponse($api, "RProUser Mock Auth Request");
 	}
+	protected function rproUserAuth(){
+		$api = new EBTAPI;
+		$data['user'] = '000NN';
+		$data['password'] 	= '2016';
+		$results = $api->post('/rprousers/auth', $data);
+		$this->checkAPIResponse($api, "RProUser Auth Request");
+	}
 	//==============================================================//
 	//////////////////// End of RProUser block ///////////////////////
 	//==============================================================//
+	//==============================================================//
+	//////////////////// RProd Products block ////////////////////////
+	//==============================================================//
+	protected function rproProductsGetInfo(){
+		$api = new EBTAPI;
+		$results = $api->get('/rproproducts/product-info/41388');
+		$this->checkAPIResponse($api, "RProProducts Get Info Request");
+	}
+	//This will affect production data
+	protected function rproProductsUpdateBIN(){
+		$api = new EBTAPI;
+		$data['bin_no'] 	= 'AC11B06';
+		$data['item_sid'] = '-1303818204129849348';
+		//$results = $api->post('/rproproducts/update-bin', $data);
+		//$this->checkAPIResponse($api, "RPro Products Update BIN Request");
+		$this->saveMessageString("RPro Products Update BIN Request", "skip");
+	}
+	//This will affect production data
+	protected function rproProductsAddSecondaryBIN(){
+		$api = new EBTAPI;
+		$data['bin_number'] = 'AC11B06';
+		$data['item_sid'] 	= '-1303818204129849348';
+		$data['item_no'] 		= '41388';
+		$data['old_bin'] 		= '';
+		$data['quantity'] 	= 12;
+		$data['description']= 'This is for tests only';
+		$data['employee_id']= '000NN';
 
+		//$results = $api->post('/rproproducts/add-secondary-location', $data);
+		//$this->checkAPIResponse($api, "RPro Products Add Secondary BIN Request");
+		$this->saveMessageString("RPro Products Add Secondary BIN", "skip");
+	}
+	//This will affect production data
+	protected function rproProductsUpdateSecondaryBIN(){
+		$api = new EBTAPI;
+
+		$data['bin_number'] = 'AC11B07';
+		$data['bin_no'] 		= 'AC11B07';
+		$data['item_sid'] 	= '-1303818204129849348';
+		$data['item_no'] 		= '41388';
+		$data['old_bin'] 		= 'AC11B06';
+		$data['quantity'] 	= 13;
+		$data['qty_old'] 		= 12;
+		$data['qty_new'] 		= 13;
+		$data['description']= 'This is for tests only';
+		$data['employee_id']= '000NN';
+		$data['bin_id']			= '16998';
+
+		//$results = $api->post('/rproproducts/update-secondary-location', $data);
+		//$this->checkAPIResponse($api, "RPro Products Update Secondary BIN Request");
+		$this->saveMessageString("RPro Products Update Secondary BIN Request", "skip");
+	}
+	//This will affect production data
+	protected function rproProductsDeleteSecondaryBIN(){
+		$api = new EBTAPI;
+		$data['bin_number'] = 'AC11B07';
+		$data['bin_no'] 		= 'AC11B07';
+		$data['item_sid'] 	= '-1303818204129849348';
+		$data['item_no'] 		= '41388';
+		$data['old_bin'] 		= 'AC11B06';
+		$data['quantity'] 	= 13;
+		$data['qty_old'] 		= 12;
+		$data['qty_new'] 		= 13;
+		$data['description']= 'This is for tests only';
+		$data['employee_id']= '000NN';
+		$data['bin_id']			= '16998';
+		//$results = $api->post('/rproproducts/delete-secondary-location', $data);
+		//$this->checkAPIResponse($api, "RPro Products Delete Secondary BIN Request");
+		$this->saveMessageString("RPro Products Delete Secondary BIN Request", "skip");
+	}
+	//==============================================================//
+	/////////////////// End RProd Products block /////////////////////
+	//==============================================================//
 	/**
 	 * Check response code from the API
 	 */
