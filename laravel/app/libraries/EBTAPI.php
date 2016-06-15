@@ -4,6 +4,10 @@ class EBTAPI
 {
 	protected $token = null;
 	public $status_code = 0;
+	private $show_log = false;//Show request and response
+	private $url;
+	private $headers;
+	private $counter = 0;
 
 	public function __construct($allowTokenFromSession = TRUE)
 	{
@@ -38,6 +42,7 @@ class EBTAPI
 				// Clog::log(__METHOD__ . ' $this->token retreived from session');
 			}
 		}
+		$this->counter = 1;
 	}
 
 	protected function getToken()
@@ -83,10 +88,15 @@ class EBTAPI
 	{
 		// Clog::log(__METHOD__);
 		$returnval = false;
+		$this->buildParams($resource);
+		//$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		//$headers = array('X-Auth-Token' => $this->token);
 
-		$response = Requests::get($_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource, array('X-Auth-Token' => $this->token), array('verify' => false));
+		$response = Requests::get($this->url, $this->headers, array('verify' => false));
+		$this->showLog("GET",array(), $response);
+		return $this->processResponse($response, "get", null);
 
-		if ($response->success) {
+		/*if ($response->success) {
 			// Clog::log(__METHOD__ . ' success');
 			$returnval = json_decode($response->body);
 		} elseif($response->status_code === 401) {
@@ -95,7 +105,7 @@ class EBTAPI
 			$returnval = $this->get($resource);
 		}
 		$this->status_code = $response->status_code;
-		return $returnval;
+		return $returnval;*/
 	}
 
 	public function post($resource, $vals)
@@ -104,28 +114,29 @@ class EBTAPI
 
 		$returnval = false;
 
-		$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
-		$headers = array('X-Auth-Token' => $this->token);
+		//$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		//$headers = array('X-Auth-Token' => $this->token);
 
 		// Clog::log($url);
 		// Clog::log($headers);
 		// Clog::log($vals);
 
+		$this->buildParams($resource);
+		$response = Requests::post($this->url, $this->headers, $vals, array('verify' => false));
+		$this->showLog("POST",$vals, $response);
 
-		$response = Requests::post($url, $headers, $vals, array('verify' => false));
-
-		// Clog::log($response);
-
-		if ($response->success) {
+		return $this->processResponse($response, "post", null);
+		/*if ($response->success) {
 			// Clog::log(1);
 			$returnval = json_decode($response->body);
+
 		} elseif($response->status_code === 401) {
 			// Clog::log(2);
 			$this->resetToken();
 			$returnval = $this->post($resource, $vals);
 		}
 		$this->status_code = $response->status_code;
-		return $returnval;
+		return $returnval;*/
 	}
 
 	public function put($resource, $vals)
@@ -134,18 +145,19 @@ class EBTAPI
 
 		$returnval = false;
 
-		$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
-		$headers = array('X-Auth-Token' => $this->token);
-
+		//$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		//$headers = array('X-Auth-Token' => $this->token);
+		$this->buildParams($resource);
 		// Clog::log($url);
 		// Clog::log($headers);
 		// Clog::log($vals);
 
 
-		$response = Requests::put($url, $headers, $vals, array('verify' => false));
-
+		$response = Requests::put($this->url, $this->headers, $vals, array('verify' => false));
+		$this->showLog("PUT",$vals, $response);
+		return $this->processResponse($response, "post", null);
 		// Clog::log($response);
-
+		/*
 		if ($response->success) {
 			// Clog::log(1);
 			$returnval = json_decode($response->body);
@@ -155,7 +167,7 @@ class EBTAPI
 			$returnval = $this->post($resource, $vals);
 		}
 		$this->status_code = $response->status_code;
-		return $returnval;
+		return $returnval;*/
 	}
 
 	public function delete($resource)
@@ -164,16 +176,18 @@ class EBTAPI
 
 		$returnval = false;
 
-		$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
-		$headers = array('X-Auth-Token' => $this->token);
-
+		//$url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		//$headers = array('X-Auth-Token' => $this->token);
+		$this->buildParams($resource);
 		// Clog::log($url);
 		// Clog::log($headers);
 		// Clog::log($vals);
 
 
-		$response = Requests::delete($url, $headers, array('verify' => false));
-
+		$response = Requests::delete($this->url, $this->headers, array('verify' => false));
+		$this->showLog("DELETE",array(), $response);
+		return $this->processResponse($response, "post", null);
+		/*
 		// Clog::log($response);
 
 		if ($response->success) {
@@ -185,6 +199,49 @@ class EBTAPI
 			$returnval = $this->post($resource, $vals);
 		}
 		$this->status_code = $response->status_code;
+		return $returnval;*/
+	}
+
+	private function buildParams($resource){
+		$this->url = $_ENV['ebt_api_host'] . $_ENV['ebt_api_uri'] . $resource;
+		$this->headers = array('X-Auth-Token' => $this->token);
+	}
+
+	private function showLog($method, $vals, $response){
+		if($this->show_log){
+			Log::info($method." Request to ".$this->url,array('Headers' => $this->headers, 'vars'=> $vals));
+			Log::info($method." Response -- ".$response->status_code,array('Response' => json_decode($response->body)));
+		}
+	}
+
+	private function processResponse($response, $request_type, $vals){
+		$returnval = false;
+		$this->status_code = $response->status_code;
+		if($response->status_code === 401 && $this->counter <3){
+			$this->resetToken();
+			switch ($request_type) {
+				case 'get':
+					$returnval = $this->get($resource);
+					break;
+				case 'post':
+					$returnval = $this->post($resource, $vals);
+					break;
+				case 'put':
+					$returnval = $this->put($resource, $vals);
+					break;
+				case 'delete':
+					$returnval = $this->delete($resource);
+					break;
+				default:
+					# code...
+					break;
+			}
+			//Preventing Infinite loop in case the API always returns 401
+			$this->counter = $this->counter + 1;
+			//$returnval = $this->post($resource, $vals);
+		}else{
+			$returnval = json_decode($response->body);
+		}
 		return $returnval;
 	}
 }

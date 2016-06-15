@@ -377,6 +377,7 @@ class APITest extends Command {
 	 * Check response code from the API
 	 */
 	private function checkAPIResponse($api, $msg){
+		//Log::info("Status code is ".$api->status_code." msg-> ".$msg);
 		if($api->status_code==200){
 			$this->saveMessageString($msg);
 		}else{

@@ -70,8 +70,13 @@ function doSearch(searchString){
                       break;
                     default:
                       min = result.minmax[store_id].min;
-                      max = result.minmax[store_id].max;
-                      realmax = result.minmax[store_id].max;
+                      if(result.minmax[store_id].max<result.case_qty){
+                        max     = result.case_qty;
+                        realmax = result.case_qty;
+                      }else{
+                        max     = result.minmax[store_id].max;
+                        realmax = result.minmax[store_id].max;
+                      }
                       break;
                   }
 
@@ -96,6 +101,7 @@ function doSearch(searchString){
                       resultsHTML.push("<div class='qty-form form-inline'>");
                         resultsHTML.push("<div class='form-group'>");
                           resultsHTML.push("<input type='hidden' id='realmax' value='"+realmax+"'>");
+                          resultsHTML.push("<input type='hidden' id='case_qty' value='"+result.case_qty+"'>");
                           resultsHTML.push("<label>Cases:&nbsp;</label>");
                           resultsHTML.push("<input type='hidden' id='item_no' value='"+result.item_no+"'>");
                           resultsHTML.push("<select class='add-qty form-control' "+disabled+">"+options+"</select>");
@@ -118,15 +124,15 @@ function doSearch(searchString){
 }
 
 function buildPagination(totalRecords){
-  console.log("Pagination called with "+totalRecords+" records");
+  //console.log("Pagination called with "+totalRecords+" records");
 	var current_page = $("#current_page").val();
 	var pages = Math.ceil(totalRecords/20);
 	$("#total_pages").val(pages);
-  console.log("pages math is "+pages);
+  //console.log("pages math is "+pages);
 	//alert("number of pages are "+pages);
 	var form = '';
 	if(pages>1){
-    console.log("pages math is "+pages);
+    //console.log("pages math is "+pages);
 		var next;
 		var prev;
 
@@ -148,7 +154,7 @@ function buildPagination(totalRecords){
 		}
 		form += '<li '+next+' ><a href="#" onclick="return false;" class="page_next"><span aria-hidden="true">&raquo;</span></a></li>';
 	}else{
-    console.log("inside else");
+    //console.log("inside else");
   }
 	return form;
 }
@@ -197,13 +203,13 @@ $(document).ready(function () {
       if (event.keyCode == 13){
         event.preventDefault();
         //alert( "Handler for click called." );
-        updateCartQuantity();
+        updateCartQuantity(this);
       }
     });
 
     $(".update-quantity").on('click', function(event){
       //alert( "Handler for click called." );
-      updateCartQuantity();
+      updateCartQuantity(this);
     });
 
     $(".remove-item").on('click', function(event){
@@ -330,6 +336,7 @@ $(document).ready(function () {
         var qty       = parseInt($(this).closest("div").find(".add-qty").val());
         var item      = $(this).closest("div").find("#item_no").val();
         var max       = parseInt($(this).closest("div").find("#realmax").val());
+        var case_qty  = parseInt($(this).closest("div").find("#case_qty").val());
         var store_id  = $("#store-id").val();
 
         var debug = "false";
@@ -351,13 +358,15 @@ $(document).ready(function () {
                   'store_id' : store_id,
                   'product_id' : item,
                   'quantity' : qty,
+                  'case_quantity' : case_qty,
                   'max' : max
                 }
             });
 
             request.done(function(response){
+              //console.log("Response: "+response.errors[0]);
               if (response.errors.length>0) {
-                $("#item-search>input").attr("disabled", false).focus();
+                //$("#item-search>input").attr("disabled", false).focus();
                 showMessage(response.errors[0], 'error');
               }else{
                 showMessage("Item added to cart successfully.", 'success');
@@ -375,7 +384,12 @@ $(document).ready(function () {
         var qty       = parseInt($(this).closest("td").find("#add_qty").val());
         var item      = $(this).closest("td").find("#item_id").val();
         var max       = parseInt($(this).closest("td").find("#realmax").val());
+        var case_qty       = parseInt($(this).closest("td").find("#case_qty").val());
         var store_id  = $("#store-id").val();
+
+        //resultsHTML.push("<input type='hidden' id='item_id' value='"+result.item_no+"'>");
+        //resultsHTML.push("<input type='hidden' id='add_qty' value='1'>");
+        //resultsHTML.push("<input type='hidden' id='case_qty' value='"+result.case_qty+"'>");
 
         var debug = "false";
         if(qty > max){
@@ -395,6 +409,7 @@ $(document).ready(function () {
                 data: {
                   'store_id' : store_id,
                   'product_id' : item,
+                  'case_quantity' : case_qty,
                   'quantity' : qty,
                   'max' : max
                 }
@@ -488,13 +503,20 @@ $(document).ready(function () {
   	});
 });
 
-function updateCartQuantity(){
-  //console.log( $( "#products-list" ).serialize());
+function updateCartQuantity(element){
+  var store_id      = $(element).closest('tr').find('.store_id').val();
+  var product_id    = $(element).closest('tr').find('.product_id').val();
+  var case_quantity = $(element).closest('tr').find('.case_quantity').val();
+  var quantity      = $(element).closest('tr').find('.quantity').val();
+
+  console.log("quantity = "+quantity);
+  console.log("case_quantity = "+case_quantity);
   var myObj = {};
   var rootObj = {};
   var prodObj = {};
 
-  $('form input, form select').each(
+  //var item      = $(this).closest("td").find("#item_id").val();
+  /*$('form input, form select').each(
     function(index){
       var input = $(this);
       if(input.attr('name')=="store-id"){
@@ -509,12 +531,15 @@ function updateCartQuantity(){
 
   myObj["products"] = prodObj;
   var json = JSON.stringify(myObj);
-
+*/
   var request = $.ajax({
       method : 'POST',
       url: '/lsvc/restock-update-cart',
       data: {
-          'data' : json
+          'store_id' : store_id,
+          'product_id' : product_id,
+          'case_quantity' : case_quantity,
+          'quantity' : quantity
       }
   });
 
@@ -626,8 +651,13 @@ function getProductsList(orderId, stage){
               break;
             default:
               min = result.min_qty;
-              max = result.max_qty;
-              realmax = result.max_qty;
+              if(result.max_qty<result.case_qty){
+                max     = result.case_qty;
+                realmax = result.case_qty;
+              }else{
+                max     = result.max_qty;
+                realmax = result.max_qty;
+              }
               break;
           }
           resultsHTML.push("<tr>");
@@ -642,6 +672,7 @@ function getProductsList(orderId, stage){
               resultsHTML.push("<input type='hidden' id='realmax' value='"+realmax+"'>");
               resultsHTML.push("<input type='hidden' id='item_id' value='"+result.item_no+"'>");
               resultsHTML.push("<input type='hidden' id='add_qty' value='1'>");
+              resultsHTML.push("<input type='hidden' id='case_qty' value='"+result.case_qty+"'>");
               resultsHTML.push("<button type='button' class='add-from-archived btn btn-default' "+disabled+"'>Add to current cart</button>");
             resultsHTML.push("</td>");
           resultsHTML.push("</tr>");
