@@ -42,7 +42,7 @@ class LSvcController extends BaseController
     {
       //Get data sent by the restock.js
       //get input
-			$data             = Input::all();
+			$data = Input::all();
       $api  = new EBTAPI;
 			$json	= $api->post('/restock/cart', $data);
       return Response::json($json);
@@ -50,9 +50,9 @@ class LSvcController extends BaseController
 
     public function postRestockUpdateCart(){
       $data             = Input::all();
-      $real_data = json_decode($data['data'], true);
+      //$real_data = json_decode($data['data'], true);
       $api  = new EBTAPI;
-			$json	= $api->put('/restock/cart/'.$real_data['store_id'], $real_data);
+			$json	= $api->put('/restock/cart/'.$data['store_id'], $data);
       return Response::json($json);
     }
 
@@ -532,12 +532,9 @@ class LSvcController extends BaseController
       $date       = date("Y-m-d",$startStamp);
 
       try{
-        Log::info('Inside try');
         //Selecting the record from MySql to get the sql_id
         $sql = "SELECT * FROM scheduled_inout WHERE id = '$inOutId'";
-        Log::info('query is '.$sql);
         $sel = DB::connection('mysql')->select($sql);
-        Log::info('Query result is ',$sel);
         //if sql_id>0 it means that we can save that into mysql
         $sqlId = $sel[0]->sql_id;
         $sellable = $sel[0]->sellable;
@@ -545,9 +542,7 @@ class LSvcController extends BaseController
         if($sqlId>0){
           //Making update on sql Server
           $update_sql = $this->updateSqlScheduler($startDate, $endDate, $sellable, $userId, $sqlId);
-          Log::info('inside if with sql id '.$sqlId);
           if($update_sql!="0"){
-            Log::info('inside $update_sql '.$update_sql);
             //At this point the php could not save the record on sql meaning that we should not update mySql
             return Response::json(array( 'status' => 0));
             exit();
@@ -564,7 +559,6 @@ class LSvcController extends BaseController
         ";
 
         if (DB::connection('mysql')->update($SQL)) {
-          Log::info('inside db connection '.$SQL);
           $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
           $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
           return Response::json(array(
@@ -573,11 +567,9 @@ class LSvcController extends BaseController
               'schedule' => $this->getDaySchedule($storeNumber, $date)
           ));
         } else {
-          Log::info('inside else');
           return Response::json(array( 'status' => 0));
         }
       } catch (Exception $e) {
-        Log::info('inside catch');
         return Response::json(array( 'status' => 0));
       }
     }
@@ -956,29 +948,6 @@ class LSvcController extends BaseController
         } catch (Exception $e) {
           return Response::json(array( 'status' => 0));
         }
-
-        /*$SQL = "
-            UPDATE scheduled_inout
-            SET
-                date_in = '$in',
-                date_out = '$out'
-            WHERE
-                id = $inOutId
-        ";
-
-        if (DB::connection('mysql')->update($SQL)) {
-
-            $scheduleHalfHourLookupSQL  = "call p2($storeNumber, '$date')";
-            $scheduleHalfHourLookupRES  = DB::connection('mysql')->select($scheduleHalfHourLookupSQL);
-
-            return Response::json(array(
-                'status' => 1,
-                'scheduleHourLookup' => $scheduleHalfHourLookupRES[0],
-                'schedule' => $this->getDaySchedule($storeNumber, $date)
-            ));
-        } else {
-            return Response::json(array('status' => 0));
-        }*/
     }
 
     public function postSchedulerInOut()
@@ -1113,14 +1082,10 @@ class LSvcController extends BaseController
         }
 
         $metaArray = json_decode($metaRES[0]->{'data'}, true);
-
-        Log::info("meta array",$metaArray);
-        Log::info("schedule array",$scheduleRES);
         //Checking if the employee still works at the store,
         //if not remove him/her from the array
         foreach($scheduleRES as $k => $v){
           $check = in_array($scheduleRES[$k]->associate_id, $metaArray['sequence']);
-          Log::info("Is employee ".$scheduleRES[$k]->associate_id." exist on sequence->".$check);
           if(!$check){
             unset($scheduleRES[$k]);
           }
@@ -1395,10 +1360,10 @@ class LSvcController extends BaseController
      * Functions to update the sql side with the scheduler
      */
     public function createSqlScheduler($start, $end, $sellable = 1, $employee_id, $store_number){
-      Log::info('createSqlScheduler', array("start"=>$start,
+      /*Log::info('createSqlScheduler', array("start"=>$start,
       "end"=>$end,
       "Emp ID"=>$employee_id
-      ));
+    ));*/
       $sql = "exec dbo.operInOut 'A', NULL, '".$start."', '".$end."',".$sellable.", '".$employee_id."', '".$store_number."'";
 
       //Log::info('createSqlScheduler', array("op"=>$sql));
@@ -1413,10 +1378,10 @@ class LSvcController extends BaseController
     }
 
     public function updateSqlScheduler($start, $end, $sellable, $employee_id, $sql_id){
-      Log::info('updateSqlScheduler', array("start"=>$start,
+      /*Log::info('updateSqlScheduler', array("start"=>$start,
       "end"=>$end,
       "Emp ID"=>$employee_id
-      ));
+    ));*/
       $sql = "exec dbo.operInOut 'U', ".$sql_id.", '".$start."', '".$end."',".$sellable.", '".$employee_id."'";
       $sqlupdate = DB::connection('sqlsrv_ebtgoogle')->select($sql);
       //Log::info('updateSqlScheduler query '.$sql);
@@ -1438,17 +1403,17 @@ class LSvcController extends BaseController
      * new schedule as well
      */
     public function copSqlScheduler($start, $store_number, $employee_id=0){
-      Log::info('Received', array("start"=>$start,
+      /*Log::info('Received', array("start"=>$start,
       "Store"=>$store_number,
       "Emp ID"=>$employee_id
-      ));
+    ));*/
       if($employee_id>0){
         $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."', NULL, '".$employee_id."'";
       }else{
         $sql = "exec dbo.operInOutCopy '".$store_number."', '".$start."'";
       }
       $sqldelete = DB::connection('sqlsrv_ebtgoogle')->select($sql);
-      Log::info('SqlDetele', $sqldelete);
+      //Log::info('SqlDetele', $sqldelete);
       //return $sqldelete[0]->STATUS;
       return true;
     }

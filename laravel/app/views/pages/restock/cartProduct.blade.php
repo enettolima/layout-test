@@ -11,13 +11,16 @@
       </div>
     </div>
   </td>
-  <td style="width: 290px">
+  <td style="width: 290px" class="option-box">
     <label>Boxes: <div id="item-qty" class="form-group">
-      <input class="form-control" id="qtybox" name="{{$prod['item_no']}}" value="{{$prod['qty_box']}}">
+      <input class="form-control quantity" value="{{$prod['qty_box']}}">
     </div></label>
   </td>
   <td>
     <button type="button" data-item-id="" class="update-quantity btn btn-secondary">Update Qty</button>
+    <input type="hidden" class="store_id" value="{{$prod['store_code']}}">
+    <input type="hidden" class="product_id" value="{{$prod['item_no']}}">
+    <input type="hidden" class="case_quantity" value="{{$prod['case_qty']}}">
     <button type="button" data-item-id="{{$store_id}}-{{$prod['item_no']}}" class="remove-item btn btn-danger">Remove Item</button>
   </td>
 </tr>

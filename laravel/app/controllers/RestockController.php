@@ -68,7 +68,7 @@ class RestockController extends BaseController
       try{
         $api = new EBTAPI;
         $res = $api->get("/restock/cart/".$this->store_id."/status");
-        Log::info("Status API Call",array('response' => $res));
+        //Log::info("Status API Call",array('response' => $res));
         if($res->error_code>0 && $res->error_code==404){
           $this->items_count = 0;
           //$this->error = true;

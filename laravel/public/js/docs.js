@@ -79,7 +79,7 @@ function doSearch(searchstring) {
 						//Production
 						var full = "https://ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
 						//Local Dev
-						//var full = "http://cdev.ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
+						//var full = "http://newdev.ebtpassport.com/documents/load-file?filename="+filename+"&path="+virtual+"&id="+id;
 						var row = "";
 						row += "<li>";
 						row += "<h4><a target='_blank' href='"+full+"'>"+filename+"</a></h4>";

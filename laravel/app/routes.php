@@ -38,3 +38,8 @@ Route::controller('/preferences', 'PreferencesController');
 Route::controller('/documents', 'DocumentsController');
 
 Route::controller('/restock', 'RestockController');
+
+Route::get('/testapi', function () {
+  $response = Artisan::call('api:test', array('--show'=> 'error'));
+  echo "OK - ".$response;
+});
