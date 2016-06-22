@@ -30,11 +30,12 @@ class LSvcController extends BaseController
 			$data             = Input::all();
       $api = new EBTAPI;
       if(strlen($data['keyword'])>0){
-        $search_str = urlencode(trim($data['keyword']));
+        $kw = str_replace('/', '&#47;', $data['keyword']);
+        $search_str = urlencode(trim($kw));
       }else{
         $search_str = '*';
       }
-      $res = $api->get("/restock/product/search/".$data['store_id']."/".$data['page'].'/'.$search_str.'/'.urlencode($data['dcs']) );
+      $res = $api->get("/restock/product/search/".$data['store_id']."/".$data['page'].'/'.$search_str.'/'.urlencode($data['dcs']));
       return Response::json($res);
     }
 
