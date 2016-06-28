@@ -83,7 +83,7 @@ function doSearch(searchString){
                   resultsHTML.push("<li class='"+disabled+"'>");
                     resultsHTML.push("<div class='left'>");
                       resultsHTML.push("<div class='compress'>");
-                        resultsHTML.push("<img height='160' width='160' src='https://ebapi.earthboundtrading.com/pimg/image/"+result.item_no+"'/>");
+                        resultsHTML.push("<img height='160' width='160' src='https://ebapi.earthboundtrading.com/pimg/"+result.item_no+"'/>");
                         resultsHTML.push("<i class='fa fa-search-plus' id='img-icon'></i>");
                       resultsHTML.push("</div>");
                       resultsHTML.push("<h3>"+result.description+"</h3>");
