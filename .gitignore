@@ -7,3 +7,5 @@ laravel/public/docs
 laravel/app/storage/exempt-documentation
 #Documents for ElasticSearch Index
 /es_docs/*
+.sass-cache
+node_modules
