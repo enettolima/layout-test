@@ -5,56 +5,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class RpmsyncCompareOrders extends Command {
-                            /*
-                              From Magento:
-                                class stdClass#744 (6) {
-                                    public $increment_id =>
-                                        string(9) "100002591"
-                                        public $created_at =>
-                                        string(19) "2014-12-30 23:28:43"
-                                        public $total =>
-                                        double(77.85)
-                                        public $tax =>
-                                        int(0)
-                                        public $before_tax =>
-                                        double(77.85)
-                                        public $qtysold =>
-                                        int(2)
-                                    }
-
-                                From RP: 
-                                    class stdClass#717 (1) {
-                                        public $data =>
-                                            class stdClass#722 (13) {
-                                                public $sbs_no =>
-                                                string(1) "1"
-                                                public $store_no =>
-                                                string(2) "74"
-                                                public $invc_no =>
-                                                string(9) "100002591"
-                                                public $invc_sid =>
-                                                string(10) "1100002591"
-                                                public $created_date =>
-                                                string(19) "2014-12-30 17:28:43"
-                                                public $ext_price =>
-                                                string(5) "74.90"
-                                                public $ext_tax =>
-                                                string(4) "0.00"
-                                                public $ext_return =>
-                                                string(1) "0"
-                                                public $qtysold =>
-                                                string(1) "2"
-                                                public $invc_type =>
-                                                string(1) "0"
-                                                public $so_no =>
-                                                NULL
-                                                public $so_no_web =>
-                                                NULL
-                                                public $calc_total =>
-                                                string(5) "74.90"
-                                            }
-                                    }
-                             */
 
     /**
      * The console command name.
@@ -91,6 +41,7 @@ class RpmsyncCompareOrders extends Command {
 
     public function fire()
     {
+
 
         try {
 
@@ -151,34 +102,52 @@ class RpmsyncCompareOrders extends Command {
 
             if (count($allMageOrders) > 0) {
 
-                $this->info("Done. Now checking " . count($allMageOrders) . " orders...");
+                $this->info("Finished retrieving " . count($allMageOrders) . " orders from Magento.");
 
                 $api = new EBTAPI;
+
+                $mageOrdersToCheck = [];
+
+                foreach ($allMageOrders as $mo) {
+                    $mageOrdersToCheck[] = $mo->increment_id;
+                }
+
+                $this->info("Submitting " . count($allMageOrders) . " to EBAPI for validation...");
+
+                $rpResults = $api->post('/rproorders/orders', array('orders' => $mageOrdersToCheck));
+
+                $this->info("Got " . count($rpResults->data) . " orders back from EBAPI.");
+
+                if (count($allMageOrders) !== count($rpResults->data)) {
+                    throw new Exception("Sent " . count($allMageOrders) . " orders to EBAPI but got " . count($rpResults->data) . " back. Check max_input_vars in php.ini on EBAPI!");
+                }
+
+                $rpResults = $this->indexRpResults($rpResults->data);
 
                 foreach ($allMageOrders as $mageOrder) {
 
                     $matchResults['pass'] = array();
                     $matchResults['fail'] = array();
 
-                    $rpReceipt = $api->get('/rproorders/order/' . $mageOrder->increment_id);
+                    $rpReceipt = $rpResults[$mageOrder->increment_id];
 
                     $metaArray = array();
                     $metaArray['OWT'] = $mageOrder->order_was_taxed ? "Y" : "N";
                     $metaArray['SWC'] = $mageOrder->shipping_was_charged ? "Y" : "N";
                     $metaArray['SWT'] = $mageOrder->shipping_was_taxed ? "Y" : "N";
 
-                    if (isset($rpReceipt->data)) {
+                    if (isset($rpReceipt->rp_data)) {
 
                         $matchResults['pass'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'yes');
 
                         $mageTotal = (float) $mageOrder->total;
-                        $rpTotal = (float) $rpReceipt->data->totalreceipt;
+                        $rpTotal = (float) $rpReceipt->rp_data->totalreceipt;
 
                         $mageTax = (float) $mageOrder->order_tax_amount;
-                        $rpTax = (float) $rpReceipt->data->ext_tax;
+                        $rpTax = (float) $rpReceipt->rp_data->ext_tax;
 
                         $mageQty = (int) $mageOrder->qtysold;
-                        $rpQty = (int) $rpReceipt->data->qtysold;
+                        $rpQty = (int) $rpReceipt->rp_data->qtysold;
 
                         $testInfo = array('datapoint' => 'total', 'mage' => $mageTotal, 'rp' => $rpTotal);
 
@@ -194,17 +163,36 @@ class RpmsyncCompareOrders extends Command {
                         $matchResults['fail'][] = array('datapoint' => 'exists', 'mage' => 'yes', 'rp' => 'missing');
                     }
 
-                    //report($mageOrder->increment_id, $matchMatches, $matchErrors);
                     $dateString = date("Y-m-d H:i:s", strtotime($mageOrder->created_at));
                     $this->report($mageOrder->increment_id, $dateString, $matchResults, $metaArray);
                 }
             }
 
         } catch(Exception $e) {
-            echo $e->getMessage();
+
+            echo $e->getMessage() . "\n\n";
+
+            echo $e->getTraceAsString();
+
             exit(1);
         }
     }
+
+    protected function indexRpResults($results){
+
+        $returnval = [];
+
+        foreach ($results as $result) {
+
+            $mid = key($result);
+
+            $returnval[$mid] = $result->$mid;
+        }
+
+        return $returnval;
+
+    }
+
 
     protected function report($i, $c, $results, $metaArray) {
         $metaString = "(OWT:{$metaArray['OWT']} SWC:{$metaArray['SWC']} SWT:{$metaArray['SWT']})";
