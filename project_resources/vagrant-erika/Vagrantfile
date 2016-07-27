@@ -1,0 +1,17 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.ssh.insert_key = false
+    config.vm.box = "ubuntu/trusty64"
+
+    config.vm.network "private_network", ip: "10.11.12.13"
+
+    config.vm.synced_folder "../../", "/var/www"
+
+    config.vm.hostname = "devpassport-local"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--memory", "2048"]
+        vb.name = "devpassport-local"
+    end
+end
