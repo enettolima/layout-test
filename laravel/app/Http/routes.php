@@ -12,5 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return view('pages.login.login');
+});
+
+Route::get('/dashboard', function () {
+    //return view('welcome');
+    return view('pages.dashboard.index');
+});
+
+Route::get('/test404', function(){
+   return abort(404);
 });
