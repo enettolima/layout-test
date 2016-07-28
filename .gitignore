@@ -10,3 +10,6 @@ laravel/app/storage/exempt-documentation
 laravel/public/assets/
 .sass-cache
 node_modules
+laravel/.env
+laravel/bootstrap/cache/
+laravel/storage/
