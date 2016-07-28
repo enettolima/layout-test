@@ -33,8 +33,8 @@
                             <img alt="image" class="img-circle" src="{{ asset('img/profile_small.jpg') }}" />
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
-                             </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Justin {lastname}</strong>
+                             </span> <span class="text-muted text-xs block">Buyer <b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="profile.html">Profile</a></li>
                                 <li><a href="contacts.html">Contacts</a></li>
@@ -48,7 +48,7 @@
                         </div>
                     </li>
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
+                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li class="active"><a href="index.html">Dashboard v.1</a></li>
                             <li><a href="dashboard_2.html">Dashboard v.2</a></li>
@@ -60,7 +60,7 @@
                     <li>
                         <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Graphs</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="graph_flot.html">Flot Charts</a></li>
@@ -72,7 +72,7 @@
                             <li><a href="graph_peity.html">Peity Charts</a></li>
                             <li><a href="graph_sparkline.html">Sparkline Charts</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
                         <ul class="nav nav-second-level collapse">
@@ -82,7 +82,7 @@
                             <li><a href="email_template.html">Email templates</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="metrics.html"><i class="fa fa-pie-chart"></i> <span class="nav-label">Metrics</span>  </a>
                     </li>
                     <li>
@@ -98,8 +98,8 @@
                             <li><a href="form_editors.html">Text Editor</a></li>
                             <li><a href="form_markdown.html">Markdown</a></li>
                         </ul>
-                    </li>
-                    <li>
+                    </li> -->
+                    <li> 
                         <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">App Views</span>  <span class="pull-right label label-primary">SPECIAL</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="contacts.html">Contacts</a></li>
@@ -123,7 +123,7 @@
                             <li><a href="pin_board.html">Pin board</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Other Pages</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="search_results.html">Search results</a></li>
@@ -240,12 +240,9 @@
                     </li>
                     <li>
                         <a href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">CSS Animations </span><span class="label label-info pull-right">62</span></a>
-                    </li>
+                    </li> -->
                     <li class="landing_link">
-                        <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">Landing Page</span> <span class="label label-warning pull-right">NEW</span></a>
-                    </li>
-                    <li class="special_link">
-                        <a href="package.html"><i class="fa fa-database"></i> <span class="nav-label">Package</span></a>
+                        <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">Passport</span> <span class="label label-warning pull-right">Label</span></a>
                     </li>
                 </ul>
 
