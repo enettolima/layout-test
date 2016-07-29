@@ -4,3 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
+app/storage/
+bootstrap/compiled.php
+/public/css/passport-style
