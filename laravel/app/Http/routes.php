@@ -19,6 +19,17 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     //return view('welcome');
     return view('pages.dashboard.index');
+    //return view('pages.dashboard.home');
+});
+Route::get('/requests', function () {
+    //return view('welcome');
+    return view('pages.procurement.order.requests');
+    //return view('pages.dashboard.home');
+});
+Route::get('/vendors', function () {
+    //return view('welcome');
+    return view('pages.procurement.vendor.vendor');
+    //return view('pages.dashboard.home');
 });
 
 Route::get('/test404', function(){
