@@ -12,6 +12,8 @@
     @include('layouts.pagewrapper')
 
   </div>
+<!-- custom scripts -->
+<script src="{{ asset('js/passport.js') }}"></script>
 <!-- Mainly scripts -->
 <script src="{{ asset('js/jquery-2.1.1.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
@@ -33,6 +35,9 @@
 <script src="{{ asset('js/inspinia.js') }}"></script>
 <script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
 
+<!-- Footable -->
+<script src="{{ asset('js/plugins/footable/footable.all.min.js') }}"></script>
+
 <!-- jQuery UI -->
 <script src="{{ asset('js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
@@ -52,6 +57,8 @@
 <script src="{{ asset('js/plugins/toastr/toastr.min.js') }}"></script>
 
 
+
+
 <script>
     $(document).ready(function() {
         /*setTimeout(function() {
@@ -64,6 +71,11 @@
             toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
 
         }, 1300);*/
+
+
+        /* run footable plugin on Catalogue page */
+        $('.footable').footable();
+
 
 
         var data1 = [
@@ -185,6 +197,7 @@
         var Polarchart = new Chart(ctx).PolarArea(polarData, polarOptions);*/
 
     });
+  
 </script>
 </body>
 </html>
