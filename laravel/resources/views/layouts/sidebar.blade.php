@@ -6,7 +6,7 @@
                     <img alt="image" class="img-circle" src="{{ asset('img/profile_small.jpg') }}" />
                      </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Justin {lastname}</strong>
+                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Justin Casey</strong>
                      </span> <span class="text-muted text-xs block">Buyer <b class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="profile.html">Profile</a></li>
@@ -36,7 +36,7 @@
                       </ul>
                     </li>
                     <li><a href="/vendors">Vendors</a></li>
-                    <li><a href="dashboard_3.html">Catalog</a></li>
+                    <li><a href="/catalog">Catalog</a></li>
                 </ul>
             </li>
             <li>
