@@ -38,7 +38,6 @@ Route::get('/catalog', function () {
     return view('pages.procurement.catalog.catalog', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Itmes List']);
 });
 
-
 //Tests
 Route::get('/test404', function(){
    return abort(404);
