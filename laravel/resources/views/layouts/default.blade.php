@@ -56,6 +56,9 @@
 <!-- Toastr -->
 <script src="{{ asset('js/plugins/toastr/toastr.min.js') }}"></script>
 
+<!-- Multi Step Modal -->
+<script src="{{ asset('js/plugins/multistepmodal/multi-step-modal.js') }}"></script>
+
 
 
 
