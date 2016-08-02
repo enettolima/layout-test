@@ -2,11 +2,18 @@
 	text-align: left;
 }
 
-.product-img img {
-    width: 32px;
-    height: 32px;
+.product-img > div {
+	width: 32px;
+	height: 32px;
+	overflow: hidden;
 }
 
+.product-img img {
+    width: 100%;
+    border-radius: 0;
+}
+
+/* hide img label ˅˄ icons */
 #product-img-label span.footable-sort-indicator:before {
 	content: "";
 }

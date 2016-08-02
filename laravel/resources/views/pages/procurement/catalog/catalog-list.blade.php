@@ -13,8 +13,9 @@
                     <thead>
                         <tr>
                             <th id="product-img-label">Img</th>
-                            <th data-toggle="true">Item#</th>
-                            <th data-hide="all">Description</th>
+                            <th data-hide="phone">Item#</th>
+                            <th data-toggle="true">Description</th>
+                            <th data-hide="all">Long Description</th>
                             <th data-hide="phone">Price</th>
                             <th data-hide="phone,tablet" >Vendor</th>
                             <th data-hide="phone">Status</th>
@@ -24,19 +25,21 @@
                     <tbody>
                         <tr>
                             <td class="product-img">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                <div>
+                                    <img alt="image" class="img-circle" src="img/43457-necklacecooldesert_hero.jpg">
+                                </div>
+                            </td>
+                            <td class="hash">
+                               43457
                             </td>
                             <td>
-                               Example product 1
+                                Cool Desert Wanderer Necklace
                             </td>
                             <td>
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-                                that it has a more-or-less normal distribution of letters, as opposed to using
-                                'Content here, content here', making it look like readable English.
+                                Explore the southwest in this long, cool desert wanderer necklace with purple rope fringe and unique mixture of textures and elements.
                             </td>
-                            <td>
-                                $50.00
+                            <td class="dollars">
+                                12.95
                             </td>
                             <td>
                                 Vendor Name
@@ -53,19 +56,21 @@
                         </tr>
                         <tr>
                             <td class="product-img">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                <div>
+                                    <img alt="image" class="img-circle" src="img/41735-skinnyscarfwhite_hero.jpg">
+                                </div>
+                            </td>
+                            <td class="hash">
+                               41735
                             </td>
                             <td>
-                               Example product 1
+                                White Boho Pattern Scarf
                             </td>
                             <td>
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-                                that it has a more-or-less normal distribution of letters, as opposed to using
-                                'Content here, content here', making it look like readable English.
+                                This long and lean bohemian scarf can be worn like a tradition scarf or wrapped around your head like a turban or headband. 
                             </td>
-                            <td>
-                                $50.00
+                            <td class="dollars">
+                                12.95
                             </td>
                             <td>
                                 Vendor Name
@@ -82,19 +87,21 @@
                         </tr>
                         <tr>
                             <td class="product-img">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                <div>
+                                    <img alt="image" class="img-circle" src="img/42448-redthrowblanket-222.jpg">
+                                </div>
+                            </td>
+                            <td class="hash">
+                               42448
                             </td>
                             <td>
-                               Example product 1
+                                Red Striped Throw
                             </td>
                             <td>
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-                                that it has a more-or-less normal distribution of letters, as opposed to using
-                                'Content here, content here', making it look like readable English.
+                                Brighten up your abode with this striped cotton throw from India. This versatile throw is super lightweight and can be used in many different ways to bring warmth to your space. Use it to cover a chair, to cozy up with on the couch, or as a cover for a table.
                             </td>
-                            <td>
-                                $50.00
+                            <td class="dollars">
+                                24.95
                             </td>
                             <td>
                                 Vendor Name
@@ -111,19 +118,21 @@
                         </tr>
                         <tr>
                             <td class="product-img">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                <div>
+                                    <img alt="image" class="img-circle" src="img/44362-messengerbagleather-271.jpg">
+                                </div>
+                            </td>
+                            <td class="hash">
+                               44362
                             </td>
                             <td>
-                               Example product 1
+                                Brown Canvas Messenger Bag with Leather
                             </td>
                             <td>
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-                                that it has a more-or-less normal distribution of letters, as opposed to using
-                                'Content here, content here', making it look like readable English.
+                                Head out for a day adventure after class with this classic brown canvas messenger bag. Features a flap with two faux buckles that close with metal snaps. Open the bag to reveal two pockets underneath the flap and a large area to carry things like a laptop and iPad. Thick canvas strap is adjustable and comes with a leather shoulder strap.
                             </td>
-                            <td>
-                                $50.00
+                            <td class="dollars">
+                                39.95
                             </td>
                             <td>
                                 Vendor Name
@@ -140,19 +149,21 @@
                         </tr>
                         <tr>
                             <td class="product-img">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                <div>
+                                    <img alt="image" class="img-circle" src="img/42462-necklacebluered-123.jpg">
+                                </div>
+                            </td>
+                            <td class="hash">
+                               42462
                             </td>
                             <td>
-                               Example product 1
+                                Blue and Red Collar Necklace
                             </td>
                             <td>
-                                It is a long established fact that a reader will be distracted by the readable
-                                content of a page when looking at its layout. The point of using Lorem Ipsum is
-                                that it has a more-or-less normal distribution of letters, as opposed to using
-                                'Content here, content here', making it look like readable English.
+                                Layer on the bold with this blue and red bohemian collar necklace. This necklace features rows of turquoise bars with dangling, beaded accents and silver diamond charms.
                             </td>
-                            <td>
-                                $50.00
+                            <td class="dollars">
+                                12.95
                             </td>
                             <td>
                                 Vendor Name
