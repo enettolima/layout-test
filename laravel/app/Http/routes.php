@@ -35,7 +35,10 @@ Route::get('/vendors', function () {
 
 //Catalog
 Route::get('/catalog', function () {
-    return view('pages.procurement.catalog.catalog', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Itmes List']);
+    return view('pages.procurement.catalog.catalog', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Items List']);
+});
+Route::get('/catalog-details', function () {
+    return view('pages.procurement.catalog.catalog-detail', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Items List']);
 });
 
 //Tests
