@@ -50,7 +50,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <!-- <button class="btn-white btn btn-xs">Edit</button> -->
-                                    <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="/catalog-details" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                 </div>
                             </td>
                         </tr>
@@ -67,7 +67,7 @@
                                 White Boho Pattern Scarf
                             </td>
                             <td>
-                                This long and lean bohemian scarf can be worn like a tradition scarf or wrapped around your head like a turban or headband. 
+                                This long and lean bohemian scarf can be worn like a tradition scarf or wrapped around your head like a turban or headband.
                             </td>
                             <td class="dollars">
                                 12.95
@@ -81,7 +81,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <!-- <button class="btn-white btn btn-xs">Edit</button> -->
-                                    <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="/catalog-details" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                 </div>
                             </td>
                         </tr>
@@ -112,7 +112,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <!-- <button class="btn-white btn btn-xs">Edit</button> -->
-                                    <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="/catalog-details" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                 </div>
                             </td>
                         </tr>
@@ -143,7 +143,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <!-- <button class="btn-white btn btn-xs">Edit</button> -->
-                                    <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="/catalog-details" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                 </div>
                             </td>
                         </tr>
@@ -174,7 +174,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <!-- <button class="btn-white btn btn-xs">Edit</button> -->
-                                    <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    <a href="/catalog-details" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                 </div>
                             </td>
                         </tr>

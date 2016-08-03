@@ -116,7 +116,6 @@
                           </div>
                       </div>
                   </form>
-                  <script src="/path/to/multi-step-modal.js"></script>
                   <script>
                   sendEvent = function() {
                       $('#demo-modal').trigger('next.m.2');
