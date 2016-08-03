@@ -1,54 +1,49 @@
+<link href="css/plugins/slick/slick.css" rel="stylesheet">
+<link href="css/plugins/slick/slick-theme.css" rel="stylesheet">
+
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-    <div class="col-lg-7">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Basic form <small>Simple login form example</small></h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-wrench"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#">Config option 1</a>
-                        </li>
-                        <li><a href="#">Config option 2</a>
-                        </li>
-                    </ul>
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">Sign in</h3>
-                        <p>Sign in today for more expirience.</p>
-                        <form role="form">
-                            <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div>
-                            <div class="form-group"><label>Password</label> <input type="password" placeholder="Password" class="form-control"></div>
-                            <div>
-                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Log in</strong></button>
-                                <label> <input type="checkbox" class="i-checks"> Remember me </label>
+        <div class="col-lg-12">
+            <div class="ibox product-detail">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="product-images">
+                                <div>
+                                    <div class="image-imitation">
+                                        <img src="img/44159-kimono-wht-035_1029.jpg">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="image-imitation">
+                                        <img src="img/44159-kimono-wht-033_1028.jpg">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="image-imitation">
+                                        <img src="img/44159-kimono-wht-064_1030.jpg">
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-6"><h4>Not a member?</h4>
-                        <p>You can create an account:</p>
-                        <p class="text-center">
-                            <a href=""><i class="fa fa-sign-in big-icon"></i></a>
-                        </p>
+                        </div>
+                        <div class="col-md-9">
+                            <small>Description</small>
+                            <h2 class="font-bold m-b-xs"> 
+                                White with Blue Embroidery Kimono 
+                            </h2>
+                            <br/>
+                            <span class="label label-warning">Pending</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        <div class="col-lg-5">
+    <div class="row">
+        <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Horizontal form</h5>
+                    <h5>Info</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -62,34 +57,409 @@
                             <li><a href="#">Config option 2</a>
                             </li>
                         </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <form class="form-horizontal">
-                        <p>Sign in today for more expirience.</p>
-                        <div class="form-group"><label class="col-lg-2 control-label">Email</label>
-
-                            <div class="col-lg-10"><input type="email" placeholder="Email" class="form-control"> <span class="help-block m-b-none">Example block-level help text here.</span>
-                            </div>
-                        </div>
-                        <div class="form-group"><label class="col-lg-2 control-label">Password</label>
-
-                            <div class="col-lg-10"><input type="password" placeholder="Password" class="form-control"></div>
+                    <form role="form">
+                        <div class="form-group">
+                            <label>EBT Item#</label> 
+                            <input type="text" placeholder="Retail Pro's Item#" class="form-control">
                         </div>
                         <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                                <div class="i-checks"><label> <input type="checkbox"><i></i> Remember me </label></div>
-                            </div>
+                            <label>Vendor SKU</label> 
+                            <input type="text" placeholder="Vendor's Item#" class="form-control">
                         </div>
                         <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                                <button class="btn btn-sm btn-white" type="submit">Sign in</button>
-                            </div>
+                            <label>Vendor Description</label> 
+                            <input type="text" placeholder="What is the vendor's name of this item?" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>EBT Description</label> 
+                            <input type="text" placeholder="What is EB's name for this item?" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Long Description</label> 
+                            <input type="text" placeholder="Describe the aspects of this item" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label style="margin-right: 50px;"> 
+                                <input type="checkbox" class="i-checks"> Store 
+                            </label>
+                            <label>
+                                <input type="checkbox" class="i-checks"> Online
+                            </label>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Pricing</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form">
+                        <div class="form-group">
+                            <label>Vendor FOB Cost</label> 
+                            <input type="text" placeholder="Total product cost" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>EBT Price 1</label> 
+                            <input type="text" placeholder="" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>EBT Price 2</label> 
+                            <input type="text" placeholder="" class="form-control">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Packaging</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form">
+                        <div class="form-group">
+                            <label>Master Pieces</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Inner Pieces</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount of Inners</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Individually Packaged</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Uploads</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <h5>Order files</h5>
+                    <p class="small font-bold">
+                        <span><i class="fa fa-circle text-warning"></i> In Process</span>
+                    </p>
+                    <ul class="list-unstyled project-files">
+                        <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
+                        <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
+                        <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
+                        <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
+                    </ul>
+                    <div class="text-center m-t-md">
+                        <a href="#" class="btn btn-xs btn-primary">Add files</a>
+                        <a href="#" class="btn btn-xs btn-primary">Report contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Dimensions</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel-heading">
+                        <div class="panel-options">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab-1" data-toggle="tab">Master</a></li>
+                                <li class=""><a href="#tab-2" data-toggle="tab">Inner</a></li>
+                                <li class=""><a href="#tab-3" data-toggle="tab">Individual</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="tab-1">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Length</label> 
+                                    <input type="text" placeholder="Retail Pro's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Width</label> 
+                                    <input type="text" placeholder="Vendor's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Height</label> 
+                                    <input type="text" placeholder="What is the vendor's name of this item?" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight</label> 
+                                    <input type="text" placeholder="What is EB's name for this item?" class="form-control">
+                                </div>
+                            </form>
+                          </div>
+                          <div class="tab-pane" id="tab-2">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Length</label> 
+                                    <input type="text" placeholder="Retail Pro's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Width</label> 
+                                    <input type="text" placeholder="Vendor's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Height</label> 
+                                    <input type="text" placeholder="What is the vendor's name of this item?" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight</label> 
+                                    <input type="text" placeholder="What is EB's name for this item?" class="form-control">
+                                </div>
+                            </form>
+                          </div>
+                          <div class="tab-pane" id="tab-3">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Length</label> 
+                                    <input type="text" placeholder="Retail Pro's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Width</label> 
+                                    <input type="text" placeholder="Vendor's Item#" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Height</label> 
+                                    <input type="text" placeholder="What is the vendor's name of this item?" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight</label> 
+                                    <input type="text" placeholder="What is EB's name for this item?" class="form-control">
+                                </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Pricing</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form">
+                        <div class="form-group">
+                            <label>Vendor FOB Cost</label> 
+                            <input type="text" placeholder="Total product cost" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>EBT Price 1</label> 
+                            <input type="text" placeholder="" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>EBT Price 2</label> 
+                            <input type="text" placeholder="" class="form-control">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Packaging</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form">
+                        <div class="form-group">
+                            <label>Master Pieces</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Inner Pieces</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount of Inners</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Individually Packaged</label> 
+                            <select class="form-control m-b">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Uploads</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <h5>Order files</h5>
+                    <p class="small font-bold">
+                        <span><i class="fa fa-circle text-warning"></i> In Process</span>
+                    </p>
+                    <ul class="list-unstyled project-files">
+                        <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
+                        <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
+                        <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
+                        <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
+                    </ul>
+                    <div class="text-center m-t-md">
+                        <a href="#" class="btn btn-xs btn-primary">Add files</a>
+                        <a href="#" class="btn btn-xs btn-primary">Report contact</a>
+                    </div>
                 </div>
             </div>
         </div>

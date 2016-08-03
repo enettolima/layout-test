@@ -59,7 +59,9 @@
 <!-- Multi Step Modal -->
 <script src="{{ asset('js/plugins/multistepmodal/multi-step-modal.js') }}"></script>
 
-
+<!-- slick carousel-->
+<!-- product page -->
+<script src="{{ asset('js/plugins/slick/slick.min.js') }}"></script>
 
 
 <script>
@@ -79,7 +81,10 @@
         /* run footable plugin on Catalogue page */
         $('.footable').footable();
 
-
+        /* run slick carousel plugin for product page */
+        $('.product-images').slick({
+            dots: true
+        });
 
         var data1 = [
             [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
