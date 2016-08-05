@@ -22,9 +22,9 @@
                 <h1 class="logo-name">PASSPORT</h1>
             </div>
         <div class="middle-box">
-            
+
             <p>Login in</p>
-            <form class="m-t" role="form" action="index.html">
+            <form class="m-t" role="form" action="dashboard">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Username" required="">
                 </div>

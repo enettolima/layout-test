@@ -6,7 +6,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="m-b-md">
-                                <a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i> Edit</a>
+                                <a href="/order/edit" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i> Edit</a>
                                 <a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-clipboard"></i> Duplicate</a>
                                 <button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right" type="button" aria-pressed="false"><i class="fa fa-thumbs-up"></i> Follow</button>
                                 <h2>India - 360 Clothing</h2>
@@ -38,8 +38,7 @@
                               <dt>First US Port:</dt> <dd>Los Angeles, CA </dd>
                               <dt>ETA to First Port:</dt> <dd>03/01/2016</dd>
                               <dt>ETA to Final:</dt> <dd> 04/01/2016 </dd>
-                              <dt>Production Started:</dt> <dd> 09/15/2015 </dd>
-                              <dt>Production Time:</dt> <dd> 90 Days </dd>
+                              <dt>Days to arrive:</dt> <dd> 23 Days </dd>
                               <dt>Associate:</dt> <dd> 000KF </dd>
                               <dt>Participants:</dt>
                               <dd class="project-people">
@@ -194,6 +193,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal inmodal fade" id="sendApproval" tabindex="-1" role="dialog"  aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <form method="get" action="/requests">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Submit for Approval?</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <small class="font-bold">This order seems to be incomplete, do you still want to move forward with this request?</small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger" id="submit">Yes, Send to Approval Now</button>
+                                </div>
+                            </div>
+                          </form>
+                        </div>
+                    </div>
                     <div class="modal inmodal fade" id="editQuantity" tabindex="-1" role="dialog"  aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -227,7 +245,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <dl class="dl-horizontal pull-right">
-                                <dt><a class="btn btn-primary btn-rounded" href="#">Request Approval</a></dt>
+                                <dt><a class="btn btn-primary btn-rounded" href="#" data-toggle="modal"  data-target="#sendApproval">Request Approval</a></dt>
                             </dl>
                         </div>
                     </div>

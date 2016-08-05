@@ -27,6 +27,9 @@ Route::get('/requests', function () {
 Route::get('/order-details', function () {
     return view('pages.procurement.order.order-detail', ['page_title' => 'Order Details', 'page_breadcrumb' => 'Order Details']);
 });
+Route::get('/order/edit', function () {
+    return view('pages.procurement.order.order-edit', ['page_title' => 'Order Edit', 'page_breadcrumb' => 'Edit Order']);
+});
 
 //Vendors
 Route::get('/vendors', function () {

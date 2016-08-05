@@ -26,7 +26,7 @@
             <li>
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">E-Procurement</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li><a href="mailbox.html"><span class="nav-label">Orders </span><span class="label label-warning pull-right">16/24</span></a></a>
+                    <li><a href="mailbox.html"><span class="nav-label">Orders </span></a></a>
                       <ul class="nav nav-third-level">
                         <li><a href="/requests">Request</a></li>
                         <li><a href="dashboard_2.html">Approval</a></li>
