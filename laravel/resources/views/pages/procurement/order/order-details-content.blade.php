@@ -287,9 +287,9 @@
                                               <td class="client-avatar"><img alt="image" src="img/a2.jpg"> </td>
                                               <td><a data-toggle="tab" href="#contact-1" class="client-link">Dress-Olive MAXI-S</a></td>
                                               <td> 360-13002</td>
-                                              <td>8.75</td>
-                                              <td>205.00</td>
-                                              <td>3587.50</td>
+                                              <td class="dollars">8.75</td>
+                                              <td>205</td>
+                                              <td class="dollars">3587.50</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
@@ -297,9 +297,9 @@
                                               <td class="client-avatar"><img alt="image" src="img/a3.jpg"> </td>
                                               <td><a data-toggle="tab" href="#contact-2" class="client-link">Dress-Olive MAXI-M</a></td>
                                               <td> 360-13002</td>
-                                              <td>8.75</td>
-                                              <td>205.00</td>
-                                              <td>3587.50</td>
+                                              <td class="dollars">8.75</td>
+                                              <td>205</td>
+                                              <td class="dollars">3587.50</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
@@ -307,9 +307,9 @@
                                               <td class="client-avatar"><img alt="image" src="img/a4.jpg"> </td>
                                               <td><a data-toggle="tab" href="#contact-3" class="client-link">Dress-Olive MAXI-L</a></td>
                                               <td> 360-13002</td>
-                                              <td>8.75</td>
-                                              <td>205.00</td>
-                                              <td>3587.50</td>
+                                              <td class="dollars">8.75</td>
+                                              <td>205</td>
+                                              <td class="dollars">3587.50</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
@@ -317,9 +317,9 @@
                                               <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
                                               <td><a data-toggle="tab" href="#contact-4" class="client-link">Dress-Olive MAXI-XL</a></td>
                                               <td> 360-13002</td>
-                                              <td>8.75</td>
-                                              <td>205.00</td>
-                                              <td>3587.50</td>
+                                              <td class="dollars">8.75</td>
+                                              <td>205</td>
+                                              <td class="dollars">3587.50</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
@@ -329,7 +329,7 @@
                                               <td></td>
                                               <td></td>
                                               <td><strong>Subtotal:</strong></td>
-                                              <td><strong>14350.00</strong></td>
+                                              <td class="dollars"><strong>14350.00</strong></td>
                                               <td></td>
                                           </tr>
                                           <tr>
@@ -338,7 +338,7 @@
                                               <td></td>
                                               <td></td>
                                               <td><strong>Fees:</strong></td>
-                                              <td><strong>0.00</strong></td>
+                                              <td class="dollars"><strong>0.00</strong></td>
                                               <td></td>
                                           </tr>
                                           <tr>
@@ -347,7 +347,7 @@
                                               <td></td>
                                               <td></td>
                                               <td><strong>Total</strong></td>
-                                              <td><strong>14350.00</strong></td>
+                                              <td class="dollars"><strong>14350.00</strong></td>
                                               <td></td>
                                           </tr>
                                         </tbody>
@@ -644,21 +644,25 @@
     </div>
     <div class="col-lg-3">
         <div class="wrapper wrapper-content project-manager">
-            <h4>Order files</h4>
-            <p class="small font-bold">
-                <span><i class="fa fa-circle text-warning"></i> In Process</span>
-            </p>
-            <ul class="list-unstyled project-files">
-                <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
-                <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
-                <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
-                <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
-            </ul>
-            <div class="text-center m-t-md">
-                <a href="#" class="btn btn-xs btn-primary">Add files</a>
-                <a href="#" class="btn btn-xs btn-primary">Report contact</a>
+          <div class="ibox">
+            <div class="ibox-content">
+              <h4>Order files</h4>
+              <p class="small font-bold">
+                  <span><i class="fa fa-circle text-warning"></i> In Process</span>
+              </p>
+              <ul class="list-unstyled project-files">
+                  <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
+                  <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
+                  <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
+                  <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
+              </ul>
+              <div class="text-center m-t-md">
+                  <a href="#" class="btn btn-xs btn-primary">Add files</a>
+                  <a href="#" class="btn btn-xs btn-primary">Report contact</a>
 
+              </div>
             </div>
+          </div>
         </div>
     </div>
 </div>

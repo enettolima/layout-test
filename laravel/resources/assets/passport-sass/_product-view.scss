@@ -1,0 +1,29 @@
+@media (min-width: 992px) {
+	div.col-md-3 {
+		max-width: 200px;
+	}
+}
+
+.col-md-3 {
+	max-width: 446px;
+	margin: 0 auto;
+}
+
+.col-lg-3 {
+	.nav-tabs > li > a {
+		padding: 10px;
+	}
+}
+
+.product-images {
+	.image-imitation {
+		padding: 0;
+	}
+	.slick-slide img {
+		width: 100%;
+	}
+}
+
+.ibox-title .prod-form.label {
+	float: none;
+}

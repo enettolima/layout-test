@@ -17,7 +17,11 @@ Route::get('/', function () {
 });
 //Dashboard
 Route::get('/dashboard', function () {
-    return view('pages.dashboard.index');
+    return view('pages.dashboard.index',[
+      'extra_js' => array(
+        'js/passport/dashboard/dashboard.js'
+      )
+    ]);
 });
 
 //Orders
@@ -40,8 +44,16 @@ Route::get('/vendors', function () {
 Route::get('/catalog', function () {
     return view('pages.procurement.catalog.catalog', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Items List']);
 });
+
 Route::get('/catalog-details', function () {
-    return view('pages.procurement.catalog.catalog-detail', ['page_title' => 'Catalog', 'page_breadcrumb' => 'Items List']);
+    return view('pages.procurement.catalog.catalog-detail', [
+      'page_title' => 'Catalog',
+      'page_breadcrumb' => 'Items List',
+      'extra_js' => array(
+        'js/plugins/slick/slick.min.js',
+        'js/passport/procurement/catalog.js'
+      )
+    ]);
 });
 
 //Tests

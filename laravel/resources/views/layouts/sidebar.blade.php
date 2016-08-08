@@ -39,22 +39,6 @@
                     <li><a href="/catalog">Catalog</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
-            </li>
-            <li>
-                <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="mailbox.html">Inbox</a></li>
-                    <li><a href="mail_detail.html">Email view</a></li>
-                    <li><a href="mail_compose.html">Compose email</a></li>
-                    <li><a href="email_template.html">Email templates</a></li>
-                </ul>
-            </li>
-            <li class="landing_link">
-                <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">Passport</span> <span class="label label-warning pull-right">Label</span></a>
-            </li>
         </ul>
-
     </div>
 </nav>
