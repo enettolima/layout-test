@@ -28,11 +28,11 @@
                 <ul class="nav nav-second-level collapse">
                     <li><a href="mailbox.html"><span class="nav-label">Orders </span></a></a>
                       <ul class="nav nav-third-level">
-                        <li><a href="/requests">Request</a></li>
-                        <li><a href="dashboard_2.html">Approval</a></li>
-                        <li><a href="dashboard_2.html">Importing</a></li>
-                        <li><a href="dashboard_2.html">Payment</a></li>
-                        <li><a href="dashboard_2.html">Receive</a></li>
+                        <li><a href="/order/requests">Request</a></li>
+                        <li><a href="/order/approval">Approval</a></li>
+                        <li><a href="/order/importing">Importing</a></li>
+                        <li><a href="/order/payment">Payment</a></li>
+                        <li><a href="/order/receive">Receive</a></li>
                       </ul>
                     </li>
                     <li><a href="/vendors">Vendors</a></li>

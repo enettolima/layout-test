@@ -4,6 +4,7 @@
 <!-- my head section goes here -->
 <!-- my css and js goes here -->
 @include('layouts.header')
+<script src="{{ asset('js/jquery-2.1.1.js') }}"></script>
 </head>
 <body>
   <div id="wrapper">
@@ -15,7 +16,6 @@
 <!-- custom scripts -->
 <script src="{{ asset('js/passport/passport.js') }}"></script>
 <!-- Mainly scripts -->
-<script src="{{ asset('js/jquery-2.1.1.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
 <script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>

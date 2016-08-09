@@ -42,11 +42,11 @@
                               <dt>Associate:</dt> <dd> 000KF </dd>
                               <dt>Participants:</dt>
                               <dd class="project-people">
-                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="img/a1.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="img/a2.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="img/a4.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="img/a5.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/img/a3.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/img/a1.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/img/a2.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/img/a4.jpg"></a>
+                                <a href=""><img alt="image" class="img-circle" src="/img/a5.jpg"></a>
                                 <a href="#" class="btn btn-white btn-xs pull-right" data-toggle="modal"  data-target="#participantsModal"><i class="fa fa-plus"></i> Add Participant</a>
                               </dd>
                             </dl>
@@ -75,28 +75,28 @@
                                     </thead>
                                     <tbody>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a2.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a2.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-1" class="client-link">Dress-Olive MAXI-S</a></td>
                                           <td> 360-13002</td>
                                           <td>8.75</td>
                                           <td><button type="button" class="btn btn-default btn-xs step step-1" data-step="1" onclick="sendEvent()"><i class="fa fa-plus"></i> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a3.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a3.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-2" class="client-link">Dress-Olive MAXI-M</a></td>
                                           <td> 360-13002</td>
                                           <td>8.75</td>
                                           <td><button type="button" class="btn btn-default btn-xs step step-1" data-step="1" onclick="sendEvent()"><i class="fa fa-plus"></i> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a4.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a4.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-3" class="client-link">Dress-Olive MAXI-L</a></td>
                                           <td> 360-13002</td>
                                           <td>8.75</td>
                                           <td><button type="button" class="btn btn-default btn-xs step step-1" data-step="1" onclick="sendEvent()"><i class="fa fa-plus"></i> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
+                                          <td class="client-avatar"><a href=""><img alt="image" src="/img/a5.jpg"></a> </td>
                                           <td><a data-toggle="tab" href="#contact-4" class="client-link">Dress-Olive MAXI-XL</a></td>
                                           <td> 360-13002</td>
                                           <td>8.75</td>
@@ -132,37 +132,37 @@
                                   <table class="table table-striped table-hover">
                                       <tbody>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a2.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a2.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-1" class="client-link">Anthony Jackson</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a3.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a3.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-2" class="client-link">Rooney Lindsay</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><img alt="image" src="img/a4.jpg"> </td>
+                                          <td class="client-avatar"><img alt="image" src="/img/a4.jpg"> </td>
                                           <td><a data-toggle="tab" href="#contact-3" class="client-link">Lionel Mcmillan</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right active" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
+                                          <td class="client-avatar"><a href=""><img alt="image" src="/img/a5.jpg"></a> </td>
                                           <td><a data-toggle="tab" href="#contact-4" class="client-link">Edan Randall</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right active" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><a href=""><img alt="image" src="img/a6.jpg"></a> </td>
+                                          <td class="client-avatar"><a href=""><img alt="image" src="/img/a6.jpg"></a> </td>
                                           <td><a data-toggle="tab" href="#contact-2" class="client-link">Jasper Carson</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><a href=""><img alt="image" src="img/a7.jpg"></a> </td>
+                                          <td class="client-avatar"><a href=""><img alt="image" src="/img/a7.jpg"></a> </td>
                                           <td><a data-toggle="tab" href="#contact-3" class="client-link">Reuben Pacheco</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right active" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
                                       <tr>
-                                          <td class="client-avatar"><a href=""><img alt="image" src="img/a1.jpg"></a> </td>
+                                          <td class="client-avatar"><a href=""><img alt="image" src="/img/a1.jpg"></a> </td>
                                           <td><a data-toggle="tab" href="#contact-1" class="client-link">Simon Carson</a></td>
                                           <td class="client-status"><button data-toggle="button" class="btn btn-primary btn-outline btn-xs pull-right" type="button" aria-pressed="false"> Add </button></td>
                                       </tr>
@@ -242,6 +242,16 @@
                             </dl>
                         </div>
                     </div>
+                    @if(app('request')->input('order') == 'approval')
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <dl class="dl-horizontal pull-right">
+                                  <a class="btn btn-primary btn-rounded pull-right" href="#" data-toggle="modal" data-target="#sendApproval">Submit to Importing</a>
+                                  <a style="margin-right:20px;" class="btn btn-danger btn-rounded pull-right" href="#" data-toggle="modal" data-target="#reject-order">Reject Order</a>
+                                </dl>
+                            </div>
+                        </div>
+                    @else
                     <div class="row">
                         <div class="col-lg-12">
                             <dl class="dl-horizontal pull-right">
@@ -249,6 +259,7 @@
                             </dl>
                         </div>
                     </div>
+                    @endif
                     <div class="row m-t-sm">
                         <div class="col-lg-12">
                         <div class="panel blank-panel">
@@ -257,7 +268,7 @@
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab-1" data-toggle="tab">Products</a></li>
                                     <li class=""><a href="#tab-2" data-toggle="tab">Users messages</a></li>
-                                    <li class=""><a href="#tab-3" data-toggle="tab">Last activity</a></li>
+                                    <li class=""><a href="#tab-3" data-toggle="tab">Latest Activity</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -274,7 +285,10 @@
                                         <thead>
                                           <tr>
                                               <th></th>
-                                              <th>Description 1</th>
+                                              <th>item#</th>
+                                              <th>vendor</th>
+                                              <th>SKU</th>
+                                              <th>HTS</th>
                                               <th>FOB</th>
                                               <th>Price</th>
                                               <th>Quantity</th>
@@ -284,55 +298,86 @@
                                         </thead>
                                         <tbody>
                                           <tr>
-                                              <td class="client-avatar"><img alt="image" src="img/a2.jpg"> </td>
-                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">Dress-Olive MAXI-S</a></td>
-                                              <td> 360-13002</td>
-                                              <td class="dollars">8.75</td>
-                                              <td>205</td>
-                                              <td class="dollars">3587.50</td>
+                                              <td class="client-avatar"><img alt="image" src="/img/a2.jpg"> </td>
+                                              <td>#154875</td>
+                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">935 - INDIA 360 CLOTHING</a></td>
+                                              <td>97865</td>
+                                              <td>6204.44.4010</td>
+                                              <td>15.20</td>
+                                              <td class="dollars">15.20</td>
+                                              <td>86</td>
+                                              <td class="dollars">1307.20</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
                                           <tr>
-                                              <td class="client-avatar"><img alt="image" src="img/a3.jpg"> </td>
-                                              <td><a data-toggle="tab" href="#contact-2" class="client-link">Dress-Olive MAXI-M</a></td>
-                                              <td> 360-13002</td>
-                                              <td class="dollars">8.75</td>
-                                              <td>205</td>
-                                              <td class="dollars">3587.50</td>
+                                              <td class="client-avatar"><img alt="image" src="/img/a3.jpg"> </td>
+                                              <td>#198535</td>
+                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">340 - Li & Fung</a></td>
+                                              <td>16547</td>
+                                              <td>4654.44.4430</td>
+                                              <td>12.68</td>
+                                              <td class="dollars">65.54</td>
+                                              <td>29</td>
+                                              <td class="dollars">1900.66</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
                                           <tr>
-                                              <td class="client-avatar"><img alt="image" src="img/a4.jpg"> </td>
-                                              <td><a data-toggle="tab" href="#contact-3" class="client-link">Dress-Olive MAXI-L</a></td>
-                                              <td> 360-13002</td>
-                                              <td class="dollars">8.75</td>
-                                              <td>205</td>
-                                              <td class="dollars">3587.50</td>
+                                              <td class="client-avatar"><img alt="image" src="/img/a4.jpg"> </td>
+                                              <td>#147965</td>
+                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">657 - Dress-Olive MAXI-S</a></td>
+                                              <td>26548</td>
+                                              <td>5674.56.4235</td>
+                                              <td>16.89</td>
+                                              <td class="dollars">124.35</td>
+                                              <td>56</td>
+                                              <td class="dollars">6963.60</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
                                           <tr>
-                                              <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
-                                              <td><a data-toggle="tab" href="#contact-4" class="client-link">Dress-Olive MAXI-XL</a></td>
-                                              <td> 360-13002</td>
-                                              <td class="dollars">8.75</td>
-                                              <td>205</td>
-                                              <td class="dollars">3587.50</td>
+                                              <td class="client-avatar"><img alt="image" src="/img/a5.jpg"> </td>
+                                              <td>#657843</td>
+                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">423 - Toys Jim</a></td>
+                                              <td>46576</td>
+                                              <td>3544.42.1432</td>
+                                              <td>12.54</td>
+                                              <td class="dollars">1.89</td>
+                                              <td>850</td>
+                                              <td class="dollars">1606.50</td>
                                               <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
                                           </tr>
                                           <tr>
+                                              <td class="client-avatar"><img alt="image" src="/img/a6.jpg"> </td>
+                                              <td>#697865</td>
+                                              <td><a data-toggle="tab" href="#contact-1" class="client-link">756 - Export Xzoom</a></td>
+                                              <td>57894</td>
+                                              <td>7654.34.4450</td>
+                                              <td>24.58</td>
+                                              <td class="dollars">4.87</td>
+                                              <td>46</td>
+                                              <td class="dollars">224.02</td>
+                                              <td><button type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#editQuantity"><i class="fa fa-pencil"></i> Edit</button>
+                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"  data-target="#removeProduct"><i class="fa fa-trash"></i> Remove</button></a></td>
+                                          </tr>
+                                          <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
                                               <td></td>
                                               <td></td>
                                               <td></td>
                                               <td></td>
                                               <td><strong>Subtotal:</strong></td>
-                                              <td class="dollars"><strong>14350.00</strong></td>
+                                              <td class="dollars"><strong>12002.08</strong></td>
                                               <td></td>
                                           </tr>
                                           <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
                                               <td></td>
                                               <td></td>
                                               <td></td>
@@ -346,8 +391,11 @@
                                               <td></td>
                                               <td></td>
                                               <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
                                               <td><strong>Total</strong></td>
-                                              <td class="dollars"><strong>14350.00</strong></td>
+                                              <td class="dollars"><strong>12002.08</strong></td>
                                               <td></td>
                                           </tr>
                                         </tbody>
@@ -360,74 +408,86 @@
                               <div class="feed-activity-list">
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/a2.jpg">
+                                          <img alt="image" class="img-circle" src="/img/a2.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right">2h ago</small>
-                                          <strong>Mark Johnson</strong> posted message on <strong>Monica Smith</strong> site. <br>
+                                          <strong>Mark Johnson</strong> posted message asking about product <strong>#41321</strong>.<br>
                                           <small class="text-muted">Today 2:10 pm - 12.06.2014</small>
                                           <div class="well">
-                                              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                              Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                              Product #4566 is missing the price. We need to get this fixed by the end of the day.
                                           </div>
                                       </div>
                                   </div>
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/a3.jpg">
+                                          <img alt="image" class="img-circle" src="/img/a3.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right">2h ago</small>
-                                          <strong>Janet Rosowski</strong> add 1 photo on <strong>Monica Smith</strong>. <br>
+                                          <strong>Janet Rosowski</strong> posted message <strong>Urgent!</strong>. <br>
                                           <small class="text-muted">2 days ago at 8:30am</small>
+                                          <div class="well">
+                                            We need to review this order asap because the hollidays will be next week.
+                                          </div>
                                       </div>
                                   </div>
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/a4.jpg">
+                                          <img alt="image" class="img-circle" src="/img/a4.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right text-navy">5h ago</small>
-                                          <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                          <strong>Chris Johnatan Overtunk</strong> posted message asking about product <strong>#45894</strong>. <br>
                                           <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                          <div class="well">
+                                              Product #3456 will increase demand this month. We will need to buy lot more than 1000un.
+                                          </div>
+                                          <!--
                                           <div class="actions">
                                               <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>
                                               <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a>
                                           </div>
+                                        -->
                                       </div>
                                   </div>
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/a5.jpg">
+                                          <img alt="image" class="img-circle" src="/img/a5.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right">2h ago</small>
-                                          <strong>Kim Smith</strong> posted message on <strong>Monica Smith</strong> site. <br>
+                                          <strong>Kim Smith</strong> posted message for <strong>review</strong><br>
                                           <small class="text-muted">Yesterday 5:20 pm - 12.06.2014</small>
                                           <div class="well">
-                                              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                              Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                            Product #9876 needs to be review because we are expecting 100% quality.
                                           </div>
                                       </div>
                                   </div>
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/profile.jpg">
+                                          <img alt="image" class="img-circle" src="/img/profile.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right">23h ago</small>
-                                          <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                          <strong>Monica Smith</strong> posted message <strong></strong>. <br>
                                           <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                          <div class="well">
+                                            We will start reviewing this order on monday.
+                                          </div>
                                       </div>
                                   </div>
                                   <div class="feed-element">
                                       <a href="#" class="pull-left">
-                                          <img alt="image" class="img-circle" src="img/a7.jpg">
+                                          <img alt="image" class="img-circle" src="/img/a7.jpg">
                                       </a>
                                       <div class="media-body ">
                                           <small class="pull-right">46h ago</small>
-                                          <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                          <strong>Mike Loreipsum</strong> posted message about the <strong>order</strong>. <br>
                                           <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                          <div class="well">
+                                            Product #9876 have wrong quantity, we should expect about 240 items in it.
+                                          </div>
                                       </div>
                                   </div>
                               </div>
@@ -446,12 +506,32 @@
                                   </tr>
                                   </thead>
                                   <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="label label-success"><i class="fa fa-check"></i> Done.</span>
+                                        </td>
+                                        <td>
+                                            Process finished.
+                                        </td>
+                                        <td>
+                                           12.07.2014 10:10:1
+                                        </td>
+                                        <td>
+                                            14.07.2014 10:16:36
+                                        </td>
+                                        <td>
+                                        <p class="small">
+                                            Order Received.
+                                        </p>
+                                        </td>
+
+                                    </tr>
                                   <tr>
                                       <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
+                                          <span class="label label-primary"><i class="fa fa-check"></i> Payment Approved</span>
                                       </td>
                                       <td>
-                                         Create project in webapp
+                                          Payment ok.
                                       </td>
                                       <td>
                                          12.07.2014 10:10:1
@@ -461,17 +541,77 @@
                                       </td>
                                       <td>
                                       <p class="small">
-                                          Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
+                                          Payment was accepted.
                                       </p>
                                       </td>
 
                                   </tr>
                                   <tr>
                                       <td>
+                                          <span class="label label-danger"><i class="fa fa-check"></i> Reject</span>
+                                      </td>
+                                      <td>
+                                          Payment Problem
+                                      </td>
+                                      <td>
+                                          12.07.2014 10:10:1
+                                      </td>
+                                      <td>
+                                          14.07.2014 10:16:36
+                                      </td>
+                                      <td>
+                                          <p class="small">
+                                              We had problem validating the payment for the order.
+                                          </p>
+                                      </td>
+
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <span class="label label-primary"><i class="fa fa-check"></i> Payment Review</span>
+                                      </td>
+                                      <td>
+                                          Payment Review
+                                      </td>
+                                      <td>
+                                          12.07.2014 10:10:1
+                                      </td>
+                                      <td>
+                                          14.07.2014 10:16:36
+                                      </td>
+                                      <td>
+                                          <p class="small">
+                                            Product payment needs to be done.
+                                          </p>
+                                      </td>
+
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                      </td>
+                                      <td>
+                                          Import Asap
+                                      </td>
+                                      <td>
+                                          12.07.2014 10:10:1
+                                      </td>
+                                      <td>
+                                          14.07.2014 10:16:36
+                                      </td>
+                                      <td>
+                                          <p class="small">
+                                              Please Start the importing process this week, because we will have holiday by the end of the month.
+                                          </p>
+                                      </td>
+
+                                  </tr>
+                                  <tr>
+                                      <td>
                                           <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
                                       </td>
                                       <td>
-                                          Various versions
+                                          Order Ok
                                       </td>
                                       <td>
                                           12.07.2014 10:10:1
@@ -481,17 +621,17 @@
                                       </td>
                                       <td>
                                           <p class="small">
-                                              Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                              We just review the order and approved for importing.
                                           </p>
                                       </td>
 
                                   </tr>
                                   <tr>
                                       <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                          <span class="label label-danger"><i class="fa fa-check"></i>Rejected</span>
                                       </td>
                                       <td>
-                                          There are many variations
+                                          Expected Demmand
                                       </td>
                                       <td>
                                           12.07.2014 10:10:1
@@ -501,17 +641,17 @@
                                       </td>
                                       <td>
                                           <p class="small">
-                                              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which
+                                              We will need more of product #3213 than the quantity informed in the order.
                                           </p>
                                       </td>
 
                                   </tr>
                                   <tr>
                                       <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
+                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent to Approval</span>
                                       </td>
                                       <td>
-                                          Latin words
+                                          Review Order
                                       </td>
                                       <td>
                                           12.07.2014 10:10:1
@@ -521,17 +661,17 @@
                                       </td>
                                       <td>
                                           <p class="small">
-                                              Latin words, combined with a handful of model sentence structures
+                                              We just review the price and update the product, please try to review this by the end of this week.
                                           </p>
                                       </td>
 
                                   </tr>
                                   <tr>
                                       <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
+                                          <span class="label label-danger"><i class="fa fa-check"></i> Rejected</span>
                                       </td>
                                       <td>
-                                          The generated Lorem
+                                          Product #4566
                                       </td>
                                       <td>
                                           12.07.2014 10:10:1
@@ -541,37 +681,17 @@
                                       </td>
                                       <td>
                                           <p class="small">
-                                              The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+                                              Product #4566 is missing price, please review. Etc
                                           </p>
                                       </td>
 
                                   </tr>
                                   <tr>
                                       <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent to Approval</span>
                                       </td>
                                       <td>
-                                          The first line
-                                      </td>
-                                      <td>
-                                          12.07.2014 10:10:1
-                                      </td>
-                                      <td>
-                                          14.07.2014 10:16:36
-                                      </td>
-                                      <td>
-                                          <p class="small">
-                                              The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-                                          </p>
-                                      </td>
-
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
-                                      </td>
-                                      <td>
-                                          The standard chunk
+                                          Check order for approval
                                       </td>
                                       <td>
                                           12.07.2014 10:10:1
@@ -581,47 +701,7 @@
                                       </td>
                                       <td>
                                           <p class="small">
-                                              The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-                                          </p>
-                                      </td>
-
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
-                                      </td>
-                                      <td>
-                                          Lorem Ipsum is that
-                                      </td>
-                                      <td>
-                                          12.07.2014 10:10:1
-                                      </td>
-                                      <td>
-                                          14.07.2014 10:16:36
-                                      </td>
-                                      <td>
-                                          <p class="small">
-                                              Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
-                                          </p>
-                                      </td>
-
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
-                                      </td>
-                                      <td>
-                                          Contrary to popular
-                                      </td>
-                                      <td>
-                                          12.07.2014 10:10:1
-                                      </td>
-                                      <td>
-                                          14.07.2014 10:16:36
-                                      </td>
-                                      <td>
-                                          <p class="small">
-                                              Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+                                              Please approve this order as soon as you can
                                           </p>
                                       </td>
 
@@ -666,3 +746,28 @@
         </div>
     </div>
 </div>
+
+<form class="modal multi-step inmodal fade" id="reject-order">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <div class="modal-header">
+              <h4 class="modal-title step-1" data-step="1">Why are you rejecting this order?</h4>
+          </div>
+          <div style="height:150px;" class="modal-body step step-1">
+              <textarea class="col-md-12" rows="6" placeholder="Describe why you are rejecting the order." required></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-default step-1" onclick="rejectnow()">Reject Now</button>
+          </div>
+      </div>
+  </div>
+</form>
+<script>
+$( document ).ready(function() {
+  rejectnow = function() {
+    console.log('order rejected');
+  }
+});
+</script>

@@ -25,10 +25,23 @@ Route::get('/dashboard', function () {
 });
 
 //Orders
-Route::get('/requests', function () {
-    return view('pages.procurement.order.requests', ['page_title' => 'Orders', 'page_breadcrumb' => 'Requests']);
+Route::get('/order/requests', function () {
+    return view('pages.procurement.order.requests', ['order'=>'request', 'page_title' => 'Orders', 'page_breadcrumb' => 'Requests']);
 });
-Route::get('/order-details', function () {
+Route::get('/order/approval', function () {
+    return view('pages.procurement.order.requests', ['order'=>'approval','page_title' => 'Orders', 'page_breadcrumb' => 'Approval']);
+});
+Route::get('/order/importing', function () {
+    return view('pages.procurement.order.requests', ['order'=>'importing','page_title' => 'Orders', 'page_breadcrumb' => 'Importing']);
+});
+Route::get('/order/payment', function () {
+    return view('pages.procurement.order.requests', ['order'=>'payment','page_title' => 'Orders', 'page_breadcrumb' => 'Payment']);
+});
+Route::get('/order/receive', function () {
+    return view('pages.procurement.order.requests', ['order'=>'receive', 'page_title' => 'Orders', 'page_breadcrumb' => 'Receive']);
+});
+
+Route::get('/order/details', function () {
     return view('pages.procurement.order.order-detail', ['page_title' => 'Order Details', 'page_breadcrumb' => 'Order Details']);
 });
 Route::get('/order/edit', function () {

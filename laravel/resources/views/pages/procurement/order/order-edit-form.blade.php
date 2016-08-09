@@ -277,7 +277,7 @@
     <div class="row">
         <div class="col-lg-12">
             <dl class="dl-horizontal">
-              <form method="get" action="/order-details">
+              <form method="get" action="/order/details">
                 <dt><button type="submit" class="btn btn-sm btn-primary btn-rounded">Save Purchase Order</button></dt>
               </form>
             </dl>
