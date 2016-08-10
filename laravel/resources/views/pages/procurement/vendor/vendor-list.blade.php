@@ -28,171 +28,19 @@
                                         <tbody>
                                         <tr>
                                             <td class="client-avatar"><img alt="image" src="img/a2.jpg"> </td>
-                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">Anthony Jackson</a></td>
-                                            <td> Tellus Institute</td>
+                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">INDIA 360 CLOTHING</a></td>
+                                            <td>935</td>
                                             <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> gravida@rbisit.com</td>
+                                            <td>sales@india360clothing.xxx</td>
                                             <td class="client-status"><span class="label label-primary">Active</span></td>
                                         </tr>
                                         <tr>
                                             <td class="client-avatar"><img alt="image" src="img/a3.jpg"> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Rooney Lindsay</a></td>
-                                            <td>Proin Limited</td>
+                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Li & Fung</a></td>
+                                            <td>340</td>
                                             <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> rooney@proin.com</td>
+                                            <td>manager@lifung.xxx</td>
                                             <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><img alt="image" src="img/a4.jpg"> </td>
-                                            <td><a data-toggle="tab" href="#contact-3" class="client-link">Lionel Mcmillan</a></td>
-                                            <td>Et Industries</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +432 955 908</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-4" class="client-link">Edan Randall</a></td>
-                                            <td>Integer Sem Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +422 600 213</td>
-                                            <td class="client-status"><span class="label label-warning">Waiting</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a6.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Jasper Carson</a></td>
-                                            <td>Mone Industries</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +400 468 921</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a7.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-3" class="client-link">Reuben Pacheco</a></td>
-                                            <td>Magna Associates</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> pacheco@manga.com</td>
-                                            <td class="client-status"><span class="label label-info">Phoned</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a1.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">Simon Carson</a></td>
-                                            <td>Erat Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> Simon@erta.com</td>
-                                            <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a3.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Rooney Lindsay</a></td>
-                                            <td>Proin Limited</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> rooney@proin.com</td>
-                                            <td class="client-status"><span class="label label-warning">Waiting</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a4.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-3" class="client-link">Lionel Mcmillan</a></td>
-                                            <td>Et Industries</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +432 955 908</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-4" class="client-link">Edan Randall</a></td>
-                                            <td>Integer Sem Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +422 600 213</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a2.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">Anthony Jackson</a></td>
-                                            <td> Tellus Institute</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> gravida@rbisit.com</td>
-                                            <td class="client-status"><span class="label label-danger">Deleted</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a7.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Reuben Pacheco</a></td>
-                                            <td>Magna Associates</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> pacheco@manga.com</td>
-                                            <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-3"class="client-link">Edan Randall</a></td>
-                                            <td>Integer Sem Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +422 600 213</td>
-                                            <td class="client-status"><span class="label label-info">Phoned</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a6.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-4" class="client-link">Jasper Carson</a></td>
-                                            <td>Mone Industries</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +400 468 921</td>
-                                            <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a7.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Reuben Pacheco</a></td>
-                                            <td>Magna Associates</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> pacheco@manga.com</td>
-                                            <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a1.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">Simon Carson</a></td>
-                                            <td>Erat Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> Simon@erta.com</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a3.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-3" class="client-link">Rooney Lindsay</a></td>
-                                            <td>Proin Limited</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> rooney@proin.com</td>
-                                            <td class="client-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a4.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-4" class="client-link">Lionel Mcmillan</a></td>
-                                            <td>Et Industries</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +432 955 908</td>
-                                            <td class="client-status"><span class="label label-primary">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a5.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-1" class="client-link">Edan Randall</a></td>
-                                            <td>Integer Sem Corp.</td>
-                                            <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                            <td> +422 600 213</td>
-                                            <td class="client-status"><span class="label label-info">Phoned</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a2.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-2" class="client-link">Anthony Jackson</a></td>
-                                            <td> Tellus Institute</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> gravida@rbisit.com</td>
-                                            <td class="client-status"><span class="label label-warning">Waiting</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="client-avatar"><a href=""><img alt="image" src="img/a7.jpg"></a> </td>
-                                            <td><a data-toggle="tab" href="#contact-4" class="client-link">Reuben Pacheco</a></td>
-                                            <td>Magna Associates</td>
-                                            <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                            <td> pacheco@manga.com</td>
-                                            <td class="client-status"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -349,7 +197,7 @@
                         <div id="contact-1" class="tab-pane active">
                             <div class="row m-b-lg">
                                 <div class="col-lg-4 text-center">
-                                    <h2>Nicki Smith</h2>
+                                    <h2>INDIA 360 CLOTHING</h2>
 
                                     <div class="m-b-sm">
                                         <img alt="image" class="img-circle" src="img/a2.jpg"
@@ -361,13 +209,9 @@
                                         About me
                                     </strong>
 
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua.
+                                    <p style="text-align:justify;">
+                                      we sell clothes to customers around the world since 1995. value in our product quality and customer service. So we grew 80% in the past year. We have over 500 models of available clothes for sale and we can supply more than 10000 pieces per month
                                     </p>
-                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i
-                                            class="fa fa-envelope"></i> Send Message
-                                    </button>
                                 </div>
                             </div>
                             <div class="client-detail">
@@ -378,30 +222,25 @@
                                 <ul class="list-group clear-list">
                                     <li class="list-group-item fist-item">
                                         <span class="pull-right"> 09:00 pm </span>
-                                        Please contact me
+                                        Shipping information is available now.
                                     </li>
                                     <li class="list-group-item">
                                         <span class="pull-right"> 10:16 am </span>
-                                        Sign a contract
+                                        Importer of Record Number changed for #56721
                                     </li>
                                     <li class="list-group-item">
                                         <span class="pull-right"> 08:22 pm </span>
-                                        Open new shop
+                                        Bank information validated.
                                     </li>
                                     <li class="list-group-item">
                                         <span class="pull-right"> 11:06 pm </span>
-                                        Call back to Sylvia
+                                        5 documents were upload for request #54321
                                     </li>
                                     <li class="list-group-item">
                                         <span class="pull-right"> 12:00 am </span>
-                                        Write a letter to Sandra
+                                        Conctact information updated.
                                     </li>
                                 </ul>
-                                <strong>Notes</strong>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua.
-                                </p>
                                 <hr/>
                                 <strong>Timeline activity</strong>
                                 <div id="vertical-timeline" class="vertical-container dark-timeline">
@@ -410,7 +249,7 @@
                                             <i class="fa fa-coffee"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>Conference on the sales results for the previous year.
+                                            <p>Importing process is done.
                                             </p>
                                             <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
                                         </div>
@@ -420,7 +259,7 @@
                                             <i class="fa fa-briefcase"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>Many desktop publishing packages and web page editors now use Lorem.
+                                            <p>5 documents were uploaded and is under review.
                                             </p>
                                             <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
                                         </div>
@@ -430,7 +269,7 @@
                                             <i class="fa fa-bolt"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>There are many variations of passages of Lorem Ipsum available.
+                                            <p>Shipping of order 935-06062015 was made today.
                                             </p>
                                             <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
                                         </div>
@@ -440,7 +279,7 @@
                                             <i class="fa fa-warning"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>The generated Lorem Ipsum is therefore.
+                                            <p>Vendor Information was updated.
                                             </p>
                                             <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
                                         </div>
@@ -450,7 +289,7 @@
                                             <i class="fa fa-coffee"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>Conference on the sales results for the previous year.
+                                            <p>Your account was validated and now you can update your information.
                                             </p>
                                             <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
                                         </div>
@@ -460,7 +299,7 @@
                                             <i class="fa fa-briefcase"></i>
                                         </div>
                                         <div class="vertical-timeline-content">
-                                            <p>Many desktop publishing packages and web page editors now use Lorem.
+                                            <p>Account is under review by our staff. We will give you feed back soon.
                                             </p>
                                             <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
                                         </div>

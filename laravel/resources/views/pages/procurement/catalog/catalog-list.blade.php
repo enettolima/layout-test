@@ -17,6 +17,8 @@
                             <th data-toggle="true">Description</th>
                             <th data-hide="all">Long Description</th>
                             <th data-hide="phone">Price</th>
+                            <th>SKU</th>
+                            <th>HTS</th>
                             <th data-hide="phone,tablet" >Vendor</th>
                             <th data-hide="phone">Status</th>
                             <th class="text-right" data-sort-ignore="true">Action</th>
@@ -26,7 +28,7 @@
                         <tr>
                             <td class="product-img">
                                 <div>
-                                    <img alt="image" class="img-circle" src="img/43457-necklacecooldesert_hero.jpg">
+                                    <img width="100" alt="image" class="img-circle" src="img/43457-necklacecooldesert_hero.jpg">
                                 </div>
                             </td>
                             <td class="hash">
@@ -42,7 +44,13 @@
                                 12.95
                             </td>
                             <td>
-                                Vendor Name
+                                97865
+                            </td>
+                            <td>
+                              	6204.44.4010
+                            </td>
+                            <td>
+                                 Li & Fung
                             </td>
                             <td>
                                 <span class="label label-info">In Stock</span>
@@ -57,7 +65,7 @@
                         <tr>
                             <td class="product-img">
                                 <div>
-                                    <img alt="image" class="img-circle" src="img/41735-skinnyscarfwhite_hero.jpg">
+                                    <img width="100" alt="image" class="img-circle" src="img/41735-skinnyscarfwhite_hero.jpg">
                                 </div>
                             </td>
                             <td class="hash">
@@ -73,7 +81,13 @@
                                 12.95
                             </td>
                             <td>
-                                Vendor Name
+                                37648
+                            </td>
+                            <td>
+                              	3424.41.4110
+                            </td>
+                            <td>
+                                 Li & Fung
                             </td>
                             <td>
                                 <span class="label label-warning">Low Stock</span>
@@ -88,7 +102,7 @@
                         <tr>
                             <td class="product-img">
                                 <div>
-                                    <img alt="image" class="img-circle" src="img/42448-redthrowblanket-222.jpg">
+                                    <img width="100" alt="image" class="img-circle" src="img/42448-redthrowblanket-222.jpg">
                                 </div>
                             </td>
                             <td class="hash">
@@ -104,7 +118,13 @@
                                 24.95
                             </td>
                             <td>
-                                Vendor Name
+                                95364
+                            </td>
+                            <td>
+                              	3215.42.7869
+                            </td>
+                            <td>
+                               INDIA 360 CLOTHING
                             </td>
                             <td>
                                 <span class="label label-danger">Out of Stock</span>
@@ -119,7 +139,7 @@
                         <tr>
                             <td class="product-img">
                                 <div>
-                                    <img alt="image" class="img-circle" src="img/44362-messengerbagleather-271.jpg">
+                                    <img width="100" alt="image" class="img-circle" src="img/44362-messengerbagleather-271.jpg">
                                 </div>
                             </td>
                             <td class="hash">
@@ -135,7 +155,13 @@
                                 39.95
                             </td>
                             <td>
-                                Vendor Name
+                                86942
+                            </td>
+                            <td>
+                              	2549.97.8567
+                            </td>
+                            <td>
+                                INDIA 360 CLOTHING
                             </td>
                             <td>
                                 <span class="label label-success">New!</span>
@@ -150,7 +176,7 @@
                         <tr>
                             <td class="product-img">
                                 <div>
-                                    <img alt="image" class="img-circle" src="img/42462-necklacebluered-123.jpg">
+                                    <img width="100" alt="image" class="img-circle" src="img/42462-necklacebluered-123.jpg">
                                 </div>
                             </td>
                             <td class="hash">
@@ -166,7 +192,13 @@
                                 12.95
                             </td>
                             <td>
-                                Vendor Name
+                                95739
+                            </td>
+                            <td>
+                              	5869.45.7835
+                            </td>
+                            <td>
+                                INDIA 360 CLOTHING
                             </td>
                             <td>
                                 <span class="label label-inverse">Discontinued</span>

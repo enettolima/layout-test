@@ -4862,7 +4862,7 @@ table.shoping-cart-table {
 .image-imitation {
   background-color: #f8f8f9;
   text-align: center;
-  padding: 200px 0; }
+  padding:0px; }
 
 .product-main-price small {
   font-size: 10px; }

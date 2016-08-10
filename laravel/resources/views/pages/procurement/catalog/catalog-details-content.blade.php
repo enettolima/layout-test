@@ -11,17 +11,17 @@
                             <div class="product-images">
                                 <div>
                                     <div class="image-imitation">
-                                        <img src="img/44159-kimono-wht-035_1029.jpg">
+                                        <img class="col-md-12" src="img/44159-kimono-wht-035_1029.jpg">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="image-imitation">
-                                        <img src="img/44159-kimono-wht-033_1028.jpg">
+                                        <img class="col-md-12" src="img/44159-kimono-wht-033_1028.jpg">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="image-imitation">
-                                        <img src="img/44159-kimono-wht-064_1030.jpg">
+                                        <img class="col-md-12" src="img/44159-kimono-wht-064_1030.jpg">
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +32,13 @@
                                 White with Blue Embroidery Kimono
                             </h2>
                             <br/>
-                            <span class="label label-warning">Pending</span>
+                            <div id="pendingstatus" class="col-md-4 col-sm-12">
+																<span class="label label-warning">Pending</span>
+																<div class="stat-percent">48%</div>
+																<div class="progress progress-mini">
+																		<div style="width: 48%;" class="progress-bar"></div>
+																</div>
+														</div>
                         </div>
                     </div>
                 </div>
@@ -45,11 +51,11 @@
             <div class="wrapper wrapper-content animated fadeInUp">
               <div class="row">
                   <div class="col-lg-3">
-                      <div class="ibox float-e-margins">
+                      <div data-box="info" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Info</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label"><i class="fa fa-uncheck"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -87,7 +93,7 @@
                       </div>
                   </div>
                   <div class="col-lg-3">
-                      <div class="ibox float-e-margins">
+                      <div  data-box="pricing" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Pricing</h5>
                               <div class="ibox-tools">
@@ -113,11 +119,11 @@
                       </div>
                   </div>
                   <div class="col-lg-3">
-                      <div class="ibox float-e-margins">
+                      <div  data-box="packaging" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Packaging</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-uncheck"></i></span>
                                   <a class="collapse-link">
                                       <i class="fa fa-chevron-up"></i>
                                   </a>
@@ -176,7 +182,7 @@
                   </div>
 
                   <div class="col-lg-3">
-                      <div class="ibox float-e-margins">
+                      <div  data-box="material" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Material</h5>
                               <div class="ibox-tools">
@@ -208,7 +214,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
+                    <div  data-box="textiles" class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Textiles</h5>
                             <div class="ibox-tools">
@@ -278,7 +284,7 @@
                     </div>
                 </div>
                   <div class="col-lg-6">
-                      <div class="ibox float-e-margins">
+                      <div  data-box="dimensions" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Dimensions</h5>
                               <div class="ibox-tools">
@@ -363,7 +369,7 @@
                               </div>
                           </div>
                       </div>
-                      <div class="ibox float-e-margins">
+                      <div  data-box="testing" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Testing</h5>
                               <div class="ibox-tools">
@@ -397,7 +403,7 @@
                       </div>
                   </div>
                   <div class="col-lg-3">
-                      <div class="ibox float-e-margins">
+                      <div  data-box="animal" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Animal By-Products</h5>
                               <div class="ibox-tools">
@@ -426,7 +432,7 @@
                               </form>
                           </div>
                       </div>
-                      <div class="ibox float-e-margins">
+                      <div  data-box="wood" class="ibox float-e-margins">
                           <div class="ibox-title">
                               <h5>Wood</h5>
                               <div class="ibox-tools">
@@ -469,8 +475,7 @@
                       <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
                   </ul>
                   <div class="text-center m-t-md">
-                      <a href="#" class="btn btn-xs btn-primary">Add files</a>
-                      <a href="#" class="btn btn-xs btn-primary">Report contact</a>
+                      <a href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#add-files">Add files</a>
                   </div>
                 </div>
               </div>
@@ -478,3 +483,76 @@
         </div>
     </div>
 </div>
+
+
+
+<form class="modal modal-md multi-step inmodal fade"  id="add-files">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <div class="modal-header">
+              <h4 class="modal-title step-1" data-step="1">Select files to upload.</h4>
+          </div>
+          <div class="modal-body step step-1">
+            <ul class="list-group" id="add-files-doc">
+                  <li class="list-group-item active" value="document" onclick="testingop('off');"><a data-toggle="tab" href="#contact-1" class="client-link">Document</a></li>
+                  <li class="list-group-item" value = "testing" onclick="testingop('on');"><a data-toggle="tab" href="#contact-2" class="client-link">Product Testing</a></li>
+            </ul>
+          <label class="btn btn-default btn-file">
+                Upload <input type="file" style="display: none;">
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-default step-1" onclick="sendnow()">Send</button>
+          </div>
+      </div>
+  </div>
+</form>
+<script>
+function testingop(status){
+  if(status == "on"){
+    var vartxt = '<div id="testingoptions" class="form-group">\
+            <div>\
+                <label style="margin-right: 10px; width: 100%;">\
+                    <input type="checkbox" class="i-checks"> California Prop 65\
+                </label>\
+                <label style="margin-right: 10px; width: 100%;">\
+                    <input type="checkbox" class="i-checks"> Flammability\
+                </label>\
+                <label style="margin-right: 10px; width: 100%;">\
+                    <input type="checkbox" class="i-checks"> FDA (Food and Drug Administration)\
+                </label>\
+                <label style="margin-right: 10px; width: 100%;">\
+                    <input type="checkbox" class="i-checks"> CPSCIA (Consumer Product Safety Commission Improvement Act)\
+                </label>\
+                <label style="margin-right: 10px; width: 100%;">\
+                    <input type="checkbox" class="i-checks"> TPCH (Toxic Packaging Clearing House)\
+                </label>\
+            </div></div>';
+    if (!$( "#testingoptions" ).length) {
+      $('#add-files-doc').after(vartxt);
+    }
+  }else{
+    $('#testingoptions').remove();
+  }
+}
+
+$(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+});
+
+$(document).ready( function() {
+  $(':file').on('fileselect', function(event, numFiles, label) {
+        console.log(numFiles);
+        console.log(label);
+  });
+
+  sendnow = function() {
+    console.log('send files');
+  }
+});
+</script>
