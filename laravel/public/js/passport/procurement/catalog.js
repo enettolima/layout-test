@@ -25,14 +25,14 @@ $(document).ready(function () {
     var target = $(this).attr('data-box');
     $(this).find('span.prod-form').click(function () {
       if ($(this).hasClass("label-primary")) {
-        pending_count += 1;
+        pending_count -= 1;
         $('div[data-box="'+target+'"] form').find("input").prop( "disabled", false );
         $('div[data-box="'+target+'"] form').find("textarea").prop( "disabled", false );
         $('div[data-box="'+target+'"] form').find("select").prop( "disabled", false );
         $(this).removeClass('label-primary').addClass('label-default');
         //$(this).find('i').removeClass('fa-check').addClass('fa-uncheck');
       }else{
-        pending_count -= 1;
+        pending_count += 1;
         $('div[data-box="'+target+'"] form').find("input").prop( "disabled", true );
         $('div[data-box="'+target+'"] form').find("textarea").prop( "disabled", true );
         $('div[data-box="'+target+'"] form').find("select").prop( "disabled", true );
@@ -48,11 +48,11 @@ $(document).ready(function () {
     pending_total += 1;
     var target = $(this).attr('data-box');
     if ($(this).find(".label-primary").length) {
+        pending_count += 1;
         $('div[data-box="'+target+'"] form').find("input").prop( "disabled", true );
         $('div[data-box="'+target+'"] form').find("textarea").prop( "disabled", true );
         $('div[data-box="'+target+'"] form').find("select").prop( "disabled", true );
     }else{
-        pending_count += 1;
         $('div[data-box="'+target+'"] form').find("input").prop( "disabled", false );
         $('div[data-box="'+target+'"] form').find("textarea").prop( "disabled", false );
         $('div[data-box="'+target+'"] form').find("select").prop( "disabled", false );
