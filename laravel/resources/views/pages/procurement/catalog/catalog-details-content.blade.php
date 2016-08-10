@@ -55,7 +55,7 @@
                           <div class="ibox-title">
                               <h5>Info</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-uncheck"></i></span>
+                                  <span class="prod-form label label-default"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -123,7 +123,7 @@
                           <div class="ibox-title">
                               <h5>Packaging</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label label-primary"><i class="fa fa-uncheck"></i></span>
+                                  <span class="prod-form label label-default"><i class="fa fa-check"></i></span>
                                   <a class="collapse-link">
                                       <i class="fa fa-chevron-up"></i>
                                   </a>
@@ -186,7 +186,7 @@
                           <div class="ibox-title">
                               <h5>Material</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -218,7 +218,7 @@
                         <div class="ibox-title">
                             <h5>Textiles</h5>
                             <div class="ibox-tools">
-                                <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -288,7 +288,7 @@
                           <div class="ibox-title">
                               <h5>Dimensions</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -373,7 +373,7 @@
                           <div class="ibox-title">
                               <h5>Testing</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -407,7 +407,7 @@
                           <div class="ibox-title">
                               <h5>Animal By-Products</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
@@ -436,7 +436,7 @@
                           <div class="ibox-title">
                               <h5>Wood</h5>
                               <div class="ibox-tools">
-                                  <span class="prod-form label"><i class="fa fa-check"></i></span>
+                                  <span class="prod-form label label-primary"><i class="fa fa-check"></i></span>
                               </div>
                           </div>
                           <div class="ibox-content">
